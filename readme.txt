@@ -40,4 +40,9 @@ None... so far.
 1. Login as an existing user, such as admin.
 1. Upload the folder named `ad-integration` to your plugins folder, usually `wp-content/plugins`.
 1. Activate the plugin on the Plugins screen.
-1. Enable SSL-Admin-Mode by adding the line "define('FORCE_SSL_ADMIN', true);" to your wp-config.php so that your passwords are not sent in cleartext. 
+1. Enable SSL-Admin-Mode by adding the line "define('FORCE_SSL_ADMIN', true);" to your wp-config.php so that your passwords are not sent in cleartext.
+
+== Changelog ==
+
+= 0.9.0 =
+* first published version 
