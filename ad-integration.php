@@ -2,9 +2,9 @@
 /*
 Plugin Name: Active Directory Integration 
 Version: 0.9.0
-Plugin URI: http://www.ecw.de/
+Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
-Author: Christoph Steindorff <cst@ecw.de>, ECW GmbH
+Author: Christoph Steindorff, ECW GmbH
 Author URI: http://www.ecw.de/
 
 The work is derived from version 1.0.5 of the plugin Active Directory Authentication:
