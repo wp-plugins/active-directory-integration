@@ -22,18 +22,19 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * protection against brute force attacks
 * multi-language support (english and german included)
 
-"Active Directory Integration" is based upon Jonathan Marc Bearak's great plugin "Active Directory Authentication" (http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's "adLDAP", a very useful PHP class (http://adldap.sourceforge.net/). 
+"Active Directory Integration" is based upon Jonathan Marc Bearak's great plugin "Active Directory Authentication" (http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's "adLDAP", a very useful PHP class (http://adldap.sourceforge.net/).
+
+= Requirements =
+
+* WordPress since 2.7.1 
+* PHP 5
+* LDAP support
+* OpenSSL Support for TLS (recommended) 
 
 == Frequently Asked Questions ==
 
 None... so far.
 
-== Requirements ==
-
-* WordPress since 2.7.1 
-* PHP 5
-* LDAP support
-* OpenSSL Support for TLS (recommended)
   
 == Installation ==
 
