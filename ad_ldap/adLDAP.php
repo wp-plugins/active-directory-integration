@@ -1369,7 +1369,7 @@ class adLDAP {
     * Coping with AD not returning the primary group
     * http://support.microsoft.com/?kbid=321360 
     * 
-    * For some reason it's not possible to search on primarygrouptoken=XXX
+    * For some reason it's not possible to search on primarygrouptoken=x
     * If someone can show otherwise, I'd like to know about it :)
     * this way is resource intensive and generally a pain in the @#%^
     * 

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Active Directory Integration 0.9.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-08 16:28+0200\n"
-"PO-Revision-Date: 2009-06-11 17:19+0100\n"
+"PO-Revision-Date: 2009-06-26 16:22+0100\n"
 "Last-Translator: Christoph Steindorff <christoph.steindorff@ecw.de>\n"
 "Language-Team: DEUTSCH <info@ecw.de>\n"
 "MIME-Version: 1.0\n"
@@ -192,4 +192,37 @@ msgstr "Sperrzeit"
 
 msgid "Number of seconds an account is blocked after the maximum number of failed login attempts is reached."
 msgstr "Zeit in Sekunden für die ein Benutzerkonto gesperrt wird, nachdem die maximale Zahl von gescheiterten Login-Versuchen erreicht wurde."
+
+msgid "User Notification"
+msgstr "Benutzer-Benachrichtigung"
+
+msgid "Notify user by e-mail when his account is blocked."
+msgstr "Informieren des Benutzers durch eine E-Mail, dass sein Konto gesperrt wurde."
+
+msgid "Admin Notification"
+msgstr "Admin-Benachrichtigung"
+
+msgid "Account blocked"
+msgstr "Konto gesperrt"
+
+msgid "Notify admin by e-mail when an user account is blocked."
+msgstr "Informieren des Admins durch eine E-Mail, das ein Benutzerkonto gesperrt wurde."
+
+msgid "If left blank, notifications will be sent to the blog-administrator."
+msgstr "Leer lassen, um die Benachrichtigungen an den Blog-Administrator zu senden."
+
+msgid "E-mail address for notifications:"
+msgstr "E-Mail-Adresse für Benachrichtigungen:"
+
+msgid "Someone tried to login to %s (%s) with your username (%s) - but in vain. For security reasons your account is now blocked for %d seconds."
+msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit Deinem Benutzernamen (%s) anzumelden. Aus Sicherheitsgründen, ist Dein Konto nun für %d Sekunden gesperrt."
+
+msgid "Someone tried to login to %s (%s) with the username \"%s\" - but in vain. For security reasons this account is now blocked for %d seconds."
+msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit dem Benutzernamen \"%s\" anzumelden. Aus Sicherheitsgründen, ist dieses Konto nun für %d Sekunden gesperrt."
+
+msgid "The login attempt was made from IP-Address: %s"
+msgstr "Der Loginversuch ging aus von der IP-Adresse: %s"
+
+msgid "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE."
+msgstr "DIESE E-MAIL WURDE VOM SYSTEM AUTOMATISCH ERSTELLT, BITTE SENDEN SIE KEINE ANTWORT AN DIE ABSENDERADRESSE."
 

@@ -86,7 +86,9 @@ if (! class_exists('ADIntegrationPlugin')) {
 				add_option('AD_Integration_authorization_group', '', 'Group name for authorization.');
 				add_option('AD_Integration_max_login_attempts', '3', 'Maximum number of failed login attempts before the account is blocked.');
 				add_option('AD_Integration_block_time', '30', 'Number of seconds an account is blocked after the maximum number of failed login attempts is reached.');
-				
+				add_option('AD_Integration_user_notification', false, 'Send email to user if his account is blocked.');
+				add_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
+				add_option('AD_Integration_admin_email', '', 'Administrators email address where notifications should be sent to.');
 			}
 		}
 
@@ -120,16 +122,9 @@ if (! class_exists('ADIntegrationPlugin')) {
 			$auto_update_user 			= (bool)get_option('AD_Integration_auto_update_user');
 			$max_login_attempts 		= (int)get_option('AD_Integration_max_login_attempts');
 			$block_time 				= (int)get_option('AD_Integration_block_time');
-			
-			// Check for maximum login attempts
-			if ($max_login_attempts > 0) {
-				$failed_logins = $this->_get_failed_logins_within_time($username, $block_time);
-				if ($failed_logins >= $max_login_attempts) {
-					$this->authenticated = false;
-					$this->_display_blocking_page($username);
-					die();
-				} 
-			}
+			$send_user_notification	    = (bool)get_option('AD_Integration_user_notification');
+			$send_admin_notification	= (bool)get_option('AD_Integration_admin_notification');
+			$admin_email				= get_option('AD_Integration_admin_email');
 			
 			$this->adldap = new adLDAP(array(
 						"account_suffix" => $account_suffix,
@@ -140,6 +135,26 @@ if (! class_exists('ADIntegrationPlugin')) {
 						"ad_port" => $port,               // AD port
 						"use_tls" => $use_tls             // secure?
 						));
+			
+			
+			// Check for maximum login attempts
+			if ($max_login_attempts > 0) {
+				$failed_logins = $this->_get_failed_logins_within_time($username, $block_time);
+				if ($failed_logins >= $max_login_attempts) {
+					$this->authenticated = false;
+
+					if ($send_user_notification) {
+						$this->_notify_user($username);
+					}
+					if ($send_admin_notification) {
+						$this->_notify_admin($username);
+					}
+					
+					$this->_display_blocking_page($username);
+					die();
+				} 
+			}
+			
 			
 			if ( $this->adldap->authenticate($username, $password) )
 			{	
@@ -456,6 +471,131 @@ if (! class_exists('ADIntegrationPlugin')) {
 		}
 		
 		
+		/**
+		 * Send an email to the user who's account is blocked
+		 * 
+		 * @param $username string
+		 * @return unknown_type
+		 */
+		function _notify_user($username)
+		{
+			// if auto creation is enabled look for the user in AD 
+			$auto_create_user = (bool)get_option('AD_Integration_auto_create_user');
+			if ($auto_create_user) {
+				
+				$userinfo = $this->adldap->user_info($username, array("sn", "givenname", "mail"));
+				if ($userinfo) {
+					$userinfo = $userinfo[0];
+					$email = $userinfo['mail'][0];
+					$first_name = $userinfo['givenname'][0];
+					$last_name = $userinfo['sn'][0];	
+				} else { 
+					return false;
+				}
+			} else {
+				// auto creation is disabled, so look for the user in local database
+				require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
+				$user_id = username_exists($username);
+				if ($user_id) {
+					$user_info = get_userdata($user_id);
+					$last_name = $user_info->last_name;
+					$first_name = $user_info->first_name;
+					$email = $user_info->user_email;
+				} else {
+					return false;
+				}
+			}
+
+			// do we have a correct email address?
+			if (is_email($email)) { 
+				$blog_url = get_bloginfo('url');
+				$blog_name = get_bloginfo('name');
+				$blog_domain = preg_replace ('/^(http:\/\/)(.+)\/.*$/i','$2', $blog_url);
+				$block_time = (int) get_option('AD_Integration_block_time');
+
+				$subject = '['.$blog_name.'] '.__('Account blocked','ad-integration');
+				$body = sprintf(__('Someone tried to login to %s (%s) with your username (%s) - but in vain. For security reasons your account is now blocked for %d seconds.','ad-integration'), $blog_name, $blog_url, $username, $block_time);
+				$body .= "\n\r";
+				$body .= __('THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE.','ad-integration');
+				
+				$header = 'From: "WordPress" <wordpress@'.$blog_domain.">\r\n";
+				return wp_mail($email, $subject, $body, $header);
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Notify administrator by email if an account is blocked
+		 * 
+		 * @param $username username of the blocked account
+		 * @return unknown_type
+		 */
+		function _notify_admin($username)
+		{
+			// TODO: needs testing
+			
+			if ((bool)get_option('AD_Integration_admin_notification')) {
+				$email = get_option('AD_Integration_admin_email');
+				if (trim($email) == '') {
+					$email = get_bloginfo('admin_email ');
+				}
+				
+				echo $email;
+
+				if (is_email($email)) {
+					if ((bool)get_option('AD_Integration_auto_create_user')) {
+						
+						$userinfo = $this->adldap->user_info($username, array("sn", "givenname", "mail"));
+						if ($userinfo) {
+							$userinfo = $userinfo[0];
+							$email = $userinfo['mail'][0];
+							$first_name = $userinfo['givenname'][0];
+							$last_name = $userinfo['sn'][0];	
+						} else { 
+							return false;
+						}
+					} else {
+						// auto creation is disabled, so look for the user in local database
+						require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
+						$user_id = username_exists($username);
+						if ($user_id) {
+							$user_info = get_userdata($user_id);
+							$last_name = $user_info->last_name;
+							$first_name = $user_info->first_name;
+							$email = $user_info->user_email;
+						} else {
+							return false;
+						}
+					}
+					
+					$blog_url = get_bloginfo('url');
+					$blog_name = get_bloginfo('name');
+					$blog_domain = preg_replace ('/^(http:\/\/)(.+)\/.*$/i','$2', $blog_url);
+					$block_time = (int) get_option('AD_Integration_block_time');
+	
+					$subject = '['.$blog_name.'] '.__('Account blocked','ad-integration');
+					$body = sprintf(__('Someone tried to login to %s (%s) with the username "%s" - but in vain. For security reasons this account is now blocked for %d seconds.','ad-integration'), $blog_name, $blog_url, $username, $block_time);
+					$body .= "\n\r";
+					$body .= sprintf(__('The login attempt was made from IP-Address: %s','ad-integration'), $_SERVER['REMOTE_ADDR']);
+					$body .= "\n\r";
+					$body .= __('THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE.','ad-integration');
+					$header = 'From: "WordPress" <wordpress@'.$blog_domain.">\r\n";
+					return wp_mail($email, $subject, $body, $header);
+					
+					
+				} else {
+					die('no email');
+					return false;
+				}
+			} else {
+				die('no admin notification');
+				return false;
+			}
+			
+			return true;
+		} 
+		
 		
 		
 		/*
@@ -612,6 +752,9 @@ if (! class_exists('ADIntegrationPlugin')) {
 			$authorization_group 		= get_option('AD_Integration_authorization_group');
 			$max_login_attempts 		= (int) get_option('AD_Integration_max_login_attempts');
 			$block_time 				= (int) get_option('AD_Integration_block_time');
+			$send_user_notification	    = (bool)get_option('AD_Integration_user_notification');
+			$send_admin_notification	= (bool)get_option('AD_Integration_admin_notification');
+			$admin_email				= get_option('AD_Integration_admin_email');
 
 ?>
 
@@ -624,7 +767,7 @@ if (! class_exists('ADIntegrationPlugin')) {
   <h2><?php _e('Options › Active Directory Integration', 'ad-integration');?></h2>
   <form action="options.php" method="post">
     <input type="hidden" name="action" value="update" />
-    <input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_base_dn,AD_Integration_account_suffix,AD_Integration_domain_controllers,AD_Integration_role_equivalent_groups,AD_Integration_default_email_domain,AD_Integration_port,AD_Integration_bind_user,AD_Integration_bind_pwd,AD_Integration_use_tls,AD_Integration_append_suffix_to_new_users,AD_Integration_authorization_group,AD_Integration_authorize_by_group,AD_Integration_auto_update_user,AD_Integration_max_login_attempts,AD_Integration_block_time" />
+    <input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_base_dn,AD_Integration_account_suffix,AD_Integration_domain_controllers,AD_Integration_role_equivalent_groups,AD_Integration_default_email_domain,AD_Integration_port,AD_Integration_bind_user,AD_Integration_bind_pwd,AD_Integration_use_tls,AD_Integration_append_suffix_to_new_users,AD_Integration_authorization_group,AD_Integration_authorize_by_group,AD_Integration_auto_update_user,AD_Integration_max_login_attempts,AD_Integration_block_time,AD_Integration_admin_notification,AD_Integration_user_notification,AD_Integration_admin_email" />
     <?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
 
     <table class="form-table">
@@ -784,6 +927,28 @@ if (! class_exists('ADIntegrationPlugin')) {
           <input type="text" name="AD_Integration_block_time" id="AD_Integration_block_time"  
           value="<?php echo $block_time; ?>" /><br />
 		  <?php _e('Number of seconds an account is blocked after the maximum number of failed login attempts is reached.', 'ad-integration'); ?>
+	    </td>
+	  </tr>
+
+	  <tr valign="top">
+        <th scope="row"><label for="AD_Integration_user_notification"><?php _e('User Notification', 'ad-integration'); ?></label></th>
+        <td>
+          <input type="checkbox" name="AD_Integration_user_notification" id="AD_Integration_user_notification"<?php if ($send_user_notification) echo ' checked="checked"' ?> value="1" />  
+		  <?php _e('Notify user by e-mail when his account is blocked.', 'ad-integration'); ?>
+	    </td>
+	  </tr>
+
+	  <tr valign="top">
+        <th scope="row"><label for="AD_Integration_admin_notification"><?php _e('Admin Notification', 'ad-integration'); ?></label></th>
+        <td>
+          <input type="checkbox" name="AD_Integration_admin_notification" id="AD_Integration_admin_notification"<?php if ($send_admin_notification) echo ' checked="checked"' ?> value="1" />  
+		  <?php _e('Notify admin by e-mail when an user account is blocked.', 'ad-integration'); ?>
+		  <br />
+          <?php _e('E-mail address for notifications:','ad-integration');?>
+          <input type="text" name="AD_Integration_admin_email" id="AD_Integration_admin_email"  
+          value="<?php echo $admin_email; ?>" /><span class="description">
+		  <?php _e('If left blank, notifications will be sent to the blog-administrator.', 'ad-integration'); ?>
+		  </span>
 	    </td>
 	  </tr>
       
