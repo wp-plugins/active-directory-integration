@@ -5,7 +5,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Active Directory Integration 0.9.0\n"
+"Project-Id-Version: Active Directory Integration 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-08 16:28+0200\n"
 "PO-Revision-Date: 2009-06-26 16:22+0100\n"
@@ -205,20 +205,20 @@ msgstr "Admin-Benachrichtigung"
 msgid "Account blocked"
 msgstr "Konto gesperrt"
 
-msgid "Notify admin by e-mail when an user account is blocked."
+msgid "Notify admin(s) by e-mail when an user account is blocked."
 msgstr "Informieren des Admins durch eine E-Mail, das ein Benutzerkonto gesperrt wurde."
 
-msgid "If left blank, notifications will be sent to the blog-administrator."
-msgstr "Leer lassen, um die Benachrichtigungen an den Blog-Administrator zu senden."
+msgid "Seperate multiple addresses by semicolon (e.g. \"admin@domain.tld;me@mydomain.tld\"). If left blank, notifications will be sent to the blog-administrator only."
+msgstr "Trenne mehrere Adressen durch ein Semikolon (z.B. \"admin@domain.tld;ich@meinedomain.tld\"). Leer lassen, um die Benachrichtigungen an den Blog-Administrator zu senden."
 
-msgid "E-mail address for notifications:"
-msgstr "E-Mail-Adresse für Benachrichtigungen:"
+msgid "E-mail addresses for notifications:"
+msgstr "E-Mail-Adressen für Benachrichtigungen:"
 
 msgid "Someone tried to login to %s (%s) with your username (%s) - but in vain. For security reasons your account is now blocked for %d seconds."
 msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit Deinem Benutzernamen (%s) anzumelden. Aus Sicherheitsgründen, ist Dein Konto nun für %d Sekunden gesperrt."
 
-msgid "Someone tried to login to %s (%s) with the username \"%s\" - but in vain. For security reasons this account is now blocked for %d seconds."
-msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit dem Benutzernamen \"%s\" anzumelden. Aus Sicherheitsgründen, ist dieses Konto nun für %d Sekunden gesperrt."
+msgid "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in vain. For security reasons this account is now blocked for %d seconds."
+msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit dem Benutzernamen \"%s\" (%s %s) anzumelden. Aus Sicherheitsgründen, ist dieses Konto nun für %d Sekunden gesperrt."
 
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "Der Loginversuch ging aus von der IP-Adresse: %s"
