@@ -103,7 +103,6 @@ class ADIntegrationPlugin {
 	/**
 	 * Constructor
 	 */
-	//function ADIntegrationPlugin() {
 	function __construct() {
 		
  		// Load up the localization file if we're using WordPress in a different language
