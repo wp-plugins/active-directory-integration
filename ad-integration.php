@@ -206,6 +206,7 @@ class ADIntegrationPlugin {
 			if ($failed_logins >= $this->_max_login_attempts) {
 				$this->_authenticated = false;
 
+				// e-mail notfications if user is blocked
 				if ($this->_user_notification) {
 					$this->_notify_user($username);
 				}
@@ -213,8 +214,9 @@ class ADIntegrationPlugin {
 					$this->_notify_admin($username);
 				}
 				
+				// Show the blocking page to the user
 				$this->_display_blocking_page($username);
-				die();
+				die(); // important !
 			} 
 		}
 		
@@ -265,8 +267,7 @@ class ADIntegrationPlugin {
 					$first_name = $userinfo['givenname'][0];
 					$last_name = $userinfo['sn'][0];
 					$this->_create_user($ad_username, $email, $first_name, $last_name, $user_role);
-			}
-			else {
+			} else {
 				// Bail out to avoid showing the login form
 					return new WP_Error('invalid_username', __('<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress.'));
 			}
