@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.1
+Version: 0.9.2 beta
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -33,10 +33,10 @@ if (!class_exists('ADIntegrationPlugin')) {
 class ADIntegrationPlugin {
 	
 	// 
-	public static $db_version = "0.9";
+	public static $db_version = "0.9"; // TODO: shouldn´t this be a constant
 	
 	// name of our own table
-	public static $table_name = 'adintegration';
+	public static $table_name = 'adintegration'; // TODO: shouldn´t this be a constant
 	
 	// is the user authenticated?
 	public $_authenticated = false;
@@ -1077,139 +1077,10 @@ class ADIntegrationPlugin {
       <input type="submit" class="button-primary" name="Submit" value="<?php _e("Save Changes"); ?>" />
     </p>
   </form>
-  
-  <?php /* 
-  <br/>
-  <br/>
-   <h2>Instant User Creation for Role Equivalent Groups</h2>
-   <form action="http://elf.soc.qc.cuny.edu/soc/wordpress/wp-admin/options-general.php?page=ad-integration/ad-integration.php" method="post">
-    <input type="hidden" name="create_users_for_role_equivalent_groups" value="yes" />
-    <?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
-    <table class="form-table">
-      <tr valign="top">
-        <th scope="row">
-        <label for="AD_Integration_auto_create_user">
-        	Active Directory Username:
-        </label></th>
-        <td>
-          <input type="text" name="ad_username" 
-          	id="ad_username" value="" 
-          />
-          <br/>
-          You must specify an Active Directory username with 
-          the privileges necessary to perform an ldap search query 
-          and check user group memberships.
-        </td>
-      </tr>
-      <tr valign="top">
-        <th scope="row">
-        <label for="AD_Integration_auto_create_user">
-        	Active Directory Password:
-        </label></th>
-        <td>
-          <input type="text" name="ad_password" 
-          	id="ad_password" value="" 
-          />
-        </td>
-      </tr>
-     </table>
-
-      <p class="submit">
-        Once you press this button, WordPress accounts will be created for 
-        all users who are members of groups with role equivalents, as 
-        specified above, if they do not already have WordPress accounts.
-        <br/>
-      	<input type="submit" name="Submit" value="Create Users" />
-      </p>
-    </form>
-    */ ?>
 </div>
 <?php
 	}
-	
-	
-	/*
-	function _add_users_for_role_equivalent_groups($ad_username, $ad_password)
-	{
-		$authenticated = false;
-		$account_suffix = get_option('AD_Integration_account_suffix');
-		$domain_controllers = explode(';',
-				get_option('AD_Integration_domain_controllers')
-								);
-		$base_dn = get_option('AD_Integration_base_dn');
-		$this->_adldap = new adLDAP(array(
-					"account_suffix" => $account_suffix,
-					"base_dn" => "DC=qc,DC=ads", 
-					"domain_controllers" => $domain_controllers
-					));
-		if ( $this->_adldap->authenticate($ad_username, $ad_password) )
-		{	
-			$authenticated = true;
-		}
-		
-		if ( $authenticated == false )
-		{
-			return "Cannot log on to Active Directory system with the provided credentials.";
-			echo $ad_username . $ad_password;
-		}
-		
-		$users_added = "";
-		
-		$letters = array('a', 'b', 'c', 'd', 'e', 'f', 
-					'g', 'h', 'i', 'j', 
-					'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 
-					't', 'u', 'v', 'w', 'x', 'y', 'z');
-		$prefixes = array();
-		foreach ( $letters as $l1 )
-			foreach ( $letters as $l2 )
-				$prefixes[] = $l1 . $l2;
-		
-		$users = array();
-		foreach ( $prefixes as $prefix )
-		{
-			$users_new = array_merge($users, 
-				$this->_adldap->listUsersWithNames($prefix . "*"));
-			$users = $users_new;
-		}
 
-		$role_equiv_groups = get_option('AD_Integration_role_equivalent_groups');
-		$role_equiv_groups = explode(';', $role_equiv_groups);
-		foreach ( $users as $check_username => $user )
-		{
-			$wp_user = get_userdatabylogin(
-					$check_username . $account_suffix);
-			if ( ! $wp_user or $wp_user->user_login != $check_username)
-			{
-				$user_role = $this->_get_user_role_equiv($this->_adldap, $check_username);
-
-				if ( $user_role != '' )
-				{
-					$userinfo = $this->_adldap->user_info($check_username, 
-							array("sn", "givenname", "mail")
-								);
-					$userinfo = $userinfo[0];
-					$email = $userinfo['mail'][0];
-					$first_name = $userinfo['givenname'][0];
-					$last_name = $userinfo['sn'][0];
-					$this->_create_user($check_username . $account_suffix,
-									$email, $first_name, 
-										$last_name, $user_role);
-					
-					$users_added .= "<br/>$check_username$account_suffix";
-				}
-			}
-		}
-		
-		if ( $users_added != "" ) 
-		{
-			return "The following users were created: $users_added";
-		}
-		else
-		{
-			return "No users were added.  (This can occur if you do not have sufficient AD permissions, or you provided incorrect login information.)";
-		}
-	}
-	*/
 } // END OF CLASS
 } // ENDIF
 
