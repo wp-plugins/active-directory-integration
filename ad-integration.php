@@ -32,11 +32,11 @@ OriginalAuthor URI: http://soc.qc.edu/jonathan
 if (!class_exists('ADIntegrationPlugin')) {
 class ADIntegrationPlugin {
 	
-	// 
-	public static $db_version = "0.9"; // TODO: shouldn´t this be a constant
+	// version of needed DB table structure
+	const DB_VERSION = "0.9";
 	
 	// name of our own table
-	public static $table_name = 'adintegration'; // TODO: shouldn´t this be a constant
+	const TABLE_NAME = 'adintegration';
 	
 	// is the user authenticated?
 	public $_authenticated = false;
@@ -105,12 +105,14 @@ class ADIntegrationPlugin {
 	/**
 	 * Constructor
 	 */
-	function __construct() {
+	public function __construct() {
 		
- 		// Load up the localization file if we're using WordPress in a different language
+		// define folder constant  
+		define('ADINTEGRATION_FOLDER', basename(dirname(__FILE__)));
+
+		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's folder and name it "ad-auth-[value in wp-config].mo"
-		$plugin_dir = basename(dirname(__FILE__));
-		load_plugin_textdomain( 'ad-integration', PLUGINDIR.'/'.$plugin_dir, $plugin_dir );
+		load_plugin_textdomain( 'ad-integration', PLUGINDIR.'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER ); 
 		
 		if (isset($_GET['activate']) and $_GET['activate'] == 'true') {
 			add_action('init', array(&$this, 'initialize_options'));
@@ -124,8 +126,9 @@ class ADIntegrationPlugin {
 		add_action('password_reset', array(&$this, 'disable_function'));
 		add_action('check_passwords', array(&$this, 'generate_password'), 10, 3);
 		add_filter('show_password_fields', array(&$this, 'disable_password_fields'));
+		add_filter('contextual_help', array(&$this, 'contextual_help'), 10, 2);
 		
-		if (! class_exists('adLDAP')) {
+		if (!class_exists('adLDAP')) {
 			require 'ad_ldap/adLDAP.php';
 		}
 	
@@ -139,7 +142,7 @@ class ADIntegrationPlugin {
 	/**
 	 * Add options for this plugin to the database.
 	 */
-	function initialize_options() {
+	public function initialize_options() {
 		if (current_user_can('manage_options')) {
 			add_option('AD_Integration_account_suffix', '', 'Account Suffix (will be appended to all usernames created in WordPress, as well as used in the Active Directory authentication process');
 			add_option('AD_Integration_auto_create_user', false, 'Should a new user be created automatically if not already in the WordPress database?');
@@ -169,7 +172,7 @@ class ADIntegrationPlugin {
 	/**
 	 * Add an options pane for this plugin.
 	 */
-	function add_options_page() {
+	public function add_options_page() {
 		if (function_exists('add_options_page')) {
 			add_options_page('Active Directory Integration', 'Active Directory Integration', 9, __FILE__, array(&$this, '_display_options_page'));
 		}
@@ -181,7 +184,7 @@ class ADIntegrationPlugin {
 	 * If the REMOTE_USER evironment is set, use it as the username.
 	 * This assumes that you have externally authenticated the user.
 	 */
-	function authenticate($username, $password) {
+	public function authenticate($username, $password) {
 
 		$this->_authenticated = false;
 		
@@ -290,7 +293,7 @@ class ADIntegrationPlugin {
 	/*
 	 * Skip the password check, since we've externally authenticated.
 	 */
-	function override_password_check($check, $password, $hash, $user_id) {
+	public function override_password_check($check, $password, $hash, $user_id) {
 		if ( $this->_authenticated == true ) 
 		{
 			return true;
@@ -306,7 +309,7 @@ class ADIntegrationPlugin {
 	 * require the user to enter this value, but we want to set it
 	 * to something nonobvious.
 	 */
-	function generate_password($username, $password1, $password2) {
+	public function generate_password($username, $password1, $password2) {
 		$password1 = $password2 = $this->_get_password();
 	}
 
@@ -314,7 +317,7 @@ class ADIntegrationPlugin {
 	 * Used to disable certain display elements, e.g. password
 	 * fields on profile screen.
 	 */
-	function disable_password_fields($show_password_fields) {
+	public function disable_password_fields($show_password_fields) {
 		return false;
 	}
 
@@ -322,7 +325,7 @@ class ADIntegrationPlugin {
 	 * Used to disable certain login functions, e.g. retrieving a
 	 * user's password.
 	 */
-	function disable_function() {
+	public function disable_function() {
 		die('Disabled');
 	}
 
@@ -334,10 +337,10 @@ class ADIntegrationPlugin {
 	public static function activate() {
 		global $wpdb;
 		
-		$table_name = $wpdb->prefix . ADIntegrationPlugin::$table_name;
-		$db_version = ADIntegrationPlugin::$db_version;
+		//$table_name = $wpdb->prefix . ADIntegrationPlugin::$table_name;
+		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
 	   
-		if (($wpdb->get_var("show tables like '$table_name'") != $table_name) OR  (get_option('AD_Integration_db_version') != $db_version)) { 
+		if (($wpdb->get_var("show tables like '$table_name'") != $table_name) OR (get_option('AD_Integration_db_version') != ADIntegrationPlugin::DB_VERSION)) { 
 	      
 	    	$sql = 'CREATE TABLE ' . $table_name . ' (
 		  			id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -350,7 +353,7 @@ class ADIntegrationPlugin {
 	      	dbDelta($sql);
 	      
 	   		// store db version in the options
-		   	add_option('AD_Integration_db_version', $db_version, 'Version of the table structure');
+		   	add_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION, 'Version of the table structure');
 	   }
 	}
 	
@@ -362,7 +365,8 @@ class ADIntegrationPlugin {
 	public static function deactivate() {
 		global $wpdb;
 		
-		$table_name = $wpdb->prefix . ADIntegrationPlugin::$table_name;
+		//$table_name = $wpdb->prefix . ADIntegrationPlugin::$table_name;
+		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
 		
 		// drop table
 		$wpdb->query('DROP TABLE IF EXISTS '.$table_name);
@@ -412,38 +416,33 @@ class ADIntegrationPlugin {
 		}
 	}
 	
+	
+	/**
+	 * Shows the contexual help on the options screen.
+	 * 
+	 * @param $help
+	 * @param $screen
+	 * @return string help message
+	 */
+	function contextual_help ($help, $screen) {
+		
+		if ($screen == 'settings_page_' . ADINTEGRATION_FOLDER . '/ad-integration') {
+			$help .= '<h5>' . __('Active Directory Integration Help','ad-integration') . '</h5><div class="metabox-prefs">';
+			$help .= '<a href="http://blog.ecw.de/wp-ad-integration">'.__ ('Overview','ad-integration').'</a><br/>';
+			$help .= '<a href="http://wordpress.org/extend/plugins/active-directory-integration/faq/">'.__ ('FAQ', 'ad-integration').'</a><br/>';
+			$help .= '<a href="http://wordpress.org/extend/plugins/active-directory-integration/changelog/">'.__ ('Changelog', 'ad-integration').'</a><br/>';
+			$help .= '<a href="http://wordpress.org/tags/active-directory-integration">'.__ ('Support-Forum', 'ad-integration').'</a><br/>';
+			
+			$help .= '</div>';
+		}
+		return $help;
+	}	
+	
 
 	/*************************************************************
 	 * Functions
 	 *************************************************************/
 	
-	/**
-	 * Remove options for this plugin from the database.
-	 * TODO: not really needed anymore, should be deleted.
-	 */
-	protected function _remove_options() {
-		if (current_user_can('manage_options')) {
-			delete_option('AD_Integration_account_suffix');
-			delete_option('AD_Integration_auto_create_user');
-			delete_option('AD_Integration_auto_update_user');
-			delete_option('AD_Integration_append_suffix_to_new_users');
-			delete_option('AD_Integration_domain_controllers');
-			delete_option('AD_Integration_base_dn');
-			delete_option('AD_Integration_role_equivalent_groups');
-			delete_option('AD_Integration_default_email_domain');
-			delete_option('AD_Integration_port');
-			delete_option('AD_Integration_bind_user');
-			delete_option('AD_Integration_bind_pwd');
-			delete_option('AD_Integration_use_tls');
-			delete_option('AD_Integration_authorize_by_group');
-			delete_option('AD_Integration_authorization_group');
-			delete_option('AD_Integration_max_login_attempts');
-			delete_option('AD_Integration_block_time');
-			delete_option('AD_Integration_user_notification');
-			delete_option('AD_Integration_admin_notification');
-			delete_option('AD_Integration_admin_email');
-		}
-	}
 	
 	
 	/**
@@ -479,9 +478,10 @@ class ADIntegrationPlugin {
 	 * @param $username
 	 * @return unknown_type
 	 */
-	function _store_failed_login($username) {
+	protected function _store_failed_login($username) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		//$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
 		
 		$sql = "INSERT INTO $table_name (user_login, failed_login_time) VALUES ('" . $wpdb->escape($username)."'," . time() . ")";
 		$result = $wpdb->query($sql);
@@ -496,9 +496,10 @@ class ADIntegrationPlugin {
 	 * @param $seconds number of seconds
 	 * @return number of failed login attempts  
 	 */
-	function _get_failed_logins_within_block_time($username) {
+	protected function _get_failed_logins_within_block_time($username) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		//$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - (int)$this->_block_time;
 		
 		$sql = "SELECT count(*) AS count from $table_name WHERE user_login = '".$wpdb->escape($username)."' AND failed_login_time >= $time";
@@ -513,9 +514,10 @@ class ADIntegrationPlugin {
 	 * @param $username
 	 * @return 
 	 */
-	function _cleanup_failed_logins($username = NULL) {
+	protected function _cleanup_failed_logins($username = NULL) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->table_name;
+		//$table_name = $wpdb->prefix . $this->table_name;
+		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - $this->_block_time;
 		
 		$sql = "DELETE FROM $table_name WHERE failed_login_time < $time";
@@ -533,9 +535,10 @@ class ADIntegrationPlugin {
 	 * @param $username
 	 * @return int seconds the account is blocked, or 0
 	 */
-	function _get_rest_of_blocking_time($username) {
+	protected function _get_rest_of_blocking_time($username) {
 		global $wpdb;
-		$table_name = $wpdb->prefix . $this->_table_name;
+		//$table_name = $wpdb->prefix . $this->_table_name;
+		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
 		
 		$sql = "SELECT max(failed_login_time) FROM $table_name WHERE user_login = '".$wpdb->escape($username)."'";
 		$max_time = $wpdb->get_var($sql);
@@ -554,7 +557,7 @@ class ADIntegrationPlugin {
 	 * @param int $length Length of the password
 	 * @return password as string
 	 */
-	function _get_password($length = 10) {
+	protected function _get_password($length = 10) {
 		return substr(md5(uniqid(microtime())), 0, $length);
 	}
 
@@ -562,7 +565,7 @@ class ADIntegrationPlugin {
 	/*
 	 * Create a new WordPress account for the specified username.
 	 */
-	function _create_user($username, $email, $first_name, $last_name, $role = '') {
+	protected function _create_user($username, $email, $first_name, $last_name, $role = '') {
 		$password = $this->_get_password();
 		
 		if ( $email == '' ) 
@@ -595,7 +598,7 @@ class ADIntegrationPlugin {
 	/**
 	 * Updates a specific Wordpress user account
 	 */
-	function _update_user($username, $email, $first_name, $last_name, $role = '') {
+	protected function _update_user($username, $email, $first_name, $last_name, $role = '') {
 		
 		if ( $email == '' ) 
 		{
@@ -627,7 +630,7 @@ class ADIntegrationPlugin {
 	 * @param $username
 	 * @return boolean
 	 */
-	function _check_authorization_by_group($username) {
+	protected function _check_authorization_by_group($username) {
 		if ($this->_authorize_by_group) {
 			return $this->_adldap->user_ingroup($username, $this->_authorization_group, true);
 		} else {
@@ -642,13 +645,12 @@ class ADIntegrationPlugin {
 	 * @param $ad_username 
 	 * @return string matching role
 	 */
-	function _get_user_role_equiv($ad_username)
-	{
+	protected function _get_user_role_equiv($ad_username) {
 		
 		$role_equiv_groups = explode(';', $this->_role_equivalent_groups);
 		
 		$user_role = '';
-		foreach ( $role_equiv_groups as $whatever => $role_group)
+		foreach ($role_equiv_groups as $whatever => $role_group)
 		{
 				$role_group = explode('=', $role_group);
 				if ( count($role_group) != 2 )
@@ -674,7 +676,7 @@ class ADIntegrationPlugin {
 	 * @param $username string
 	 * @return unknown_type
 	 */
-	function _notify_user($username)
+	protected function _notify_user($username)
 	{
 		// if auto creation is enabled look for the user in AD 
 		$auto_create_user = (bool)get_option('AD_Integration_auto_create_user');
@@ -728,7 +730,7 @@ class ADIntegrationPlugin {
 	 * @param $username username of the blocked account
 	 * @return boolean false if no e-mail is sent, true on success
 	 */
-	function _notify_admin($username)
+	protected function _notify_admin($username)
 	{
 		$arrEmail = array(); // list of recipients
 		
@@ -823,7 +825,7 @@ class ADIntegrationPlugin {
 	 * 
 	 * @param $username
 	 */
-	function _display_blocking_page($username) {
+	protected function _display_blocking_page($username) {
 		$seconds = $this->_get_rest_of_blocking_time($username);
 			
 				?>
@@ -874,6 +876,7 @@ class ADIntegrationPlugin {
 	function _display_options_page() {
 		
 		$this->_load_options();
+		
 			
 
 ?>

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Active Directory Integration 0.9.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-08 16:28+0200\n"
-"PO-Revision-Date: 2009-06-26 16:22+0100\n"
+"PO-Revision-Date: 2009-07-01 17:11+0100\n"
 "Last-Translator: Christoph Steindorff <christoph.steindorff@ecw.de>\n"
 "Language-Team: DEUTSCH <info@ecw.de>\n"
 "MIME-Version: 1.0\n"
@@ -225,4 +225,16 @@ msgstr "Der Loginversuch ging aus von der IP-Adresse: %s"
 
 msgid "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE."
 msgstr "DIESE E-MAIL WURDE VOM SYSTEM AUTOMATISCH ERSTELLT, BITTE SENDEN SIE KEINE ANTWORT AN DIE ABSENDERADRESSE."
+
+msgid "Overview"
+msgstr "Übersicht"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Changelog"
+msgstr "Änderungshistorie (changelog)"
+
+msgid "Support-Forum"
+msgstr "Support-Forum"
 
