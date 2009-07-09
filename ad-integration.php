@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.2
+Version: 0.9.3
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
-Author URI: http://www.ecw.de/
+Author URI: http://blog.ecw.de/
 
 The work is derived from version 1.0.5 of the plugin Active Directory Authentication:
 OriginalPlugin URI: http://soc.qc.edu/jonathan/wordpress-ad-auth
@@ -101,6 +101,10 @@ class ADIntegrationPlugin {
 	// Administrator's e-mail address(es) where notifications should be sent to.		
 	protected $_admin_email = '';
 	
+	// Set user's display_name to an AD attribute or to username if left blank
+	// Possible values: description, displayname, mail, sn, cn, givenname, samaccountname
+	protected $_display_name = '';
+	
 	
 	/**
 	 * Constructor
@@ -112,7 +116,7 @@ class ADIntegrationPlugin {
 
 		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's folder and name it "ad-auth-[value in wp-config].mo"
-		load_plugin_textdomain( 'ad-integration', PLUGINDIR.'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER ); 
+		load_plugin_textdomain( 'ad-integration', WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER ); 
 		
 		if (isset($_GET['activate']) and $_GET['activate'] == 'true') {
 			add_action('init', array(&$this, 'initialize_options'));
@@ -120,20 +124,29 @@ class ADIntegrationPlugin {
 		
 		add_action('admin_menu', array(&$this, 'add_options_page'));
 		add_action('wp_authenticate', array(&$this, 'authenticate'), 10, 2);
-		add_filter('check_password', array(&$this, 'override_password_check'), 10, 4);
 		add_action('lost_password', array(&$this, 'disable_function'));
 		add_action('retrieve_password', array(&$this, 'disable_function'));
 		add_action('password_reset', array(&$this, 'disable_function'));
+	    add_action('admin_print_styles', array(&$this, 'load_styles'));
 		add_action('check_passwords', array(&$this, 'generate_password'), 10, 3);
+		
+		add_filter('check_password', array(&$this, 'override_password_check'), 10, 4);
 		add_filter('show_password_fields', array(&$this, 'disable_password_fields'));
 		add_filter('contextual_help', array(&$this, 'contextual_help'), 10, 2);
 		
 		if (!class_exists('adLDAP')) {
 			require 'ad_ldap/adLDAP.php';
 		}
-	
 	}
-
+	
+	
+	public function load_styles() {
+		 
+		wp_register_style('adintegration', WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER.'/css/adintegration.css',false, '1.7.1', 'screen');
+		wp_enqueue_style('adintegration');
+		//die(PLUGINDIR.'/'.ADINTEGRATION_FOLDER.'/css/adintegration.css');
+	}
+	
 
 	/*************************************************************
 	 * Plugin hooks
@@ -162,11 +175,10 @@ class ADIntegrationPlugin {
 			add_option('AD_Integration_block_time', '30', 'Number of seconds an account is blocked after the maximum number of failed login attempts is reached.');
 			add_option('AD_Integration_user_notification', false, 'Send email to user if his account is blocked.');
 			add_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
-			add_option('AD_Integration_admin_email', '', 'Administrators email address where notifications should be sent to.');
+			add_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
+			add_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
 		}
 	}
-	
-	
 	
 
 	/**
@@ -262,14 +274,13 @@ class ADIntegrationPlugin {
 			$user_role = $this->_get_user_role_equiv($ad_username);
 			if ($this->_auto_create_user || $user_role != '' ) {
 					// create user
-					$userinfo = $this->_adldap->user_info($ad_username, 
-						array("sn", "givenname", "mail")
-							);
+					$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
 					$userinfo = $userinfo[0];
 					$email = $userinfo['mail'][0];
 					$first_name = $userinfo['givenname'][0];
 					$last_name = $userinfo['sn'][0];
-					$this->_create_user($ad_username, $email, $first_name, $last_name, $user_role);
+					$display_name = $this->_get_display_name_from_AD($username, $userinfo);
+					$this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
 			} else {
 				// Bail out to avoid showing the login form
 					return new WP_Error('invalid_username', __('<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress.'));
@@ -280,15 +291,26 @@ class ADIntegrationPlugin {
 			if ($this->_auto_create_user AND $this->_auto_update_user) {
 				// Update users role
 				$user_role = $this->_get_user_role_equiv($ad_username);
-				$userinfo = $this->_adldap->user_info($ad_username, array("sn", "givenname", "mail"));
+				$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
 				$userinfo = $userinfo[0];
+				
+				//TODO: Implement to choose display_name
+				/*echo '<pre>';
+				print_r($userinfo);
+				echo '</pre>';
+				die();*/ 
+				
 				$email = $userinfo['mail'][0];
 				$first_name = $userinfo['givenname'][0];
 				$last_name = $userinfo['sn'][0];
-				$this->_update_user($ad_username, $email, $first_name, $last_name, $user_role);
+				$common_name = $userinfo['cn'][0];
+				$display_name = $this->_get_display_name_from_AD($username, $userinfo);
+				$this->_update_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
 			}
 		}
 	}
+	
+	
 
 	/*
 	 * Skip the password check, since we've externally authenticated.
@@ -397,7 +419,8 @@ class ADIntegrationPlugin {
 			'AD_Integration_block_time',
 			'AD_Integration_user_notification',
 			'AD_Integration_admin_notification',
-			'AD_Integration_admin_email'
+			'AD_Integration_admin_email',
+			'AD_Integration_display_name'
 		);
 		
 		foreach($options as $option) {
@@ -436,8 +459,8 @@ class ADIntegrationPlugin {
 			$help .= '</div>';
 		}
 		return $help;
-	}	
-	
+	}
+
 
 	/*************************************************************
 	 * Functions
@@ -468,9 +491,27 @@ class ADIntegrationPlugin {
 		$this->_user_notification	  		= (bool)get_option('AD_Integration_user_notification');
 		$this->_admin_notification			= (bool)get_option('AD_Integration_admin_notification');
 		$this->_admin_email					= get_option('AD_Integration_admin_email');
+		$this->_display_name				= get_option('AD_Integration_display_name');
 	}
 	
-	
+
+	/**
+	 * Determine the display_name to be stored in WP database.
+	 * @param $username  the username used to login
+	 * @param $userinfo  the array with data returned from AD
+	 * @return string  display_name
+	 */
+	protected function _get_display_name_from_AD($username, $userinfo) {
+		if (($this->_display_name == '') OR ($this->_display_name == 'sAMAccountName')) {
+			return $username;
+		}
+		$display_name = $userinfo[$this->_display_name][0];
+		if ($display_name == '') {
+			return $username;
+		} else {
+			return $display_name;
+		}
+	}
 	
 	/**
 	 * Stores the username and the current time in the db.
@@ -565,7 +606,7 @@ class ADIntegrationPlugin {
 	/*
 	 * Create a new WordPress account for the specified username.
 	 */
-	protected function _create_user($username, $email, $first_name, $last_name, $role = '') {
+	protected function _create_user($username, $email, $first_name, $last_name, $display_name = '', $role = '') {
 		$password = $this->_get_password();
 		
 		if ( $email == '' ) 
@@ -587,6 +628,13 @@ class ADIntegrationPlugin {
 		} else {
 			update_usermeta($user_id, 'first_name', $first_name);
 			update_usermeta($user_id, 'last_name', $last_name);
+			
+			// set display_name
+			if ($display_name != '') {
+				wp_update_user(array('ID' => $user_id, 'display_name' => $display_name));
+			}
+			
+			// set role
 			if ( $role != '' ) 
 			{
 				wp_update_user(array("ID" => $user_id, "role" => $role));
@@ -598,7 +646,7 @@ class ADIntegrationPlugin {
 	/**
 	 * Updates a specific Wordpress user account
 	 */
-	protected function _update_user($username, $email, $first_name, $last_name, $role = '') {
+	protected function _update_user($username, $email, $first_name, $last_name, $display_name='', $role = '') {
 		
 		if ( $email == '' ) 
 		{
@@ -612,13 +660,20 @@ class ADIntegrationPlugin {
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 		$user_id = username_exists($username);
 		if ( !$user_id ) {
-			die("Error updating user!");
+			die('Error updating user!');
 		} else {
 			update_usermeta($user_id, 'first_name', $first_name);
 			update_usermeta($user_id, 'last_name', $last_name);
+			
+			// set display_name
+			if ($display_name != '') {
+				wp_update_user(array('ID' => $user_id, 'display_name' => $display_name));
+			}
+			
+			// set role
 			if ( $role != '' ) 
 			{
-				wp_update_user(array("ID" => $user_id, "role" => $role));
+				wp_update_user(array('ID' => $user_id, 'role' => $role));
 			}
 		}
 	}
@@ -864,7 +919,7 @@ class ADIntegrationPlugin {
 </body>
 </html>
 <?php 
-		die();
+		die(); // IMPORTANT
 	
 	}
 	
@@ -881,206 +936,226 @@ class ADIntegrationPlugin {
 
 ?>
 
-
 <div class="wrap" style="background-image: url('<?php echo WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)); ?>/ad-integration.png'); background-repeat: no-repeat; background-position: right 50px;">
 
   <div id="icon-options-general" class="icon32">
-    <br/>
+   		<br/>
   </div>
   <h2><?php _e('Options › Active Directory Integration', 'ad-integration');?></h2>
-  <form action="options.php" method="post">
-    <input type="hidden" name="action" value="update" />
-    <input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_base_dn,AD_Integration_account_suffix,AD_Integration_domain_controllers,AD_Integration_role_equivalent_groups,AD_Integration_default_email_domain,AD_Integration_port,AD_Integration_bind_user,AD_Integration_bind_pwd,AD_Integration_use_tls,AD_Integration_append_suffix_to_new_users,AD_Integration_authorization_group,AD_Integration_authorize_by_group,AD_Integration_auto_update_user,AD_Integration_max_login_attempts,AD_Integration_block_time,AD_Integration_admin_notification,AD_Integration_user_notification,AD_Integration_admin_email" />
-    <?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
 
-    <table class="form-table">
-      <tbody>
-      <tr>
-		 <td colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('Active Directory Server', 'ad-integration'); ?></h2></td>
-	  </tr>
+  <div class="wrap">
+
+	<form action="options.php" method="post">
+		<input type="hidden" name="action" value="update" />
+    	<input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_base_dn,AD_Integration_account_suffix,AD_Integration_domain_controllers,AD_Integration_role_equivalent_groups,AD_Integration_default_email_domain,AD_Integration_port,AD_Integration_bind_user,AD_Integration_bind_pwd,AD_Integration_use_tls,AD_Integration_append_suffix_to_new_users,AD_Integration_authorization_group,AD_Integration_authorize_by_group,AD_Integration_auto_update_user,AD_Integration_max_login_attempts,AD_Integration_block_time,AD_Integration_admin_notification,AD_Integration_user_notification,AD_Integration_admin_email,AD_Integration_display_name" />
+    	<?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
+
+	    <table class="form-table">
+      		<tbody>
+      			<tr>
+					<td colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('Active Directory Server', 'ad-integration'); ?></h2></td>
+  				</tr>
      
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_domain_controllers"><?php _e('Domain Controllers', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_domain_controllers" id="AD_Integration_domain_controllers" class="regular-text" value="<?php echo $this->_domain_controllers; ?>" /><br />
-          <?php _e('Domain Controllers (separate with semicolons, e.g. "dc1.domain.tld;dc2.domain.tld")', 'ad-integration'); ?>
-        </td>
-      </tr>
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_domain_controllers"><?php _e('Domain Controllers', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_domain_controllers" id="AD_Integration_domain_controllers" class="regular-text" value="<?php echo $this->_domain_controllers; ?>" /><br />
+			          <?php _e('Domain Controllers (separate with semicolons, e.g. "dc1.domain.tld;dc2.domain.tld")', 'ad-integration'); ?>
+			        </td>
+			      </tr>
 
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_port"><?php _e('Port', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_port" id="AD_Integration_port" class="regular-text" 
-          value="<?php echo $this->_port; ?>" /><br />
-          <?php _e('Port on which the AD listens (defaults to "389")', 'ad-integration'); ?>
-        </td>
-      </tr>
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_port"><?php _e('Port', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_port" id="AD_Integration_port" class="regular-text" 
+			          value="<?php echo $this->_port; ?>" /><br />
+			          <?php _e('Port on which the AD listens (defaults to "389")', 'ad-integration'); ?>
+			        </td>
+			      </tr>
       
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_use_tls"><?php _e('Use TLS', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="checkbox" name="AD_Integration_use_tls" id="AD_Integration_use_tls"<?php if ($this->_use_tls) echo ' checked="checked"' ?> value="1" />
-          <?php _e('Secure the connection between the WordPress and the Active Directory Servers using TLS. Note: To use TLS, you must set the LDAP Port to 389.', 'ad-integration'); ?>
-        </td>
-      </tr>
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_bind_user"><?php _e('Bind User', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_bind_user" id="AD_Integration_bind_user" class="regular-text" 
-          value="<?php echo $this->_bind_user; ?>" />
-		  <?php _e('Username for non-anonymous requests to AD (e.g. "ldapuser@domain.tld"). Leave empty for anonymous requests.', 'ad-integration'); ?>
-        </td>
-      </tr>
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_bind_pwd"><?php _e('Bind User Password', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="password" name="AD_Integration_bind_pwd" id="AD_Integration_bind_pwd" class="regular-text" 
-          value="<?php echo $this->_bind_pwd; ?>" />
-		  <?php _e('Password for non-anonymous requests to AD', 'ad-integration'); ?>
-        </td>
-      </tr>
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_base_dn"><?php _e('Base DN', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_base_dn" id="AD_Integration_base_dn" class="regular-text" 
-          value="<?php echo $this->_base_dn; ?>" />
-		  <?php _e('Base DN (e.g., "ou=unit,dc=domain,dc=tld")', 'ad-integration'); ?>
-        </td>
-      </tr>
-    
-      <tr>
-		 <td colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('User specific settings','ad-integration'); ?></h2></td>
-	  </tr>
-    
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_auto_create_user"><?php _e('Automatic User Creation', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="checkbox" name="AD_Integration_auto_create_user" id="AD_Integration_auto_create_user" <?php if ($this->_auto_create_user) echo ' checked="checked"' ?> value="1" />
-          <?php _e('Should a new user be created automatically if not already in the WordPress database?','ad-integration'); ?>
-          <br />
-          <?php _e('Created users will obtain the role defined under "New User Default Role" on the <a href="options-general.php">General Options</a> page.', 'ad-integration'); ?>
-          <br/>
-          <?php _e('This setting is separate from the Role Equivalent Groups option, below.', 'ad-integration'); ?>
-          <br />
-		  
-          <?php _e("<b>Users with role equivalent groups will be created even if this setting is turned off</b> (because if you didn't want this to happen, you would leave that option blank.)", 'ad-integration'); ?>
-        </td>
-      </tr>
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_use_tls"><?php _e('Use TLS', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="checkbox" name="AD_Integration_use_tls" id="AD_Integration_use_tls"<?php if ($this->_use_tls) echo ' checked="checked"' ?> value="1" />
+			          <?php _e('Secure the connection between the WordPress and the Active Directory Servers using TLS. Note: To use TLS, you must set the LDAP Port to 389.', 'ad-integration'); ?>
+			        </td>
+			      </tr>
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_bind_user"><?php _e('Bind User', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_bind_user" id="AD_Integration_bind_user" class="regular-text" 
+			          value="<?php echo $this->_bind_user; ?>" />
+					  <?php _e('Username for non-anonymous requests to AD (e.g. "ldapuser@domain.tld"). Leave empty for anonymous requests.', 'ad-integration'); ?>
+			        </td>
+			      </tr>
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_bind_pwd"><?php _e('Bind User Password', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="password" name="AD_Integration_bind_pwd" id="AD_Integration_bind_pwd" class="regular-text" 
+			          value="<?php echo $this->_bind_pwd; ?>" />
+					  <?php _e('Password for non-anonymous requests to AD', 'ad-integration'); ?>
+			        </td>
+			      </tr>
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_base_dn"><?php _e('Base DN', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_base_dn" id="AD_Integration_base_dn" class="regular-text" 
+			          value="<?php echo $this->_base_dn; ?>" />
+					  <?php _e('Base DN (e.g., "ou=unit,dc=domain,dc=tld")', 'ad-integration'); ?>
+			        </td>
+			      </tr>
+			    
+			      <tr>
+					 <td colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('User specific settings','ad-integration'); ?></h2></td>
+				  </tr>
+			    
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_auto_create_user"><?php _e('Automatic User Creation', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="checkbox" name="AD_Integration_auto_create_user" id="AD_Integration_auto_create_user" <?php if ($this->_auto_create_user) echo ' checked="checked"' ?> value="1" />
+			          <?php _e('Should a new user be created automatically if not already in the WordPress database?','ad-integration'); ?>
+			          <br />
+			          <?php _e('Created users will obtain the role defined under "New User Default Role" on the <a href="options-general.php">General Options</a> page.', 'ad-integration'); ?>
+			          <br/>
+			          <?php _e('This setting is separate from the Role Equivalent Groups option, below.', 'ad-integration'); ?>
+			          <br />
+					  
+			          <?php _e("<b>Users with role equivalent groups will be created even if this setting is turned off</b> (because if you didn't want this to happen, you would leave that option blank.)", 'ad-integration'); ?>
+			        </td>
+			      </tr>
+			
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_auto_update_user"><?php _e('Automatic User Update', 'ad-integration'); ?></label></th>
+			        <td>
+					  <input type="checkbox" name="AD_Integration_auto_update_user" id="AD_Integration_auto_update_user" <?php if ($this->_auto_update_user) echo ' checked="checked"' ?> value="1" />          
+					  <?php _e('Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>', 'ad-integration'); ?>          
+			        </td>
+			      </tr>
+			      
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_default_email_domain"><?php _e('Default email domain', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_default_email_domain" id="AD_Integration_default_email_domain" class="regular-text" value="<?php echo $this->_default_email_domain; ?>" /><br />
+					  <?php _e("If the Active Directory attribute 'mail' is blank, a user's email will be set to username@whatever-this-says", 'ad-integration'); ?>
+			        </td>
+			      </tr>
+				  
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_account_suffix"><?php _e('Account Suffix', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_account_suffix" id="AD_Integration_account_suffix" class="regular-text" value="<?php echo $this->_account_suffix; ?>" /><br />
+			          <?php _e('Account Suffix (will be appended to all usernames in the Active Directory authentication process; e.g., "@domain.tld".)', 'ad-integration'); ?>
+					  <br />
+					  <br />
+					  <input type="checkbox" name="AD_Integration_append_suffix_to_new_users" id="AD_Integration_append_suffix_to_new_users"<?php if ($this->_append_suffix_to_new_users) echo ' checked="checked"' ?> value="1" />
+			          <label for="AD_Integration_append_suffix_to_new_users"><?php _e('Append account suffix to new created usernames. If checked, the account suffix (see above) will be appended to the usernames of new created users.', 'ad-integration'); ?></label>
+			        </td>
+			      </tr>
+			      
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_display_name"><?php _e('Display name', 'ad-integration'); ?></label></th>
+			        <td>
+			          <select name="AD_Integration_display_name" id="AD_Integration_display_name">
+			            <?php _e('LDAP Attribute: ','ad-integration');?>
+			            <option value="samaccountname"<?php if (($this->_display_name == 'samaccountname') OR ($this->_display_name == '')) echo ' selected="selected"' ?>><?php _e('sAMAccountName (the username)', 'ad-integration'); ?></option>
+			            <option value="displayname"<?php if ($this->_display_name == 'displayname') echo ' selected="selected"' ?>><?php _e('displayName', 'ad-integration'); ?></option>
+			            <option value="description"<?php if ($this->_display_name == 'description') echo ' selected="selected"' ?>><?php _e('description', 'ad-integration'); ?></option>
+			            <option value="givenname"<?php if ($this->_display_name == 'givenname') echo ' selected="selected"' ?>><?php _e('givenName (firstname)', 'ad-integration'); ?></option>
+			            <option value="sn"<?php if ($this->_display_name == 'sn') echo ' selected="selected"' ?>><?php _e('SN (lastname)', 'ad-integration'); ?></option>
+			            <option value="cn"<?php if ($this->_display_name == 'cn') echo ' selected="selected"' ?>><?php _e('CN (Common Name, the whole name)', 'ad-integration'); ?></option>
+			            <option value="mail"<?php if ($this->_display_name == 'mail') echo ' selected="selected"' ?>><?php _e('mail', 'ad-integration'); ?></option>
+			          </select>
+			          <?php _e("Choose user's Active Directory attribute to be used as display name.", 'ad-integration'); ?>
+			        </td>
+			      </tr>
+			      
+			
+			      <tr>
+				   <td scope="col" colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('Authorization','ad-integration'); ?></h2></td>
+				  </tr>
+			      
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_authorize_by_group"><?php _e('Authorize by group membership','ad-integration'); ?></label></th>
+			        <td>
+			          <input type="checkbox" name="AD_Integration_authorize_by_group" id="AD_Integration_authorize_by_group"<?php if ($this->_authorize_by_group) echo ' checked="checked"' ?> value="1" />
+			          <?php _e('Users are authorized for login only when they are members of a specific AD group.','ad-integration'); ?>
+			          <br />
+			          <label for="AD_Integration_authorization_group"><?php _e('Group','ad-integration'); ?>: </label>
+			          <input type="text" name="AD_Integration_authorization_group" id="AD_Integration_authorization_group" class="regular-text"
+			                    value="<?php echo $this->_authorization_group; ?>" /><?php _e('(e.g., "WP-Users")', 'ad-integration'); ?>
+			          
+			        </td>
+			      </tr>
+			      
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_role_equivalent_groups"><?php _e('Role Equivalent Groups', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_role_equivalent_groups" id="AD_Integration_role_equivalent_groups" class="regular-text" 
+			          value="<?php echo $this->_role_equivalent_groups; ?>" /><br />
+					  <?php _e('List of Active Directory groups which correspond to WordPress user roles.', 'ad-integration'); ?><br/>
+					  <?php _e('When a user is first created, his role will correspond to what is specified here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., "Soc-Faculty=faculty" or "Faculty=faculty;Students=subscriber"<br/>A user will be created based on the first math, from left to right, so you should obviously put the more powerful groups first.', 'ad-integration'); ?><br/>
+					  <?php _e('NOTES', 'ad-integration'); ?>
+					  <ol style="list-style-type:decimal; margin-left:2em;font-size:11px;">
+					    <li><?php _e('WordPress stores roles as lower case ("Subscriber" is stored as "subscriber")', 'ad-integration'); ?></li>
+					    <li><?php _e('Active Directory groups are case-sensitive.', 'ad-integration'); ?></li>
+					    <li><?php _e('Group memberships cannot be checked across domains.  So if you have two domains, instr and qc, and qc is the domain specified above, if instr is linked to qc, I can authenticate instr users, but not check instr group memberships.', 'ad-integration'); ?></li>
+					  </ol>
+			        </td>
+			      </tr>
+			      
+			      <tr>
+				   <td scope="col" colspan="2">
+				     <h2 style="font-size: 150%; font-weight: bold;"><?php _e('Brute Force Protection','ad-integration'); ?></h2>
+				     <?php _e('For security reasons you can use the following options to prevent brute force attacks on your user accounts.','ad-integration'); ?>
+				   </td>
+				  </tr>
+				  
+			     <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_max_login_attempts"><?php _e('Maximum number of allowed login attempts', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_max_login_attempts" id="AD_Integration_max_login_attempts"  
+			          value="<?php echo $this->_max_login_attempts; ?>" /><br />
+					  <?php _e('Maximum number of failed login attempts before a user account is blocked. If empty or "0" Brute Force Protection is turned off.', 'ad-integration'); ?>
+				    </td>
+				  </tr>
+			 
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_block_time"><?php _e('Blocking Time', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="text" name="AD_Integration_block_time" id="AD_Integration_block_time"  
+			          value="<?php echo $this->_block_time; ?>" /><br />
+					  <?php _e('Number of seconds an account is blocked after the maximum number of failed login attempts is reached.', 'ad-integration'); ?>
+				    </td>
+				  </tr>
+			
+				  <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_user_notification"><?php _e('User Notification', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="checkbox" name="AD_Integration_user_notification" id="AD_Integration_user_notification"<?php if ($this->_user_notification) echo ' checked="checked"' ?> value="1" />  
+					  <?php _e('Notify user by e-mail when his account is blocked.', 'ad-integration'); ?>
+				    </td>
+				  </tr>
+			
+				  <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_admin_notification"><?php _e('Admin Notification', 'ad-integration'); ?></label></th>
+			        <td>
+			          <input type="checkbox" name="AD_Integration_admin_notification" id="AD_Integration_admin_notification"<?php if ($this->_admin_notification) echo ' checked="checked"' ?> value="1" />  
+					  <?php _e('Notify admin(s) by e-mail when an user account is blocked.', 'ad-integration'); ?>
+					  <br />
+			          <?php _e('E-mail addresses for notifications:','ad-integration');?>
+			          <input type="text" name="AD_Integration_admin_email" id="AD_Integration_admin_email" class="regular-text"  
+			          value="<?php echo $this->_admin_email; ?>" />
+			          <br />
+			          <?php _e('Seperate multiple addresses by semicolon (e.g. "admin@domain.tld;me@mydomain.tld"). If left blank, notifications will be sent to the blog-administrator only.', 'ad-integration'); ?>
+				    </td>
+				  </tr>
+      	      </tbody>
+    	</table>
+    	<p class="submit">
+      		<input type="submit" class="button-primary" name="Submit" value="<?php _e("Save Changes"); ?>" />
+    	</p>
+  	</form>
 
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_auto_update_user"><?php _e('Automatic User Update', 'ad-integration'); ?></label></th>
-        <td>
-		  <input type="checkbox" name="AD_Integration_auto_update_user" id="AD_Integration_auto_update_user" <?php if ($this->_auto_update_user) echo ' checked="checked"' ?> value="1" />          
-		  <?php _e('Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>', 'ad-integration'); ?>          
-        </td>
-      </tr>
-      
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_default_email_domain"><?php _e('Default email domain', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_default_email_domain" id="AD_Integration_default_email_domain" class="regular-text" value="<?php echo $this->_default_email_domain; ?>" /><br />
-		  <?php _e("If the Active Directory attribute 'mail' is blank, a user's email will be set to username@whatever-this-says", 'ad-integration'); ?>
-        </td>
-      </tr>
-	  
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_account_suffix"><?php _e('Account Suffix', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_account_suffix" id="AD_Integration_account_suffix" class="regular-text" value="<?php echo $this->_account_suffix; ?>" /><br />
-          <?php _e('Account Suffix (will be appended to all usernames in the Active Directory authentication process; e.g., "@domain.tld".)', 'ad-integration'); ?>
-		  <br />
-		  <br />
-		  <input type="checkbox" name="AD_Integration_append_suffix_to_new_users" id="AD_Integration_append_suffix_to_new_users"<?php if ($this->_append_suffix_to_new_users) echo ' checked="checked"' ?> value="1" />
-          <label for="AD_Integration_append_suffix_to_new_users"><?php _e('Append account suffix to new created usernames. If checked, the account suffix (see above) will be appended to the usernames of new created users.', 'ad-integration'); ?></label>
-        </td>
-      </tr>
-
-      <tr>
-	   <td scope="col" colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('Authorization','ad-integration'); ?></h2></td>
-	  </tr>
-      
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_authorize_by_group"><?php _e('Authorize by group membership','ad-integration'); ?></label></th>
-        <td>
-          <input type="checkbox" name="AD_Integration_authorize_by_group" id="AD_Integration_authorize_by_group"<?php if ($this->_authorize_by_group) echo ' checked="checked"' ?> value="1" />
-          <?php _e('Users are authorized for login only when they are members of a specific AD group.','ad-integration'); ?>
-          <br />
-          <label for="AD_Integration_authorization_group"><?php _e('Group','ad-integration'); ?>: </label>
-          <input type="text" name="AD_Integration_authorization_group" id="AD_Integration_authorization_group" class="regular-text"
-                    value="<?php echo $this->_authorization_group; ?>" /><?php _e('(e.g., "WP-Users")', 'ad-integration'); ?>
-          
-        </td>
-      </tr>
-      
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_role_equivalent_groups"><?php _e('Role Equivalent Groups', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_role_equivalent_groups" id="AD_Integration_role_equivalent_groups" class="regular-text" 
-          value="<?php echo $this->_role_equivalent_groups; ?>" /><br />
-		  <?php _e('List of Active Directory groups which correspond to WordPress user roles.', 'ad-integration'); ?><br/>
-		  <?php _e('When a user is first created, his role will correspond to what is specified here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., "Soc-Faculty=faculty" or "Faculty=faculty;Students=subscriber"<br/>A user will be created based on the first math, from left to right, so you should obviously put the more powerful groups first.', 'ad-integration'); ?><br/>
-		  <?php _e('NOTES', 'ad-integration'); ?>
-		  <ol style="list-style-type:decimal; margin-left:2em;font-size:11px;">
-		    <li><?php _e('WordPress stores roles as lower case ("Subscriber" is stored as "subscriber")', 'ad-integration'); ?></li>
-		    <li><?php _e('Active Directory groups are case-sensitive.', 'ad-integration'); ?></li>
-		    <li><?php _e('Group memberships cannot be checked across domains.  So if you have two domains, instr and qc, and qc is the domain specified above, if instr is linked to qc, I can authenticate instr users, but not check instr group memberships.', 'ad-integration'); ?></li>
-		  </ol>
-        </td>
-      </tr>
-      
-      <tr>
-	   <td scope="col" colspan="2">
-	     <h2 style="font-size: 150%; font-weight: bold;"><?php _e('Brute Force Protection','ad-integration'); ?></h2>
-	     <?php _e('For security reasons you can use the following options to prevent brute force attacks on your user accounts.','ad-integration'); ?>
-	   </td>
-	  </tr>
-	  
-     <tr valign="top">
-        <th scope="row"><label for="AD_Integration_max_login_attempts"><?php _e('Maximum number of allowed login attempts', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_max_login_attempts" id="AD_Integration_max_login_attempts"  
-          value="<?php echo $this->_max_login_attempts; ?>" /><br />
-		  <?php _e('Maximum number of failed login attempts before a user account is blocked. If empty or "0" Brute Force Protection is turned off.', 'ad-integration'); ?>
-	    </td>
-	  </tr>
- 
-      <tr valign="top">
-        <th scope="row"><label for="AD_Integration_block_time"><?php _e('Blocking Time', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="text" name="AD_Integration_block_time" id="AD_Integration_block_time"  
-          value="<?php echo $this->_block_time; ?>" /><br />
-		  <?php _e('Number of seconds an account is blocked after the maximum number of failed login attempts is reached.', 'ad-integration'); ?>
-	    </td>
-	  </tr>
-
-	  <tr valign="top">
-        <th scope="row"><label for="AD_Integration_user_notification"><?php _e('User Notification', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="checkbox" name="AD_Integration_user_notification" id="AD_Integration_user_notification"<?php if ($this->_user_notification) echo ' checked="checked"' ?> value="1" />  
-		  <?php _e('Notify user by e-mail when his account is blocked.', 'ad-integration'); ?>
-	    </td>
-	  </tr>
-
-	  <tr valign="top">
-        <th scope="row"><label for="AD_Integration_admin_notification"><?php _e('Admin Notification', 'ad-integration'); ?></label></th>
-        <td>
-          <input type="checkbox" name="AD_Integration_admin_notification" id="AD_Integration_admin_notification"<?php if ($this->_admin_notification) echo ' checked="checked"' ?> value="1" />  
-		  <?php _e('Notify admin(s) by e-mail when an user account is blocked.', 'ad-integration'); ?>
-		  <br />
-          <?php _e('E-mail addresses for notifications:','ad-integration');?>
-          <input type="text" name="AD_Integration_admin_email" id="AD_Integration_admin_email" class="regular-text"  
-          value="<?php echo $this->_admin_email; ?>" />
-          <br />
-          <?php _e('Seperate multiple addresses by semicolon (e.g. "admin@domain.tld;me@mydomain.tld"). If left blank, notifications will be sent to the blog-administrator only.', 'ad-integration'); ?>
-	    </td>
-	  </tr>
-      
-      </tbody>
-    </table>
-    <p class="submit">
-      <input type="submit" class="button-primary" name="Submit" value="<?php _e("Save Changes"); ?>" />
-    </p>
-  </form>
 </div>
 <?php
 	}
