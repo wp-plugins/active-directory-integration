@@ -1,7 +1,8 @@
 <?php
+
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.3
+Version: 0.9.4
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -110,6 +111,7 @@ class ADIntegrationPlugin {
 	 * Constructor
 	 */
 	public function __construct() {
+		global $wp_version;
 		
 		// define folder constant  
 		define('ADINTEGRATION_FOLDER', basename(dirname(__FILE__)));
@@ -123,7 +125,13 @@ class ADIntegrationPlugin {
 		}
 		
 		add_action('admin_menu', array(&$this, 'add_options_page'));
-		add_action('wp_authenticate', array(&$this, 'authenticate'), 10, 2);
+
+		if (version_compare($wp_version, '2.8', '>=')) {
+			add_filter('authenticate', array(&$this, 'authenticate'), 20, 3);
+		} else {
+			add_action('wp_authenticate', array(&$this, 'authenticate'), 10, 2);
+		}
+		
 		add_action('lost_password', array(&$this, 'disable_function'));
 		add_action('retrieve_password', array(&$this, 'disable_function'));
 		add_action('password_reset', array(&$this, 'disable_function'));
@@ -190,19 +198,38 @@ class ADIntegrationPlugin {
 		}
 	}
 
+	/**
+	 * Wrapper
+	 * 
+	 * @param $arg1 WP_User or username
+	 * @param $arg2 username or password
+	 * @param $arg3 passwprd or empty
+	 * @return WP_User
+	 */
+	public function authenticate($arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
+		global $wp_version;
+		
+		if (version_compare($wp_version, '2.8', '>=')) {
+			return $this->ad_authenticate($arg1, $arg2, $arg3); 
+		} else {
+			return $this->ad_authenticate(NULL, $arg1, $arg2);
+		}
+	}
 	
 
+	
 	/**
 	 * If the REMOTE_USER evironment is set, use it as the username.
 	 * This assumes that you have externally authenticated the user.
 	 */
-	public function authenticate($username, $password) {
+	public function ad_authenticate($user = NULL, $username = '', $password = '') {
 
+		$user_id = NULL;
+		
 		$this->_authenticated = false;
 		
 		// Load options from WordPress-DB.
 		$this->_load_options();
-		
 		
 		// Connect to Active Directory			
 		$this->_adldap = new adLDAP(array(
@@ -280,7 +307,7 @@ class ADIntegrationPlugin {
 					$first_name = $userinfo['givenname'][0];
 					$last_name = $userinfo['sn'][0];
 					$display_name = $this->_get_display_name_from_AD($username, $userinfo);
-					$this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
+					$user_id = $this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
 			} else {
 				// Bail out to avoid showing the login form
 					return new WP_Error('invalid_username', __('<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress.'));
@@ -294,22 +321,25 @@ class ADIntegrationPlugin {
 				$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
 				$userinfo = $userinfo[0];
 				
-				//TODO: Implement to choose display_name
-				/*echo '<pre>';
-				print_r($userinfo);
-				echo '</pre>';
-				die();*/ 
-				
 				$email = $userinfo['mail'][0];
 				$first_name = $userinfo['givenname'][0];
 				$last_name = $userinfo['sn'][0];
 				$common_name = $userinfo['cn'][0];
 				$display_name = $this->_get_display_name_from_AD($username, $userinfo);
-				$this->_update_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
+				$user_id = $this->_update_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
 			}
 		}
-	}
+		
+		
+		if (!$user_id) {
+			$user_id = username_exists($username);
+		}
+
+		$user = new WP_User($user_id);
+		return $user;
+	}	
 	
+
 	
 
 	/*
@@ -603,8 +633,15 @@ class ADIntegrationPlugin {
 	}
 
 	
-	/*
+	/**
 	 * Create a new WordPress account for the specified username.
+	 * @param $username
+	 * @param $email
+	 * @param $first_name
+	 * @param $last_name
+	 * @param $display_name
+	 * @param $role
+	 * @return integer user_id
 	 */
 	protected function _create_user($username, $email, $first_name, $last_name, $display_name = '', $role = '') {
 		$password = $this->_get_password();
@@ -640,11 +677,20 @@ class ADIntegrationPlugin {
 				wp_update_user(array("ID" => $user_id, "role" => $role));
 			}
 		}
+		return $user_id;
 	}
 	
 	
 	/**
 	 * Updates a specific Wordpress user account
+	 * 
+	 * @param $username
+	 * @param $email
+	 * @param $first_name
+	 * @param $last_name
+	 * @param $display_name
+	 * @param $role
+	 * @return integer user_id
 	 */
 	protected function _update_user($username, $email, $first_name, $last_name, $display_name='', $role = '') {
 		
@@ -676,6 +722,7 @@ class ADIntegrationPlugin {
 				wp_update_user(array('ID' => $user_id, 'role' => $role));
 			}
 		}
+		return $user_id;
 	}
 	
 	

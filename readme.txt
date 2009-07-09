@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 2.8.0
-Stable tag: 0.9.3
+Stable tag: 0.9.4
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -32,7 +32,11 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * WordPress since 2.7.1 
 * PHP 5
 * LDAP support
-* OpenSSL Support for TLS (recommended) 
+* OpenSSL Support for TLS (recommended)
+
+= Known Issues =
+* XMLRPC will only work with WordPress 2.8 and above.
+ 
 
 == Frequently Asked Questions ==
 
@@ -47,6 +51,9 @@ None... so far.
 1. Enable SSL-Admin-Mode by adding the line `define('FORCE_SSL_ADMIN', true);` to your wp-config.php so that your passwords are not sent in plain-text.
 
 == Changelog ==
+
+= 0.9.4 =
+* FIX: XMLRPC now works with WP 2.8 and above. XMLRPC won´t work with earlier versions. (Thanks to Alexander Liesch for the bug report.)
 
 = 0.9.3 =
 * NEW: determine WP display name from AD attributes
