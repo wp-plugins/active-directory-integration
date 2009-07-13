@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 2.8.1
-Stable tag: 0.9.5
+Stable tag: 0.9.6
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -53,7 +53,7 @@ None... so far.
 == Changelog ==
 
 = 0.9.6 =
-* FIX: With WP 2.8 login screen shows a login error even if there wasn´t an attempt zu login. (Thanks to Alexander Liesch for the bug report.)
+* FIX: With WP 2.8 login screen shows a login error even if there wasn´t an attempt zu login and you can not login with local user, as admin.(Thanks to Alexander Liesch and shimh for the bug report.)
 
 = 0.9.5 =
 * FIX: "Call to undefined function username_exists()..." fixed, which occurs under some circustances. (Thanks to Alexander Liesch for the bug report.)
