@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.6
+Version: 0.9.6-dev
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -28,8 +28,6 @@ OriginalAuthor URI: http://soc.qc.edu/jonathan
 */
 
 
-
-
 if (!class_exists('ADIntegrationPlugin')) {
 class ADIntegrationPlugin {
 	
@@ -41,6 +39,9 @@ class ADIntegrationPlugin {
 	
 	// is the user authenticated?
 	public $_authenticated = false;
+	
+	protected $_minium_WPMU_version = '2.8';
+	protected $_minium_WP_version = '2.8';
 	
 	// adLDAP-object
 	protected $_adldap;
@@ -105,13 +106,38 @@ class ADIntegrationPlugin {
 	// Set user's display_name to an AD attribute or to username if left blank
 	// Possible values: description, displayname, mail, sn, cn, givenname, samaccountname
 	protected $_display_name = '';
-	
-	
+
+	// All options and its types 
+	protected $_all_options = array(
+			array(name => 'AD_Integration_account_suffix', type => 'string'),
+			array(name => 'AD_Integration_auto_create_user', type => 'bool'),
+			array(name => 'AD_Integration_auto_update_user', type => 'bool'),
+			array(name => 'AD_Integration_append_suffix_to_new_users', type => 'bool'),
+			array(name => 'AD_Integration_domain_controllers', type => 'string'),
+			array(name => 'AD_Integration_base_dn', type => 'string'),
+			array(name => 'AD_Integration_role_equivalent_groups', type => 'string'),
+			array(name => 'AD_Integration_default_email_domain', type => 'string'),
+			array(name => 'AD_Integration_port', type => 'int'),
+			array(name => 'AD_Integration_bind_user', type => 'string'),
+			array(name => 'AD_Integration_bind_pwd', type => 'string'),
+			array(name => 'AD_Integration_use_tls', type => 'bool'),
+			array(name => 'AD_Integration_authorize_by_group', type => 'bool'),
+			array(name => 'AD_Integration_authorization_group', type => 'string'),
+			array(name => 'AD_Integration_max_login_attempts', type => 'int'),
+			array(name => 'AD_Integration_block_time', type => 'int'),
+			array(name => 'AD_Integration_user_notification', type => 'bool'),
+			array(name => 'AD_Integration_admin_notification', type => 'bool'),
+			array(name => 'AD_Integration_admin_email', type => 'string'),
+			array(name => 'AD_Integration_display_name', type => 'string')
+		);
+
 	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		global $wp_version;
+		global $wp_version, $wpmu_version, $wpdb, $wpmuBaseTablePrefix;
+		
+		define('IS_WPMU', ($wpmu_version != ''));
 		
 		// define folder constant  
 		define('ADINTEGRATION_FOLDER', basename(dirname(__FILE__)));
@@ -145,6 +171,10 @@ class ADIntegrationPlugin {
 		if (!class_exists('adLDAP')) {
 			require 'ad_ldap/adLDAP.php';
 		}
+		
+		// Load Options
+		$this->_load_options();
+
 	}
 	
 	
@@ -164,37 +194,76 @@ class ADIntegrationPlugin {
 	 * Add options for this plugin to the database.
 	 */
 	public function initialize_options() {
-		if (current_user_can('manage_options')) {
-			add_option('AD_Integration_account_suffix', '', 'Account Suffix (will be appended to all usernames created in WordPress, as well as used in the Active Directory authentication process');
-			add_option('AD_Integration_auto_create_user', false, 'Should a new user be created automatically if not already in the WordPress database?');
-			add_option('AD_Integration_auto_update_user', false, 'Should the users be updated in the WordPress database everytime they logon? (Works only if automatic user creation is set.)');
-			add_option('AD_Integration_append_suffix_to_new_users', '', false, 'Should the account suffix be appended to the usernames created in WordPress?');
-			add_option('AD_Integration_domain_controllers', '', 'Domain Controllers (separate with semicolons)');
-			add_option('AD_Integration_base_dn', '', 'Base DN');
-			add_option('AD_Integration_role_equivalent_groups', '', 'Role Equivalent Groups');
-			add_option('AD_Integration_default_email_domain', '', 'Default Email Domain');
-			add_option('AD_Integration_port', '389', 'Port on which AD listens (default 389).');
-			add_option('AD_Integration_bind_user', '', 'Username for non-anonymous requests to AD.');
-			add_option('AD_Integration_bind_pwd', '', 'Password for non-anonymous requests to AD.');
-			add_option('AD_Integration_use_tls', false, 'Secure the connection between the Drupal and the LDAP servers using TLS.');
-			add_option('AD_Integration_authorize_by_group', false, 'Check Login authorization by group membership.');
-			add_option('AD_Integration_authorization_group', '', 'Group name for authorization.');
-			add_option('AD_Integration_max_login_attempts', '3', 'Maximum number of failed login attempts before the account is blocked.');
-			add_option('AD_Integration_block_time', '30', 'Number of seconds an account is blocked after the maximum number of failed login attempts is reached.');
-			add_option('AD_Integration_user_notification', false, 'Send email to user if his account is blocked.');
-			add_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
-			add_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
-			add_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
+		
+		if (IS_WPMU) {
+			if (is_site_admin()) {
+				add_site_option('AD_Integration_account_suffix', '', 'Account Suffix (will be appended to all usernames created in WordPress, as well as used in the Active Directory authentication process');
+				add_site_option('AD_Integration_auto_create_user', false, 'Should a new user be created automatically if not already in the WordPress database?');
+				add_site_option('AD_Integration_auto_update_user', false, 'Should the users be updated in the WordPress database everytime they logon? (Works only if automatic user creation is set.)');
+				add_site_option('AD_Integration_append_suffix_to_new_users', '', false, 'Should the account suffix be appended to the usernames created in WordPress?');
+				add_site_option('AD_Integration_domain_controllers', '', 'Domain Controllers (separate with semicolons)');
+				add_site_option('AD_Integration_base_dn', '', 'Base DN');
+				add_site_option('AD_Integration_role_equivalent_groups', '', 'Role Equivalent Groups');
+				add_site_option('AD_Integration_default_email_domain', '', 'Default Email Domain');
+				add_site_option('AD_Integration_port', '389', 'Port on which AD listens (default 389).');
+				add_site_option('AD_Integration_bind_user', '', 'Username for non-anonymous requests to AD.');
+				add_site_option('AD_Integration_bind_pwd', '', 'Password for non-anonymous requests to AD.');
+				add_site_option('AD_Integration_use_tls', false, 'Secure the connection between the Drupal and the LDAP servers using TLS.');
+				add_site_option('AD_Integration_authorize_by_group', false, 'Check Login authorization by group membership.');
+				add_site_option('AD_Integration_authorization_group', '', 'Group name for authorization.');
+				add_site_option('AD_Integration_max_login_attempts', '3', 'Maximum number of failed login attempts before the account is blocked.');
+				add_site_option('AD_Integration_block_time', '30', 'Number of seconds an account is blocked after the maximum number of failed login attempts is reached.');
+				add_site_option('AD_Integration_user_notification', false, 'Send email to user if his account is blocked.');
+				add_site_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
+				add_site_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
+				add_site_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
+			}
+		} else {
+			if (current_user_can('manage_options')) {
+				add_option('AD_Integration_account_suffix', '', 'Account Suffix (will be appended to all usernames created in WordPress, as well as used in the Active Directory authentication process');
+				add_option('AD_Integration_auto_create_user', false, 'Should a new user be created automatically if not already in the WordPress database?');
+				add_option('AD_Integration_auto_update_user', false, 'Should the users be updated in the WordPress database everytime they logon? (Works only if automatic user creation is set.)');
+				add_option('AD_Integration_append_suffix_to_new_users', '', false, 'Should the account suffix be appended to the usernames created in WordPress?');
+				add_option('AD_Integration_domain_controllers', '', 'Domain Controllers (separate with semicolons)');
+				add_option('AD_Integration_base_dn', '', 'Base DN');
+				add_option('AD_Integration_role_equivalent_groups', '', 'Role Equivalent Groups');
+				add_option('AD_Integration_default_email_domain', '', 'Default Email Domain');
+				add_option('AD_Integration_port', '389', 'Port on which AD listens (default 389).');
+				add_option('AD_Integration_bind_user', '', 'Username for non-anonymous requests to AD.');
+				add_option('AD_Integration_bind_pwd', '', 'Password for non-anonymous requests to AD.');
+				add_option('AD_Integration_use_tls', false, 'Secure the connection between the Drupal and the LDAP servers using TLS.');
+				add_option('AD_Integration_authorize_by_group', false, 'Check Login authorization by group membership.');
+				add_option('AD_Integration_authorization_group', '', 'Group name for authorization.');
+				add_option('AD_Integration_max_login_attempts', '3', 'Maximum number of failed login attempts before the account is blocked.');
+				add_option('AD_Integration_block_time', '30', 'Number of seconds an account is blocked after the maximum number of failed login attempts is reached.');
+				add_option('AD_Integration_user_notification', false, 'Send email to user if his account is blocked.');
+				add_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
+				add_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
+				add_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
+			}
 		}
 	}
+	
+	
 	
 
 	/**
 	 * Add an options pane for this plugin.
 	 */
 	public function add_options_page() {
-		if (function_exists('add_options_page')) {
-			add_options_page('Active Directory Integration', 'Active Directory Integration', 9, __FILE__, array(&$this, '_display_options_page'));
+	
+		if (IS_WPMU && is_site_admin()) {
+			// WordPress MU
+			if (function_exists('add_submenu_page')) {
+				add_submenu_page('wpmu-admin.php', __('Active Directory Integration'), __('Active Directory Integration'), 'manage_options', __FILE__, array(&$this, '_display_options_page'));
+			}
+		}
+
+		if (!IS_WPMU) {
+			// WordPress Standard
+			if (function_exists('add_options_page')) {
+				add_options_page('Active Directory Integration', 'Active Directory Integration', 9, __FILE__, array(&$this, '_display_options_page'));
+			}
 		}
 	}
 
@@ -207,9 +276,15 @@ class ADIntegrationPlugin {
 	 * @return WP_User
 	 */
 	public function authenticate($arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
-		global $wp_version;
+		global $wp_version, $wpmu_version;
 		
-		if (version_compare($wp_version, '2.8', '>=')) {
+		if (IS_WPMU) {
+			$version = $wpmu_version;
+		} else {
+			$version = $wp_version;
+		}
+		
+		if (version_compare($version, '2.8', '>=')) {
 			return $this->ad_authenticate($arg1, $arg2, $arg3); 
 		} else {
 			return $this->ad_authenticate(NULL, $arg1, $arg2);
@@ -227,6 +302,9 @@ class ADIntegrationPlugin {
 		$user_id = NULL;
 		
 		$this->_authenticated = false;
+		
+		// IMPORTANT!
+		$username = strtolower($username);
 		
 		// Load options from WordPress-DB.
 		$this->_load_options();
@@ -297,6 +375,9 @@ class ADIntegrationPlugin {
 		
 		// Create new users automatically, if configured
 		$user = get_userdatabylogin($username);
+		
+		// TODO: hmm... perhaps we should check lower case ...?
+		// if (! $user OR (str_to_lower($user->user_login) != str_to_lower($username))) {
 		if (! $user OR ($user->user_login != $username)) {
 			$user_role = $this->_get_user_role_equiv($ad_username);
 			if ($this->_auto_create_user || $user_role != '' ) {
@@ -307,10 +388,14 @@ class ADIntegrationPlugin {
 					$first_name = $userinfo['givenname'][0];
 					$last_name = $userinfo['sn'][0];
 					$display_name = $this->_get_display_name_from_AD($username, $userinfo);
+
+					// TODO: or the username should be converted to lower-case at this point...? Or even both?
+					// e.g. $user_id = $this->_create_user(strtolower($ad_username), $email, $first_name, $last_name, $display_name, $user_role);
+					
 					$user_id = $this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
 			} else {
 				// Bail out to avoid showing the login form
-					return new WP_Error('invalid_username', __('<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress.'));
+				return new WP_Error('invalid_username', __('<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress.'));
 			}
 		} else {
 			
@@ -381,6 +466,47 @@ class ADIntegrationPlugin {
 	public function disable_function() {
 		die('Disabled');
 	}
+	
+	/**
+	 * Shows the contexual help on the options/admin screen.
+	 * 
+	 * @param $help
+	 * @param $screen
+	 * @return string help message
+	 */
+	public function contextual_help ($help, $screen) {
+		if ($screen == 'settings_page_' . ADINTEGRATION_FOLDER . '/ad-integration'
+		                 || $screen == 'wpmu-admin_page_' . ADINTEGRATION_FOLDER . '/ad-integration') {
+			$help .= '<h5>' . __('Active Directory Integration Help','ad-integration') . '</h5><div class="metabox-prefs">';
+			$help .= '<a href="http://blog.ecw.de/wp-ad-integration">'.__ ('Overview','ad-integration').'</a><br/>';
+			$help .= '<a href="http://wordpress.org/extend/plugins/active-directory-integration/faq/">'.__ ('FAQ', 'ad-integration').'</a><br/>';
+			$help .= '<a href="http://wordpress.org/extend/plugins/active-directory-integration/changelog/">'.__ ('Changelog', 'ad-integration').'</a><br/>';
+			$help .= '<a href="http://wordpress.org/tags/active-directory-integration">'.__ ('Support-Forum', 'ad-integration').'</a><br/>';
+			
+			$help .= '</div>';
+		}
+		return $help;
+	}	
+	
+	/****************************************************************
+	 * STATIC FUNCTIONS
+	 ****************************************************************/
+
+	/**
+	 * Determine global table prefix, usually "wp_".
+	 * 
+	 * @return string table prefix
+	 */
+	public static function global_db_prefix() {
+		global $wpmu_version, $wpdb, $wpmuBaseTablePrefix;
+		
+		// define table prefix
+		if ($wpmu_version != '') {
+			return $wpmuBaseTablePrefix;
+		} else {
+			return $wpdb->prefix;
+		}
+	}
 
 	
 	/**
@@ -388,12 +514,18 @@ class ADIntegrationPlugin {
 	 * options table on plugin activation.
 	 */
 	public static function activate() {
-		global $wpdb;
+		global $wpdb, $wpmu_version;
 		
-		//$table_name = $wpdb->prefix . ADIntegrationPlugin::$table_name;
-		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
-	   
-		if (($wpdb->get_var("show tables like '$table_name'") != $table_name) OR (get_option('AD_Integration_db_version') != ADIntegrationPlugin::DB_VERSION)) { 
+		//$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
+		
+		if ($wpmu_version != '') {
+			$db_version = get_site_option('AD_Integration_db_version');
+		} else {
+			$db_version = get_option('AD_Integration_db_version');
+		}
+		
+		if (($wpdb->get_var("show tables like '$table_name'") != $table_name) OR ($db_version != ADIntegrationPlugin::DB_VERSION)) { 
 	      
 	    	$sql = 'CREATE TABLE ' . $table_name . ' (
 		  			id bigint(20) NOT NULL AUTO_INCREMENT,
@@ -406,7 +538,11 @@ class ADIntegrationPlugin {
 	      	dbDelta($sql);
 	      
 	   		// store db version in the options
-		   	add_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION, 'Version of the table structure');
+	      	if ($wpmu_version != '') {
+	      		add_site_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION, 'Version of the table structure');
+	      	} else {
+		   		add_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION, 'Version of the table structure');
+	      	}
 	   }
 	}
 	
@@ -416,16 +552,19 @@ class ADIntegrationPlugin {
 	 * options table on plugin deactivation.
 	 */
 	public static function deactivate() {
-		global $wpdb;
+		global $wpdb, $wpmu_version;
 		
-		//$table_name = $wpdb->prefix . ADIntegrationPlugin::$table_name;
-		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
 		// drop table
 		$wpdb->query('DROP TABLE IF EXISTS '.$table_name);
 		
 		// delete option
-		delete_option('AD_Integration_db_version');
+		if ($wpmu_version != '') {
+			delete_site_option('AD_Integration_db_version');
+		} else {
+			delete_option('AD_Integration_db_version');
+		}
 	}	
 	
 	
@@ -433,37 +572,16 @@ class ADIntegrationPlugin {
 	 * removes the plugin options from options table.
 	 */
 	public static function uninstall($echo=false) {
-		$options = array(   
-			'AD_Integration_account_suffix','AD_Integration_auto_create_user','AD_Integration_auto_update_user',
-			'AD_Integration_append_suffix_to_new_users',
-			'AD_Integration_domain_controllers',
-			'AD_Integration_base_dn',
-			'AD_Integration_role_equivalent_groups',
-			'AD_Integration_default_email_domain',
-			'AD_Integration_port',
-			'AD_Integration_bind_user',
-			'AD_Integration_bind_pwd',
-			'AD_Integration_use_tls',
-			'AD_Integration_authorize_by_group',
-			'AD_Integration_authorization_group',
-			'AD_Integration_max_login_attempts',
-			'AD_Integration_block_time',
-			'AD_Integration_user_notification',
-			'AD_Integration_admin_notification',
-			'AD_Integration_admin_email',
-			'AD_Integration_display_name'
-		);
-		
-		foreach($options as $option) {
-			$delete_setting = delete_option($option);
+		foreach($this->_all_options as $option) {
+			$delete_setting = delete_option($option['name']);
 			if ($echo) {
 				if($delete_setting) {
 					echo '<font color="green">';
-					printf(__('Setting Key \'%s\' has been deleted.', 'MiniMetaWidget'), "<strong><em>{$setting}</em></strong>");
+					printf(__('Setting Key \'%s\' has been deleted.', 'MiniMetaWidget'), "<strong><em>{$option['name']}</em></strong>");
 					echo '</font><br />';
 				} else {
 					echo '<font color="red">';
-					printf(__('Error deleting Setting Key \'%s\'.', 'MiniMetaWidget'), "<strong><em>{$setting}</em></strong>");
+					printf(__('Error deleting Setting Key \'%s\'.', 'MiniMetaWidget'), "<strong><em>{$option['name']}</em></strong>");
 					echo '</font><br />';
 				}
 			}
@@ -471,26 +589,7 @@ class ADIntegrationPlugin {
 	}
 	
 	
-	/**
-	 * Shows the contexual help on the options screen.
-	 * 
-	 * @param $help
-	 * @param $screen
-	 * @return string help message
-	 */
-	function contextual_help ($help, $screen) {
-		
-		if ($screen == 'settings_page_' . ADINTEGRATION_FOLDER . '/ad-integration') {
-			$help .= '<h5>' . __('Active Directory Integration Help','ad-integration') . '</h5><div class="metabox-prefs">';
-			$help .= '<a href="http://blog.ecw.de/wp-ad-integration">'.__ ('Overview','ad-integration').'</a><br/>';
-			$help .= '<a href="http://wordpress.org/extend/plugins/active-directory-integration/faq/">'.__ ('FAQ', 'ad-integration').'</a><br/>';
-			$help .= '<a href="http://wordpress.org/extend/plugins/active-directory-integration/changelog/">'.__ ('Changelog', 'ad-integration').'</a><br/>';
-			$help .= '<a href="http://wordpress.org/tags/active-directory-integration">'.__ ('Support-Forum', 'ad-integration').'</a><br/>';
-			
-			$help .= '</div>';
-		}
-		return $help;
-	}
+
 
 
 	/*************************************************************
@@ -503,29 +602,86 @@ class ADIntegrationPlugin {
 	 * Loads the options from WordPress-DB
 	 */
 	protected function _load_options() {
-		$this->_auto_create_user 			= (bool)get_option('AD_Integration_auto_create_user');
-		$this->_auto_update_user 			= (bool)get_option('AD_Integration_auto_update_user');
-		$this->_account_suffix		 		= get_option('AD_Integration_account_suffix');
-		$this->_append_suffix_to_new_users 	= get_option('AD_Integration_append_suffix_to_new_users');
-		$this->_domain_controllers 			= get_option('AD_Integration_domain_controllers');
-		$this->_base_dn						= get_option('AD_Integration_base_dn');
-		$this->_bind_user 					= get_option('AD_Integration_bind_user');
-		$this->_bind_pwd 					= get_option('AD_Integration_bind_pwd');
-		$this->_port 						= get_option('AD_Integration_port');
-		$this->_use_tls 					= get_option('AD_Integration_use_tls');
-		$this->_default_email_domain 		= get_option('AD_Integration_default_email_domain');
-		$this->_authorize_by_group 			= (bool)get_option('AD_Integration_authorize_by_group');
-		$this->_authorization_group 		= get_option('AD_Integration_authorization_group');
-		$this->_role_equivalent_groups 		= get_option('AD_Integration_role_equivalent_groups');
-		$this->_max_login_attempts 			= (int)get_option('AD_Integration_max_login_attempts');
-		$this->_block_time 					= (int)get_option('AD_Integration_block_time');
-		$this->_user_notification	  		= (bool)get_option('AD_Integration_user_notification');
-		$this->_admin_notification			= (bool)get_option('AD_Integration_admin_notification');
-		$this->_admin_email					= get_option('AD_Integration_admin_email');
-		$this->_display_name				= get_option('AD_Integration_display_name');
+		if (IS_WPMU) {
+			$this->_auto_create_user 			= (bool)get_site_option('AD_Integration_auto_create_user');
+			$this->_auto_update_user 			= (bool)get_site_option('AD_Integration_auto_update_user');
+			$this->_account_suffix		 		= get_site_option('AD_Integration_account_suffix');
+			$this->_append_suffix_to_new_users 	= get_site_option('AD_Integration_append_suffix_to_new_users');
+			$this->_domain_controllers 			= get_site_option('AD_Integration_domain_controllers');
+			$this->_base_dn						= get_site_option('AD_Integration_base_dn');
+			$this->_bind_user 					= get_site_option('AD_Integration_bind_user');
+			$this->_bind_pwd 					= get_site_option('AD_Integration_bind_pwd');
+			$this->_port 						= get_site_option('AD_Integration_port');
+			$this->_use_tls 					= get_site_option('AD_Integration_use_tls');
+			$this->_default_email_domain 		= get_site_option('AD_Integration_default_email_domain');
+			$this->_authorize_by_group 			= (bool)get_site_option('AD_Integration_authorize_by_group');
+			$this->_authorization_group 		= get_site_option('AD_Integration_authorization_group');
+			$this->_role_equivalent_groups 		= get_site_option('AD_Integration_role_equivalent_groups');
+			$this->_max_login_attempts 			= (int)get_site_option('AD_Integration_max_login_attempts');
+			$this->_block_time 					= (int)get_site_option('AD_Integration_block_time');
+			$this->_user_notification	  		= (bool)get_site_option('AD_Integration_user_notification');
+			$this->_admin_notification			= (bool)get_site_option('AD_Integration_admin_notification');
+			$this->_admin_email					= get_site_option('AD_Integration_admin_email');
+			$this->_display_name				= get_site_option('AD_Integration_display_name');
+		} else {
+			$this->_auto_create_user 			= (bool)get_option('AD_Integration_auto_create_user');
+			$this->_auto_update_user 			= (bool)get_option('AD_Integration_auto_update_user');
+			$this->_account_suffix		 		= get_option('AD_Integration_account_suffix');
+			$this->_append_suffix_to_new_users 	= get_option('AD_Integration_append_suffix_to_new_users');
+			$this->_domain_controllers 			= get_option('AD_Integration_domain_controllers');
+			$this->_base_dn						= get_option('AD_Integration_base_dn');
+			$this->_bind_user 					= get_option('AD_Integration_bind_user');
+			$this->_bind_pwd 					= get_option('AD_Integration_bind_pwd');
+			$this->_port 						= get_option('AD_Integration_port');
+			$this->_use_tls 					= get_option('AD_Integration_use_tls');
+			$this->_default_email_domain 		= get_option('AD_Integration_default_email_domain');
+			$this->_authorize_by_group 			= (bool)get_option('AD_Integration_authorize_by_group');
+			$this->_authorization_group 		= get_option('AD_Integration_authorization_group');
+			$this->_role_equivalent_groups 		= get_option('AD_Integration_role_equivalent_groups');
+			$this->_max_login_attempts 			= (int)get_option('AD_Integration_max_login_attempts');
+			$this->_block_time 					= (int)get_option('AD_Integration_block_time');
+			$this->_user_notification	  		= (bool)get_option('AD_Integration_user_notification');
+			$this->_admin_notification			= (bool)get_option('AD_Integration_admin_notification');
+			$this->_admin_email					= get_option('AD_Integration_admin_email');
+			$this->_display_name				= get_option('AD_Integration_display_name');
+		}
 	}
 	
-
+	
+	/**
+	 * Saves the options to the sitewide options store. This is only needed for WPMU.
+	 * 
+	 * @param $arrPost the POST-Array with the new options
+	 * @return unknown_type
+	 */
+	protected function _save_wpmu_options($arrPost) {
+		if (IS_WPMU) {
+			update_site_option('AD_Integration_auto_create_user', (bool)$arrPost['AD_Integration_auto_create_user']);
+			update_site_option('AD_Integration_auto_update_user', (bool)$arrPost['AD_Integration_auto_update_user']);
+			update_site_option('AD_Integration_account_suffix', $arrPost['AD_Integration_account_suffix']);
+			update_site_option('AD_Integration_append_suffix_to_new_users', $arrPost['AD_Integration_append_suffix_to_new_users']);
+			update_site_option('AD_Integration_domain_controllers', $arrPost['AD_Integration_domain_controllers']);
+			update_site_option('AD_Integration_base_dn', $arrPost['AD_Integration_base_dn']);
+			update_site_option('AD_Integration_bind_user', $arrPost['AD_Integration_bind_user']);
+			update_site_option('AD_Integration_bind_pwd', $arrPost['AD_Integration_bind_pwd']);
+			update_site_option('AD_Integration_port', $arrPost['AD_Integration_port']);
+			update_site_option('AD_Integration_use_tls', $arrPost['AD_Integration_use_tls']);
+			update_site_option('AD_Integration_default_email_domain', $arrPost['AD_Integration_default_email_domain']);
+			update_site_option('AD_Integration_authorize_by_group', (bool)$arrPost['AD_Integration_authorize_by_group']);
+			update_site_option('AD_Integration_authorization_group', $arrPost['AD_Integration_authorization_group']);
+			update_site_option('AD_Integration_role_equivalent_groups', $arrPost['AD_Integration_role_equivalent_groups']);
+			update_site_option('AD_Integration_max_login_attempts', (int)$arrPost['AD_Integration_max_login_attempts']);
+			update_site_option('AD_Integration_block_time', (int)$arrPost['AD_Integration_block_time']);
+			update_site_option('AD_Integration_user_notification', (bool)$arrPost['AD_Integration_user_notification']);
+			update_site_option('AD_Integration_admin_notification', (bool)$arrPost['AD_Integration_admin_notification']);
+			update_site_option('AD_Integration_admin_email', $arrPost['AD_Integration_admin_email']);
+			update_site_option('AD_Integration_display_name', $arrPost['AD_Integration_display_name']);
+			
+			// let�s load the new values
+			$this->_load_options();
+		}
+	}
+	
 	/**
 	 * Determine the display_name to be stored in WP database.
 	 * @param $username  the username used to login
@@ -553,7 +709,7 @@ class ADIntegrationPlugin {
 	protected function _store_failed_login($username) {
 		global $wpdb;
 		//$table_name = $wpdb->prefix . $this->table_name;
-		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
 		$sql = "INSERT INTO $table_name (user_login, failed_login_time) VALUES ('" . $wpdb->escape($username)."'," . time() . ")";
 		$result = $wpdb->query($sql);
@@ -571,7 +727,7 @@ class ADIntegrationPlugin {
 	protected function _get_failed_logins_within_block_time($username) {
 		global $wpdb;
 		//$table_name = $wpdb->prefix . $this->table_name;
-		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - (int)$this->_block_time;
 		
 		$sql = "SELECT count(*) AS count from $table_name WHERE user_login = '".$wpdb->escape($username)."' AND failed_login_time >= $time";
@@ -589,7 +745,7 @@ class ADIntegrationPlugin {
 	protected function _cleanup_failed_logins($username = NULL) {
 		global $wpdb;
 		//$table_name = $wpdb->prefix . $this->table_name;
-		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - $this->_block_time;
 		
 		$sql = "DELETE FROM $table_name WHERE failed_login_time < $time";
@@ -610,7 +766,7 @@ class ADIntegrationPlugin {
 	protected function _get_rest_of_blocking_time($username) {
 		global $wpdb;
 		//$table_name = $wpdb->prefix . $this->_table_name;
-		$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
 		$sql = "SELECT max(failed_login_time) FROM $table_name WHERE user_login = '".$wpdb->escape($username)."'";
 		$max_time = $wpdb->get_var($sql);
@@ -782,7 +938,6 @@ class ADIntegrationPlugin {
 	protected function _notify_user($username)
 	{
 		// if auto creation is enabled look for the user in AD 
-		$auto_create_user = (bool)get_option('AD_Integration_auto_create_user');
 		if ($this->_auto_create_user) {
 			
 			$userinfo = $this->_adldap->user_info($username, array("sn", "givenname", "mail"));
@@ -978,22 +1133,40 @@ class ADIntegrationPlugin {
 	 */
 	function _display_options_page() {
 		
-		$this->_load_options();
+		if (IS_WPMU && !is_site_admin()) {
+			_e('Access denied.', 'ad-integration');
+		}
 		
-			
+		
+		// form send?
+		if (IS_WPMU && $_POST['action'] == 'update') {
+			$this->_save_wpmu_options($_POST);
+		} else {
+			$this->_load_options();
+		}
+		
+		// Since we have no plugin activation hook for WPMU,
+		// we do it here (everytime the admin/options page is shown).
+		if (IS_WPMU) {
+			$this->activate();
+		}
 
 ?>
 
-<div class="wrap" style="background-image: url('<?php echo WP_PLUGIN_URL.'/'.basename(dirname(__FILE__)); ?>/ad-integration.png'); background-repeat: no-repeat; background-position: right 50px;">
+<div class="wrap" style="background-image: url('<?php if (IS_WPMU) { echo WPMU_PLUGIN_URL; } else { echo WP_PLUGIN_URL; } echo '/'.basename(dirname(__FILE__)); ?>/ad-integration.png'); background-repeat: no-repeat; background-position: right 50px;">
 
   <div id="icon-options-general" class="icon32">
    		<br/>
   </div>
-  <h2><?php _e('Options › Active Directory Integration', 'ad-integration');?></h2>
+  <h2><?php if (IS_WPMU) { 
+  	_e('Active Directory Integration', 'ad-integration');
+  } else {
+  	_e('Options › Active Directory Integration', 'ad-integration');
+  }?></h2>
 
   <div class="wrap">
 
-	<form action="options.php" method="post">
+	<form action="<?php if (!IS_WPMU)echo 'options.php'; ?>" method="post">
 		<input type="hidden" name="action" value="update" />
     	<input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_base_dn,AD_Integration_account_suffix,AD_Integration_domain_controllers,AD_Integration_role_equivalent_groups,AD_Integration_default_email_domain,AD_Integration_port,AD_Integration_bind_user,AD_Integration_bind_pwd,AD_Integration_use_tls,AD_Integration_append_suffix_to_new_users,AD_Integration_authorization_group,AD_Integration_authorize_by_group,AD_Integration_auto_update_user,AD_Integration_max_login_attempts,AD_Integration_block_time,AD_Integration_admin_notification,AD_Integration_user_notification,AD_Integration_admin_email,AD_Integration_display_name" />
     	<?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
@@ -1216,7 +1389,7 @@ class ADIntegrationPlugin {
 // create the needed tables on plugin activation
 register_activation_hook(__FILE__,'ADIntegrationPlugin::activate');
 
-// create the needed tables on plugin activation
+// delete the tables on plugin deactivation
 register_deactivation_hook(__FILE__,'ADIntegrationPlugin::deactivate');
 
 // uninstall hook
