@@ -376,8 +376,6 @@ class ADIntegrationPlugin {
 		// Create new users automatically, if configured
 		$user = get_userdatabylogin($username);
 		
-		// TODO: hmm... perhaps we should check lower case ...?
-		// if (! $user OR (str_to_lower($user->user_login) != str_to_lower($username))) {
 		if (! $user OR ($user->user_login != $username)) {
 			$user_role = $this->_get_user_role_equiv($ad_username);
 			if ($this->_auto_create_user || $user_role != '' ) {
@@ -388,11 +386,9 @@ class ADIntegrationPlugin {
 					$first_name = $userinfo['givenname'][0];
 					$last_name = $userinfo['sn'][0];
 					$display_name = $this->_get_display_name_from_AD($username, $userinfo);
-
-					// TODO: or the username should be converted to lower-case at this point...? Or even both?
-					// e.g. $user_id = $this->_create_user(strtolower($ad_username), $email, $first_name, $last_name, $display_name, $user_role);
-					
 					$user_id = $this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
+
+
 			} else {
 				// Bail out to avoid showing the login form
 				return new WP_Error('invalid_username', __('<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress.'));
