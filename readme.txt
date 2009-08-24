@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 2.8.4
-Stable tag: 0.9.6
+Stable tag: 0.9.7
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -51,6 +51,12 @@ None... so far.
 1. Enable SSL-Admin-Mode by adding the line `define('FORCE_SSL_ADMIN', true);` to your wp-config.php so that your passwords are not sent in plain-text.
 
 == Changelog ==
+
+= 0.9.7 =
+It is highly recommended to update to this version, because of a security vulnerability. 
+* FIX: SECURITY RELEVANT - TLS was not used if you have chosen this option. (Thanks to Jim Carrier for the bug report.)
+* ADD: First WordPress MU prototype. Read mu/readme_wpmu.txt for further informations.
+* FIX: Usernames will be converted to lower case, because usernames are case sensitive in WordPress but not in Active Directory. (Thanks to Robert Nelson for the bug report.)
 
 = 0.9.6 =
 * FIX: With WP 2.8 login screen shows a login error even if there wasn´t an attempt zu login and you can not login with local user, as admin.(Thanks to Alexander Liesch and shimh for the bug report.)

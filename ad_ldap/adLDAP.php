@@ -170,7 +170,7 @@ class adLDAP {
             if (array_key_exists("ad_password",$options)){ $this->_ad_password=$options["ad_password"]; }
             if (array_key_exists("real_primarygroup",$options)){ $this->_real_primarygroup=$options["real_primarygroup"]; }
             if (array_key_exists("use_ssl",$options)){ $this->_use_ssl=$options["use_ssl"]; }
-			if (array_key_exists("use_tls",$options)){ $this->_use_start_tls=$options["use_tls"]; }
+			if (array_key_exists("use_tls",$options)){ $this->_use_tls=$options["use_tls"]; }
             if (array_key_exists("recursive_groups",$options)){ $this->_recursive_groups=$options["recursive_groups"]; }
 			if (array_key_exists("ad_port",$options)){ $this->_ad_port=$options["ad_port"]; }
         }
