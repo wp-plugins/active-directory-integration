@@ -53,19 +53,20 @@ None... so far.
 == Changelog ==
 
 = 0.9.7 =
-It is highly recommended to update to this version, because of a security vulnerability. 
+It is highly recommended to update to this version, because of a security vulnerability.
+ 
 * FIX: SECURITY RELEVANT - TLS was not used if you have chosen this option. (Thanks to Jim Carrier for the bug report.)
 * ADD: First WordPress MU prototype. Read mu/readme_wpmu.txt for further informations.
 * FIX: Usernames will be converted to lower case, because usernames are case sensitive in WordPress but not in Active Directory. (Thanks to Robert Nelson for the bug report.)
 
 = 0.9.6 =
-* FIX: With WP 2.8 login screen shows a login error even if there wasn´t an attempt zu login and you can not login with local user, as admin.(Thanks to Alexander Liesch and shimh for the bug report.)
+* FIX: With WP 2.8 login screen shows a login error even if there wasn't an attempt zu login and you can not login with local user, as admin.(Thanks to Alexander Liesch and shimh for the bug report.)
 
 = 0.9.5 =
 * FIX: "Call to undefined function username_exists()..." fixed, which occurs under some circustances. (Thanks to Alexander Liesch for the bug report.)
 
 = 0.9.4 =
-* FIX: XMLRPC now works with WP 2.8 and above. XMLRPC won´t work with earlier versions. (Thanks to Alexander Liesch for the bug report.)
+* FIX: XMLRPC now works with WP 2.8 and above. XMLRPC won't work with earlier versions. (Thanks to Alexander Liesch for the bug report.)
 
 = 0.9.3 =
 * NEW: determine WP display name from AD attributes
