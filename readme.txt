@@ -52,6 +52,10 @@ None... so far.
 
 == Changelog ==
 
+= 0.9.8-dev =
+* NEW: Deactivate Plugin if LDAP support is not installed.
+* NEW: New Option "Allow users to change their local WordPress password."
+
 = 0.9.7 =
 It is highly recommended to update to this version, because of a security vulnerability.
  

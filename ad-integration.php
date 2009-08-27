@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.7
+Version: 0.9.8-dev
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -106,6 +106,9 @@ class ADIntegrationPlugin {
 	// Set user's display_name to an AD attribute or to username if left blank
 	// Possible values: description, displayname, mail, sn, cn, givenname, samaccountname
 	protected $_display_name = '';
+	
+	// Enable/Disable password changes 
+	protected $_enable_password_change = false;
 
 	// All options and its types 
 	protected $_all_options = array(
@@ -128,7 +131,8 @@ class ADIntegrationPlugin {
 			array(name => 'AD_Integration_user_notification', type => 'bool'),
 			array(name => 'AD_Integration_admin_notification', type => 'bool'),
 			array(name => 'AD_Integration_admin_email', type => 'string'),
-			array(name => 'AD_Integration_display_name', type => 'string')
+			array(name => 'AD_Integration_display_name', type => 'string'),
+			array(name => 'AD_Integration_enable_password_fields', type => 'bool')
 		);
 
 	/**
@@ -144,37 +148,42 @@ class ADIntegrationPlugin {
 
 		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's folder and name it "ad-auth-[value in wp-config].mo"
-		load_plugin_textdomain( 'ad-integration', WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER ); 
-		
+		load_plugin_textdomain( 'ad-integration', WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER );
+
+		// Load Options
+		$this->_load_options();
+				
 		if (isset($_GET['activate']) and $_GET['activate'] == 'true') {
 			add_action('init', array(&$this, 'initialize_options'));
 		}
 		
 		add_action('admin_menu', array(&$this, 'add_options_page'));
-
-		if (version_compare($wp_version, '2.8', '>=')) {
-			add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
-		} else {
-			add_action('wp_authenticate', array(&$this, 'authenticate'), 10, 2);
-		}
-		
-		add_action('lost_password', array(&$this, 'disable_function'));
-		add_action('retrieve_password', array(&$this, 'disable_function'));
-		add_action('password_reset', array(&$this, 'disable_function'));
-	    add_action('admin_print_styles', array(&$this, 'load_styles'));
-		add_action('check_passwords', array(&$this, 'generate_password'), 10, 3);
-		
-		add_filter('check_password', array(&$this, 'override_password_check'), 10, 4);
-		add_filter('show_password_fields', array(&$this, 'disable_password_fields'));
 		add_filter('contextual_help', array(&$this, 'contextual_help'), 10, 2);
 		
-		if (!class_exists('adLDAP')) {
-			require 'ad_ldap/adLDAP.php';
+		// DO WE HAVE LDAP SUPPORT?
+		if (function_exists('ldap_connect')) {
+			if (version_compare($wp_version, '2.8', '>=')) {
+				add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
+			} else {
+				add_action('wp_authenticate', array(&$this, 'authenticate'), 10, 2);
+			}
+			
+			add_action('lost_password', array(&$this, 'disable_function'));
+			add_action('retrieve_password', array(&$this, 'disable_function'));
+			add_action('password_reset', array(&$this, 'disable_function'));
+		    add_action('admin_print_styles', array(&$this, 'load_styles'));
+			add_action('check_passwords', array(&$this, 'generate_password'), 10, 3);
+			
+			add_filter('check_password', array(&$this, 'override_password_check'), 10, 4);
+			
+			if (!$this->_enable_password_change) {
+				add_filter('show_password_fields', array(&$this, 'disable_password_fields'));
+			}
+			
+			if (!class_exists('adLDAP')) {
+				require 'ad_ldap/adLDAP.php';
+			}
 		}
-		
-		// Load Options
-		$this->_load_options();
-
 	}
 	
 	
@@ -217,6 +226,7 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
 				add_site_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
 				add_site_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
+				add_site_option('AD_Integration_enable_password_change', false, 'Enable the ability of the users to change their WP passwords.');
 			}
 		} else {
 			if (current_user_can('manage_options')) {
@@ -240,6 +250,7 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
 				add_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
 				add_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
+				add_option('AD_Integration_enable_password_change', false, 'Enable or disabled the ability to the change user WP passwords.');
 			}
 		}
 	}
@@ -619,6 +630,7 @@ class ADIntegrationPlugin {
 			$this->_admin_notification			= (bool)get_site_option('AD_Integration_admin_notification');
 			$this->_admin_email					= get_site_option('AD_Integration_admin_email');
 			$this->_display_name				= get_site_option('AD_Integration_display_name');
+			$this->_enable_password_change     = get_site_option('AD_Integration_enable_password_change');
 		} else {
 			$this->_auto_create_user 			= (bool)get_option('AD_Integration_auto_create_user');
 			$this->_auto_update_user 			= (bool)get_option('AD_Integration_auto_update_user');
@@ -640,6 +652,7 @@ class ADIntegrationPlugin {
 			$this->_admin_notification			= (bool)get_option('AD_Integration_admin_notification');
 			$this->_admin_email					= get_option('AD_Integration_admin_email');
 			$this->_display_name				= get_option('AD_Integration_display_name');
+			$this->_enable_password_change     = get_option('AD_Integration_enable_password_change');
 		}
 	}
 	
@@ -672,6 +685,7 @@ class ADIntegrationPlugin {
 			update_site_option('AD_Integration_admin_notification', (bool)$arrPost['AD_Integration_admin_notification']);
 			update_site_option('AD_Integration_admin_email', $arrPost['AD_Integration_admin_email']);
 			update_site_option('AD_Integration_display_name', $arrPost['AD_Integration_display_name']);
+			update_site_option('AD_Integration_enable_password_change', $arrPost['AD_Integration_enable_password_change']);
 			
 			// let�s load the new values
 			$this->_load_options();
@@ -1159,12 +1173,20 @@ class ADIntegrationPlugin {
   } else {
   	_e('Options › Active Directory Integration', 'ad-integration');
   }?></h2>
+  
 
   <div class="wrap">
+  
+  	<?php 
+  	if (!function_exists('ldap_connect')) {
+  		echo '<h3>' . __('ATTENTION: You have no LDAP support. This plugin won´t work.', 'ad-integration') . '</h3>';
+  	}
+	?>
+  
 
 	<form action="<?php if (!IS_WPMU)echo 'options.php'; ?>" method="post">
 		<input type="hidden" name="action" value="update" />
-    	<input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_base_dn,AD_Integration_account_suffix,AD_Integration_domain_controllers,AD_Integration_role_equivalent_groups,AD_Integration_default_email_domain,AD_Integration_port,AD_Integration_bind_user,AD_Integration_bind_pwd,AD_Integration_use_tls,AD_Integration_append_suffix_to_new_users,AD_Integration_authorization_group,AD_Integration_authorize_by_group,AD_Integration_auto_update_user,AD_Integration_max_login_attempts,AD_Integration_block_time,AD_Integration_admin_notification,AD_Integration_user_notification,AD_Integration_admin_email,AD_Integration_display_name" />
+    	<input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_base_dn,AD_Integration_account_suffix,AD_Integration_domain_controllers,AD_Integration_role_equivalent_groups,AD_Integration_default_email_domain,AD_Integration_port,AD_Integration_bind_user,AD_Integration_bind_pwd,AD_Integration_use_tls,AD_Integration_append_suffix_to_new_users,AD_Integration_authorization_group,AD_Integration_authorize_by_group,AD_Integration_auto_update_user,AD_Integration_max_login_attempts,AD_Integration_block_time,AD_Integration_admin_notification,AD_Integration_user_notification,AD_Integration_admin_email,AD_Integration_display_name,AD_Integration_enable_password_change" />
     	<?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
 
 	    <table class="form-table">
@@ -1285,8 +1307,18 @@ class ADIntegrationPlugin {
 			          <?php _e("Choose user's Active Directory attribute to be used as display name.", 'ad-integration'); ?>
 			        </td>
 			      </tr>
+
+			      <tr valign="top">
+			        <th scope="row"><label for="AD_Integration_enable_password_change"><?php _e('Enable local password changes', 'ad-integration'); ?></label></th>
+			        <td>
+					  <input type="checkbox" name="AD_Integration_enable_password_change" id="AD_Integration_enable_password_change" <?php if ($this->_enable_password_change) echo ' checked="checked"' ?> value="1" />          
+					  <label for="AD_Integration_enable_password_change"><?php _e('Allow users to change their local (<strong>non AD</strong>) WordPress password', 'ad-integration'); ?>
+					  <br/>
+					  <?php _e('<strong>If activated, a password change will update the local WordPress database only. No changes in Active Directory will be made.</strong>', 'ad-integration'); ?>
+					  </label>          
+			        </td>
+			      </tr>
 			      
-			
 			      <tr>
 				   <td scope="col" colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('Authorization','ad-integration'); ?></h2></td>
 				  </tr>

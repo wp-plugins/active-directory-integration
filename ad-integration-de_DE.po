@@ -7,331 +7,355 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Active Directory Integration 0.9.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-07-09 09:17+0200\n"
-"PO-Revision-Date: 2009-07-09 09:25+0100\n"
+"POT-Creation-Date: 2009-08-27 12:03+0200\n"
+"PO-Revision-Date: 2009-08-27 12:07+0100\n"
 "Last-Translator: Christoph Steindorff <christoph.steindorff@ecw.de>\n"
 "Language-Team: DEUTSCH <info@ecw.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ad-integration.php:286
+#: ad-integration.php:269
+#: ad-integration.php:1172
+msgid "Active Directory Integration"
+msgstr "Active Directory Integration"
+
+#: ad-integration.php:405
 msgid "<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress."
 msgstr "<strong>FEHLER</strong>: Dieser Benutzer existiert im Active Directory, aber er hat kein Recht zur Anmeldung an dieser WordPress-Installation."
 
-#: ad-integration.php:431
+#: ad-integration.php:487
+msgid "Active Directory Integration Help"
+msgstr "Active Directory Integration Hilfe"
+
+#: ad-integration.php:488
+msgid "Overview"
+msgstr "Übersicht"
+
+#: ad-integration.php:489
+msgid "FAQ"
+msgstr "FAQ"
+
+#: ad-integration.php:490
+msgid "Changelog"
+msgstr "Änderungshistorie (changelog)"
+
+#: ad-integration.php:491
+msgid "Support-Forum"
+msgstr "Support-Forum"
+
+#: ad-integration.php:587
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr "Einstellung '%s' wurde entfernt."
 
-#: ad-integration.php:435
+#: ad-integration.php:591
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr "Fehler beim Löschen der Einstellung '%s'."
 
-#: ad-integration.php:453
-msgid "Active Directory Integration Help"
-msgstr "Active Directory Integration Hilfe"
-
-#: ad-integration.php:454
-msgid "Overview"
-msgstr "Übersicht"
-
-#: ad-integration.php:455
-msgid "FAQ"
-msgstr "FAQ"
-
-#: ad-integration.php:456
-msgid "Changelog"
-msgstr "Änderungshistorie (changelog)"
-
-#: ad-integration.php:457
-msgid "Support-Forum"
-msgstr "Support-Forum"
-
-#: ad-integration.php:770
-#: ad-integration.php:847
+#: ad-integration.php:983
+#: ad-integration.php:1060
 msgid "Account blocked"
 msgstr "Konto gesperrt"
 
-#: ad-integration.php:771
+#: ad-integration.php:984
 #, php-format
 msgid "Someone tried to login to %s (%s) with your username (%s) - but in vain. For security reasons your account is now blocked for %d seconds."
 msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit Deinem Benutzernamen (%s) anzumelden. Aus Sicherheitsgründen, ist Dein Konto nun für %d Sekunden gesperrt."
 
-#: ad-integration.php:773
-#: ad-integration.php:852
+#: ad-integration.php:986
+#: ad-integration.php:1065
 msgid "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE."
 msgstr "DIESE E-MAIL WURDE VOM SYSTEM AUTOMATISCH ERSTELLT, BITTE SENDEN SIE KEINE ANTWORT AN DIE ABSENDERADRESSE."
 
-#: ad-integration.php:848
+#: ad-integration.php:1061
 #, php-format
 msgid "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in vain. For security reasons this account is now blocked for %d seconds."
 msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit dem Benutzernamen \"%s\" (%s %s) anzumelden. Aus Sicherheitsgründen, ist dieses Konto nun für %d Sekunden gesperrt."
 
-#: ad-integration.php:850
+#: ad-integration.php:1063
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "Der Loginversuch ging aus von der IP-Adresse: %s"
 
-#: ad-integration.php:914
+#: ad-integration.php:1127
 msgid "Powered by WordPress"
 msgstr "Powered by WordPress"
 
-#: ad-integration.php:916
-#, fuzzy
+#: ad-integration.php:1129
 msgid "Account blocked for"
 msgstr "Konto gesperrt"
 
-#: ad-integration.php:916
+#: ad-integration.php:1129
 msgid "seconds"
 msgstr "Sekunden"
 
-#: ad-integration.php:944
+#: ad-integration.php:1147
+msgid "Access denied."
+msgstr "Zugriff verweigert."
+
+#: ad-integration.php:1174
 msgid "Options › Active Directory Integration"
 msgstr "Einstellungen › Active Directory Integration"
 
-#: ad-integration.php:956
+#: ad-integration.php:1182
+msgid "ATTENTION: You have no LDAP support. This plugin won´t work."
+msgstr "ACHTUNG: Es ist kein LDAP Support vorhanden. Dieses Plugin wird nicht funktionieren."
+
+#: ad-integration.php:1195
 msgid "Active Directory Server"
 msgstr "Active Directory Server"
 
-#: ad-integration.php:960
+#: ad-integration.php:1199
 msgid "Domain Controllers"
 msgstr "Domänen Controller"
 
-#: ad-integration.php:963
+#: ad-integration.php:1202
 msgid "Domain Controllers (separate with semicolons, e.g. \"dc1.domain.tld;dc2.domain.tld\")"
 msgstr "Domänen Controller (trenne mehrere durch ein Semikolon, z.B. \"dc1.domain.tld;dc2.domain.tld\")"
 
-#: ad-integration.php:968
+#: ad-integration.php:1207
 msgid "Port"
 msgstr "Port"
 
-#: ad-integration.php:972
+#: ad-integration.php:1211
 msgid "Port on which the AD listens (defaults to \"389\")"
 msgstr "Port auf dem das AD lauscht (Standard ist \"389\")."
 
-#: ad-integration.php:977
+#: ad-integration.php:1216
 msgid "Use TLS"
 msgstr "Benutze TLS"
 
-#: ad-integration.php:980
+#: ad-integration.php:1219
 msgid "Secure the connection between the WordPress and the Active Directory Servers using TLS. Note: To use TLS, you must set the LDAP Port to 389."
 msgstr "Sicher die Verbindung zwischen WordPress und dem Active Directory mit TLS. Achtung: Um TLS zu verwenden muss der Port 389 verwendet werden."
 
-#: ad-integration.php:984
+#: ad-integration.php:1223
 msgid "Bind User"
 msgstr "Bind User"
 
-#: ad-integration.php:988
+#: ad-integration.php:1227
 msgid "Username for non-anonymous requests to AD (e.g. \"ldapuser@domain.tld\"). Leave empty for anonymous requests."
 msgstr "Benutzername für nicht-anonyme Zugriffe auf das AD (z.B. \"ldapuser@domain.tld\"). Leer lassen für anonyme Zugriffe."
 
-#: ad-integration.php:992
+#: ad-integration.php:1231
 msgid "Bind User Password"
 msgstr "Bind User Kennwort"
 
-#: ad-integration.php:996
+#: ad-integration.php:1235
 msgid "Password for non-anonymous requests to AD"
 msgstr "Kennwort für nicht-anonyme Zugrriffe auf das AD"
 
-#: ad-integration.php:1000
+#: ad-integration.php:1239
 msgid "Base DN"
 msgstr "Base DN"
 
-#: ad-integration.php:1004
+#: ad-integration.php:1243
 msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
 msgstr "Base DN (z.B. \"ou=unit,dc=domain,dc=tld\")"
 
-#: ad-integration.php:1009
+#: ad-integration.php:1248
 msgid "User specific settings"
 msgstr "Benutzereinstellungen"
 
-#: ad-integration.php:1013
+#: ad-integration.php:1252
 msgid "Automatic User Creation"
 msgstr "Automatischen Anlegen von Benutzern"
 
-#: ad-integration.php:1016
+#: ad-integration.php:1255
 msgid "Should a new user be created automatically if not already in the WordPress database?"
 msgstr "Soll automatisch ein neuer Benutzer in der WordPress-Datenbank angelegt werden, wenn er noch nicht existiert?"
 
-#: ad-integration.php:1018
+#: ad-integration.php:1257
 msgid "Created users will obtain the role defined under \"New User Default Role\" on the <a href=\"options-general.php\">General Options</a> page."
 msgstr "Neu angelegte Benutzer erhalten die Rolle die unter \"Standardrolle eines neuen Benutzers\" auf der Seite <a href=\"options-general.php\">Einstellungen › Allgemein</a> festgelegt ist."
 
-#: ad-integration.php:1020
+#: ad-integration.php:1259
 msgid "This setting is separate from the Role Equivalent Groups option, below."
 msgstr "Diese Einstellung ist unabhängig von denen unter \"Rollen-Gruppen-Zugehörigkeit\" (s.u.)."
 
-#: ad-integration.php:1023
+#: ad-integration.php:1262
 msgid "<b>Users with role equivalent groups will be created even if this setting is turned off</b> (because if you didn't want this to happen, you would leave that option blank.)"
 msgstr "<b>Benutzer mit Rollen-Gruppen-Zuordnung werden auch angelegt, wenn diese Einstellung ausgeschaltet ist.</b> Wenn Sie kein automatisches Anlegen von Benutzern wünschen, lassen sie auch die \"Rollen-Gruppen-Zuordnung\" leer."
 
-#: ad-integration.php:1028
+#: ad-integration.php:1267
 msgid "Automatic User Update"
 msgstr "Automatisches Updates der Benutzer"
 
-#: ad-integration.php:1031
+#: ad-integration.php:1270
 msgid "Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>"
 msgstr "Soll bei jedem Login ein Update der Benutzerdaten in der WordPress-Datenbank durchgeführt werden?<br /><b>Funktioniert nur, wenn \"Automatisches Anlegen von Benutzern\" aktiviert ist.</b>"
 
-#: ad-integration.php:1036
+#: ad-integration.php:1275
 msgid "Default email domain"
 msgstr "Standard-E-Mail-Domäne"
 
-#: ad-integration.php:1039
+#: ad-integration.php:1278
 msgid "If the Active Directory attribute 'mail' is blank, a user's email will be set to username@whatever-this-says"
 msgstr "Wenn das Active-Directory-Attribut \"mail\" leer ist, wird die E-Mail-Adresse des Benutzers in WordPress aus seinem Benutzernamen und dieser Standard-E-Mail-Domäne gebildet."
 
-#: ad-integration.php:1044
+#: ad-integration.php:1283
 msgid "Account Suffix"
 msgstr "Account Suffix"
 
-#: ad-integration.php:1047
+#: ad-integration.php:1286
 msgid "Account Suffix (will be appended to all usernames in the Active Directory authentication process; e.g., \"@domain.tld\".)"
 msgstr "Der Account Suffix wird beim Authentifizierungsprozess an den Benutzernamen angehängt (z.B. \"@domain.tld\")."
 
-#: ad-integration.php:1051
+#: ad-integration.php:1290
 msgid "Append account suffix to new created usernames. If checked, the account suffix (see above) will be appended to the usernames of new created users."
 msgstr "Account Suffix (s.o.) auch an neu angelegte WordPress-Benutzernamen anhängen (aus \"user\" wird dann z.B. \"user@domain.tld\")."
 
-#: ad-integration.php:1056
+#: ad-integration.php:1295
 msgid "Display name"
 msgstr "Den Namen wiefolgt darstellen"
 
-#: ad-integration.php:1059
+#: ad-integration.php:1298
 msgid "LDAP Attribute: "
 msgstr "Active-Directory-Attribut: "
 
-#: ad-integration.php:1060
+#: ad-integration.php:1299
 msgid "sAMAccountName (the username)"
 msgstr "sAMAccountName (der Benutzername)"
 
-#: ad-integration.php:1061
+#: ad-integration.php:1300
 msgid "displayName"
 msgstr "displayName"
 
-#: ad-integration.php:1062
+#: ad-integration.php:1301
 msgid "description"
 msgstr "description"
 
-#: ad-integration.php:1063
+#: ad-integration.php:1302
 msgid "givenName (firstname)"
 msgstr "givenName (Vorname)"
 
-#: ad-integration.php:1064
+#: ad-integration.php:1303
 msgid "SN (lastname)"
 msgstr "SN (Nachname)"
 
-#: ad-integration.php:1065
+#: ad-integration.php:1304
 msgid "CN (Common Name, the whole name)"
 msgstr "CN (Common Name, der komplette Name)"
 
-#: ad-integration.php:1066
+#: ad-integration.php:1305
 msgid "mail"
 msgstr "mail (E-Mail-Adresse)"
 
-#: ad-integration.php:1068
+#: ad-integration.php:1307
 msgid "Choose user's Active Directory attribute to be used as display name."
 msgstr "Wähle ein Active-Directory-Attribut das als Anzeigename verwendet werden soll."
 
-#: ad-integration.php:1074
+#: ad-integration.php:1312
+msgid "Enable local password changes"
+msgstr "Lokales Kennwort änderbar"
+
+#: ad-integration.php:1315
+msgid "Allow users to change their local (<strong>non AD</strong>) WordPress password"
+msgstr "Gestatte den Benutzern ihr lokales (<strong>nicht AD</strong>) WordPress-Kennwort zu ändern."
+
+#: ad-integration.php:1317
+msgid "<strong>If activated, a password change will update the local WordPress database only. No changes in Active Directory will be made.</strong>"
+msgstr "<strong>Wenn aktiviert, finden etwaige Kennwortänderungen nur in der lokalen WordPress-Datenbank statt. Es werden keinerlei Änderungen im Active Directory durchgeführt.</strong>"
+
+#: ad-integration.php:1323
 msgid "Authorization"
 msgstr "Berechtigung"
 
-#: ad-integration.php:1078
+#: ad-integration.php:1327
 msgid "Authorize by group membership"
 msgstr "Berechtigung durch Gruppenzugehörigkeit"
 
-#: ad-integration.php:1081
+#: ad-integration.php:1330
 msgid "Users are authorized for login only when they are members of a specific AD group."
 msgstr "Die Benutzer haben die Berichtigung zum Anmelden nur, wenn sie Mitglied einer bestimmten Gruppe sind."
 
-#: ad-integration.php:1083
+#: ad-integration.php:1332
 msgid "Group"
 msgstr "Gruppe"
 
-#: ad-integration.php:1085
+#: ad-integration.php:1334
 msgid "(e.g., \"WP-Users\")"
 msgstr "(z.B. \"WP-Users\")"
 
-#: ad-integration.php:1091
+#: ad-integration.php:1340
 msgid "Role Equivalent Groups"
 msgstr "Rollen-Gruppen-Zuordnung"
 
-#: ad-integration.php:1095
+#: ad-integration.php:1344
 msgid "List of Active Directory groups which correspond to WordPress user roles."
 msgstr "Liste von Active-Directory-Gruppen welche Rollen in WordPress entsprechen."
 
-#: ad-integration.php:1096
+#: ad-integration.php:1345
 msgid "When a user is first created, his role will correspond to what is specified here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., \"Soc-Faculty=faculty\" or \"Faculty=faculty;Students=subscriber\"<br/>A user will be created based on the first math, from left to right, so you should obviously put the more powerful groups first."
 msgstr "Wenn ein Benutzer neu angelegt wird, wird seine Rolle in WordPress so festgelegt wie hier eingestellt.<br/>Format: AD-Group1=WordPress-Role1;AD-Group2=WordPress-Role2;...<br/>z.B. <i>\"Domänen-Benutzer=subscriber\"</i> oder <i>\"Domänen-Admins=administrator;WordPress-User=subscriber\"</i><br/>Die Rolle wird durch den ersten Treffer bei einer Auswertung von links nach rechts festgelegt. Die mächtigeren Rollen, sollten also links stehen, die schwächeren rechts in der Liste."
 
-#: ad-integration.php:1097
+#: ad-integration.php:1346
 msgid "NOTES"
 msgstr "ANMERUNGEN"
 
-#: ad-integration.php:1099
+#: ad-integration.php:1348
 msgid "WordPress stores roles as lower case (\"Subscriber\" is stored as \"subscriber\")"
 msgstr "WordPress speichert die Rollen in Kleinschreibung und in englisch (Administrator=administrator, Redakteur=editor, Autor=author, Mitarbeiter=contributor und Abonnent=subscriber)."
 
-#: ad-integration.php:1100
+#: ad-integration.php:1349
 msgid "Active Directory groups are case-sensitive."
 msgstr "Bei den Gruppennamen aus dem Active Directory wird Klein- und Großschreibung unterschieden."
 
-#: ad-integration.php:1101
+#: ad-integration.php:1350
 msgid "Group memberships cannot be checked across domains.  So if you have two domains, instr and qc, and qc is the domain specified above, if instr is linked to qc, I can authenticate instr users, but not check instr group memberships."
 msgstr "Die Gruppenmitgliedschaft kann nicht über Domänengrenzen hinweg ermittelt werden. Wenn Sie z.B. die zwei Domänen \"foo\" und \"bar\" haben und \"foo\" unter \"BASE DN\" als Domäne festgelegt wurde, so kann ein Benutzer aus der verbundenen Domäne \"bar\" zwar authentifiziert werden, aber nicht seine Gruppenmitgliedschaft ermittelt werden."
 
-#: ad-integration.php:1108
+#: ad-integration.php:1357
 msgid "Brute Force Protection"
 msgstr "Brute-Force-Schutz"
 
-#: ad-integration.php:1109
+#: ad-integration.php:1358
 msgid "For security reasons you can use the following options to prevent brute force attacks on your user accounts."
 msgstr "Aus Sicherheitsgründen können sie mit den folgenden Optionen Brute Force Attacken auf die Benutzerkonten verhindern."
 
-#: ad-integration.php:1114
+#: ad-integration.php:1363
 msgid "Maximum number of allowed login attempts"
 msgstr "Maximale Anzahl von Login-Versuchen"
 
-#: ad-integration.php:1118
+#: ad-integration.php:1367
 msgid "Maximum number of failed login attempts before a user account is blocked. If empty or \"0\" Brute Force Protection is turned off."
 msgstr "Maximale Anzahl von gescheiterten Login-Versuchen, bevor der Benutzerkonto gesperrt wird. Wenn leer oder \"0\" wird der Brute-Force-Schutz nicht verwendet."
 
-#: ad-integration.php:1123
+#: ad-integration.php:1372
 msgid "Blocking Time"
 msgstr "Sperrzeit"
 
-#: ad-integration.php:1127
+#: ad-integration.php:1376
 msgid "Number of seconds an account is blocked after the maximum number of failed login attempts is reached."
 msgstr "Zeit in Sekunden für die ein Benutzerkonto gesperrt wird, nachdem die maximale Zahl von gescheiterten Login-Versuchen erreicht wurde."
 
-#: ad-integration.php:1132
+#: ad-integration.php:1381
 msgid "User Notification"
 msgstr "Benutzer-Benachrichtigung"
 
-#: ad-integration.php:1135
+#: ad-integration.php:1384
 msgid "Notify user by e-mail when his account is blocked."
 msgstr "Informieren des Benutzers durch eine E-Mail, dass sein Konto gesperrt wurde."
 
-#: ad-integration.php:1140
+#: ad-integration.php:1389
 msgid "Admin Notification"
 msgstr "Admin-Benachrichtigung"
 
-#: ad-integration.php:1143
+#: ad-integration.php:1392
 msgid "Notify admin(s) by e-mail when an user account is blocked."
 msgstr "Informieren des Admins durch eine E-Mail, das ein Benutzerkonto gesperrt wurde."
 
-#: ad-integration.php:1145
+#: ad-integration.php:1394
 msgid "E-mail addresses for notifications:"
 msgstr "E-Mail-Adressen für Benachrichtigungen:"
 
-#: ad-integration.php:1149
+#: ad-integration.php:1398
 msgid "Seperate multiple addresses by semicolon (e.g. \"admin@domain.tld;me@mydomain.tld\"). If left blank, notifications will be sent to the blog-administrator only."
 msgstr "Trenne mehrere Adressen durch ein Semikolon (z.B. \"admin@domain.tld;ich@meinedomain.tld\"). Leer lassen, um die Benachrichtigungen an den Blog-Administrator zu senden."
 
-#: ad-integration.php:1155
+#: ad-integration.php:1404
 msgid "Save Changes"
-msgstr ""
+msgstr "Änderungen speichern"
 
