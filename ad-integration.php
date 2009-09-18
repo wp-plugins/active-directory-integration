@@ -894,14 +894,26 @@ class ADIntegrationPlugin {
 	
 	
 	/**
-	 * Checks if the user is member of the group allowed to login
+	 * Checks if the user is member of the group(s) allowed to login
 	 * 
 	 * @param $username
 	 * @return boolean
 	 */
 	protected function _check_authorization_by_group($username) {
-		if ($this->_authorize_by_group) {
+		/*if ($this->_authorize_by_group) {
 			return $this->_adldap->user_ingroup($username, $this->_authorization_group, true);
+		} else {
+			return true;
+		}*/
+
+		if ($this->_authorize_by_group) {
+			$authorization_groups = explode(';', $this->_authorization_group);
+			foreach ($authorization_groups as $authorization_group) {
+				if ($this->_adldap->user_ingroup($username, $authorization_group, true)) {
+					return true;
+				}
+			}
+			return false;
 		} else {
 			return true;
 		}
@@ -1329,9 +1341,9 @@ class ADIntegrationPlugin {
 			          <input type="checkbox" name="AD_Integration_authorize_by_group" id="AD_Integration_authorize_by_group"<?php if ($this->_authorize_by_group) echo ' checked="checked"' ?> value="1" />
 			          <?php _e('Users are authorized for login only when they are members of a specific AD group.','ad-integration'); ?>
 			          <br />
-			          <label for="AD_Integration_authorization_group"><?php _e('Group','ad-integration'); ?>: </label>
+			          <label for="AD_Integration_authorization_group"><?php _e('Group(s)','ad-integration'); ?>: </label>
 			          <input type="text" name="AD_Integration_authorization_group" id="AD_Integration_authorization_group" class="regular-text"
-			                    value="<?php echo $this->_authorization_group; ?>" /><?php _e('(e.g., "WP-Users")', 'ad-integration'); ?>
+			                    value="<?php echo $this->_authorization_group; ?>" /> <?php _e('Seperate multiple groups by semicolon (e.g. "domain-users;WP-Users;test-users").', 'ad-integration'); ?>
 			          
 			        </td>
 			      </tr>
