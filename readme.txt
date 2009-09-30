@@ -56,6 +56,7 @@ None... so far.
 * NEW: Deactivate Plugin if LDAP support is not installed.
 * NEW: New Option "Allow users to change their local WordPress password."
 * NEW: Multiple authorization groups (as requested by Lori Dabbs).
+* FIX: Added missing CSS file. (Thanks to ajay and BagNin for the bug report.)
 
 = 0.9.7 =
 It is highly recommended to update to this version, because of a security vulnerability.

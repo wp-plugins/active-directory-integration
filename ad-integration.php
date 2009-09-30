@@ -191,7 +191,6 @@ class ADIntegrationPlugin {
 		 
 		wp_register_style('adintegration', WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER.'/css/adintegration.css',false, '1.7.1', 'screen');
 		wp_enqueue_style('adintegration');
-		//die(PLUGINDIR.'/'.ADINTEGRATION_FOLDER.'/css/adintegration.css');
 	}
 	
 
