@@ -887,6 +887,14 @@ class ADIntegrationPlugin {
 			{
 				wp_update_user(array('ID' => $user_id, 'role' => $role));
 			}
+			
+			// set email
+			if ( $email != '' ) 
+			{
+				wp_update_user(array('ID' => $user_id, 'user_email' => $email));
+			}
+			
+			
 		}
 		return $user_id;
 	}
