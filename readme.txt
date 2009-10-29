@@ -54,6 +54,7 @@ None... so far.
 
 
 = 0.9.9-dev =
+* NEW: testing und debugging tool
 * CHANGE: tabbed interface for options  
 
 = 0.9.8 =

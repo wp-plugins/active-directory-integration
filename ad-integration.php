@@ -1301,7 +1301,7 @@ class ADIntegrationPlugin {
 			<li><a href="#user"><?php _e('User', 'ad-integration'); ?></a></li>
 			<li><a href="#authorization"><?php _e('Authorization', 'ad-integration'); ?></a></li>
 			<li><a href="#security"><?php _e('Security', 'ad-integration'); ?></a></li>
-			<li><a href="#test"><?php _e('Test', 'ad-integration'); ?></a></li>
+			<li><a href="#test"><?php _e('Test Tool', 'ad-integration'); ?></a></li>
 		</ul>	
 
     	<!-- TAB: Server  -->
@@ -1589,7 +1589,12 @@ class ADIntegrationPlugin {
 				<table class="form-table">
 					<tbody>
 						<tr>
-							<td scope="col" colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('Test','ad-integration'); ?></h2></td>
+							<td scope="col" colspan="2">
+								<h2 style="font-size: 150%; font-weight: bold;"><?php _e('Test Tool','ad-integration'); ?></h2>
+								<p><?php _e('Enter a username and password to test logon. If you click the button below, a new window with detailed debug information opens.','ad-integration'); ?>
+								
+							</td>
+							
 						</tr>
 	
 						<tr valign="top">
