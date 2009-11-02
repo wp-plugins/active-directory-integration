@@ -56,7 +56,7 @@ class ADIntegrationPlugin {
 	protected $_minium_WP_version = '2.8';
 	
 	// log level
-	protected $_loglevel = 0;
+	protected $_loglevel = ADI_LOG_NONE;
 	
 	// adLDAP-object
 	protected $_adldap;
@@ -386,16 +386,23 @@ class ADIntegrationPlugin {
 			if ($failed_logins >= $this->_max_login_attempts) {
 				$this->_authenticated = false;
 
+				$this->_log(ADI_LOG_ERROR,'Authentication failed');
+				$this->_log(ADI_LOG_ERROR,"Account '$username' blocked for $this->_block_time seconds");
+				
 				// e-mail notfications if user is blocked
 				if ($this->_user_notification) {
 					$this->_notify_user($username);
+					$this->_log(ADI_LOG_NOTICE,"Notification send to user.");
 				}
 				if ($this->_admin_notification) {
 					$this->_notify_admin($username);
+					$this->_log(ADI_LOG_NOTICE,"Notification send to admin(s).");
 				}
 				
-				// Show the blocking page to the user
-				$this->_display_blocking_page($username);
+				// Show the blocking page to the user (only if we are not in debug/log mode)
+				if ($this->_loglevel == ADI_LOG_NONE) {
+					$this->_display_blocking_page($username);
+				}
 				die(); // important !
 			} 
 		}
@@ -1252,6 +1259,7 @@ class ADIntegrationPlugin {
 		if (IS_WPMU && !is_site_admin()) {
 			_e('Access denied.', 'ad-integration');
 			$this->_log(ADI_LOG_WARN,'Access to options page denied');
+			exit();
 		}
 		
 		
@@ -1274,6 +1282,11 @@ class ADIntegrationPlugin {
 		jQuery('#slider').tabs({ fxFade: true, fxSpeed: 'fast' });	
 	});
 
+	function submitTestForm() {
+		openTestWindow();
+		return false; // so the form is not submitted
+	}
+
 	function openTestWindow() {
 
 		var user = document.getElementById('AD_Integration_test_user').value;
@@ -1284,7 +1297,7 @@ class ADIntegrationPlugin {
 	}
 </script>
 
-<div class="wrap" style="background-image: url('<?php if (IS_WPMU) { echo WPMU_PLUGIN_URL; } else { echo WP_PLUGIN_URL; } echo '/'.basename(dirname(__FILE__)); ?>/ad-integration.png'); background-repeat: no-repeat; background-position: right 80px;">
+<div class="wrap" style="background-image: url('<?php if (IS_WPMU) { echo WPMU_PLUGIN_URL; } else { echo WP_PLUGIN_URL; } echo '/'.basename(dirname(__FILE__)); ?>/ad-integration.png'); background-repeat: no-repeat; background-position: right 100px;">
 
 	<div id="icon-options-general" class="icon32">
 		<br/>
@@ -1312,7 +1325,11 @@ class ADIntegrationPlugin {
 			<li><a href="#user"><?php _e('User', 'ad-integration'); ?></a></li>
 			<li><a href="#authorization"><?php _e('Authorization', 'ad-integration'); ?></a></li>
 			<li><a href="#security"><?php _e('Security', 'ad-integration'); ?></a></li>
+<?php 
+// Test Tool nicht für WordPress MU 
+if (!IS_WPMU) { ?>		
 			<li><a href="#test"><?php _e('Test Tool', 'ad-integration'); ?></a></li>
+<?php } ?>			
 		</ul>	
 
     	<!-- TAB: Server  -->
@@ -1596,16 +1613,14 @@ class ADIntegrationPlugin {
 		<!-- TAB: Test -->
 		
 		<div id="test">
-			<form>
+			<form onsubmit="return submitTestForm();">
 				<table class="form-table">
 					<tbody>
 						<tr>
 							<td scope="col" colspan="2">
 								<h2 style="font-size: 150%; font-weight: bold;"><?php _e('Test Tool','ad-integration'); ?></h2>
-								<p><?php _e('Enter a username and password to test logon. If you click the button below, a new window with detailed debug information opens.','ad-integration'); ?>
-								
+								<p><?php _e('Enter a username and password to test logon. If you click the button below, a new window with detailed debug information opens. <strong>Be sure, that no authorized person can see the output, because passwords will be shown in plaintext.</strong>','ad-integration'); ?></p>
 							</td>
-							
 						</tr>
 	
 						<tr valign="top">
@@ -1628,13 +1643,11 @@ class ADIntegrationPlugin {
 					</tbody>
 				</table>
 				<p class="submit">
-					<input type="button" class="button-primary" name="Submit" value="<?php _e("Perform Test"); ?>" onClick="openTestWindow();" />
+					<input type="submit" class="button-primary" name="Submit" value="<?php _e('Perform Test','ad-integration'); ?>" />
 				</p>
 			</form>				
 		</div> <!-- END OF TAB AUTHORIZATION -->	
-		
 	</div>
-	
 </div>
 
 <?php

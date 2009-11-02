@@ -1,6 +1,11 @@
 <?php
 /**
- * This code is part of the WordPress plugin Active Directory Integration by Christoph Steindorff.
+ * Test Tool for Active Directory Integration
+ *
+ * @package Active Directory Integration
+ * @author Christoph Steindorff
+ * @copyright 2009
+ * @since 0.9.9-dev
  */
 
 if ( !defined('WP_LOAD_PATH') ) {
@@ -19,6 +24,26 @@ if ( !defined('WP_LOAD_PATH') ) {
 
 // let's load WordPress
 require_once( WP_LOAD_PATH . 'wp-load.php');
+
+
+// Let's do some security checks
+ 
+// If the user is not logged in, die silently.
+if(!$user_ID) {
+	die();
+}
+
+// If the user is not an admin, die silently.
+if (!current_user_can('level_10')) {
+	die();
+}
+
+// If we have WordPress MU, die silently.
+if ($wpmu_version != '') {
+	die();
+}
+
+
 
 // Using our own debug handler for output
 class TestADIntegrationPlugin extends ADIntegrationPlugin {

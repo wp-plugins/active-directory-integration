@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 2.8.5
-Stable tag: 0.9.9.1
+Stable tag: 0.9.9.2
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -14,7 +14,7 @@ This Plugin allows WordPress to authenticate, authorize, create and update again
 It is very easy to set up. Just activate the plugin, type in a domain controller, and you're done. But there are more Features:
 
 * authenticate against more than one AD Server
-* authorize users by Active Directory group membership
+* authorize users by Active Directory group memberships
 * auto create and update users that can authenticate against AD
 * mapping of AD groups to WordPress roles
 * use TLS for secure communication to AD Servers (recommended)
@@ -23,7 +23,8 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * user and/or admin e-mail notification on failed login attempts
 * multi-language support (english and german included)
 * determine WP display name from AD attributes (sAMAccountName, displayName, description, SN, CN, givenName or mail)
-
+* tool for testing with detailed debug informations
+* enable/disable password changes for local (non AD) WP users
 
 *Active Directory Integration* is based upon Jonathan Marc Bearak's great plugin [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
 
@@ -40,9 +41,21 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 
 == Frequently Asked Questions ==
 
-None... so far.
+= Is it possible to use TLS with a self-signed certificate on the AD server? =
 
-  
+Yes, this works. But you have to add the line `TLS_REQCERT never` to your ldap.conf on your web server.
+If yout don't already have one create it. On Windows systems the path should be `c:\openldap\sysconf\ldap.conf`.
+
+== Screenshots ==
+
+1. Server Settings 
+2. User specific settings
+3. Settings for authorization
+4. Security related stuff
+5. Test Tool
+6. Output of Test Tool
+
+
 == Installation ==
 
 1. Login as an existing user, such as admin.
@@ -52,8 +65,14 @@ None... so far.
 
 == Changelog ==
 
+= 0.9.9.2 =
+**If you have 0.9.9.1 installed, it is highly recommended to update to 0.9.9.2.**
 
-= 0.9.9-dev =
+* FIX: SECURITY RELEVANT - Added security checks to the Test Tool in test.php.
+* NEW: German translation for the Test Tool.
+* CHANGE: Improved debug informations in the Test Tool.
+
+= 0.9.9.1 =
 * NEW: testing und debugging tool
 * CHANGE: tabbed interface for options  
 
@@ -68,7 +87,7 @@ None... so far.
 It is highly recommended to update to this version, because of a security vulnerability.
  
 * FIX: SECURITY RELEVANT - TLS was not used if you have chosen this option. (Thanks to Jim Carrier for the bug report.)
-* ADD: First WordPress MU prototype. Read mu/readme_wpmu.txt for further informations.
+* NEW: First WordPress MU prototype. Read mu/readme_wpmu.txt for further informations.
 * FIX: Usernames will be converted to lower case, because usernames are case sensitive in WordPress but not in Active Directory. (Thanks to Robert Nelson for the bug report.)
 
 = 0.9.6 =
@@ -82,7 +101,7 @@ It is highly recommended to update to this version, because of a security vulner
 
 = 0.9.3 =
 * NEW: determine WP display name from AD attributes
-* added template for your own translation (ad-integration.pot)
+* NEW: added template for your own translation (ad-integration.pot)
 
 = 0.9.2 =
 * NEW: drop table on deactivation
