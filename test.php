@@ -1,4 +1,7 @@
 <?php
+/**
+ * This code is part of the WordPress plugin Active Directory Integration by Christoph Steindorff.
+ */
 
 if ( !defined('WP_LOAD_PATH') ) {
 
@@ -120,7 +123,7 @@ $ADI->setLogLevel(ADI_LOG_DEBUG);
 if (function_exists('ldap_connect')) {
 	echo "openLDAP installed\n";
 } else {
-	echo "openLDAP not installed\n";
+	die('openLDAP not installed');
 }
 ?>
 		<div id="output">

@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.9-dev
+Version: 0.9.9.1
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -309,7 +309,7 @@ class ADIntegrationPlugin {
 	public function authenticate($arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
 		global $wp_version, $wpmu_version;
 		
-		$this->_log(ADI_LOG_INFO,'* method authenticate() called');
+		$this->_log(ADI_LOG_INFO,'method authenticate() called');
 		 
 		
 		if (IS_WPMU) {
@@ -318,7 +318,7 @@ class ADIntegrationPlugin {
 			$version = $wp_version;
 		}
 		
-		$this->_log(ADI_LOG_INFO,'* WP version: '.$version);
+		$this->_log(ADI_LOG_INFO,'WP version: '.$version);
 		
 		if (version_compare($version, '2.8', '>=')) {
 			return $this->ad_authenticate($arg1, $arg2, $arg3); 
@@ -348,8 +348,7 @@ class ADIntegrationPlugin {
 		// Load options from WordPress-DB.
 		$this->_load_options();
 		
-		// Connect to Active Directory
-
+		// Log informations
 		$this->_log(ADI_LOG_INFO,"Options for adLDAP connection:\n".
 					  "- account_suffix: $this->_account_suffix\n".					
 					  "- base_dn: $this->_base_dn\n".
@@ -359,8 +358,9 @@ class ADIntegrationPlugin {
 					  "- ad_port: $this->_port\n".
 					  "- use_tls: $this->_use_tls");
 
+		// Connect to Active Directory
 		try {
-			$this->_adldap = new adLDAP(array(
+			$this->_adldap = @new adLDAP(array(
 						"account_suffix" => $this->_account_suffix,
 						"base_dn" => $this->_base_dn, 
 						"domain_controllers" => explode(';', $this->_domain_controllers),
@@ -382,6 +382,7 @@ class ADIntegrationPlugin {
 		$this->_log(ADI_LOG_INFO,'max_login_attempts: '.$this->_max_login_attempts);
 		if ($this->_max_login_attempts > 0) {
 			$failed_logins = $this->_get_failed_logins_within_block_time($username);
+			$this->_log(ADI_LOG_INFO,'users failed logins: '.$failed_logins);
 			if ($failed_logins >= $this->_max_login_attempts) {
 				$this->_authenticated = false;
 
@@ -989,7 +990,7 @@ class ADIntegrationPlugin {
 			$authorization_groups = explode(';', $this->_authorization_group);
 			foreach ($authorization_groups as $authorization_group) {
 				if ($this->_adldap->user_ingroup($username, $authorization_group, true)) {
-					$this->_log(ADI_LOG_NOTICE,'* Authorized by membership of group "'.$authorization_group.'"');
+					$this->_log(ADI_LOG_NOTICE,'Authorized by membership of group "'.$authorization_group.'"');
 					return true;
 				}
 			}
@@ -1278,7 +1279,7 @@ class ADIntegrationPlugin {
 		var user = document.getElementById('AD_Integration_test_user').value;
 		var password = document.getElementById('AD_Integration_test_password').value;
 		
-		TestWindow = window.open("<?php echo WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER;?>/test.php?user=" + user + "&password=" + password, "Test", "width=400,height=500,left=100,top=200");
+		TestWindow = window.open("<?php echo WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER;?>/test.php?user=" + user + "&password=" + password, "Test", "width=450,height=500,left=100,top=200");
 		TestWindow.focus();
 	}
 </script>

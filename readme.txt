@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 2.8.5
-Stable tag: 0.9.9-dev
+Stable tag: 0.9.9.1
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
