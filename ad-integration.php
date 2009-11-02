@@ -29,6 +29,17 @@ OriginalAuthor URI: http://soc.qc.edu/jonathan
 
 
 if (!class_exists('ADIntegrationPlugin')) {
+	
+// LOG LEVEL	
+
+define('ADI_LOG_DEBUG', 6);
+define('ADI_LOG_INFO',  5);
+define('ADI_LOG_NOTICE',4);
+define('ADI_LOG_WARN',  3);
+define('ADI_LOG_ERROR', 2);
+define('ADI_LOG_FATAL', 1);
+define('ADI_LOG_NONE',  0);
+
 class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
@@ -37,14 +48,15 @@ class ADIntegrationPlugin {
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
 	
+	
 	// is the user authenticated?
 	public $_authenticated = false;
 	
 	protected $_minium_WPMU_version = '2.8';
 	protected $_minium_WP_version = '2.8';
 	
-	// debug mode
-	protected $debug = false;
+	// log level
+	protected $_loglevel = 0;
 	
 	// adLDAP-object
 	protected $_adldap;
@@ -297,7 +309,7 @@ class ADIntegrationPlugin {
 	public function authenticate($arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
 		global $wp_version, $wpmu_version;
 		
-		$this->_debug('* method authenticate() called');
+		$this->_log(ADI_LOG_INFO,'* method authenticate() called');
 		 
 		
 		if (IS_WPMU) {
@@ -306,7 +318,7 @@ class ADIntegrationPlugin {
 			$version = $wp_version;
 		}
 		
-		$this->_debug('* WP version: '.$version);
+		$this->_log(ADI_LOG_INFO,'* WP version: '.$version);
 		
 		if (version_compare($version, '2.8', '>=')) {
 			return $this->ad_authenticate($arg1, $arg2, $arg3); 
@@ -330,22 +342,22 @@ class ADIntegrationPlugin {
 		// IMPORTANT!
 		$username = strtolower($username);
 		
-		$this->_debug('* username: '.$username);
-		$this->_debug('* password: '.$password);
+		$this->_log(ADI_LOG_NOTICE,'username: '.$username);
+		$this->_log(ADI_LOG_DEBUG,'password: '.$password);
 		
 		// Load options from WordPress-DB.
 		$this->_load_options();
 		
 		// Connect to Active Directory
 
-		$this->_debug("* Options for adLDAP connection:\n".
-					  "  account_suffix: $this->_account_suffix\n".					
-					  "  base_dn: $this->_base_dn\n".
-					  "  domain_controllers: $this->_domain_controllers\n".
-					  "  ad_username: $this->_bind_user\n".
-					  "  ad_password: $this->_bind_pwd\n".
-					  "  ad_port: $this->_port\n".
-					  "  use_tls: $this->_use_tls");
+		$this->_log(ADI_LOG_INFO,"Options for adLDAP connection:\n".
+					  "- account_suffix: $this->_account_suffix\n".					
+					  "- base_dn: $this->_base_dn\n".
+					  "- domain_controllers: $this->_domain_controllers\n".
+					  "- ad_username: $this->_bind_user\n".
+					  "- ad_password: $this->_bind_pwd\n".
+					  "- ad_port: $this->_port\n".
+					  "- use_tls: $this->_use_tls");
 
 		try {
 			$this->_adldap = new adLDAP(array(
@@ -358,16 +370,16 @@ class ADIntegrationPlugin {
 						"use_tls" => $this->_use_tls             // secure?
 						));
 		} catch (Exception $e) {
-    		$this->_debug('! adLDAP exception: ' . $e->getMessage());
+    		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
     		return false;
 		}
 					
-		$this->_debug('* adLDAP object created.');							
+		$this->_log(ADI_LOG_NOTICE,'adLDAP object created.');							
 					
 		
 		
 		// Check for maximum login attempts
-		$this->_debug('* max_login_attempts: '.$this->_max_login_attempts);
+		$this->_log(ADI_LOG_INFO,'max_login_attempts: '.$this->_max_login_attempts);
 		if ($this->_max_login_attempts > 0) {
 			$failed_logins = $this->_get_failed_logins_within_block_time($username);
 			if ($failed_logins >= $this->_max_login_attempts) {
@@ -390,13 +402,13 @@ class ADIntegrationPlugin {
 		// This is where the action is.
 		if ( $this->_adldap->authenticate($username, $password) )
 		{	
-			$this->_debug('* Authentication successfull');
+			$this->_log(ADI_LOG_NOTICE,'Authentication successfull');
 			$this->_authenticated = true;
 		}
 
 		if ( $this->_authenticated == false )
 		{
-			$this->_debug('! Authentication failed');
+			$this->_log(ADI_LOG_ERROR,'Authentication failed');
 			$this->_authenticated = false;
 			$this->_store_failed_login($username);
 			return false;			
@@ -438,7 +450,7 @@ class ADIntegrationPlugin {
 					$user_id = $this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role);
 			} else {
 				// Bail out to avoid showing the login form
-				$this->_debug('! ERROR: This user exists in Active Directory, but has not been granted access to this installation of WordPress.');
+				$this->_log(ADI_LOG_ERROR,'This user exists in Active Directory, but has not been granted access to this installation of WordPress.');
 				return new WP_Error('invalid_username', __('<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress.'));
 			}
 		} else {
@@ -463,11 +475,11 @@ class ADIntegrationPlugin {
 		if (!$user_id) {
 			require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR .'registration.php'); 
 			$user_id = username_exists($username);
-			$this->_debug('* user_id: '.$user_id);
+			$this->_log(ADI_LOG_NOTICE,'user_id: '.$user_id);
 		}
 		$user = new WP_User($user_id);
 
-		$this->_debug('* FINISHED');
+		$this->_log(ADI_LOG_NOTICE,'FINISHED');
 		return $user;
 	}	
 	
@@ -533,8 +545,8 @@ class ADIntegrationPlugin {
 	}	
 	
 	
-	public function enableDebug() {
-		$this->debug = true;
+	public function setLogLevel($level = 0) {
+		$this->_loglevel = (int)$level;
 	}
 	
 	
@@ -656,7 +668,7 @@ class ADIntegrationPlugin {
 	 * Loads the options from WordPress-DB
 	 */
 	protected function _load_options() {
-		$this->_debug('* loading options...');
+		$this->_log(ADI_LOG_INFO,'loading options...');
 		if (IS_WPMU) {
 			$this->_auto_create_user 			= (bool)get_site_option('AD_Integration_auto_create_user');
 			$this->_auto_update_user 			= (bool)get_site_option('AD_Integration_auto_update_user');
@@ -735,7 +747,7 @@ class ADIntegrationPlugin {
 			update_site_option('AD_Integration_display_name', $arrPost['AD_Integration_display_name']);
 			update_site_option('AD_Integration_enable_password_change', $arrPost['AD_Integration_enable_password_change']);
 			
-			// let�s load the new values
+			// let's load the new values
 			$this->_load_options();
 		}
 	}
@@ -767,8 +779,7 @@ class ADIntegrationPlugin {
 	protected function _store_failed_login($username) {
 		global $wpdb;
 		
-		$this->_debug('* storing failed login');
-		//$table_name = $wpdb->prefix . $this->table_name;
+		$this->_log(ADI_LOG_WARN,'storing failed login for user "'.$username.'"');
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
 		$sql = "INSERT INTO $table_name (user_login, failed_login_time) VALUES ('" . $wpdb->escape($username)."'," . time() . ")";
@@ -786,7 +797,6 @@ class ADIntegrationPlugin {
 	 */
 	protected function _get_failed_logins_within_block_time($username) {
 		global $wpdb;
-		//$table_name = $wpdb->prefix . $this->table_name;
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - (int)$this->_block_time;
 		
@@ -805,7 +815,7 @@ class ADIntegrationPlugin {
 	protected function _cleanup_failed_logins($username = NULL) {
 		global $wpdb;
 		
-		$this->_debug('* cleaning up failed logins for user "'.$username.'"');
+		$this->_log(ADI_LOG_NOTICE,'cleaning up failed logins for user "'.$username.'"');
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - $this->_block_time;
 		
@@ -827,7 +837,6 @@ class ADIntegrationPlugin {
 	protected function _get_rest_of_blocking_time($username) {
 		global $wpdb;
 		
-		//$table_name = $wpdb->prefix . $this->_table_name;
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
 		$sql = "SELECT max(failed_login_time) FROM $table_name WHERE user_login = '".$wpdb->escape($username)."'";
@@ -875,20 +884,20 @@ class ADIntegrationPlugin {
 			$username .= $this->_account_suffix;
 		}
 		
-		$this->_debug("* Creating user '$username' with following data:\n".
-					  "  email: $email\n".
-					  "  first name: $first_name\n".
-					  "  last name: $last_name\n".
-					  "  display name: $display_name\n".
-					  "  role: $role");
+		$this->_log(ADI_LOG_NOTICE,"Creating user '$username' with following data:\n".
+					  "- email: $email\n".
+					  "- first name: $first_name\n".
+					  "- last name: $last_name\n".
+					  "- display name: $display_name\n".
+					  "- role: $role");
 		
 
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 		wp_create_user($username, $password, $email);
 		$user_id = username_exists($username);
-		$this->_debug('* user_id: '.$user_id);
+		$this->_log(ADI_LOG_NOTICE,' - user_id: '.$user_id);
 		if ( !$user_id ) {
-			$this->_debug('! Error creating user.');
+			$this->_log(ADI_LOG_FATAL,'Error creating user.');
 			die("Error creating user!");
 		} else {
 			update_usermeta($user_id, 'first_name', $first_name);
@@ -931,18 +940,18 @@ class ADIntegrationPlugin {
 			$username .= $this->_account_suffix;
 		}
 		
-		$this->_debug("* Updating user '$username' with following data:\n".
-					  "  email: $email\n".
-					  "  first name: $first_name\n".
-					  "  last name: $last_name\n".
-					  "  display name: $display_name\n".
-					  "  role: $role");
+		$this->_log(ADI_LOG_NOTICE,'Updating user "'.$username."\" with following data:\n".
+					  "- email: $email\n".
+					  "- first name: $first_name\n".
+					  "- last name: $last_name\n".
+					  "- display name: $display_name\n".
+					  "- role: $role");
 		
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 		$user_id = username_exists($username);
-		$this->_debug('* user_id: '.$user_id);
+		$this->_log(ADI_LOG_NOTICE,' - user_id: '.$user_id);
 		if ( !$user_id ) {
-			$this->_debug('! Error updating user.');
+			$this->_log(ADI_LOG_FATAL,'Error updating user.');
 			die('Error updating user!');
 		} else {
 			update_usermeta($user_id, 'first_name', $first_name);
@@ -964,8 +973,6 @@ class ADIntegrationPlugin {
 			{
 				wp_update_user(array('ID' => $user_id, 'user_email' => $email));
 			}
-			
-			
 		}
 		return $user_id;
 	}
@@ -982,11 +989,11 @@ class ADIntegrationPlugin {
 			$authorization_groups = explode(';', $this->_authorization_group);
 			foreach ($authorization_groups as $authorization_group) {
 				if ($this->_adldap->user_ingroup($username, $authorization_group, true)) {
-					$this->_debug('* Authorized by membership of group "'.$authorization_group.'"');
+					$this->_log(ADI_LOG_NOTICE,'* Authorized by membership of group "'.$authorization_group.'"');
 					return true;
 				}
 			}
-			$this->_debug('! Authorization by group failed');
+			$this->_log(ADI_LOG_WARN,'Authorization by group failed. User is not authorized.');
 			return false;
 		} else {
 			return true;
@@ -1021,7 +1028,7 @@ class ADIntegrationPlugin {
 					break;
 				}
 		}
-		$this->_debug('* user role: '.$user_role);
+		$this->_log(ADI_LOG_INFO,'user role: '.$user_role);
 		return $user_role;
 	}
 	
@@ -1174,11 +1181,12 @@ class ADIntegrationPlugin {
 	/**
 	 * Output debug informations
 	 * 
+	 * @param integer level
 	 * @param string $notice
 	 */
-	protected function _debug($notice = '') {
-		if ($this->debug) {
-			echo $notice."\n";
+	protected function _log($level = 0, $info = '') {
+		if ($level <= $this->_loglevel) {
+			echo '[' .$level . '] '.$info."\n";
 		}
 	}
 	
@@ -1242,6 +1250,7 @@ class ADIntegrationPlugin {
 		
 		if (IS_WPMU && !is_site_admin()) {
 			_e('Access denied.', 'ad-integration');
+			$this->_log(ADI_LOG_WARN,'Access to options page denied');
 		}
 		
 		
@@ -1289,6 +1298,7 @@ class ADIntegrationPlugin {
   	<?php 
   	if (!function_exists('ldap_connect')) {
   		echo '<h3>' . __('ATTENTION: You have no LDAP support. This plugin won´t work.', 'ad-integration') . '</h3>';
+  		$this->_log(ADI_LOG_WARN,'No LDAP support.');
   	}
 	?>
 
