@@ -53,7 +53,7 @@ None... so far.
 == Changelog ==
 
 
-= 0.9.9-dev =
+= 0.9.9.1 =
 * NEW: testing und debugging tool
 * CHANGE: tabbed interface for options  
 
