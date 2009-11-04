@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 2.8.5
-Stable tag: 0.9.9.3-dev
+Stable tag: 0.9.9.3
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -65,7 +65,7 @@ If yout don't already have one create it. On Windows systems the path should be 
 
 == Changelog ==
 
-= 0.9.9.3-dev =
+= 0.9.9.3 =
 * FIX: Test Tool did not work with passwords including special characters. (Thanks to Bruno Grossniklaus for the bug report.)
 
 = 0.9.9.2 =
