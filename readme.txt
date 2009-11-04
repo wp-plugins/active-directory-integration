@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 2.8.5
-Stable tag: 0.9.9.2
+Stable tag: 0.9.9.3-dev
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -64,6 +64,9 @@ If yout don't already have one create it. On Windows systems the path should be 
 1. Enable SSL-Admin-Mode by adding the line `define('FORCE_SSL_ADMIN', true);` to your wp-config.php so that your passwords are not sent in plain-text.
 
 == Changelog ==
+
+= 0.9.9.3-dev =
+* FIX: Test Tool did not work with passwords including special characters. (Thanks to Bruno Grossniklaus for the bug report.)
 
 = 0.9.9.2 =
 **If you have 0.9.9.1 installed, it is highly recommended to update to 0.9.9.2.**
