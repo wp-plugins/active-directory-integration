@@ -1292,7 +1292,6 @@ class ADIntegrationPlugin {
 		var user = encodeURIComponent(document.getElementById('AD_Integration_test_user').value);
 		var password = encodeURIComponent(document.getElementById('AD_Integration_test_password').value);
 
-		alert(encodeURI("<?php echo WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER;?>/test.php?user=" + user + "&password=" + password));
 		TestWindow = window.open("<?php echo WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER;?>/test.php?user=" + user + "&password=" + password, "Test", "width=450,height=500,left=100,top=200");
 		TestWindow.focus();
 	}
