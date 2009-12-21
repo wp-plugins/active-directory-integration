@@ -2,8 +2,8 @@
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
-Tested up to: 2.8.6
-Stable tag: 0.9.9.4
+Tested up to: 2.9
+Stable tag: 0.9.9.5
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -21,7 +21,7 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * use non standard port for communication to AD Servers
 * protection against brute force attacks
 * user and/or admin e-mail notification on failed login attempts
-* multi-language support (english and german included)
+* multi-language support (English, German and Belorussian included)
 * determine WP display name from AD attributes (sAMAccountName, displayName, description, SN, CN, givenName or mail)
 * tool for testing with detailed debug informations
 * enable/disable password changes for local (non AD) WP users
@@ -64,6 +64,9 @@ If yout don't already have one create it. On Windows systems the path should be 
 1. Enable SSL-Admin-Mode by adding the line `define('FORCE_SSL_ADMIN', true);` to your wp-config.php so that your passwords are not sent in plain-text.
 
 == Changelog ==
+
+= 0.9.9.5 =
+* ADD: Translation to Belorussian by <a href="http://www.fatcow.com">FatCow</a>.
 
 = 0.9.9.4 =
 * FIX: Local passwords were always set to random ones, so it was impossible to logon with a password stored/changed in the local WordPress database after the activation of the plugin.(Thanks to Vincent Lubbers for the bug report.)
