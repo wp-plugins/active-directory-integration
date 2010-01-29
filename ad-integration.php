@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.9.5
+Version: 0.9.9.6
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -193,10 +193,16 @@ class ADIntegrationPlugin {
 			
 			add_filter('check_password', array(&$this, 'override_password_check'), 10, 4);
 			
+			// Is local password change disallowed?
 			if (!$this->_enable_password_change) {
+				
+				// disable password fields
 				add_filter('show_password_fields', array(&$this, 'disable_password_fields'));
+				
+				// generate a random passwords for manually added users 
+				add_action('check_passwords', array(&$this, 'generate_password'), 10, 3);
 			}
-			
+			 			
 			if (!class_exists('adLDAP')) {
 				require 'ad_ldap/adLDAP.php';
 			}
