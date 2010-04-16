@@ -2,7 +2,7 @@
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
-Tested up to: 2.9.1
+Tested up to: 3.0-beta1
 Stable tag: 0.9.9.6
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
@@ -17,7 +17,7 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * authorize users by Active Directory group memberships
 * auto create and update users that can authenticate against AD
 * mapping of AD groups to WordPress roles
-* use TLS for secure communication to AD Servers (recommended)
+* use TLS (or LDAPS) for secure communication to AD Servers (recommended)
 * use non standard port for communication to AD Servers
 * protection against brute force attacks
 * user and/or admin e-mail notification on failed login attempts
@@ -46,6 +46,10 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 Yes, this works. But you have to add the line `TLS_REQCERT never` to your ldap.conf on your web server.
 If yout don't already have one create it. On Windows systems the path should be `c:\openldap\sysconf\ldap.conf`.
 
+= Can I use LDAPS instead of TLS? =
+Yes, you can. Just put "ldaps://" in front of the server in the option labeled "Domain Controller" (e.g. "ldaps://dc.domain.tld"), enter 636 as port and deactivate the option "Use TLS".
+    
+
 == Screenshots ==
 
 1. Server Settings 
@@ -64,6 +68,10 @@ If yout don't already have one create it. On Windows systems the path should be 
 1. Enable SSL-Admin-Mode by adding the line `define('FORCE_SSL_ADMIN', true);` to your wp-config.php so that your passwords are not sent in plain-text.
 
 == Changelog ==
+
+= 0.9.9.7 =
+* ADD: WordPress 3.0 Beta 1 compatibility.
+* FIX: Little typo fixed.
 
 = 0.9.9.6 =
 * FIX: If the option "Enable local password changes" is unchecked, it was not possible to manually add users. (Thanks to <a href="http://wordpress.org/support/profile/660906">kingkong954</a> for the bug report.)
