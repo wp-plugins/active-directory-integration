@@ -891,9 +891,15 @@ class ADIntegrationPlugin {
 		
 		if ( $email == '' ) 
 		{
-			$email = $username . '@' . $this->_default_email_domain;
+			if (trim($this->_default_email_domain) != '') {
+				$email = $username . '@' . $this->_default_email_domain;
+			} else {
+				if (strpos($username, '@') !== false) {
+					$email = $username;
+				}
+			}
 		}
-		
+				
 		// append account suffix to new users? 
 		if ($this->_append_suffix_to_new_users) {
 			$username .= $this->_account_suffix;
@@ -948,8 +954,15 @@ class ADIntegrationPlugin {
 		
 		if ( $email == '' ) 
 		{
-			$email = $username . '@' . $this->_default_email_domain;
+			if (trim($this->_default_email_domain) != '') {
+				$email = $username . '@' . $this->_default_email_domain;
+			} else {
+				if (strpos($username, '@') !== false) {
+					$email = $username;
+				}
+			}
 		}
+		
 		
 		if ($this->_append_suffix_to_new_users) {
 			$username .= $this->_account_suffix;

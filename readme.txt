@@ -70,6 +70,7 @@ Yes, you can. Just put "ldaps://" in front of the server in the option labeled "
 == Changelog ==
 
 = 0.9.9.7 =
+* FIX: Problem with generating of email addresses fixed. (Thanks to Lisa Barker for the bug report.)
 * ADD: WordPress 3.0 Beta 1 compatibility.
 * FIX: Little typo fixed.
 
