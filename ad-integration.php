@@ -658,11 +658,11 @@ class ADIntegrationPlugin {
 			if ($echo) {
 				if($delete_setting) {
 					echo '<font color="green">';
-					printf(__('Setting Key \'%s\' has been deleted.', 'MiniMetaWidget'), "<strong><em>{$option['name']}</em></strong>");
+					printf(__('Setting Key \'%s\' has been deleted.', 'ad-integration'), "<strong><em>{$option['name']}</em></strong>");
 					echo '</font><br />';
 				} else {
 					echo '<font color="red">';
-					printf(__('Error deleting Setting Key \'%s\'.', 'MiniMetaWidget'), "<strong><em>{$option['name']}</em></strong>");
+					printf(__('Error deleting Setting Key \'%s\'.', 'ad-integration'), "<strong><em>{$option['name']}</em></strong>");
 					echo '</font><br />';
 				}
 			}

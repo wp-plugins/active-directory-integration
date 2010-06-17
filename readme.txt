@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 3.0-beta1
-Stable tag: 0.9.9.6
+Stable tag: 0.9.9.7
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -73,6 +73,7 @@ Yes, you can. Just put "ldaps://" in front of the server in the option labeled "
 * FIX: Problem with generating of email addresses fixed. (Thanks to Lisa Barker for the bug report.)
 * ADD: WordPress 3.0 Beta 1 compatibility.
 * FIX: Little typo fixed.
+* FIX: Fixed a bug in adLDAP.php so the primary user group will be determined correctly.(Thanks to Matt for the bug report.) 
 
 = 0.9.9.6 =
 * FIX: If the option "Enable local password changes" is unchecked, it was not possible to manually add users. (Thanks to <a href="http://wordpress.org/support/profile/660906">kingkong954</a> for the bug report.)
