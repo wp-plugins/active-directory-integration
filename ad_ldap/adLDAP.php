@@ -657,7 +657,7 @@ class adLDAP {
         if (!$this->_bind){ return (false); }
         
         // Search the directory for their information
-        $info=@$this->user_info($username,array("memberof","primarygroupid"));
+        $info=@$this->user_info($username,array("memberof","primarygroupid","objectsid"));
         $groups=$this->nice_names($info[0]["memberof"]); // Presuming the entry returned is our guy (unique usernames)
 
         if ($recursive){
@@ -906,7 +906,7 @@ class adLDAP {
         if (!$this->_bind){ return (false); }
         
         // Search the directory for their information
-        $info=@$this->contact_info($distinguishedname,array("memberof","primarygroupid"));
+        $info=@$this->contact_info($distinguishedname,array("memberof","primarygroupid","objectsid"));
         $groups=$this->nice_names($info[0]["memberof"]); //presuming the entry returned is our contact
 
         if ($recursive){
