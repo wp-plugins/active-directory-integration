@@ -455,7 +455,7 @@ class ADIntegrationPlugin {
 		
 		if (!$user OR ($user->user_login != $username)) {
 			$user_role = $this->_get_user_role_equiv($ad_username);
-			if ($this->_auto_create_user || $user_role != '' ) {
+			if ($this->_auto_create_user || trim($user_role) != '' ) {
 					// create user
 					$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
 					$userinfo = $userinfo[0];
