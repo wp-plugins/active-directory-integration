@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.9.7
+Version: 0.9.9.8
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -164,6 +164,7 @@ class ADIntegrationPlugin {
 		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's folder and name it "ad-auth-[value in wp-config].mo"
 		load_plugin_textdomain( 'ad-integration', WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER );
+		load_plugin_textdomain( 'ad-integration', ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER );
 
 		// Load Options
 		$this->_load_options();
@@ -212,7 +213,7 @@ class ADIntegrationPlugin {
 	
 	public function load_styles() {
 		 
-		wp_register_style('adintegration', WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER.'/css/adintegration.css',false, '1.7.1', 'screen');
+		wp_register_style('adintegration', ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER.'/css/adintegration.css',false, '1.7.1', 'screen');
 		wp_enqueue_style('adintegration');
 	}
 	
@@ -739,28 +740,69 @@ class ADIntegrationPlugin {
 	 * @return unknown_type
 	 */
 	protected function _save_wpmu_options($arrPost) {
-		if (IS_WPMU) {
-			update_site_option('AD_Integration_auto_create_user', (bool)$arrPost['AD_Integration_auto_create_user']);
-			update_site_option('AD_Integration_auto_update_user', (bool)$arrPost['AD_Integration_auto_update_user']);
-			update_site_option('AD_Integration_account_suffix', $arrPost['AD_Integration_account_suffix']);
-			update_site_option('AD_Integration_append_suffix_to_new_users', $arrPost['AD_Integration_append_suffix_to_new_users']);
-			update_site_option('AD_Integration_domain_controllers', $arrPost['AD_Integration_domain_controllers']);
-			update_site_option('AD_Integration_base_dn', $arrPost['AD_Integration_base_dn']);
-			update_site_option('AD_Integration_bind_user', $arrPost['AD_Integration_bind_user']);
-			update_site_option('AD_Integration_bind_pwd', $arrPost['AD_Integration_bind_pwd']);
-			update_site_option('AD_Integration_port', $arrPost['AD_Integration_port']);
-			update_site_option('AD_Integration_use_tls', $arrPost['AD_Integration_use_tls']);
-			update_site_option('AD_Integration_default_email_domain', $arrPost['AD_Integration_default_email_domain']);
-			update_site_option('AD_Integration_authorize_by_group', (bool)$arrPost['AD_Integration_authorize_by_group']);
-			update_site_option('AD_Integration_authorization_group', $arrPost['AD_Integration_authorization_group']);
-			update_site_option('AD_Integration_role_equivalent_groups', $arrPost['AD_Integration_role_equivalent_groups']);
-			update_site_option('AD_Integration_max_login_attempts', (int)$arrPost['AD_Integration_max_login_attempts']);
-			update_site_option('AD_Integration_block_time', (int)$arrPost['AD_Integration_block_time']);
-			update_site_option('AD_Integration_user_notification', (bool)$arrPost['AD_Integration_user_notification']);
-			update_site_option('AD_Integration_admin_notification', (bool)$arrPost['AD_Integration_admin_notification']);
-			update_site_option('AD_Integration_admin_email', $arrPost['AD_Integration_admin_email']);
-			update_site_option('AD_Integration_display_name', $arrPost['AD_Integration_display_name']);
-			update_site_option('AD_Integration_enable_password_change', $arrPost['AD_Integration_enable_password_change']);
+ 		if (IS_WPMU) {	
+			if ( !empty( $arrPost['AD_Integration_auto_create_user'] ) )
+			 	update_site_option('AD_Integration_auto_create_user', (bool)$arrPost['AD_Integration_auto_create_user']);
+			 
+			if ( !empty( $arrPost['AD_Integration_auto_update_user'] ) )
+			 	update_site_option('AD_Integration_auto_update_user', (bool)$arrPost['AD_Integration_auto_update_user']);
+			 
+			if ( !empty( $arrPost['AD_Integration_account_suffix'] ) )
+			 	update_site_option('AD_Integration_account_suffix', $arrPost['AD_Integration_account_suffix']);
+			 
+			if ( !empty( $arrPost['AD_Integration_append_suffix_to_new_users'] ) )
+			 	update_site_option('AD_Integration_append_suffix_to_new_users', $arrPost['AD_Integration_append_suffix_to_new_users']);
+			 
+			if ( !empty( $arrPost['AD_Integration_domain_controllers'] ) )
+			 	update_site_option('AD_Integration_domain_controllers', $arrPost['AD_Integration_domain_controllers']);
+			 
+			if ( !empty( $arrPost['AD_Integration_base_dn'] ) )
+			 	update_site_option('AD_Integration_base_dn', $arrPost['AD_Integration_base_dn']);
+			 
+			if ( !empty( $arrPost['AD_Integration_bind_user'] ) )
+			 	update_site_option('AD_Integration_bind_user', $arrPost['AD_Integration_bind_user']);
+			 
+			if ( !empty( $arrPost['AD_Integration_bind_pwd'] ) )
+			 	update_site_option('AD_Integration_bind_pwd', $arrPost['AD_Integration_bind_pwd']);
+			 
+			if ( !empty( $arrPost['AD_Integration_port'] ) )
+			 	update_site_option('AD_Integration_port', $arrPost['AD_Integration_port']);
+			 
+			if ( !empty( $arrPost['AD_Integration_use_tls'] ) )
+			 	update_site_option('AD_Integration_use_tls', $arrPost['AD_Integration_use_tls']);
+			 
+			if ( !empty( $arrPost['AD_Integration_default_email_domain'] ) )
+			 	update_site_option('AD_Integration_default_email_domain', $arrPost['AD_Integration_default_email_domain']);
+			 
+			if ( !empty( $arrPost['AD_Integration_authorize_by_group'] ) )
+			 	update_site_option('AD_Integration_authorize_by_group', (bool)$arrPost['AD_Integration_authorize_by_group']);
+			 
+			if ( !empty( $arrPost['AD_Integration_authorization_group'] ) )
+			 	update_site_option('AD_Integration_authorization_group', $arrPost['AD_Integration_authorization_group']);
+			 
+			if ( !empty( $arrPost['AD_Integration_role_equivalent_groups'] ) )
+			 	update_site_option('AD_Integration_role_equivalent_groups', $arrPost['AD_Integration_role_equivalent_groups']);
+			 
+			if ( !empty( $arrPost['AD_Integration_max_login_attempts'] ) )
+			 	update_site_option('AD_Integration_max_login_attempts', (int)$arrPost['AD_Integration_max_login_attempts']);
+			 
+			if ( !empty( $arrPost['AD_Integration_block_time'] ) )
+			 	update_site_option('AD_Integration_block_time', (int)$arrPost['AD_Integration_block_time']);
+			 
+			if ( !empty( $arrPost['AD_Integration_user_notification'] ) )
+			 	update_site_option('AD_Integration_user_notification', (bool)$arrPost['AD_Integration_user_notification']);
+			 
+			if ( !empty( $arrPost['AD_Integration_admin_notification'] ) )
+			 	update_site_option('AD_Integration_admin_notification', (bool)$arrPost['AD_Integration_admin_notification']);
+			 
+			if ( !empty( $arrPost['AD_Integration_admin_email'] ) )
+			 	update_site_option('AD_Integration_admin_email', $arrPost['AD_Integration_admin_email']);
+			 
+			if ( !empty( $arrPost['AD_Integration_display_name'] ) )
+			 	update_site_option('AD_Integration_display_name', $arrPost['AD_Integration_display_name']);
+			 
+			if ( !empty( $arrPost['AD_Integration_enable_password_change'] ) )
+				update_site_option('AD_Integration_enable_password_change', $arrPost['AD_Integration_enable_password_change']);
 			
 			// let's load the new values
 			$this->_load_options();
@@ -1312,7 +1354,7 @@ class ADIntegrationPlugin {
 		var user = encodeURIComponent(document.getElementById('AD_Integration_test_user').value);
 		var password = encodeURIComponent(document.getElementById('AD_Integration_test_password').value);
 
-		TestWindow = window.open("<?php echo WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER;?>/test.php?user=" + user + "&password=" + password, "Test", "width=450,height=500,left=100,top=200");
+		TestWindow = window.open("<?php echo ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER;?>/test.php?user=" + user + "&password=" + password, "Test", "width=450,height=500,left=100,top=200");
 		TestWindow.focus();
 	}
 </script>
