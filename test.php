@@ -79,7 +79,7 @@ class TestADIntegrationPlugin extends ADIntegrationPlugin {
 				default:
 					$output .= 'debug';
 			}
-			$output .= str_replace("\n","\n         ",$info).'</span><br />';
+			$output .= str_replace("\n","<br />         ",$info).'</span><br />';
 			
 			echo $output;
 		}

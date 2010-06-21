@@ -954,9 +954,14 @@ class ADIntegrationPlugin {
 					  "- display name: $display_name\n".
 					  "- role: $role");
 		
-
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
-		wp_create_user($username, $password, $email);
+		$return = wp_create_user($username, $password, $email);
+
+		// log errors
+		if (is_wp_error($return)) {
+   			$this->_log(ADI_LOG_ERROR, $return->get_error_message());
+		}
+		
 		$user_id = username_exists($username);
 		$this->_log(ADI_LOG_NOTICE,' - user_id: '.$user_id);
 		if ( !$user_id ) {
@@ -968,15 +973,17 @@ class ADIntegrationPlugin {
 			
 			// set display_name
 			if ($display_name != '') {
-				wp_update_user(array('ID' => $user_id, 'display_name' => $display_name));
+				$return = wp_update_user(array('ID' => $user_id, 'display_name' => $display_name));
 			}
 			
 			// set role
 			if ( $role != '' ) 
 			{
-				wp_update_user(array("ID" => $user_id, "role" => $role));
+				$return = wp_update_user(array("ID" => $user_id, "role" => $role));
 			}
 		}
+
+		
 		return $user_id;
 	}
 	
@@ -1017,7 +1024,9 @@ class ADIntegrationPlugin {
 					  "- display name: $display_name\n".
 					  "- role: $role");
 		
+		$this->_log(ADI_LOG_DEBUG, ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
+		
 		$user_id = username_exists($username);
 		$this->_log(ADI_LOG_NOTICE,' - user_id: '.$user_id);
 		if ( !$user_id ) {
@@ -1044,6 +1053,12 @@ class ADIntegrationPlugin {
 				wp_update_user(array('ID' => $user_id, 'user_email' => $email));
 			}
 		}
+		
+		// log errors
+		if (is_wp_error($return)) {
+   			$this->_log(ADI_LOG_ERROR, $return->get_error_message());
+		}
+		
 		return $user_id;
 	}
 	
@@ -1256,7 +1271,7 @@ class ADIntegrationPlugin {
 	 */
 	protected function _log($level = 0, $info = '') {
 		if ($level <= $this->_loglevel) {
-			echo '[' .$level . '] '.$info."\n";
+			echo '[' .$level . '] '.$info."\n\r";
 		}
 	}
 	
