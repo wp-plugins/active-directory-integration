@@ -954,7 +954,10 @@ class ADIntegrationPlugin {
 					  "- display name: $display_name\n".
 					  "- role: $role");
 		
+		
+		
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
+		define('WP_IMPORTING',true);
 		$return = wp_create_user($username, $password, $email);
 
 		// log errors
