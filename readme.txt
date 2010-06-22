@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
 Tested up to: 3.0
-Stable tag: 0.9.9.8
+Stable tag: 0.9.9.9
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -69,6 +69,11 @@ Yes, you can. Just put "ldaps://" in front of the server in the option labeled "
 1. Enable SSL-Admin-Mode by adding the line `define('FORCE_SSL_ADMIN', true);` to your wp-config.php so that your passwords are not sent in plain-text.
 
 == Changelog ==
+
+= 0.9.9.9 =
+* FIX: Automatic User Creation failed in WordPress 3.0 (Thanks to d4b for the bug report and testing.)
+* ADD: New Option "Email Address Conflict Handling" (relates to the fix above). 
+* FIX: Some minor fixes in adintegration.php und adLDAP.php.
 
 = 0.9.9.8 =
 * FIX: Some fixes relating to WPMU contributed by Tim (mrsharumpe).

@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 0.9.9.8
+Version: 0.9.9.9
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -39,6 +39,10 @@ define('ADI_LOG_WARN',  3);
 define('ADI_LOG_ERROR', 2);
 define('ADI_LOG_FATAL', 1);
 define('ADI_LOG_NONE',  0);
+
+define('ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT', 'prevent');
+define('ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW', 'allow');
+define('ADI_DUPLICATE_EMAIL_ADDRESS_CREATE', 'create');
 
 class ADIntegrationPlugin {
 	
@@ -124,30 +128,33 @@ class ADIntegrationPlugin {
 	
 	// Enable/Disable password changes 
 	protected $_enable_password_change = false;
+	
+	protected $_duplicate_email_prevention = ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT; 
 
 	// All options and its types 
 	protected $_all_options = array(
-			array(name => 'AD_Integration_account_suffix', type => 'string'),
-			array(name => 'AD_Integration_auto_create_user', type => 'bool'),
-			array(name => 'AD_Integration_auto_update_user', type => 'bool'),
-			array(name => 'AD_Integration_append_suffix_to_new_users', type => 'bool'),
-			array(name => 'AD_Integration_domain_controllers', type => 'string'),
-			array(name => 'AD_Integration_base_dn', type => 'string'),
-			array(name => 'AD_Integration_role_equivalent_groups', type => 'string'),
-			array(name => 'AD_Integration_default_email_domain', type => 'string'),
-			array(name => 'AD_Integration_port', type => 'int'),
-			array(name => 'AD_Integration_bind_user', type => 'string'),
-			array(name => 'AD_Integration_bind_pwd', type => 'string'),
-			array(name => 'AD_Integration_use_tls', type => 'bool'),
-			array(name => 'AD_Integration_authorize_by_group', type => 'bool'),
-			array(name => 'AD_Integration_authorization_group', type => 'string'),
-			array(name => 'AD_Integration_max_login_attempts', type => 'int'),
-			array(name => 'AD_Integration_block_time', type => 'int'),
-			array(name => 'AD_Integration_user_notification', type => 'bool'),
-			array(name => 'AD_Integration_admin_notification', type => 'bool'),
-			array(name => 'AD_Integration_admin_email', type => 'string'),
-			array(name => 'AD_Integration_display_name', type => 'string'),
-			array(name => 'AD_Integration_enable_password_fields', type => 'bool')
+			array('name' => 'AD_Integration_account_suffix', 'type' => 'string'),
+			array('name' => 'AD_Integration_auto_create_user', 'type' => 'bool'),
+			array('name' => 'AD_Integration_auto_update_user', 'type' => 'bool'),
+			array('name' => 'AD_Integration_append_suffix_to_new_users', 'type' => 'bool'),
+			array('name' => 'AD_Integration_domain_controllers', 'type' => 'string'),
+			array('name' => 'AD_Integration_base_dn', 'type' => 'string'),
+			array('name' => 'AD_Integration_role_equivalent_groups', 'type' => 'string'),
+			array('name' => 'AD_Integration_default_email_domain', 'type' => 'string'),
+			array('name' => 'AD_Integration_port', 'type' => 'int'),
+			array('name' => 'AD_Integration_bind_user', 'type' => 'string'),
+			array('name' => 'AD_Integration_bind_pwd', 'type' => 'string'),
+			array('name' => 'AD_Integration_use_tls', 'type' => 'bool'),
+			array('name' => 'AD_Integration_authorize_by_group', 'type' => 'bool'),
+			array('name' => 'AD_Integration_authorization_group', 'type' => 'string'),
+			array('name' => 'AD_Integration_max_login_attempts', 'type' => 'int'),
+			array('name' => 'AD_Integration_block_time', 'type' => 'int'),
+			array('name' => 'AD_Integration_user_notification', 'type' => 'bool'),
+			array('name' => 'AD_Integration_admin_notification', 'type' => 'bool'),
+			array('name' => 'AD_Integration_admin_email', 'type' => 'string'),
+			array('name' => 'AD_Integration_display_name', 'type' => 'string'),
+			array('name' => 'AD_Integration_enable_password_change', 'type' => 'bool'),
+			array('name' => 'AD_Integration_duplicate_email_prevention', 'type' => 'string')
 		);
 
 	/**
@@ -155,11 +162,15 @@ class ADIntegrationPlugin {
 	 */
 	public function __construct() {
 		global $wp_version, $wpmu_version, $wpdb, $wpmuBaseTablePrefix;
+
+		if (!defined('IS_WPMU')) {
+			define('IS_WPMU', ($wpmu_version != ''));
+		}
 		
-		define('IS_WPMU', ($wpmu_version != ''));
-		
-		// define folder constant  
-		define('ADINTEGRATION_FOLDER', basename(dirname(__FILE__)));
+		// define folder constant
+		if (!defined('ADINTEGRATION_FOLDER')) {  
+			define('ADINTEGRATION_FOLDER', basename(dirname(__FILE__)));
+		}
 
 		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's folder and name it "ad-auth-[value in wp-config].mo"
@@ -255,6 +266,7 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
 				add_site_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
 				add_site_option('AD_Integration_enable_password_change', false, 'Enable the ability of the users to change their WP passwords.');
+				add_site_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT, 'Prevent duplicate email addresses?');
 			}
 		} else {
 			if (current_user_can('manage_options')) {
@@ -279,6 +291,8 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
 				add_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
 				add_option('AD_Integration_enable_password_change', false, 'Enable or disabled the ability to the change user WP passwords.');
+				add_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT, 'Prevent duplicate email addresses?');
+				
 			}
 		}
 	}
@@ -297,11 +311,11 @@ class ADIntegrationPlugin {
 				add_submenu_page('wpmu-admin.php', __('Active Directory Integration'), __('Active Directory Integration'), 'manage_options', __FILE__, array(&$this, '_display_options_page'));
 			}
 		}
-
+	
 		if (!IS_WPMU) {
 			// WordPress Standard
 			if (function_exists('add_options_page')) {
-				add_options_page('Active Directory Integration', 'Active Directory Integration', 9, __FILE__, array(&$this, '_display_options_page'));
+				add_options_page('Active Directory Integration', 'Active Directory Integration', 'manage_options', __FILE__, array(&$this, '_display_options_page'));
 			}
 		}
 	}
@@ -706,7 +720,8 @@ class ADIntegrationPlugin {
 			$this->_admin_notification			= (bool)get_site_option('AD_Integration_admin_notification');
 			$this->_admin_email					= get_site_option('AD_Integration_admin_email');
 			$this->_display_name				= get_site_option('AD_Integration_display_name');
-			$this->_enable_password_change     = get_site_option('AD_Integration_enable_password_change');
+			$this->_enable_password_change      = get_site_option('AD_Integration_enable_password_change');
+			$this->_duplicate_email_prevention  = get_site_option('AD_Integration_duplicate_email_prevention');
 		} else {
 			$this->_auto_create_user 			= (bool)get_option('AD_Integration_auto_create_user');
 			$this->_auto_update_user 			= (bool)get_option('AD_Integration_auto_update_user');
@@ -728,7 +743,8 @@ class ADIntegrationPlugin {
 			$this->_admin_notification			= (bool)get_option('AD_Integration_admin_notification');
 			$this->_admin_email					= get_option('AD_Integration_admin_email');
 			$this->_display_name				= get_option('AD_Integration_display_name');
-			$this->_enable_password_change     = get_option('AD_Integration_enable_password_change');
+			$this->_enable_password_change      = get_option('AD_Integration_enable_password_change');
+			$this->_duplicate_email_prevention  = get_option('AD_Integration_duplicate_email_prevention');
 		}
 	}
 	
@@ -928,7 +944,10 @@ class ADIntegrationPlugin {
 	 * @param $role
 	 * @return integer user_id
 	 */
-	protected function _create_user($username, $email, $first_name, $last_name, $display_name = '', $role = '') {
+	protected function _create_user($username, $email, $first_name, $last_name, $display_name = '', $role = '')
+	{
+		global $wp_version;
+		
 		$password = $this->_get_password();
 		
 		if ( $email == '' ) 
@@ -957,7 +976,22 @@ class ADIntegrationPlugin {
 		
 		
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
-		define('WP_IMPORTING',true);
+		
+		if ($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW) {
+			if (!defined('WP_IMPORTING')) {
+				define('WP_IMPORTING',true); // This is a dirty hack. See wp-includes/registration.php
+			}
+		}
+		
+		if ($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_CREATE) {
+			$new_email = $this->_create_non_duplicate_email($email);
+			if ($new_email !== $email) {
+				$this->_log(ADI_LOG_NOTICE, "Duplicate email address prevention: Email changed from $email to $new_email.");
+			}
+			$email = $new_email;
+		}
+		
+		// Here we go!
 		$return = wp_create_user($username, $password, $email);
 
 		// log errors
@@ -971,8 +1005,15 @@ class ADIntegrationPlugin {
 			$this->_log(ADI_LOG_FATAL,'Error creating user.');
 			die("Error creating user!");
 		} else {
-			update_usermeta($user_id, 'first_name', $first_name);
-			update_usermeta($user_id, 'last_name', $last_name);
+			if (version_compare($wp_version, '3', '>=')) {
+				// WP 3.0 and above
+				update_user_meta($user_id, 'first_name', $first_name);
+				update_user_meta($user_id, 'last_name', $last_name);
+			} else {
+				// WP 2.x
+				update_usermeta($user_id, 'first_name', $first_name);
+				update_usermeta($user_id, 'last_name', $last_name);
+			}
 			
 			// set display_name
 			if ($display_name != '') {
@@ -1002,7 +1043,9 @@ class ADIntegrationPlugin {
 	 * @param $role
 	 * @return integer user_id
 	 */
-	protected function _update_user($username, $email, $first_name, $last_name, $display_name='', $role = '') {
+	protected function _update_user($username, $email, $first_name, $last_name, $display_name='', $role = '')
+	{
+		global $wp_version;
 		
 		if ( $email == '' ) 
 		{
@@ -1027,7 +1070,6 @@ class ADIntegrationPlugin {
 					  "- display name: $display_name\n".
 					  "- role: $role");
 		
-		$this->_log(ADI_LOG_DEBUG, ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 		
 		$user_id = username_exists($username);
@@ -1036,8 +1078,15 @@ class ADIntegrationPlugin {
 			$this->_log(ADI_LOG_FATAL,'Error updating user.');
 			die('Error updating user!');
 		} else {
-			update_usermeta($user_id, 'first_name', $first_name);
-			update_usermeta($user_id, 'last_name', $last_name);
+			if (version_compare($wp_version, '3', '>=')) {
+				// WP 3.0 and above
+				update_user_meta($user_id, 'first_name', $first_name);
+				update_user_meta($user_id, 'last_name', $last_name);
+			} else {
+				// WP 2.x
+				update_usermeta($user_id, 'first_name', $first_name);
+				update_usermeta($user_id, 'last_name', $last_name);
+			}
 			
 			// set display_name
 			if ($display_name != '') {
@@ -1053,17 +1102,46 @@ class ADIntegrationPlugin {
 			// set email
 			if ( $email != '' ) 
 			{
-				wp_update_user(array('ID' => $user_id, 'user_email' => $email));
+				$return = wp_update_user(array('ID' => $user_id, 'user_email' => $email));
 			}
 		}
 		
 		// log errors
-		if (is_wp_error($return)) {
-   			$this->_log(ADI_LOG_ERROR, $return->get_error_message());
+		if (isset($return)) {
+			if (is_wp_error($return)) {
+	   			$this->_log(ADI_LOG_ERROR, $return->get_error_message());
+			}
 		}
 		
 		return $user_id;
 	}
+	
+	
+	/**
+	 * Returns the given email address or a newly created so no 2 users
+	 * can have the same email address.
+	 * 
+	 * @param $email original email address
+	 * @return unique email address
+	 */
+	protected function _create_non_duplicate_email($email)
+	{
+		if (!email_exists($email)) {
+			return $email;
+		}
+		
+		// Ok, lets create a new email address that does not already exists in the database
+		$arrEmailParts = split('@',$email);
+		$counter = 1;
+		$ok = false;
+		while ($ok !== true) {
+			$email = $arrEmailParts[0].$counter.'@'.$arrEmailParts[1];
+			$ok = !email_exists($email);
+			$counter++;	
+		}
+		return $email;
+	}
+		
 	
 	
 	/**
@@ -1105,7 +1183,7 @@ class ADIntegrationPlugin {
 				$role_group = explode('=', $role_group);
 				if ( count($role_group) != 2 )
 				{
-					next;
+					continue;
 				}
 				$ad_group = $role_group[0];
 				
@@ -1336,10 +1414,12 @@ class ADIntegrationPlugin {
 	 */
 	function _display_options_page() {
 		
-		if (IS_WPMU && !is_site_admin()) {
-			_e('Access denied.', 'ad-integration');
-			$this->_log(ADI_LOG_WARN,'Access to options page denied');
-			exit();
+		if (IS_WPMU) {
+			if (!is_site_admin()) {
+				_e('Access denied.', 'ad-integration');
+				$this->_log(ADI_LOG_WARN,'Access to options page denied');
+				exit();
+			}
 		}
 		
 		
@@ -1488,7 +1568,7 @@ if (!IS_WPMU) { ?>
 		<div id="user">
 			<form action="<?php if (!IS_WPMU)echo 'options.php#user'; ?>" method="post">
 				<input type="hidden" name="action" value="update" />
-					<input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_auto_update_user,AD_Integration_default_email_domain,AD_Integration_account_suffix,AD_Integration_append_suffix_to_new_users,AD_Integration_display_name,AD_Integration_enable_password_change" />
+					<input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_auto_update_user,AD_Integration_default_email_domain,AD_Integration_account_suffix,AD_Integration_append_suffix_to_new_users,AD_Integration_display_name,AD_Integration_enable_password_change,AD_Integration_duplicate_email_prevention" />
 					<?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
 
 				<table class="form-table">
@@ -1525,6 +1605,23 @@ if (!IS_WPMU) { ?>
 							<td>
 								<input type="text" name="AD_Integration_default_email_domain" id="AD_Integration_default_email_domain" class="regular-text" value="<?php echo $this->_default_email_domain; ?>" /><br />
 								<?php _e("If the Active Directory attribute 'mail' is blank, a user's email will be set to username@whatever-this-says", 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+						<th scope="row"><label for="AD_Integration_duplicate_email_prevention"><?php _e('Email Address Conflict Handling', 'ad-integration'); ?></label></th>
+							<td>
+								<select name="AD_Integration_duplicate_email_prevention" id="AD_Integration_duplicate_email_prevention">
+									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT;?>"<?php if (($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT) OR ($this->_display_name == '')) echo ' selected="selected"' ?>><?php _e('Prevent (recommended)', 'ad-integration'); ?></option>
+									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW;?>"<?php if (($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW) OR ($this->_display_name == '')) echo ' selected="selected"' ?>><?php _e('Allow (UNSAFE)', 'ad-integration'); ?></option>
+									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_CREATE;?>"<?php if (($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_CREATE) OR ($this->_display_name == '')) echo ' selected="selected"' ?>><?php _e('Create', 'ad-integration'); ?></option>
+								</select>
+								<?php _e("Choose how to handle email address conflicts.", 'ad-integration'); ?><br />
+								<ul style="list-style-type:disc; margin-left:2em;font-size:11px;">
+									<li><?php _e('Prevent: User is not created, if his email address is already in use by another user. (recommended)', 'ad-integration'); ?></li>
+									<li><?php _e('Allow: Allow users to share one email address. (UNSAFE)', 'ad-integration'); ?></li>
+									<li><?php _e('Create: In case of conflict, the new user is created with a unique email address.', 'ad-integration'); ?></li>
+								</ul>
 							</td>
 						</tr>
 
@@ -1567,6 +1664,7 @@ if (!IS_WPMU) { ?>
 								</label>          
 							</td>
 						</tr>
+						
 					</tbody>
 				</table>
 				<p class="submit">
@@ -1752,4 +1850,5 @@ if (function_exists('register_uninstall_hook')) {
 
 // Load the plugin hooks, etc.
 $AD_Integration_plugin = new ADIntegrationPlugin();
+
 ?>

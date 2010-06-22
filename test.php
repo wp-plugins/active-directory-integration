@@ -4,7 +4,6 @@
  *
  * @package Active Directory Integration
  * @author Christoph Steindorff
- * @copyright 2009
  * @since 0.9.9-dev
  */
 

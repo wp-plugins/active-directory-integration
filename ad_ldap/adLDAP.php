@@ -501,8 +501,12 @@ class adLDAP {
 
         $ret_groups=array();
         
-        $groups=$this->group_info($group,array("memberof"));
-        $groups=$groups[0]["memberof"];
+        $groups=$this->group_info($group,array('memberof'));
+        if (isset($groups[0]['memberof'])) {
+        	$groups = $groups[0]['memberof'];
+        } else {
+        	$groups = array();
+        }
 
         if ($groups){
             $group_names=$this->nice_names($groups);
@@ -696,7 +700,11 @@ class adLDAP {
             }
         }
         
-        $entries[0]["memberof"]["count"]++;
+        if (isset($entries[0]["memberof"]["count"])) {
+        	$entries[0]["memberof"]["count"]++;
+        } else {
+        	$entries[0]["memberof"]["count"] = 1;
+        }
         return ($entries);
     }
     
