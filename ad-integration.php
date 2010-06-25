@@ -173,8 +173,7 @@ class ADIntegrationPlugin {
 		}
 
 		// Load up the localization file if we're using WordPress in a different language
-		// Place it in this plugin's folder and name it "ad-auth-[value in wp-config].mo"
-		load_plugin_textdomain( 'ad-integration', WP_PLUGIN_URL.'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER );
+		// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
 		load_plugin_textdomain( 'ad-integration', ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER );
 
 		// Load Options
@@ -223,7 +222,6 @@ class ADIntegrationPlugin {
 	
 	
 	public function load_styles() {
-		 
 		wp_register_style('adintegration', ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER.'/css/adintegration.css',false, '1.7.1', 'screen');
 		wp_enqueue_style('adintegration');
 	}
@@ -1394,12 +1392,12 @@ class ADIntegrationPlugin {
 	do_action('login_head'); ?>
 </head>
 <body class="login" onload="setTimer()">
-
-<div id="login"><h1><a href="<?php echo apply_filters('login_headerurl', 'http://wordpress.org/'); ?>" title="<?php echo apply_filters('login_headertitle', __('Powered by WordPress')); ?>"><?php bloginfo('name'); ?></a></h1>
-<div id="login_error">
-<?php _e('Account blocked for','ad-integration');?> <span id="secondsleft"><?php echo $seconds;?></span> <?php _e('seconds','ad-integration');?>.
-</div>
-</div>
+	
+	<div id="login"><h1><a href="<?php echo apply_filters('login_headerurl', 'http://wordpress.org/'); ?>" title="<?php echo apply_filters('login_headertitle', __('Powered by WordPress')); ?>"><?php bloginfo('name'); ?></a></h1>
+		<div id="login_error">
+			<?php _e('Account blocked for','ad-integration');?> <span id="secondsleft"><?php echo $seconds;?></span> <?php _e('seconds','ad-integration');?>.
+		</div>
+	</div>
 </body>
 </html>
 <?php 

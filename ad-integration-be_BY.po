@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ADI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-22 13:46+0200\n"
-"PO-Revision-Date: 2010-04-16 10:52+0100\n"
+"PO-Revision-Date: 2010-06-23 08:46+0100\n"
 "Last-Translator: Christoph Steindorff <cst@ecw.de>\n"
 "Language-Team: FatCow <zhr@tut.by>\n"
 "MIME-Version: 1.0\n"
@@ -18,17 +18,14 @@ msgstr ""
 "X-Poedit-Country: BELARUS\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ad-integration.php:311 ad-integration.php:1466
+#: ad-integration.php:311
+#: ad-integration.php:1466
 msgid "Active Directory Integration"
 msgstr "Active Directory Integration"
 
 #: ad-integration.php:484
-msgid ""
-"<strong>ERROR</strong>: This user exists in Active Directory, but has not "
-"been granted access to this installation of WordPress."
-msgstr ""
-"<strong>ОШИБКА</strong>: Этот пользователь существует в Active Directory, но "
-"не был предоставлен доступ к этой установке WordPress."
+msgid "<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress."
+msgstr "<strong>ОШИБКА</strong>: Этот пользователь существует в Active Directory, но не был предоставлен доступ к этой установке WordPress."
 
 #: ad-integration.php:566
 msgid "Active Directory Integration Help"
@@ -60,35 +57,25 @@ msgstr "Ключевое слово '%s' было удалено."
 msgid "Error deleting Setting Key '%s'."
 msgstr "Ошибка при удалении настройки Ключевых '%s'."
 
-#: ad-integration.php:1243 ad-integration.php:1320
+#: ad-integration.php:1243
+#: ad-integration.php:1320
 msgid "Account blocked"
 msgstr "Аккаунт заблокирован"
 
 #: ad-integration.php:1244
 #, php-format
-msgid ""
-"Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
-"security reasons your account is now blocked for %d seconds."
-msgstr ""
-"Попыток входа%s (%s) с вашим именем (%s) - but in vain. For security reasons "
-"your account is now blocked for %d seconds."
+msgid "Someone tried to login to %s (%s) with your username (%s) - but in vain. For security reasons your account is now blocked for %d seconds."
+msgstr "Попыток входа%s (%s) с вашим именем (%s) - but in vain. For security reasons your account is now blocked for %d seconds."
 
-#: ad-integration.php:1246 ad-integration.php:1325
-msgid ""
-"THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
-"ADDRESS SPECIFIED ABOVE."
-msgstr ""
-"Это система найдено электронной почте, пожалуйста, не отвечайте на E-mail "
-"адрес, указанный ВЫШЕ."
+#: ad-integration.php:1246
+#: ad-integration.php:1325
+msgid "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE."
+msgstr "Это система найдено электронной почте, пожалуйста, не отвечайте на E-mail адрес, указанный ВЫШЕ."
 
 #: ad-integration.php:1321
 #, php-format
-msgid ""
-"Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
-"vain. For security reasons this account is now blocked for %d seconds."
-msgstr ""
-"Кто-то попытался Войти в %s (%s) with the username \"%s\" (%s %s) - but in "
-"vain. For security reasons this account is now blocked for %d seconds."
+msgid "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in vain. For security reasons this account is now blocked for %d seconds."
+msgstr "Кто-то попытался Войти в %s (%s) with the username \"%s\" (%s %s) - but in vain. For security reasons this account is now blocked for %d seconds."
 
 #: ad-integration.php:1323
 #, php-format
@@ -127,7 +114,8 @@ msgstr "Сервер"
 msgid "User"
 msgstr "Имя"
 
-#: ad-integration.php:1486 ad-integration.php:1688
+#: ad-integration.php:1486
+#: ad-integration.php:1688
 msgid "Authorization"
 msgstr "Авторизация"
 
@@ -135,7 +123,8 @@ msgstr "Авторизация"
 msgid "Security"
 msgstr "Безопасность"
 
-#: ad-integration.php:1491 ad-integration.php:1800
+#: ad-integration.php:1491
+#: ad-integration.php:1800
 msgid "Test Tool"
 msgstr "Тестирование"
 
@@ -148,12 +137,8 @@ msgid "Domain Controllers"
 msgstr "Контролер доменов"
 
 #: ad-integration.php:1513
-msgid ""
-"Domain Controllers (separate with semicolons, e.g. \"dc1.domain.tld;dc2."
-"domain.tld\")"
-msgstr ""
-"Контролер доменов (раздел. точка с запятой, например, \"dc1.domain.tld;dc2."
-"domain.tld\")"
+msgid "Domain Controllers (separate with semicolons, e.g. \"dc1.domain.tld;dc2.domain.tld\")"
+msgstr "Контролер доменов (раздел. точка с запятой, например, \"dc1.domain.tld;dc2.domain.tld\")"
 
 #: ad-integration.php:1518
 msgid "Port"
@@ -168,24 +153,16 @@ msgid "Use TLS"
 msgstr "Использовать TLS"
 
 #: ad-integration.php:1530
-msgid ""
-"Secure the connection between the WordPress and the Active Directory Servers "
-"using TLS. Note: To use TLS, you must set the LDAP Port to 389."
-msgstr ""
-"Безопасная связь между WordPress и серверами Active Directory помощью TLS. "
-"Примечание: Для использования TLS вы должны установить LDAP Порт на 389."
+msgid "Secure the connection between the WordPress and the Active Directory Servers using TLS. Note: To use TLS, you must set the LDAP Port to 389."
+msgstr "Безопасная связь между WordPress и серверами Active Directory помощью TLS. Примечание: Для использования TLS вы должны установить LDAP Порт на 389."
 
 #: ad-integration.php:1534
 msgid "Bind User"
 msgstr "Назначение пользователя"
 
 #: ad-integration.php:1538
-msgid ""
-"Username for non-anonymous requests to AD (e.g. \"ldapuser@domain.tld\"). "
-"Leave empty for anonymous requests."
-msgstr ""
-"Имя пользователя для не-анонимных запросов до н.э. (e.g. \"ldapuser@domain."
-"tld\"). Оставьте поле пустым для анонимного сообщения."
+msgid "Username for non-anonymous requests to AD (e.g. \"ldapuser@domain.tld\"). Leave empty for anonymous requests."
+msgstr "Имя пользователя для не-анонимных запросов до н.э. (e.g. \"ldapuser@domain.tld\"). Оставьте поле пустым для анонимного сообщения."
 
 #: ad-integration.php:1542
 msgid "Bind User Password"
@@ -203,7 +180,9 @@ msgstr "Base DN"
 msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
 msgstr "Базовый DN (н.э., \"ou=unit,dc=domain,dc=tld\")"
 
-#: ad-integration.php:1560 ad-integration.php:1671 ad-integration.php:1723
+#: ad-integration.php:1560
+#: ad-integration.php:1671
+#: ad-integration.php:1723
 #: ad-integration.php:1787
 msgid "Save Changes"
 msgstr "Сохранить изменения"
@@ -217,59 +196,36 @@ msgid "Automatic User Creation"
 msgstr "Автоматическое создание пользователей"
 
 #: ad-integration.php:1584
-msgid ""
-"Should a new user be created automatically if not already in the WordPress "
-"database?"
-msgstr ""
-"Новый пользователь будет создан автоматически, если его нет в базе WordPress?"
+msgid "Should a new user be created automatically if not already in the WordPress database?"
+msgstr "Новый пользователь будет создан автоматически, если его нет в базе WordPress?"
 
 #: ad-integration.php:1586
-msgid ""
-"Created users will obtain the role defined under \"New User Default Role\" "
-"on the <a href=\"options-general.php\">General Options</a> page."
-msgstr ""
-"Созданные пользователи получат роль, которая определена как \"Новые роли "
-"пользователя по умолчанию\" в <a href=\"options-general.php\">Главных "
-"настройках</a>."
+msgid "Created users will obtain the role defined under \"New User Default Role\" on the <a href=\"options-general.php\">General Options</a> page."
+msgstr "Созданные пользователи получат роль, которая определена как \"Новые роли пользователя по умолчанию\" в <a href=\"options-general.php\">Главных настройках</a>."
 
 #: ad-integration.php:1588
 msgid "This setting is separate from the Role Equivalent Groups option, below."
 msgstr "Эта настройка отдельно от той роли, эквивалентные группы опций ниже."
 
 #: ad-integration.php:1591
-msgid ""
-"<b>Users with role equivalent groups will be created even if this setting is "
-"turned off</b> (because if you didn't want this to happen, you would leave "
-"that option blank.)"
-msgstr ""
-"<b>Пользователь с группами роль эквивалентной будет создано, даже если этот "
-"параметр выключен</b> (потому что если вы не хотите, чтобы это произошло, вы "
-"должны оставить этот параметр пустой.)"
+msgid "<b>Users with role equivalent groups will be created even if this setting is turned off</b> (because if you didn't want this to happen, you would leave that option blank.)"
+msgstr "<b>Пользователь с группами роль эквивалентной будет создано, даже если этот параметр выключен</b> (потому что если вы не хотите, чтобы это произошло, вы должны оставить этот параметр пустой.)"
 
 #: ad-integration.php:1596
 msgid "Automatic User Update"
 msgstr "Обновление Automatic User"
 
 #: ad-integration.php:1599
-msgid ""
-"Should the users be updated in the WordPress database everytime they logon?"
-"<br /><b>Works only if Automatic User Creation is turned on.</b>"
-msgstr ""
-"В случае, если пользователи будут обновлены в базе данных WordPress каждый "
-"раз они входа? <br /> <b>Работает только в случае, если автоматическое "
-"создание пользователей включено.</b>"
+msgid "Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>"
+msgstr "В случае, если пользователи будут обновлены в базе данных WordPress каждый раз они входа? <br /> <b>Работает только в случае, если автоматическое создание пользователей включено.</b>"
 
 #: ad-integration.php:1604
 msgid "Default email domain"
 msgstr "Email-домен по умолчанию"
 
 #: ad-integration.php:1607
-msgid ""
-"If the Active Directory attribute 'mail' is blank, a user's email will be "
-"set to username@whatever-this-says"
-msgstr ""
-"Если атрибут  'почта'  Active Directory пусты, в электронной почте "
-"пользователя будет установлено имя username@whatever-this-says"
+msgid "If the Active Directory attribute 'mail' is blank, a user's email will be set to username@whatever-this-says"
+msgstr "Если атрибут  'почта'  Active Directory пусты, в электронной почте пользователя будет установлено имя username@whatever-this-says"
 
 #: ad-integration.php:1612
 #, fuzzy
@@ -293,9 +249,7 @@ msgid "Choose how to handle email address conflicts."
 msgstr ""
 
 #: ad-integration.php:1621
-msgid ""
-"Prevent: User is not created, if his email address is already in use by "
-"another user. (recommended)"
+msgid "Prevent: User is not created, if his email address is already in use by another user. (recommended)"
 msgstr ""
 
 #: ad-integration.php:1622
@@ -303,9 +257,7 @@ msgid "Allow: Allow users to share one email address. (UNSAFE)"
 msgstr ""
 
 #: ad-integration.php:1623
-msgid ""
-"Create: In case of conflict, the new user is created with a unique email "
-"address."
+msgid "Create: In case of conflict, the new user is created with a unique email address."
 msgstr ""
 
 #: ad-integration.php:1629
@@ -313,20 +265,12 @@ msgid "Account Suffix"
 msgstr "Суффикс для аккаунта"
 
 #: ad-integration.php:1632
-msgid ""
-"Account Suffix (will be appended to all usernames in the Active Directory "
-"authentication process; e.g., \"@domain.tld\".)"
-msgstr ""
-"Суффикс для аккаунта (будет приложено для всех пользователей в процессе "
-"проверки подлинности Active Directory, например:\"@domain.tld\".)"
+msgid "Account Suffix (will be appended to all usernames in the Active Directory authentication process; e.g., \"@domain.tld\".)"
+msgstr "Суффикс для аккаунта (будет приложено для всех пользователей в процессе проверки подлинности Active Directory, например:\"@domain.tld\".)"
 
 #: ad-integration.php:1636
-msgid ""
-"Append account suffix to new created usernames. If checked, the account "
-"suffix (see above) will be appended to the usernames of new created users."
-msgstr ""
-"Добавление суффикса для новых пользователей. При выборе этого параметра "
-"суффикс (см. выше) будет добавлен в новые имена созданных пользователей."
+msgid "Append account suffix to new created usernames. If checked, the account suffix (see above) will be appended to the usernames of new created users."
+msgstr "Добавление суффикса для новых пользователей. При выборе этого параметра суффикс (см. выше) будет добавлен в новые имена созданных пользователей."
 
 #: ad-integration.php:1641
 msgid "Display name"
@@ -366,141 +310,86 @@ msgstr "email-адрес"
 
 #: ad-integration.php:1653
 msgid "Choose user's Active Directory attribute to be used as display name."
-msgstr ""
-"Выберите атрибуты пользователей Active Directory для использования в "
-"качестве отображаемого имени."
+msgstr "Выберите атрибуты пользователей Active Directory для использования в качестве отображаемого имени."
 
 #: ad-integration.php:1658
 msgid "Enable local password changes"
 msgstr "Включите локальные изменения пароля"
 
 #: ad-integration.php:1661
-msgid ""
-"Allow users to change their local (<strong>non AD</strong>) WordPress "
-"password"
-msgstr ""
-"Разрешить пользователям изменять свои локальные <strong>(без АО)</strong> "
-"WordPress Пароли"
+msgid "Allow users to change their local (<strong>non AD</strong>) WordPress password"
+msgstr "Разрешить пользователям изменять свои локальные <strong>(без АО)</strong> WordPress Пароли"
 
 #: ad-integration.php:1663
-msgid ""
-"<strong>If activated, a password change will update the local WordPress "
-"database only. No changes in Active Directory will be made.</strong>"
-msgstr ""
-"<strong>Если активировано, смена пароля будет обновлять только локальную "
-"базу данных WordPress . Никаких изменений в Active Directory не будет.</"
-"strong>"
+msgid "<strong>If activated, a password change will update the local WordPress database only. No changes in Active Directory will be made.</strong>"
+msgstr "<strong>Если активировано, смена пароля будет обновлять только локальную базу данных WordPress . Никаких изменений в Active Directory не будет.</strong>"
 
 #: ad-integration.php:1692
 msgid "Authorize by group membership"
 msgstr "Авторизация членства в группе"
 
 #: ad-integration.php:1695
-msgid ""
-"Users are authorized for login only when they are members of a specific AD "
-"group."
-msgstr ""
-"Пользователи имеют право на вход только тогда, когда они являются членами "
-"конкретной группы объявлений."
+msgid "Users are authorized for login only when they are members of a specific AD group."
+msgstr "Пользователи имеют право на вход только тогда, когда они являются членами конкретной группы объявлений."
 
 #: ad-integration.php:1697
 msgid "Group(s)"
 msgstr "Группа (-ы)"
 
 #: ad-integration.php:1700
-msgid ""
-"Seperate multiple groups by semicolon (e.g. \"domain-users;WP-Users;test-"
-"users\")."
-msgstr ""
-"Отделять несколько групп с запятой (напр. \"domain-users;WP-Users;test-users"
-"\")."
+msgid "Seperate multiple groups by semicolon (e.g. \"domain-users;WP-Users;test-users\")."
+msgstr "Отделять несколько групп с запятой (напр. \"domain-users;WP-Users;test-users\")."
 
 #: ad-integration.php:1706
 msgid "Role Equivalent Groups"
 msgstr "Группы с эквивалентными ролями"
 
 #: ad-integration.php:1710
-msgid ""
-"List of Active Directory groups which correspond to WordPress user roles."
-msgstr ""
-"Список активных групп Directory, которые соответствуют WordPress ролям "
-"пользователей."
+msgid "List of Active Directory groups which correspond to WordPress user roles."
+msgstr "Список активных групп Directory, которые соответствуют WordPress ролям пользователей."
 
 #: ad-integration.php:1711
-msgid ""
-"When a user is first created, his role will correspond to what is specified "
-"here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/"
-"> E.g., \"Soc-Faculty=faculty\" or \"Faculty=faculty;Students=subscriber"
-"\"<br/>A user will be created based on the first math, from left to right, "
-"so you should obviously put the more powerful groups first."
-msgstr ""
-"Когда пользователь впервые создается, его роль будет соответствовать тому, "
-"что указано здесь.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-"
-"Role1;...<br/> E.g., \"Soc-Faculty=faculty\" or \"Faculty=faculty;"
-"Students=subscriber\"<br/>A user will be created based on the first math, "
-"from left to right, so you should obviously put the more powerful groups "
-"first."
+msgid "When a user is first created, his role will correspond to what is specified here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., \"Soc-Faculty=faculty\" or \"Faculty=faculty;Students=subscriber\"<br/>A user will be created based on the first math, from left to right, so you should obviously put the more powerful groups first."
+msgstr "Когда пользователь впервые создается, его роль будет соответствовать тому, что указано здесь.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., \"Soc-Faculty=faculty\" or \"Faculty=faculty;Students=subscriber\"<br/>A user will be created based on the first math, from left to right, so you should obviously put the more powerful groups first."
 
 #: ad-integration.php:1712
 msgid "NOTES"
 msgstr "ЗАМЕТКИ"
 
 #: ad-integration.php:1714
-msgid ""
-"WordPress stores roles as lower case (\"Subscriber\" is stored as "
-"\"subscriber\")"
-msgstr ""
-"WordPress сохраняет роли в нижнем регистре (\"Subscriber\" сохранен как "
-"\"subscriber\")"
+msgid "WordPress stores roles as lower case (\"Subscriber\" is stored as \"subscriber\")"
+msgstr "WordPress сохраняет роли в нижнем регистре (\"Subscriber\" сохранен как \"subscriber\")"
 
 #: ad-integration.php:1715
 msgid "Active Directory groups are case-sensitive."
 msgstr "Active Directory группы чувствительны к раскладке."
 
 #: ad-integration.php:1716
-msgid ""
-"Group memberships cannot be checked across domains.  So if you have two "
-"domains, instr and qc, and qc is the domain specified above, if instr is "
-"linked to qc, I can authenticate instr users, but not check instr group "
-"memberships."
-msgstr ""
-"Группы состоят не может быть проверен в разных доменах. Так что если у вас "
-"есть две области, InStr и контроль качества и контроля качества является "
-"домен, указанный выше, если Instr связана с КК, я могу Instr аутентификации "
-"пользователей, но не проверить Instr членство в группе."
+msgid "Group memberships cannot be checked across domains.  So if you have two domains, instr and qc, and qc is the domain specified above, if instr is linked to qc, I can authenticate instr users, but not check instr group memberships."
+msgstr "Группы состоят не может быть проверен в разных доменах. Так что если у вас есть две области, InStr и контроль качества и контроля качества является домен, указанный выше, если Instr связана с КК, я могу Instr аутентификации пользователей, но не проверить Instr членство в группе."
 
 #: ad-integration.php:1740
 msgid "Brute Force Protection"
 msgstr "Брутфорс-протекция"
 
 #: ad-integration.php:1741
-msgid ""
-"For security reasons you can use the following options to prevent brute "
-"force attacks on your user accounts."
-msgstr ""
-"По соображениям безопасности вы можете использовать следующие опции для "
-"предотвращения брутфорса вашей учетной записи."
+msgid "For security reasons you can use the following options to prevent brute force attacks on your user accounts."
+msgstr "По соображениям безопасности вы можете использовать следующие опции для предотвращения брутфорса вашей учетной записи."
 
 #: ad-integration.php:1746
 msgid "Maximum number of allowed login attempts"
 msgstr "Максимально допустимое количество попыток входа"
 
 #: ad-integration.php:1750
-msgid ""
-"Maximum number of failed login attempts before a user account is blocked. If "
-"empty or \"0\" Brute Force Protection is turned off."
-msgstr ""
-"Максимальное число неудачных попыток  входа учетной записи пользователя. "
-"Если пуст или \"0\" - брутфорс будет отключен."
+msgid "Maximum number of failed login attempts before a user account is blocked. If empty or \"0\" Brute Force Protection is turned off."
+msgstr "Максимальное число неудачных попыток  входа учетной записи пользователя. Если пуст или \"0\" - брутфорс будет отключен."
 
 #: ad-integration.php:1755
 msgid "Blocking Time"
 msgstr "Время блокирования"
 
 #: ad-integration.php:1759
-msgid ""
-"Number of seconds an account is blocked after the maximum number of failed "
-"login attempts is reached."
+msgid "Number of seconds an account is blocked after the maximum number of failed login attempts is reached."
 msgstr "Количество секунд после максимального числа неудачных попыток входа."
 
 #: ad-integration.php:1764
@@ -509,8 +398,7 @@ msgstr "Оповещение пользователя"
 
 #: ad-integration.php:1767
 msgid "Notify user by e-mail when his account is blocked."
-msgstr ""
-"Сообщить пользователю по электронной почте при заблокировали его аккаунта."
+msgstr "Сообщить пользователю по электронной почте при заблокировали его аккаунта."
 
 #: ad-integration.php:1772
 msgid "Admin Notification"
@@ -518,36 +406,19 @@ msgstr " Уведомления Администратору"
 
 #: ad-integration.php:1775
 msgid "Notify admin(s) by e-mail when an user account is blocked."
-msgstr ""
-"Сообщить администратору (ам) по электронной почте при блокировке учетной "
-"записи пользователя."
+msgstr "Сообщить администратору (ам) по электронной почте при блокировке учетной записи пользователя."
 
 #: ad-integration.php:1777
 msgid "E-mail addresses for notifications:"
 msgstr "Адреса электронной почты для уведомления:"
 
 #: ad-integration.php:1781
-msgid ""
-"Seperate multiple addresses by semicolon (e.g. \"admin@domain.tld;"
-"me@mydomain.tld\"). If left blank, notifications will be sent to the blog-"
-"administrator only."
-msgstr ""
-"Разделить несколько адресов запятой (e.g. \"admin@domain.tld;me@mydomain.tld"
-"\"). Если оставить пустым, будут отправляться уведомления на блог-только "
-"администратору."
+msgid "Seperate multiple addresses by semicolon (e.g. \"admin@domain.tld;me@mydomain.tld\"). If left blank, notifications will be sent to the blog-administrator only."
+msgstr "Разделить несколько адресов запятой (e.g. \"admin@domain.tld;me@mydomain.tld\"). Если оставить пустым, будут отправляться уведомления на блог-только администратору."
 
 #: ad-integration.php:1801
-msgid ""
-"Enter a username and password to test logon. If you click the button below, "
-"a new window with detailed debug information opens. <strong>Be sure, that no "
-"unauthorized person can see the output, because passwords will be shown in "
-"plaintext.</strong>"
-msgstr ""
-"Введите имя пользователя и пароль для входа в систему испытаний. Если вы "
-"нажмете на кнопку, расположенную ниже, новое окно с подробной информацией "
-"отладки открывается. <strong>Будьте уверены, что уполномоченные лица не "
-"видно выхода, потому что пароли будут показаны в виде обычного текста.</"
-"strong>"
+msgid "Enter a username and password to test logon. If you click the button below, a new window with detailed debug information opens. <strong>Be sure, that no unauthorized person can see the output, because passwords will be shown in plaintext.</strong>"
+msgstr "Введите имя пользователя и пароль для входа в систему испытаний. Если вы нажмете на кнопку, расположенную ниже, новое окно с подробной информацией отладки открывается. <strong>Будьте уверены, что уполномоченные лица не видно выхода, потому что пароли будут показаны в виде обычного текста.</strong>"
 
 #: ad-integration.php:1807
 msgid "Username"
@@ -563,3 +434,4 @@ msgstr "Выполнить тест"
 
 #~ msgid "Options › Active Directory Integration"
 #~ msgstr "Опции › Active Directory Integration"
+

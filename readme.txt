@@ -9,7 +9,7 @@ Allows WordPress to authenticate, authorize, create and update users against Act
 
 == Description ==
 
-This Plugin allows WordPress to authenticate, authorize, create and update against an Active Directory Domain.
+This Plugin allows WordPress to authenticate, authorize, create and update users against an Active Directory Domain.
 
 It is very easy to set up. Just activate the plugin, type in a domain controller, and you're done. But there are more Features:
 

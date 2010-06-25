@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Active Directory Integration 0.9.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-06-22 13:46+0200\n"
-"PO-Revision-Date: 2010-06-22 13:47+0100\n"
+"PO-Revision-Date: 2010-06-23 10:33+0100\n"
 "Last-Translator: Christoph Steindorff <cst@ecw.de>\n"
 "Language-Team: DEUTSCH <info@ecw.de>\n"
 "MIME-Version: 1.0\n"
@@ -430,4 +430,3 @@ msgstr "Test durchführen"
 
 #~ msgid "Options › Active Directory Integration"
 #~ msgstr "Einstellungen › Active Directory Integration"
-
