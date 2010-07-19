@@ -490,7 +490,11 @@ class ADIntegrationPlugin {
 				$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
 				$userinfo = $userinfo[0];
 				
-				$email = $userinfo['mail'][0];
+				if (isset($userinfo['mail'][0])) {
+					$email = $userinfo['mail'][0];
+				} else {
+					$email = '';
+				}
 				$first_name = $userinfo['givenname'][0];
 				$last_name = $userinfo['sn'][0];
 				$common_name = $userinfo['cn'][0];
@@ -833,7 +837,15 @@ class ADIntegrationPlugin {
 		if (($this->_display_name == '') OR ($this->_display_name == 'sAMAccountName')) {
 			return $username;
 		}
-		$display_name = $userinfo[$this->_display_name][0];
+		
+		print_r($userinfo);
+		
+		if (isset($userinfo[$this->_display_name][0])) {
+			$display_name = $userinfo[$this->_display_name][0];
+		} else {
+			$display_name = '';
+		}
+		
 		if ($display_name == '') {
 			return $username;
 		} else {

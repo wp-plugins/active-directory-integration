@@ -501,12 +501,13 @@ class adLDAP {
 
         $ret_groups=array();
         
-        $groups=$this->group_info($group,array('memberof'));
-        if (isset($groups[0]['memberof'])) {
-        	$groups = $groups[0]['memberof'];
-        } else {
-        	$groups = array();
+        $groups=$this->group_info($group,array("memberof"));
+
+        // Workaround
+        if (!isset($groups[0]['memberof'])) {
+        	$groups[0]["memberof"] = '';
         }
+        $groups=$groups[0]["memberof"];
 
         if ($groups){
             $group_names=$this->nice_names($groups);
@@ -700,11 +701,10 @@ class adLDAP {
             }
         }
         
-        if (isset($entries[0]["memberof"]["count"])) {
-        	$entries[0]["memberof"]["count"]++;
-        } else {
-        	$entries[0]["memberof"]["count"] = 1;
+        if (!isset($entries[0]["memberof"]["count"])) {
+        	$entries[0]["memberof"]["count"] = 0;
         }
+        $entries[0]["memberof"]["count"]++;
         return ($entries);
     }
     
