@@ -2,7 +2,7 @@
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
-Tested up to: 3.0
+Tested up to: 3.0.1
 Stable tag: 0.9.9.9
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
@@ -70,9 +70,13 @@ Yes, you can. Just put "ldaps://" in front of the server in the option labeled "
 
 == Changelog ==
 
+= 1.0-RC1 =
+* CHANGE: Now using an extended version of adLDAP 3.3.1 which should fix some authentication and authorization issues.
+* FIX: Fixed problem with wrong updated email addresses when option "Email Address Conflict Handling" was set to "create".
+
 = 0.9.9.9 =
 * FIX: Automatic User Creation failed in WordPress 3.0 (Thanks to d4b for the bug report and testing.)
-* ADD: New Option "Email Address Conflict Handling" (relates to the fix above). 
+* ADD: New option "Email Address Conflict Handling" (relates to the fix above). 
 * FIX: Some minor fixes in adintegration.php und adLDAP.php.
 
 = 0.9.9.8 =
