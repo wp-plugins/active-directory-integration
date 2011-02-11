@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.0-RC1
+Version: 1.0-RC2
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -131,6 +131,9 @@ class ADIntegrationPlugin {
 	
 	// How to deal with duplicate email addresses
 	protected $_duplicate_email_prevention = ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT;
+	
+	// Update users description if $_auto_update_user is true
+	protected $_auto_update_description = false;
 
 	// Use the real password when a user is created
 	//protected $_no_random_password = false;
@@ -159,6 +162,7 @@ class ADIntegrationPlugin {
 			array('name' => 'AD_Integration_display_name', 'type' => 'string'),
 			array('name' => 'AD_Integration_enable_password_change', 'type' => 'bool'),
 			array('name' => 'AD_Integration_duplicate_email_prevention', 'type' => 'string'),
+			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool')
 			//array('name' => 'AD_Integration_no_random_password', 'type' => 'bool')
 		);
 
@@ -183,7 +187,7 @@ class ADIntegrationPlugin {
 
 		// Load Options
 		$this->_load_options();
-				
+		
 		if (isset($_GET['activate']) and $_GET['activate'] == 'true') {
 			add_action('init', array(&$this, 'initialize_options'));
 		}
@@ -215,7 +219,7 @@ class ADIntegrationPlugin {
 				// disable password fields
 				add_filter('show_password_fields', array(&$this, 'disable_password_fields'));
 				
-				// generate a random passwords for manually added users 
+				// generate a random password for manually added users 
 				add_action('check_passwords', array(&$this, 'generate_password'), 10, 3);
 			}
 			 			
@@ -270,6 +274,7 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
 				add_site_option('AD_Integration_enable_password_change', false, 'Enable the ability of the users to change their WP passwords.');
 				add_site_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT, 'Prevent duplicate email addresses?');
+				add_site_option('AD_Integration_auto_update_description', false, 'Update users description if Automatic User Update is activated.');
 				//add_site_option('AD_Integration_no_random_password', false, 'Use the real password when a user is created?');
 			}
 		} else {
@@ -296,11 +301,12 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
 				add_option('AD_Integration_enable_password_change', false, 'Enable or disabled the ability to the change user WP passwords.');
 				add_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT, 'Prevent duplicate email addresses?');
+				add_option('AD_Integration_auto_update_description', false, 'Update users description if Automatic User Update is activated.');
 				//add_option('AD_Integration_no_random_password', false, 'Use the real password when a user is created?');
 				
 			}
 		}
-		/*
+		
 		// Server
 		register_setting('ADI-server-settings',	'AD_Integration_domain_controllers');
 		register_setting('ADI-server-settings', 'AD_Integration_port,AD_Integration_use_tls');
@@ -311,6 +317,7 @@ class ADIntegrationPlugin {
 		// User
 		register_setting('ADI-user-settings', 'AD_Integration_auto_create_user');
 		register_setting('ADI-user-settings', 'AD_Integration_auto_update_user');
+		register_setting('ADI-user-settings', 'AD_Integration_auto_update_description');
 		register_setting('ADI-user-settings', 'AD_Integration_default_email_domain');
 		register_setting('ADI-user-settings', 'AD_Integration_account_suffix');
 		register_setting('ADI-user-settings', 'AD_Integration_append_suffix_to_new_users');
@@ -331,7 +338,7 @@ class ADIntegrationPlugin {
 		register_setting('ADI-security-settings', 'AD_Integration_user_notification');
 		register_setting('ADI-security-settings', 'AD_Integration_admin_notification');
 		register_setting('ADI-security-settings', 'AD_Integration_admin_email');
-		*/
+		
 	}
 	
 	
@@ -436,15 +443,26 @@ class ADIntegrationPlugin {
 
 		// Connect to Active Directory
 		try {
-			$this->_adldap = @new adLDAP(array(
-						"account_suffix" => $this->_account_suffix,
-						"base_dn" => $this->_base_dn, 
-						"domain_controllers" => explode(';', $this->_domain_controllers),
-						"ad_username" => $this->_bind_user,      // AD Bind User
-						"ad_password" => $this->_bind_pwd,       // password
-						"ad_port" => $this->_port,               // AD port
-						"use_tls" => $this->_use_tls             // secure?
-						));
+			if (trim($this->_bind_user != '')) {
+				$this->_adldap = @new adLDAP(array(
+							"account_suffix" => $this->_account_suffix,
+							"base_dn" => $this->_base_dn, 
+							"domain_controllers" => explode(';', $this->_domain_controllers),
+							"ad_username" => $this->_bind_user,      // AD Bind User
+							"ad_password" => $this->_bind_pwd,       // password
+							"ad_port" => $this->_port,               // AD port
+							"use_tls" => $this->_use_tls             // secure?
+							));
+			} else {
+				$this->_log(ADI_LOG_INFO,"Bind User not set and will not be used.");
+				$this->_adldap = @new adLDAP(array(
+							"account_suffix" => $this->_account_suffix,
+							"base_dn" => $this->_base_dn, 
+							"domain_controllers" => explode(';', $this->_domain_controllers),
+							"ad_port" => $this->_port,               // AD port
+							"use_tls" => $this->_use_tls             // secure?
+							));
+			}
 		} catch (Exception $e) {
     		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
     		return false;
@@ -462,7 +480,7 @@ class ADIntegrationPlugin {
 			if ($failed_logins >= $this->_max_login_attempts) {
 				$this->_authenticated = false;
 
-				$this->_log(ADI_LOG_ERROR,'Authentication failed');
+				$this->_log(ADI_LOG_ERROR,'Authentication failed again');
 				$this->_log(ADI_LOG_ERROR,"Account '$username' blocked for $this->_block_time seconds");
 				
 				// e-mail notfications if user is blocked
@@ -517,47 +535,77 @@ class ADIntegrationPlugin {
 		if ($this->_append_suffix_to_new_users) {
 			$username .= $this->_account_suffix;
 		}
-		
-		// Create new users automatically, if configured
+
+		// getting user data
 		$user = get_userdatabylogin($username);
 		
+		// role
+		$user_role = $this->_get_user_role_equiv($ad_username); // important: use $ad_username not $username
+
+		// userinfo from AD
+		$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
+		$userinfo = $userinfo[0];
+		$this->_log(ADI_LOG_DEBUG,print_r($userinfo,true));
+		
+		// mail
+		if (isset($userinfo['mail'][0])) {
+			$email = $userinfo['mail'][0];
+		} else {
+			$email = '';
+		}
+		
+		// givenname / first name
+		if (isset($userinfo['givenname'][0])) {
+			$first_name = $userinfo['givenname'][0];
+		} else {
+			$first_name = '';
+		}
+		
+		// sn / last name
+		if (isset($userinfo['sn'][0])) {
+			$last_name = $userinfo['sn'][0];
+		} else {
+			$last_name = '';
+		}
+		
+		// cn / common name
+		if (isset($userinfo['cn'][0])) {
+			$common_name = $userinfo['cn'][0];
+		} else {
+			$common_name = '';
+		}
+		
+		// description
+		if (isset($userinfo['description'][0])) {
+			$description = $userinfo['description'][0];
+		} else {
+			$description = '';
+		}
+		
+		// display name
+		$display_name = $this->_get_display_name_from_AD($username, $userinfo);
+	
+		// Create new users automatically, if configured
 		if (!$user OR ($user->user_login != $username)) {
-			$user_role = $this->_get_user_role_equiv($ad_username);
+			
 			if ($this->_auto_create_user || trim($user_role) != '' ) {
-					// create user
-					$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
-					$userinfo = $userinfo[0];
-					$email = $userinfo['mail'][0];
-					$first_name = $userinfo['givenname'][0];
-					$last_name = $userinfo['sn'][0];
-					$display_name = $this->_get_display_name_from_AD($username, $userinfo);
-					$user_id = $this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role, $password);
+				// create user
+				$user_id = $this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $description, $user_role, $password);
 			} else {
 				// Bail out to avoid showing the login form
 				$this->_log(ADI_LOG_ERROR,'This user exists in Active Directory, but has not been granted access to this installation of WordPress.');
 				return new WP_Error('invalid_username', __('<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress.'));
 			}
+			
 		} else {
 			
-			//  update known users if configured
+			//  Update known users if configured
 			if ($this->_auto_create_user AND $this->_auto_update_user) {
 				// Update users role
-				$user_role = $this->_get_user_role_equiv($ad_username);
-				$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
-				$userinfo = $userinfo[0];
-				
-				if (isset($userinfo['mail'][0])) {
-					$email = $userinfo['mail'][0];
-				} else {
-					$email = '';
-				}
-				$first_name = $userinfo['givenname'][0];
-				$last_name = $userinfo['sn'][0];
-				$common_name = $userinfo['cn'][0];
-				$display_name = $this->_get_display_name_from_AD($username, $userinfo);
-				$user_id = $this->_update_user($ad_username, $email, $first_name, $last_name, $display_name, $user_role, $password);
+				$user_id = $this->_update_user($ad_username, $email, $first_name, $last_name, $display_name, $description, $user_role, $password);
 			}
 		}
+		
 		
 		// load user object
 		if (!$user_id) {
@@ -756,8 +804,9 @@ class ADIntegrationPlugin {
 	 * Loads the options from WordPress-DB
 	 */
 	protected function _load_options() {
-		$this->_log(ADI_LOG_INFO,'loading options...');
+		
 		if (IS_WPMU) {
+			$this->_log(ADI_LOG_INFO,'loading options (WPMU) ...');
 			$this->_auto_create_user 			= (bool)get_site_option('AD_Integration_auto_create_user');
 			$this->_auto_update_user 			= (bool)get_site_option('AD_Integration_auto_update_user');
 			$this->_account_suffix		 		= get_site_option('AD_Integration_account_suffix');
@@ -780,8 +829,10 @@ class ADIntegrationPlugin {
 			$this->_display_name				= get_site_option('AD_Integration_display_name');
 			$this->_enable_password_change      = get_site_option('AD_Integration_enable_password_change');
 			$this->_duplicate_email_prevention  = get_site_option('AD_Integration_duplicate_email_prevention');
+			$this->_auto_update_description		= (bool)get_site_option('AD_Integration_auto_update_description');
 			//$this->_no_random_password			= (bool)get_site_option('AD_Integration_no_random_password');
 		} else {
+			$this->_log(ADI_LOG_INFO,'loading options (WPMU) ...');
 			$this->_auto_create_user 			= (bool)get_option('AD_Integration_auto_create_user');
 			$this->_auto_update_user 			= (bool)get_option('AD_Integration_auto_update_user');
 			$this->_account_suffix		 		= get_option('AD_Integration_account_suffix');
@@ -804,6 +855,7 @@ class ADIntegrationPlugin {
 			$this->_display_name				= get_option('AD_Integration_display_name');
 			$this->_enable_password_change      = get_option('AD_Integration_enable_password_change');
 			$this->_duplicate_email_prevention  = get_option('AD_Integration_duplicate_email_prevention');
+			$this->_auto_update_description		= (bool)get_option('AD_Integration_auto_update_description');
 			//$this->_no_random_password			= (bool)get_option('AD_Integration_no_random_password');
 		}
 	}
@@ -1018,7 +1070,7 @@ class ADIntegrationPlugin {
 	 * @param $passwird
 	 * @return integer user_id
 	 */
-	protected function _create_user($username, $email, $first_name, $last_name, $display_name = '', $role = '', $password = '')
+	protected function _create_user($username, $email, $first_name, $last_name, $display_name = '', $description = '', $role = '', $password = '')
 	{
 		global $wp_version;
 		
@@ -1085,10 +1137,16 @@ class ADIntegrationPlugin {
 				// WP 3.0 and above
 				update_user_meta($user_id, 'first_name', $first_name);
 				update_user_meta($user_id, 'last_name', $last_name);
+				if ($this->_auto_update_description) {
+					update_user_meta($user_id, 'description', $description);
+				}
 			} else {
 				// WP 2.x
 				update_usermeta($user_id, 'first_name', $first_name);
 				update_usermeta($user_id, 'last_name', $last_name);
+				if ($this->_auto_update_description) {
+					update_usermeta($user_id, 'description', $description);
+				}
 			}
 			
 			// set display_name
@@ -1119,7 +1177,7 @@ class ADIntegrationPlugin {
 	 * @param $role
 	 * @return integer user_id
 	 */
-	protected function _update_user($username, $email, $first_name, $last_name, $display_name='', $role = '', $password = '')
+	protected function _update_user($username, $email, $first_name, $last_name, $display_name='', $description = '', $role = '', $password = '')
 	{
 		global $wp_version;
 		
@@ -1257,6 +1315,12 @@ class ADIntegrationPlugin {
 	 * @return boolean
 	 */
 	protected function _check_authorization_by_group($username) {
+		
+		// Debugging: show all groups the user is a member of
+		if (defined('WP_DEBUG')) {
+			$this->_log(ADI_LOG_DEBUG,"USER GROUPS:".print_r($this->_adldap->user_groups($username),true));
+		}
+		
 		if ($this->_authorize_by_group) {
 			$authorization_groups = explode(';', $this->_authorization_group);
 			foreach ($authorization_groups as $authorization_group) {
@@ -1676,7 +1740,8 @@ if (!IS_WPMU) { ?>
 			<form action="<?php if (!IS_WPMU)echo 'options.php#user'; ?>" method="post">
 				<?php wp_nonce_field('update-options'); ?>
 				<input type="hidden" name="action" value="update" />
-				<input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_auto_update_user,AD_Integration_default_email_domain,AD_Integration_account_suffix,AD_Integration_append_suffix_to_new_users,AD_Integration_display_name,AD_Integration_enable_password_change,AD_Integration_duplicate_email_prevention" />
+				<!--  <input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_auto_update_user,AD_Integration_auto_update_description,AD_Integration_default_email_domain,AD_Integration_account_suffix,AD_Integration_append_suffix_to_new_users,AD_Integration_display_name,AD_Integration_enable_password_change,AD_Integration_duplicate_email_prevention" />-->
+				<input type="hidden" name="page_options" value="AD_Integration_auto_create_user,AD_Integration_auto_update_user,AD_Integration_auto_update_description,AD_Integration_default_email_domain,AD_Integration_account_suffix,AD_Integration_append_suffix_to_new_users,AD_Integration_display_name,AD_Integration_enable_password_change" />
 
 				<table class="form-table">
 					<tbody>
@@ -1703,7 +1768,13 @@ if (!IS_WPMU) { ?>
 							<th scope="row"><label for="AD_Integration_auto_update_user"><?php _e('Automatic User Update', 'ad-integration'); ?></label></th>
 							<td>
 								<input type="checkbox" name="AD_Integration_auto_update_user" id="AD_Integration_auto_update_user" <?php if ($this->_auto_update_user) echo ' checked="checked"' ?> value="1" />          
-								<?php _e('Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>', 'ad-integration'); ?>          
+								<?php _e('Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>', 'ad-integration'); ?>
+								<br/>
+								<?php
+								/*          
+								<input type="checkbox" name="AD_Integration_auto_update_description" id="AD_Integration_auto_update_description" <?php if ($this->_auto_update_description) echo ' checked="checked"' ?> value="1" />          
+								<?php _e('Should the users descriptions be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation <b>and</b> Automatic User Update is turned on.</b>', 'ad-integration'); ?>
+								*/?>          
 							</td>
 						</tr>
 
