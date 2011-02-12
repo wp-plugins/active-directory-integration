@@ -952,7 +952,7 @@ class ADIntegrationPlugin {
 		}
 		
 		if (defined('WP_DEBUG')) {
-			$this->_log('ADI_LOG_DEBUG',print_r ($userinfo,true));
+			$this->_log(ADI_LOG_DEBUG,print_r ($userinfo,true));
 		}
 		
 		if (isset($userinfo[$this->_display_name][0])) {
