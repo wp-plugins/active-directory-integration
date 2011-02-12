@@ -308,7 +308,7 @@ class ADIntegrationPlugin {
 		}
 		
 		// Server
-		register_setting('ADI-server-settings',	'AD_Integration_domain_controllers');
+		/*register_setting('ADI-server-settings',	'AD_Integration_domain_controllers');
 		register_setting('ADI-server-settings', 'AD_Integration_port,AD_Integration_use_tls');
 		register_setting('ADI-server-settings', 'AD_Integration_bind_user');
 		register_setting('ADI-server-settings', 'AD_Integration_bind_pwd');
@@ -338,7 +338,7 @@ class ADIntegrationPlugin {
 		register_setting('ADI-security-settings', 'AD_Integration_user_notification');
 		register_setting('ADI-security-settings', 'AD_Integration_admin_notification');
 		register_setting('ADI-security-settings', 'AD_Integration_admin_email');
-		
+		*/
 	}
 	
 	
