@@ -49,6 +49,9 @@ If yout don't already have one create it. On Windows systems the path should be 
 
 = Can I use LDAPS instead of TLS? =
 Yes, you can. Just put "ldaps://" in front of the server in the option labeled "Domain Controller" (e.g. "ldaps://dc.domain.tld"), enter 636 as port and deactivate the option "Use TLS".
+
+= Is it possible to get more informations from the Test Tool? =
+Yes. Since 1.0-RC1 you get more informations from the Test Tool by setting WordPress into debug mode. Simply add DEFINE('WP_DEBUG',true); to your wp-config.php.
     
 
 == Screenshots ==
@@ -72,8 +75,9 @@ Yes, you can. Just put "ldaps://" in front of the server in the option labeled "
 
 = 1.0-RC2 =
 * CHANGE: Now using an extended version of adLDAP 3.3.2
-* FIX: Bug in adLDAP->recursive_groups fixed
+* FIX: Bug in adLDAP->recursive_groups() fixed.
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
+* FIX: The stylesheet was loaded by http not https even if you use https in admin mode. (Thanks to Curtiss Grymala for the bug report and fix.)
 
 = 1.0-RC1 =
 * CHANGE: Now using an extended version of adLDAP 3.3.1 which should fix some authentication and authorization issues.

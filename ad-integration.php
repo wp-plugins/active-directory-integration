@@ -31,7 +31,6 @@ OriginalAuthor URI: http://soc.qc.edu/jonathan
 if (!class_exists('ADIntegrationPlugin')) {
 	
 // LOG LEVEL	
-
 define('ADI_LOG_DEBUG', 6);
 define('ADI_LOG_INFO',  5);
 define('ADI_LOG_NOTICE',4);
