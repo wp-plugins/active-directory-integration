@@ -231,6 +231,7 @@ class ADIntegrationPlugin {
 	
 	
 	public function load_styles() {
+		wp_register_style('adintegration', plugins_url( '/css/adintegration.css', __FILE__ ),false, '1.7.1', 'screen');
 		wp_register_style('adintegration', ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER.'/css/adintegration.css',false, '1.7.1', 'screen');
 		wp_enqueue_style('adintegration');
 	}
@@ -949,10 +950,6 @@ class ADIntegrationPlugin {
 	protected function _get_display_name_from_AD($username, $userinfo) {
 		if (($this->_display_name == '') OR ($this->_display_name == 'sAMAccountName')) {
 			return $username;
-		}
-		
-		if (defined('WP_DEBUG')) {
-			$this->_log(ADI_LOG_DEBUG,print_r ($userinfo,true));
 		}
 		
 		if (isset($userinfo[$this->_display_name][0])) {
