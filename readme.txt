@@ -2,7 +2,7 @@
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
 Requires at least: 2.7.1
-Tested up to: 3.0.5
+Tested up to: 3.1
 Stable tag: 0.9.9.9
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
@@ -25,7 +25,7 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * determine WP display name from AD attributes (sAMAccountName, displayName, description, SN, CN, givenName or mail)
 * tool for testing with detailed debug informations
 * enable/disable password changes for local (non AD) WP users
-* WordPress 3.0 compatibility, including *Multisite* 
+* WordPress 3 compatibility, including *Multisite* 
 
 *Active Directory Integration* is based upon Jonathan Marc Bearak's great plugin [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
 

@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC2 (201102160834)';
+	const ADI_VERSION = '1.0-RC2 (201102161052)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -377,15 +377,21 @@ class ADIntegrationPlugin {
 		global $wp_version, $wpmu_version;
 		
 		$this->_log(ADI_LOG_INFO,'method authenticate() called');
-		 
 		
 		if (IS_WPMU) {
 			$version = $wpmu_version;
 		} else {
 			$version = $wp_version;
 		}
-		
-		$this->_log(ADI_LOG_INFO,'WP version: '.$version);
+
+		// log debug informations
+		$this->_log(ADI_LOG_INFO,"------------------------------------------\n".
+								 'PHP version: '.phpversion()."\n".
+								 'WP  version: '.$version."\n".
+								 'ADI version: '.ADIntegrationPlugin::ADI_VERSION."\n". 
+								 'OS Info    : '.php_uname()."\n".
+								 'Web Server : '.php_sapi_name()."\n".
+								 '------------------------------------------');
 		
 		if (version_compare($version, '2.8', '>=')) {
 			return $this->ad_authenticate($arg1, $arg2, $arg3); 

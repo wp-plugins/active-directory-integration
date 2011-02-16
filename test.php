@@ -53,7 +53,7 @@ class TestADIntegrationPlugin extends ADIntegrationPlugin {
 	 * @param integer level
 	 * @param string $notice
 	 */
-	public function _log($level = 0, $info = '') {
+	protected function _log($level = 0, $info = '') {
 		if ($level <= $this->_loglevel) {
 			$output = '<span class="';
 			switch ($level) {
@@ -152,7 +152,6 @@ if (function_exists('ldap_connect')) {
 ?>
 		<div id="output">
 <?php 
-$ADI->_log(ADI_LOG_INFO,'Version: '.ADIntegrationPlugin::ADI_VERSION);
 
 // Let's go!
 $result = $ADI->authenticate(NULL, $_GET['user'], $_GET['password']);
