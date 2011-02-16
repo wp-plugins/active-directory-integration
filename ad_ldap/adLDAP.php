@@ -133,13 +133,19 @@ class adLDAP {
     */
 	protected $_recursive_groups=true;
 	
-	
 	/**
 	* If your not using the standard port 389, you can change it by the options.
 	*
 	* @var int
 	*/
 	protected $_ad_port=389;
+	
+	/**
+	 * Version info
+	 *
+	 * @var unknown_type
+	 */
+	const VERSION = '3.3.2 Extended';
 	
 	
 	// You should not need to edit anything below this line

@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC2 (201102161052)';
+	const ADI_VERSION = '1.0-RC2 (201102161115)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -391,6 +391,7 @@ class ADIntegrationPlugin {
 								 'ADI version: '.ADIntegrationPlugin::ADI_VERSION."\n". 
 								 'OS Info    : '.php_uname()."\n".
 								 'Web Server : '.php_sapi_name()."\n".
+								 'adLDAP ver.: '.adLDAP::VERSION."\n".
 								 '------------------------------------------');
 		
 		if (version_compare($version, '2.8', '>=')) {
