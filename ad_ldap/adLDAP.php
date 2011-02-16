@@ -806,7 +806,8 @@ class adLDAP {
 	    while (count($groups_tocheck) > 0) {
 	    	$item=array_pop($groups_tocheck);
 	
-			$ret_groups[]=$item;
+			$ret_groups[] = $item;
+	    	
 			$newgroups=$this->group_info($item,array("memberof"));
 	
 			if (isset($newgroups[0]["memberof"])) {
@@ -823,7 +824,7 @@ class adLDAP {
 		      	}
 			}
 	    }
-	    return($ret_groups);
+        return $ret_groups;
 	}
     
     
@@ -995,6 +996,9 @@ class adLDAP {
                 $groups=array_merge($groups,$extra_groups);
             }
         }
+
+        // remove duplicate entries and close gaps
+        $groups = array_values(array_unique($groups));
         
         return ($groups);
     }

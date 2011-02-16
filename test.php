@@ -154,6 +154,7 @@ if (function_exists('ldap_connect')) {
 <?php 
 $ADI->_log(ADI_LOG_INFO,'Version: '.ADIntegrationPlugin::ADI_VERSION);
 
+// Let's go!
 $result = $ADI->authenticate(NULL, $_GET['user'], $_GET['password']);
 
 ?>
