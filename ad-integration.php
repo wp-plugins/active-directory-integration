@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC2 (201102161115)';
+	const ADI_VERSION = '1.0-RC2 (201102210848)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -138,8 +138,9 @@ class ADIntegrationPlugin {
 	// Use the real password when a user is created
 	//protected $_no_random_password = false;
 
-	// All options and its types 
-	protected $_all_options = array(
+	// All options and its types
+	// Has to be static for static call of method uninstall()
+	protected static $_all_options = array(
 			array('name' => 'AD_Integration_account_suffix', 'type' => 'string'),
 			array('name' => 'AD_Integration_auto_create_user', 'type' => 'bool'),
 			array('name' => 'AD_Integration_auto_update_user', 'type' => 'bool'),
@@ -782,7 +783,7 @@ class ADIntegrationPlugin {
 	 * removes the plugin options from options table.
 	 */
 	public static function uninstall($echo=false) {
-		foreach($this->_all_options as $option) {
+		foreach(self::$_all_options as $option) {
 			$delete_setting = delete_option($option['name']);
 			if ($echo) {
 				if($delete_setting) {

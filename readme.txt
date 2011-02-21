@@ -74,9 +74,10 @@ Yes. Since 1.0-RC1 you get more informations from the Test Tool by setting WordP
 == Changelog ==
 
 = 1.0-RC2 =
-* CHANGE: Now using an extended version of adLDAP 3.3.2
-* FIX: Bug in adLDAP->recursive_groups() fixed.
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
+* CHANGE: Now using an extended version of adLDAP 3.3.2
+* FIX: Uninstall crashed. (Thanks to z3c from hosthis.org for the bug report.)
+* FIX: Bug in adLDAP->recursive_groups() fixed.
 * FIX: The stylesheet was loaded by http not https even if you use https in admin mode. (Thanks to Curtiss Grymala for the bug report and fix.)
 
 = 1.0-RC1 =
