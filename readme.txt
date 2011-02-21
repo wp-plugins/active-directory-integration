@@ -43,7 +43,6 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 == Frequently Asked Questions ==
 
 = Is it possible to use TLS with a self-signed certificate on the AD server? =
-
 Yes, this works. But you have to add the line `TLS_REQCERT never` to your ldap.conf on your web server.
 If yout don't already have one create it. On Windows systems the path should be `c:\openldap\sysconf\ldap.conf`.
 
@@ -52,6 +51,9 @@ Yes, you can. Just put "ldaps://" in front of the server in the option labeled "
 
 = Is it possible to get more informations from the Test Tool? =
 Yes. Since 1.0-RC1 you get more informations from the Test Tool by setting WordPress into debug mode. Simply add DEFINE('WP_DEBUG',true); to your wp-config.php.
+
+= Is there an official bug tracker for ADI? =
+Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues anonymously but it is recommended to create an account.
     
 
 == Screenshots ==
