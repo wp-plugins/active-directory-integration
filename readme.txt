@@ -79,6 +79,7 @@ Yes. Since 1.0-RC1 you get more informations from the Test Tool by setting WordP
 * FIX: Uninstall crashed. (Thanks to z3c from hosthis.org for the bug report.)
 * FIX: Bug in adLDAP->recursive_groups() fixed.
 * FIX: The stylesheet was loaded by http not https even if you use https in admin mode. (Thanks to Curtiss Grymala for the bug report and fix.)
+* FIX: On activation add_option() was used with the deprecated parameter description.
 
 = 1.0-RC1 =
 * CHANGE: Now using an extended version of adLDAP 3.3.1 which should fix some authentication and authorization issues.

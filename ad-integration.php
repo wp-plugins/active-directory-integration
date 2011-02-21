@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC2 (201102210848)';
+	const ADI_VERSION = '1.0-RC2 (201102211252)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -254,57 +254,57 @@ class ADIntegrationPlugin {
 		
 		if (IS_WPMU) {
 			if (is_site_admin()) {
-				add_site_option('AD_Integration_account_suffix', '', 'Account Suffix (will be appended to all usernames created in WordPress, as well as used in the Active Directory authentication process');
-				add_site_option('AD_Integration_auto_create_user', false, 'Should a new user be created automatically if not already in the WordPress database?');
-				add_site_option('AD_Integration_auto_update_user', false, 'Should the users be updated in the WordPress database everytime they logon? (Works only if automatic user creation is set.)');
-				add_site_option('AD_Integration_append_suffix_to_new_users', '', false, 'Should the account suffix be appended to the usernames created in WordPress?');
-				add_site_option('AD_Integration_domain_controllers', '', 'Domain Controllers (separate with semicolons)');
-				add_site_option('AD_Integration_base_dn', '', 'Base DN');
-				add_site_option('AD_Integration_role_equivalent_groups', '', 'Role Equivalent Groups');
-				add_site_option('AD_Integration_default_email_domain', '', 'Default Email Domain');
-				add_site_option('AD_Integration_port', '389', 'Port on which AD listens (default 389).');
-				add_site_option('AD_Integration_bind_user', '', 'Username for non-anonymous requests to AD.');
-				add_site_option('AD_Integration_bind_pwd', '', 'Password for non-anonymous requests to AD.');
-				add_site_option('AD_Integration_use_tls', false, 'Secure the connection between the Drupal and the LDAP servers using TLS.');
-				add_site_option('AD_Integration_authorize_by_group', false, 'Check Login authorization by group membership.');
-				add_site_option('AD_Integration_authorization_group', '', 'Group name for authorization.');
-				add_site_option('AD_Integration_max_login_attempts', '3', 'Maximum number of failed login attempts before the account is blocked.');
-				add_site_option('AD_Integration_block_time', '30', 'Number of seconds an account is blocked after the maximum number of failed login attempts is reached.');
-				add_site_option('AD_Integration_user_notification', false, 'Send email to user if his account is blocked.');
-				add_site_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
-				add_site_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
-				add_site_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
-				add_site_option('AD_Integration_enable_password_change', false, 'Enable the ability of the users to change their WP passwords.');
-				add_site_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT, 'Prevent duplicate email addresses?');
-				add_site_option('AD_Integration_auto_update_description', false, 'Update users description if Automatic User Update is activated.');
-				//add_site_option('AD_Integration_no_random_password', false, 'Use the real password when a user is created?');
+				add_site_option('AD_Integration_account_suffix', ''); 
+				add_site_option('AD_Integration_auto_create_user', false);
+				add_site_option('AD_Integration_auto_update_user', false);
+				add_site_option('AD_Integration_append_suffix_to_new_users', false);
+				add_site_option('AD_Integration_domain_controllers', '');
+				add_site_option('AD_Integration_base_dn', '');
+				add_site_option('AD_Integration_role_equivalent_groups', '');
+				add_site_option('AD_Integration_default_email_domain', '');
+				add_site_option('AD_Integration_port', '389');
+				add_site_option('AD_Integration_bind_user', '');
+				add_site_option('AD_Integration_bind_pwd', '');
+				add_site_option('AD_Integration_use_tls', false);
+				add_site_option('AD_Integration_authorize_by_group', false);
+				add_site_option('AD_Integration_authorization_group', '');
+				add_site_option('AD_Integration_max_login_attempts', '3');
+				add_site_option('AD_Integration_block_time', '30');
+				add_site_option('AD_Integration_user_notification', false);
+				add_site_option('AD_Integration_admin_notification', false);
+				add_site_option('AD_Integration_admin_email', '');
+				add_site_option('AD_Integration_display_name', '');
+				add_site_option('AD_Integration_enable_password_change', false);
+				add_site_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT);
+				add_site_option('AD_Integration_auto_update_description', false);
+				//add_site_option('AD_Integration_no_random_password', false);
 			}
 		} else {
 			if (current_user_can('manage_options')) {
-				add_option('AD_Integration_account_suffix', '', 'Account Suffix (will be appended to all usernames created in WordPress, as well as used in the Active Directory authentication process');
-				add_option('AD_Integration_auto_create_user', false, 'Should a new user be created automatically if not already in the WordPress database?');
-				add_option('AD_Integration_auto_update_user', false, 'Should the users be updated in the WordPress database everytime they logon? (Works only if automatic user creation is set.)');
-				add_option('AD_Integration_append_suffix_to_new_users', '', false, 'Should the account suffix be appended to the usernames created in WordPress?');
-				add_option('AD_Integration_domain_controllers', '', 'Domain Controllers (separate with semicolons)');
-				add_option('AD_Integration_base_dn', '', 'Base DN');
-				add_option('AD_Integration_role_equivalent_groups', '', 'Role Equivalent Groups');
-				add_option('AD_Integration_default_email_domain', '', 'Default Email Domain');
-				add_option('AD_Integration_port', '389', 'Port on which AD listens (default 389).');
-				add_option('AD_Integration_bind_user', '', 'Username for non-anonymous requests to AD.');
-				add_option('AD_Integration_bind_pwd', '', 'Password for non-anonymous requests to AD.');
-				add_option('AD_Integration_use_tls', false, 'Secure the connection between the Drupal and the LDAP servers using TLS.');
-				add_option('AD_Integration_authorize_by_group', false, 'Check Login authorization by group membership.');
-				add_option('AD_Integration_authorization_group', '', 'Group name for authorization.');
-				add_option('AD_Integration_max_login_attempts', '3', 'Maximum number of failed login attempts before the account is blocked.');
-				add_option('AD_Integration_block_time', '30', 'Number of seconds an account is blocked after the maximum number of failed login attempts is reached.');
-				add_option('AD_Integration_user_notification', false, 'Send email to user if his account is blocked.');
-				add_option('AD_Integration_admin_notification', false, 'Send email to admin if a user account is blocked.');
-				add_option('AD_Integration_admin_email', '', "Administrator's email address where notifications should be sent to.");
-				add_option('AD_Integration_display_name', '', "Set user's display_name to an AD attribute or to username if left blank.");
-				add_option('AD_Integration_enable_password_change', false, 'Enable or disabled the ability to the change user WP passwords.');
-				add_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT, 'Prevent duplicate email addresses?');
-				add_option('AD_Integration_auto_update_description', false, 'Update users description if Automatic User Update is activated.');
-				//add_option('AD_Integration_no_random_password', false, 'Use the real password when a user is created?');
+				add_option('AD_Integration_account_suffix', '');
+				add_option('AD_Integration_auto_create_user', false);
+				add_option('AD_Integration_auto_update_user', false);
+				add_option('AD_Integration_append_suffix_to_new_users', false);
+				add_option('AD_Integration_domain_controllers', '');
+				add_option('AD_Integration_base_dn', '');
+				add_option('AD_Integration_role_equivalent_groups', '');
+				add_option('AD_Integration_default_email_domain', '');
+				add_option('AD_Integration_port', '389');
+				add_option('AD_Integration_bind_user', '');
+				add_option('AD_Integration_bind_pwd', '');
+				add_option('AD_Integration_use_tls', false);
+				add_option('AD_Integration_authorize_by_group', false);
+				add_option('AD_Integration_authorization_group', '');
+				add_option('AD_Integration_max_login_attempts', '3');
+				add_option('AD_Integration_block_time', '30');
+				add_option('AD_Integration_user_notification', false);
+				add_option('AD_Integration_admin_notification', false);
+				add_option('AD_Integration_admin_email', '');
+				add_option('AD_Integration_display_name', '');
+				add_option('AD_Integration_enable_password_change', false);
+				add_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT);
+				add_option('AD_Integration_auto_update_description', false);
+				//add_option('AD_Integration_no_random_password', false);
 				
 			}
 		}
