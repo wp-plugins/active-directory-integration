@@ -36,7 +36,7 @@
  * @copyright (c) 2006-2010 Scott Barnett, Richard Hyland
  * @license http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPLv2.1
  * @revision $Revision: 91 $
- * @version 3.3.2 EXTENDED
+ * @version 3.3.2 EXTENDED (201102221155)
  * @link http://adldap.sourceforge.net/
  */
 
@@ -145,7 +145,7 @@ class adLDAP {
 	 *
 	 * @var unknown_type
 	 */
-	const VERSION = '3.3.2 Extended';
+	const VERSION = '3.3.2 Extended (201102221155)';
 	
 	
 	// You should not need to edit anything below this line
@@ -396,7 +396,7 @@ class adLDAP {
                
         // Bind as a domain admin if they've set it up
         if ($this->_ad_username!=NULL && $this->_ad_password!=NULL){
-            $this->_bind = @ldap_bind($this->_conn,$this->_ad_username.$this->_account_suffix,$this->_ad_password);
+            $this->_bind = @ldap_bind($this->_conn,$this->_ad_username,$this->_ad_password);
             if (!$this->_bind){
                 if ($this->_use_ssl && !$this->_use_tls){
                     // If you have problems troubleshooting, remove the @ character from the ldap_bind command above to get the actual error message
@@ -441,9 +441,9 @@ class adLDAP {
         $this->_bind = @ldap_bind($this->_conn, $username . $this->_account_suffix, $password);
         if (!$this->_bind){ $ret = false; }
         
-        // Cnce we've checked their details, kick back into admin mode if we have it
+        // Once we've checked their details, kick back into admin mode if we have it
         if ($this->_ad_username !== NULL && !$prevent_rebind) {
-            $this->_bind = @ldap_bind($this->_conn, $this->_ad_username . $this->_account_suffix , $this->_ad_password);
+            $this->_bind = @ldap_bind($this->_conn, $this->_ad_username, $this->_ad_password);
             if (!$this->_bind){
                 // This should never happen in theory
                 throw new adLDAPException('Rebind to Active Directory failed. AD said: ' . $this->get_last_error());

@@ -78,10 +78,11 @@ Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues ano
 = 1.0-RC2 =
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
 * CHANGE: Now using an extended version of adLDAP 3.3.2
-* FIX: Uninstall crashed. (Thanks to z3c from hosthis.org for the bug report.)
+* FIX: Account suffix was accidently used for bind user. Fixed in adLDAP.php. (Issue #0009. Thanks to Tobias Bochmann for the bug report.) 
+* FIX: Uninstall crashed. (Issue #0007. Thanks to z3c from hosthis.org for the bug report.)
 * FIX: Bug in adLDAP->recursive_groups() fixed.
 * FIX: The stylesheet was loaded by http not https even if you use https in admin mode. (Thanks to Curtiss Grymala for the bug report and fix.)
-* FIX: On activation add_option() was used with the deprecated parameter description.
+* FIX: On activation add_option() was used with the deprecated parameter description. (Issue #0008.)
 
 = 1.0-RC1 =
 * CHANGE: Now using an extended version of adLDAP 3.3.1 which should fix some authentication and authorization issues.
