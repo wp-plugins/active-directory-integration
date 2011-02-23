@@ -76,6 +76,7 @@ Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues ano
 == Changelog ==
 
 = 1.0-RC2 =
+* ADD: writing a lot of AD attributes to WordPress table usermeta, so they can be used with other Plugins like "Extra User Details". The meta keys are set to adi_<attribute_name> (e.g. "adi_department", "adi_telephonenumber" and "adi_manager").
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
 * CHANGE: Now using an extended version of adLDAP 3.3.2
 * FIX: Account suffix was accidently used for bind user. Fixed in adLDAP.php. (Issue #0009. Thanks to Tobias Bochmann for the bug report.) 

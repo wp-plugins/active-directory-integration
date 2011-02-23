@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC2 (201102221155)';
+	const ADI_VERSION = '1.0-RC2 (201102321529)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -134,6 +134,62 @@ class ADIntegrationPlugin {
 	
 	// Update users description if $_auto_update_user is true
 	protected $_auto_update_description = false;
+	
+	// any attributes that can be read from AD (Windows 2000/20003)
+	protected $_user_attributes = array (
+
+		// General
+	    'cn', // Common Name
+	    'givenName', // First name
+		'initials', // Initials
+	    'sn', // Last name
+		'displayName',  // Display name
+		'description', // Description
+		'physicalDeliveryOfficeName', // Office
+		'telephoneNumber', // Telephone number
+		'mail', // E-mail
+		'wWWHomePage',   // Web Page
+		
+		// Account
+		'samAccountName', // User logon name
+
+		// Address
+		'streetAddress', // Street
+		'postOfficeBox', // P.O. Box
+		'l', // City
+		'st', // State
+		'postalCode', // ZIP/Postal cide
+		'c', // Country abbreviation
+		'co', // Country
+		'countryCode', // Country code (number)
+
+		// Telephones
+		'homePhone', // Home
+		'otherHomePhone', // Home (other)
+		'pager', // Pager
+		'otherPager', // Pager (other)
+		'mobile', // Mobile
+		'otherMobile', // Mobile (Other)  
+		'facsimileTelephoneNumber', // Fax
+		'otherFacsimileTelephoneNumber',
+		'ipPhone', // IP Phone 
+		'otherIpPhone', // IP Phone (other)
+		'info', // Notes
+		
+		// Organization
+		'title', // Title
+		'department', // Department
+		'company', // Company
+		'manager', // Manager
+		'directReports' // Direct reports
+	);
+	
+	
+	// Add all user attributes from AD to WP table usermeta
+	protected $_write_usermeta = true;
+	
+	// Prefix for user meta Data from AD 
+	protected $_usermeta_prefix = 'adi_';
 
 	// Use the real password when a user is created
 	//protected $_no_random_password = false;
@@ -552,9 +608,9 @@ class ADIntegrationPlugin {
 		$user_role = $this->_get_user_role_equiv($ad_username); // important: use $ad_username not $username
 
 		// userinfo from AD
-		$userinfo = $this->_adldap->user_info($ad_username, array('sn', 'givenname', 'mail', 'displayName', 'description', 'cn'));
+		$userinfo = $this->_adldap->user_info($ad_username, $this->_user_attributes);
 		$userinfo = $userinfo[0];
-		$this->_log(ADI_LOG_DEBUG,print_r($userinfo,true));
+		$this->_log(ADI_LOG_DEBUG,"USERINFO[0]: \n".print_r($userinfo,true));
 		
 		// mail
 		if (isset($userinfo['mail'][0])) {
@@ -599,7 +655,8 @@ class ADIntegrationPlugin {
 			
 			if ($this->_auto_create_user || trim($user_role) != '' ) {
 				// create user
-				$user_id = $this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $description, $user_role, $password);
+				//$user_id = $this->_create_user($ad_username, $email, $first_name, $last_name, $display_name, $description, $user_role, $password);
+				$user_id = $this->_create_user_new($ad_username, $userinfo, $display_name, $user_role, $password);
 			} else {
 				// Bail out to avoid showing the login form
 				$this->_log(ADI_LOG_ERROR,'This user exists in Active Directory, but has not been granted access to this installation of WordPress.');
@@ -611,7 +668,7 @@ class ADIntegrationPlugin {
 			//  Update known users if configured
 			if ($this->_auto_create_user AND $this->_auto_update_user) {
 				// Update users role
-				$user_id = $this->_update_user($ad_username, $email, $first_name, $last_name, $display_name, $description, $user_role, $password);
+				$user_id = $this->_update_user_new($ad_username, $userinfo, $display_name, $description, $user_role, $password);
 			}
 		}
 		
@@ -1170,6 +1227,117 @@ class ADIntegrationPlugin {
 		return $user_id;
 	}
 	
+	/**
+	 * Create a new WordPress account for the specified username.
+	 * @param $username
+	 * @param $display_name
+	 * @param $role
+	 * @param $passwird
+	 * @return integer user_id
+	 */
+	protected function _create_user_new($username, $userinfo, $display_name, $role = '', $password = '')
+	{
+		global $wp_version;
+		
+		/*if (!$this->_no_random_password) {
+			$password = $this->_get_password();
+		}*/
+		
+		$info = $this->_create_info_array($userinfo);
+		
+		if (isset($info['mail'])) {
+			$email = $info['mail'];
+		} else {
+			$email = '';
+		}
+		
+		if ( $info['mail'] == '' ) 
+		{
+			if (trim($this->_default_email_domain) != '') {
+				$email = $username . '@' . $this->_default_email_domain;
+			} else {
+				if (strpos($username, '@') !== false) {
+					$email = $username;
+				}
+			}
+		}
+				
+		// append account suffix to new users? 
+		if ($this->_append_suffix_to_new_users) {
+			$username .= $this->_account_suffix;
+		}
+		
+		$this->_log(ADI_LOG_NOTICE,"Creating user '$username' with following data:\n".
+					  "- email: ".$email."\n".
+					  "- first name: ".$info['givenname']."\n".
+					  "- last name: ".$info['sn']."\n".
+					  "- display name: $display_name\n".
+					  "- role: $role");
+		
+		
+		
+		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
+		
+		if ($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW) {
+			if (!defined('WP_IMPORTING')) {
+				define('WP_IMPORTING',true); // This is a dirty hack. See wp-includes/registration.php
+			}
+		}
+		
+		if ($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_CREATE) {
+			$new_email = $this->_create_non_duplicate_email($email);
+			if ($new_email !== $email) {
+				$this->_log(ADI_LOG_NOTICE, "Duplicate email address prevention: Email changed from $email to $new_email.");
+			}
+			$email = $new_email;
+		}
+		
+		// Here we go!
+		$return = wp_create_user($username, $password, $email);
+
+		// log errors
+		if (is_wp_error($return)) {
+   			$this->_log(ADI_LOG_ERROR, $return->get_error_message());
+		}
+		
+		$user_id = username_exists($username);
+		$this->_log(ADI_LOG_NOTICE,' - user_id: '.$user_id);
+		if ( !$user_id ) {
+			$this->_log(ADI_LOG_FATAL,'Error creating user.');
+			die("Error creating user!");
+		} else {
+			if (version_compare($wp_version, '3', '>=')) {
+				// WP 3.0 and above
+				update_user_meta($user_id, 'first_name', $info['givenname']);
+				update_user_meta($user_id, 'last_name', $info['sn']);
+				if ($this->_auto_update_description) {
+					update_user_meta($user_id, 'description', $info['description']);
+				}
+			} else {
+				// WP 2.x
+				update_usermeta($user_id, 'first_name', $info['givenname']);
+				update_usermeta($user_id, 'last_name', $info['sn']);
+				if ($this->_auto_update_description) {
+					update_usermeta($user_id, 'description', $info['description']);
+				}
+			}
+			
+			// set display_name
+			if ($display_name != '') {
+				$return = wp_update_user(array('ID' => $user_id, 'display_name' => $display_name));
+			}
+			
+			// set role
+			if ( $role != '' ) 
+			{
+				$return = wp_update_user(array("ID" => $user_id, "role" => $role));
+			}
+		}
+
+		
+		return $user_id;
+	}
+	
 	
 	/**
 	 * Updates a specific Wordpress user account
@@ -1286,6 +1454,142 @@ class ADIntegrationPlugin {
 	
 	
 	/**
+	 * Updates a specific Wordpress user account
+	 * 
+	 * @param $username
+	 * @param $email
+	 * @param $first_name
+	 * @param $last_name
+	 * @param $display_name
+	 * @param $role
+	 * @return integer user_id
+	 */
+	protected function _update_user_new($username, $userinfo, $display_name='', $role = '', $password = '')
+	{
+		global $wp_version;
+		
+		$info = $this->_create_info_array($userinfo);
+		
+		if (isset($info['mail'])) {
+			$email = $info['mail'];
+		} else {
+			$email = '';
+		}
+		
+		if ( $info['mail'] == '' ) 
+		{
+			if (trim($this->_default_email_domain) != '') {
+				$email = $username . '@' . $this->_default_email_domain;
+			} else {
+				if (strpos($username, '@') !== false) {
+					$email = $username;
+				}
+			}
+		}
+		
+		
+		if ($this->_append_suffix_to_new_users) {
+			$username .= $this->_account_suffix;
+		}
+		
+		$this->_log(ADI_LOG_NOTICE,'Updating user "'.$username."\" with following data:\n".
+					  "- email: $email\n".
+					  "- first name: ".$info['givenname']."\n".
+					  "- last name: ".$info['sn']."\n".
+					  "- display name: $display_name\n".
+					  "- role: $role");
+		
+		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
+		
+		$user_id = username_exists($username);
+		if ($user_id === false) {
+			return false;
+		}
+		
+		$this->_log(ADI_LOG_NOTICE,' - user_id: '.$user_id);
+		if ( !$user_id ) {
+			$this->_log(ADI_LOG_FATAL,'Error updating user.');
+			die('Error updating user!');
+		} else {
+			if (version_compare($wp_version, '3', '>=')) {
+				// WP 3.0 and above
+				update_user_meta($user_id, 'first_name', $info['givenname']);
+				update_user_meta($user_id, 'last_name', $info['sn']);
+			} else {
+				// WP 2.x
+				update_usermeta($user_id, 'first_name', $info['givenname']);
+				update_usermeta($user_id, 'last_name', $info['sn']);
+			}
+			
+			// set display_name
+			if ($display_name != '') {
+				wp_update_user(array('ID' => $user_id, 'display_name' => $display_name));
+			}
+			
+			// set role
+			if ( $role != '' ) 
+			{
+				wp_update_user(array('ID' => $user_id, 'role' => $role));
+			}
+			
+			// set email if not empty
+			if ( $email != '' ) 
+			{
+				// if we allow duplicate email addresses just set it
+				if ($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW) {
+					$return = wp_update_user(array('ID' => $user_id, 'user_email' => $email));
+				} else {
+				
+					// duplicate email addresses disallowed
+					// if we don't have a conflict, just set it
+					if (!email_exists($email)) {
+						$return = wp_update_user(array('ID' => $user_id, 'user_email' => $email));
+					} else {
+
+						// we have a conflict, so only update when the "create" option is set
+						if ($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_CREATE) { 
+							$userdata = get_userdata($user_id);
+
+							// only update if the email is not already set
+							if ($userdata->user_email == '') {  
+								$new_email = $this->_create_non_duplicate_email($email);
+								$this->_log(ADI_LOG_NOTICE, "Duplicate email address prevention: Email changed from $email to $new_email.");
+								$return = wp_update_user(array('ID' => $user_id, 'user_email' => $new_email));
+							} else { 
+								$this->_log(ADI_LOG_NOTICE, "Duplicate email address prevention: Existing email " . $userdata->user_email . " left unchanged.");
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		// Update User Meta
+		if ($this->_write_usermeta === true) {
+			foreach($info AS $attribute => $value) {
+				if (version_compare($wp_version, '3', '>=')) {
+					// WP 3.0 and above
+					update_user_meta($user_id, $this->_usermeta_prefix.$attribute, $value);
+				} else {
+					// WP 2.x
+					update_usermeta($user_id, $this->_usermeta_prefix.$attribute, $value);
+				}
+			}
+		}
+		
+		// log errors
+		if (isset($return)) {
+			if (is_wp_error($return)) {
+	   			$this->_log(ADI_LOG_ERROR, $return->get_error_message());
+			}
+		}
+		
+		return $user_id;
+	}
+	
+	
+	
+	/**
 	 * Returns the given email address or a newly created so no 2 users
 	 * can have the same email address.
 	 * 
@@ -1309,6 +1613,26 @@ class ADIntegrationPlugin {
 			$counter++;	
 		}
 		return $email;
+	}
+	
+	
+	protected function _create_info_array($userinfo)
+	{
+		$info = array();
+		foreach($this->_user_attributes AS $attribute) {
+			$attribute = strtolower($attribute);
+			if (isset($userinfo[$attribute])) {
+				if (isset($userinfo[$attribute]['count'])) {
+					unset($userinfo[$attribute]['count']);
+					$info[$attribute] = implode("\n", $userinfo[$attribute]);
+				} else {
+					$info[$attribute] = $userinfo[$attribute];
+				}
+			} else {
+				$info[$attribute] = '';
+			}
+		}
+		return $info;
 	}
 		
 	
