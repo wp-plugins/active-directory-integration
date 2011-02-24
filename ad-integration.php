@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC2 (201102241324)';
+	const ADI_VERSION = '1.0-RC2 (201102241833)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -689,7 +689,7 @@ class ADIntegrationPlugin {
 			//  Update known users if configured
 			if ($this->_auto_create_user AND $this->_auto_update_user) {
 				// Update users role
-				$user_id = $this->_update_user_new($ad_username, $userinfo, $display_name, $description, $user_role, $password);
+				$user_id = $this->_update_user_new($ad_username, $userinfo, $display_name, $user_role, $password);
 			}
 		}
 		

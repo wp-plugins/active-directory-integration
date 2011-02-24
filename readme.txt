@@ -76,6 +76,7 @@ Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues ano
 == Changelog ==
 
 = 1.0-RC2 =
+* ADD: New language Norwegian/Norsk (nb_NO) added. (Thanks to Börge Andersen
 * ADD: Store a lot of AD attributes to WordPress table usermeta and show them on users profile page without any additional plugin. The meta keys are set to adi_<attribute_name> (e.g. "adi_department", "adi_telephonenumber" and "adi_manager").
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
 * CHANGE: Now using an extended version of adLDAP 3.3.2
