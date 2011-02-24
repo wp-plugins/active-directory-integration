@@ -167,6 +167,36 @@
  * @copyright 2009
  * @since 0.9.8
  */
+ 
+#AD_Integration_attributes_to_show {
+	width: 404px;
+	height: 15em;
+	white-space: nowrap; 
+}
+
+table.attribute_descriptions {
+	border: 1px solid #BBB;
+	border-collapse: collapse;	
+}
+
+table.attribute_descriptions tr:nth-of-type(2n+2) {
+	background-color:#f4f4f4;
+}
+
+table.attribute_descriptions td {
+	border: 1px solid #BBB;
+	border-collapse: collapse;
+	padding: 1px 4px;
+}
+  
+table.attribute_descriptions th {
+	border: 1px solid #BBB;
+	border-collapse: collapse;
+	text-align: left;
+	font-weight: bold;
+	padding: 1px 4px;
+}
+
 
 
 /* Caution! Ensure accessibility in print and other media types... */

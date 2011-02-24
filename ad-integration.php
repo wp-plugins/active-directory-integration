@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC2 (201102321529)';
+	const ADI_VERSION = '1.0-RC2 (201102241324)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -137,7 +137,7 @@ class ADIntegrationPlugin {
 	
 	// any attributes that can be read from AD (Windows 2000/20003)
 	protected $_user_attributes = array (
-
+	
 		// General
 	    'cn', // Common Name
 	    'givenName', // First name
@@ -190,6 +190,13 @@ class ADIntegrationPlugin {
 	
 	// Prefix for user meta Data from AD 
 	protected $_usermeta_prefix = 'adi_';
+	
+	// Show AD attributes in user profile
+	protected $_show_attributes = false;
+
+	// List of AD attributes in the order they should appear on users profile page
+	// Attributes are separated by semicolon or linefeed / newline
+	protected $_attributes_to_show = '';
 
 	// Use the real password when a user is created
 	//protected $_no_random_password = false;
@@ -219,7 +226,9 @@ class ADIntegrationPlugin {
 			array('name' => 'AD_Integration_display_name', 'type' => 'string'),
 			array('name' => 'AD_Integration_enable_password_change', 'type' => 'bool'),
 			array('name' => 'AD_Integration_duplicate_email_prevention', 'type' => 'string'),
-			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool')
+			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool'),
+			array('name' => 'AD_Integration_show_attributes', 'type' => 'bool'),
+			array('name' => 'AD_Integration_attributes_to_show', 'type' => 'bool')
 			//array('name' => 'AD_Integration_no_random_password', 'type' => 'bool')
 		);
 
@@ -284,6 +293,12 @@ class ADIntegrationPlugin {
 				require 'ad_ldap/adLDAP.php';
 			}
 		}
+		
+		// Adding AD attributes to profile page
+		if ($this->_show_attributes) {
+			add_action( 'edit_user_profile', array(&$this, 'show_AD_attributes'));
+			add_action( 'show_user_profile', array(&$this, 'show_AD_attributes'));
+		}
 	}
 	
 	
@@ -333,6 +348,9 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_enable_password_change', false);
 				add_site_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT);
 				add_site_option('AD_Integration_auto_update_description', false);
+				add_site_option('AD_Integration_show_attributes', false);
+				add_site_option('AD_Integration_attributes_to_show', '');
+				
 				//add_site_option('AD_Integration_no_random_password', false);
 			}
 		} else {
@@ -360,6 +378,9 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_enable_password_change', false);
 				add_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT);
 				add_option('AD_Integration_auto_update_description', false);
+				add_option('AD_Integration_show_attributes', false);
+				add_option('AD_Integration_attributes_to_show', '');
+				
 				//add_option('AD_Integration_no_random_password', false);
 				
 			}
@@ -756,6 +777,65 @@ class ADIntegrationPlugin {
 		$this->debug = false;
 	}
 	
+	
+	/**
+	 * Show defined AD attributes on profile page
+	 */
+	public function show_AD_attributes($user) {
+		
+		$descriptions = $this->_get_attribute_descriptions();
+		
+		if ($this->_show_attributes) {
+			$list = str_replace(";", "\n", $this->_attributes_to_show);
+			$list = explode("\n", $list);
+			
+			$attributes = array();
+			foreach($list AS $line) {
+				if (trim($line != '')) {
+					$attributes[] = trim($line);
+				}
+			}
+			
+			if (count($attributes) > 0) {
+				echo '<h3>' . __('Additional Informations', 'ad-integration').'</h3>';
+				?>
+				<table class="form-table">
+				<?php 
+				foreach ($attributes AS $attribute) {
+					$no_attribute = false;
+					$value = get_user_meta($user->id, $this->_usermeta_prefix.$attribute, true);
+					
+					$description = esc_html($attribute);
+					if (isset($descriptions[$attribute])) {
+						$description = trim($descriptions[$attribute]);
+					} else {
+						// if value is empty and we've found no description we use $description as a headline
+						if ($value == '') {
+							$no_attribute = true;
+						}
+					} 
+					
+					?>
+					<tr>
+					  <?php if ($no_attribute) { // use as sub-headline ?>
+					  	<th colspan="2">
+					  	  <strong><?php echo $description; ?></strong>
+					  	</th>
+					  <?php } else {?>	
+					    <th><label for="<? echo $this->_usermeta_prefix.$attribute; ?>"><?php echo $description; ?></label></th>
+					    <td><?php echo nl2br(esc_html($value)); ?></td>
+					  <?php } ?>
+					</tr>
+				<?php 
+				}
+				?>
+				</table>
+				<?php
+			}
+		}
+	}
+		
+	
 	/****************************************************************
 	 * STATIC FUNCTIONS
 	 ****************************************************************/
@@ -896,6 +976,8 @@ class ADIntegrationPlugin {
 			$this->_enable_password_change      = get_site_option('AD_Integration_enable_password_change');
 			$this->_duplicate_email_prevention  = get_site_option('AD_Integration_duplicate_email_prevention');
 			$this->_auto_update_description		= (bool)get_site_option('AD_Integration_auto_update_description');
+			$this->_show_attributes				= (bool)get_site_option('AD_Integration_show_attributes');
+			$this->_attributes_to_show			= get_site_option('AD_Integration_attributes_to_show');
 			//$this->_no_random_password			= (bool)get_site_option('AD_Integration_no_random_password');
 		} else {
 			$this->_log(ADI_LOG_INFO,'loading options (WPMU) ...');
@@ -922,8 +1004,67 @@ class ADIntegrationPlugin {
 			$this->_enable_password_change      = get_option('AD_Integration_enable_password_change');
 			$this->_duplicate_email_prevention  = get_option('AD_Integration_duplicate_email_prevention');
 			$this->_auto_update_description		= (bool)get_option('AD_Integration_auto_update_description');
+			$this->_show_attributes				= (bool)get_option('AD_Integration_show_attributes');
+			$this->_attributes_to_show			= get_option('AD_Integration_attributes_to_show');
 			//$this->_no_random_password			= (bool)get_option('AD_Integration_no_random_password');
 		}
+	}
+	
+	
+	/**
+	 * Loads the descriptions for AD attributes
+	 * This function is needed for i18n.
+	 * @return array 
+	 */
+	protected function _get_attribute_descriptions() {
+		$descriptions = array();
+		
+		// General
+	    $descriptions['cn'] = __('Common Name','ad-integration');
+	    $descriptions['givenname'] = __('First name','ad-integration');
+		$descriptions['initials'] = __('Initials','ad-integration');
+	    $descriptions['sn'] = __('Last name','ad-integration');
+		$descriptions['displayname'] = __('Display name','ad-integration');
+		$descriptions['description'] = __('Description','ad-integration');
+		$descriptions['physicaldeliveryofficename'] = __('Office','ad-integration');
+		$descriptions['telephonenumber'] = __('Telephone number','ad-integration');
+		$descriptions['mail'] = __('E-mail','ad-integration');
+		$descriptions['wwwhomepage'] = __('Web Page','ad-integration');
+		
+		// Account
+		$descriptions['samaccountname'] = __('User logon name','ad-integration');
+
+		// Address
+		$descriptions['streetaddress'] = __('Street','ad-integration');
+		$descriptions['postofficebox'] = __('P.O. Box','ad-integration');
+		$descriptions['l'] = __('City','ad-integration');
+		$descriptions['st'] = __('State','ad-integration');
+		$descriptions['postalcode'] = __('ZIP/Postal cide','ad-integration');
+		$descriptions['c'] = __('Country abbreviation','ad-integration');
+		$descriptions['co'] = __('Country','ad-integration');
+		$descriptions['countrycode'] = __('Country code (number)','ad-integration');
+
+		// Telephones
+		$descriptions['homephone'] = __('Home','ad-integration');
+		$descriptions['otherhomephone'] = __('Home (other)','ad-integration');
+		$descriptions['pager'] = __('Pager','ad-integration');
+		$descriptions['otherpager'] = __('Pager (other)','ad-integration');
+		$descriptions['mobile'] = __('Mobile','ad-integration');
+		$descriptions['othermobile'] = __('Mobile (Other)','ad-integration');
+		$descriptions['facsimiletelephonenumber'] = __('Fax','ad-integration');
+		$descriptions['otherfacsimiletelephonenumber'] = __('Fax (other)','ad-integration');
+		$descriptions['ipphone'] = __('IP Phone','ad-integration');
+		$descriptions['otheripphone'] = __('IP Phone (other)','ad-integration');
+		$descriptions['info'] = __('Notes','ad-integration');
+		
+		// Organization
+		$descriptions['title'] = __('Title','ad-integration');
+		$descriptions['department'] = __('Department','ad-integration');
+		$descriptions['company'] = __('Company','ad-integration');
+		$descriptions['manager'] = __('Manager','ad-integration');
+		$descriptions['directreports'] = __('Direct reports','ad-integration');
+
+		return $descriptions;
 	}
 	
 	
@@ -1984,6 +2125,7 @@ class ADIntegrationPlugin {
 			<li><a href="#user"><?php _e('User', 'ad-integration'); ?></a></li>
 			<li><a href="#authorization"><?php _e('Authorization', 'ad-integration'); ?></a></li>
 			<li><a href="#security"><?php _e('Security', 'ad-integration'); ?></a></li>
+			<li><a href="#usermeta"><?php _e('User Meta', 'ad-integration'); ?></a></li>
 <?php 
 // Test Tool nicht für WordPress MU 
 if (!IS_WPMU) { ?>		
@@ -2295,6 +2437,74 @@ if (!IS_WPMU) { ?>
 				</p>
 			</form>	    	
 		</div> <!-- END OF TAB SECURITY -->	
+
+		<!-- TAB: User Meta -->
+		
+		<?php 
+		$descriptions = $this->_get_attribute_descriptions();
+		?>
+		
+		<div id="usermeta">
+			<form action="<?php if (!IS_WPMU)echo 'options.php#usermeta'; ?>" method="post">
+				<input type="hidden" name="action" value="update" />
+   				<input type="hidden" name="page_options" value="AD_Integration_show_attributes,AD_Integration_attributes_to_show" />
+   				<?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
+				
+				<table class="form-table">
+					<tbody>
+						<tr>
+							<td scope="col" colspan="2">
+								<h2 style="font-size: 150%; font-weight: bold;"><?php _e('User Meta','ad-integration'); ?></h2>
+								<?php _e('User attributes from the AD are stored as User Meta Data. You can use these attributes in your themes and they can be shown on the profile page of your users.','ad-integration'); ?>
+								<?php _e('The attributes are only stored in the WordPress database if you activate "Automatic User Creation" and are only updated if you activate "Automatic User Update" on tab "User".','ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+						<th scope="row"><label for="AD_Integration_show_attributes"><?php _e('Show Attributes', 'ad-integration'); ?></label></th>
+						<td>
+								<input type="checkbox" name="AD_Integration_show_attributes" id="AD_Integration_show_attributes"<?php if ($this->_show_attributes) echo ' checked="checked"' ?> value="1" />  
+								<?php _e('Show user attributes from AD in user profile.', 'ad-integration'); ?>
+						</td>
+						</tr>
+						
+
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_attributes_to_show"><?php _e('Attributes to show', 'ad-integration'); ?></label></th>
+							<td>
+								<?php _e('Enter the AD attributes (one per line) to be shown at the end of the user profile page.', 'ad-integration'); ?>
+								<?php _e('See the list below for possible values.', 'ad-integration'); ?>
+								<?php _e('If you enter something that is not in the list of attributes it will be treated as a headline. Use this to structure the output.', 'ad-integration'); ?>
+								<br/>
+								<textarea name="AD_Integration_attributes_to_show" id="AD_Integration_attributes_to_show"><?php echo $this->_attributes_to_show; ?></textarea>
+							</td>
+						</tr>
+						<tr valign="top">
+							<th scope="row"><?php _e('All attributes', 'ad-integration'); ?></label></th>
+							<td>
+								<table class="attribute_descriptions">
+									<tr>
+										<th><?php _e('AD Attribute','ad-integration');?></th>
+										<th><?php _e('Desription','ad-integration');?></th>
+									</tr>
+								<?php 
+								foreach($descriptions AS $attribute => $description) {?>
+									<tr>
+										<th><?php echo $attribute; ?></th>
+										<td><?php echo $description; ?></td>
+									</tr>	
+								<?php } ?>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<p class="submit">
+					<input type="submit" class="button-primary" name="Submit" value="<?php _e("Save Changes"); ?>" />
+				</p>
+			</form>	    	
+		</div> <!-- END OF TAB USER META -->	
 		
 		<!-- TAB: Test -->
 		
@@ -2332,7 +2542,7 @@ if (!IS_WPMU) { ?>
 					<input type="submit" class="button-primary" name="Submit" value="<?php _e('Perform Test','ad-integration'); ?>" />
 				</p>
 			</form>				
-		</div> <!-- END OF TAB AUTHORIZATION -->	
+		</div> <!-- END OF TAB TEST -->	
 	</div>
 </div>
 
