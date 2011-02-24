@@ -1473,6 +1473,19 @@ class ADIntegrationPlugin {
 			{
 				$return = wp_update_user(array("ID" => $user_id, "role" => $role));
 			}
+			
+			// Update User Meta
+			if ($this->_write_usermeta === true) {
+				foreach($info AS $attribute => $value) {
+					if (version_compare($wp_version, '3', '>=')) {
+						// WP 3.0 and above
+						update_user_meta($user_id, $this->_usermeta_prefix.$attribute, $value);
+					} else {
+						// WP 2.x
+						update_usermeta($user_id, $this->_usermeta_prefix.$attribute, $value);
+					}
+				}
+			}
 		}
 
 		
