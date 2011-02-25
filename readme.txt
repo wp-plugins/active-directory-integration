@@ -1,17 +1,18 @@
 === Active Directory Integration ===
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security
-Requires at least: 2.7.1
+Requires at least: 2.8
 Tested up to: 3.1
 Stable tag: 0.9.9.9
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
+
 == Description ==
 
 This Plugin allows WordPress to authenticate, authorize, create and update users against an Active Directory Domain.
 
-It is very easy to set up. Just activate the plugin, type in a domain controller, and you're done. But there are more Features:
+It is very easy to set up. Just activate the plugin, type in a domain controller, and you're done. But there are many more Features:
 
 * authenticate against more than one AD Server
 * authorize users by Active Directory group memberships
@@ -21,13 +22,16 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * use non standard port for communication to AD Servers
 * protection against brute force attacks
 * user and/or admin e-mail notification on failed login attempts
-* multi-language support (English, German and Belorussian included)
+* multi-language support (English, German, Norwegian and Belorussian included)
 * determine WP display name from AD attributes (sAMAccountName, displayName, description, SN, CN, givenName or mail)
+* setting user meta data to AD attributes (like Office, Telephone number, Department, Company and a lot more)
+* show AD attributes (see above) in user profile
 * tool for testing with detailed debug informations
 * enable/disable password changes for local (non AD) WP users
 * WordPress 3 compatibility, including *Multisite* 
 
 *Active Directory Integration* is based upon Jonathan Marc Bearak's great plugin [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
+
 
 = Requirements =
 
@@ -36,9 +40,11 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * LDAP support
 * OpenSSL Support for TLS (recommended)
 
+
 = Known Issues =
 * XMLRPC will only work with WordPress 2.8 and above.
- 
+* There are some issues with MultiSite. This is tracked [here](http://bt.ecw.de/view.php?id=4 and [here](http://bt.ecw.de/view.php?id=11).
+
 
 == Frequently Asked Questions ==
 
@@ -47,13 +53,22 @@ Yes, this works. But you have to add the line `TLS_REQCERT never` to your ldap.c
 If yout don't already have one create it. On Windows systems the path should be `c:\openldap\sysconf\ldap.conf`.
 
 = Can I use LDAPS instead of TLS? =
-Yes, you can. Just put "ldaps://" in front of the server in the option labeled "Domain Controller" (e.g. "ldaps://dc.domain.tld"), enter 636 as port and deactivate the option "Use TLS".
+Yes, you can. Just put "ldaps://" in front of the server in the option labeled "Domain Controller" (e.g. "ldaps://dc.domain.tld"), enter 636 as port and deactivate the option "Use TLS". But have in mind, that 
 
 = Is it possible to get more informations from the Test Tool? =
 Yes. Since 1.0-RC1 you get more informations from the Test Tool by setting WordPress into debug mode. Simply add DEFINE('WP_DEBUG',true); to your wp-config.php.
 
+= Where are the AD attributes stored in WordPress? =
+If you activate "Automatic User Creation" and "Automatic User Update" a lot of AD attributes are stored in the table wp_usermeta. Their meta key is set to `adi_<attribute>` (e.g. `adi_physicaldeliveryofficename` for the Office attribute). You can find the list of supported attributes on the "User Meta" tab.
+
 = Is there an official bug tracker for ADI? =
-Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues anonymously but it is recommended to create an account.
+Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues anonymously but it is recommended to create an account. This is also the right place for feature requests.
+
+= I'm missing some functionality. Where can I submit a feature request? =
+Use the [bug tracker](http://bt.ecw.de/) (see above) at http://bt.ecw.de/.
+
+= Authentication is successfull but the user is not authorized by group membership. What is wrong? =
+A common mistake is that the Base DN is set to a wrong value. If the user resides in an Organizational Unit (OU) that is not "below" the Base DN the groups the user belongs to can not be determined. A quick solution is to set the Base DN to something like `dc=mydomain,dc=local` without any OU.
     
 
 == Screenshots ==
@@ -62,8 +77,10 @@ Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues ano
 2. User specific settings
 3. Settings for authorization
 4. Security related stuff
-5. Test Tool
-6. Output of Test Tool
+5. User Meta Settings
+6. Test Tool
+7. Sample output of the Test Tool
+8. User Profile Page with additional informations from Active Directory (see User Meta)
 
 
 == Installation ==
@@ -73,21 +90,19 @@ Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues ano
 1. Activate the plugin on the Plugins screen.
 1. Enable SSL-Admin-Mode by adding the line `define('FORCE_SSL_ADMIN', true);` to your wp-config.php so that your passwords are not sent in plain-text.
 
+
 == Changelog ==
 
-= 1.0-RC2 =
-* ADD: New language Norwegian/Norsk (nb_NO) added. (Thanks to Börge Andersen
+= 1.0 =
+* ADD: New language Norwegian/Norsk (nb_NO) added. (Issue #0002. Thanks to Børge Anderssen.)
 * ADD: Store a lot of AD attributes to WordPress table usermeta and show them on users profile page without any additional plugin. The meta keys are set to adi_<attribute_name> (e.g. "adi_department", "adi_telephonenumber" and "adi_manager").
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
-* CHANGE: Now using an extended version of adLDAP 3.3.2
+* CHANGE: Now using an extended version of adLDAP 3.3.2 which should fix some authentication and authorization issues.
 * FIX: Account suffix was accidently used for bind user. Fixed in adLDAP.php. (Issue #0009. Thanks to Tobias Bochmann for the bug report.) 
 * FIX: Uninstall crashed. (Issue #0007. Thanks to z3c from hosthis.org for the bug report.)
 * FIX: Bug in adLDAP->recursive_groups() fixed.
 * FIX: The stylesheet was loaded by http not https even if you use https in admin mode. (Thanks to Curtiss Grymala for the bug report and fix.)
 * FIX: On activation add_option() was used with the deprecated parameter description. (Issue #0008.)
-
-= 1.0-RC1 =
-* CHANGE: Now using an extended version of adLDAP 3.3.1 which should fix some authentication and authorization issues.
 * FIX: Fixed problem with wrong updated email addresses when option "Email Address Conflict Handling" was set to "create".
 
 = 0.9.9.9 =
@@ -118,7 +133,7 @@ Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues ano
 * FIX: Test Tool did not work with passwords including special characters. (Thanks to Bruno Grossniklaus for the bug report.)
 
 = 0.9.9.2 =
-**If you have 0.9.9.1 installed, it is highly recommended to update to 0.9.9.2.**
+**If you have 0.9.9.1 installed, it is highly recommended to update.**
 
 * FIX: SECURITY RELEVANT - Added security checks to the Test Tool in test.php.
 * NEW: German translation for the Test Tool.
