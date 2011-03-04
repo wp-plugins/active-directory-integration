@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC2 (2011022418337';
+	const ADI_VERSION = '1.0-RC3 (201103041602)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -184,6 +184,17 @@ class ADIntegrationPlugin {
 		'directReports' // Direct reports
 	);
 	
+	// List of additional user attributes that can be defined by the admin
+	// The attributes are seperated by a new line and have the format:
+	//   <Attribute name>:<type>:<description>
+	// where type can be one of the following: string, integer, bool, image, time, timestamp
+	//   thumbnailphoto:image:Photo
+	//   whencreated:time:Account Created
+	protected $_additional_user_attributes = '';
+	
+	// Merged array of _user_attributes and _additional_user_attributes
+	protected $_all_user_attributes = array();
+	
 	
 	// Add all user attributes from AD to WP table usermeta
 	protected $_write_usermeta = true;
@@ -228,7 +239,8 @@ class ADIntegrationPlugin {
 			array('name' => 'AD_Integration_duplicate_email_prevention', 'type' => 'string'),
 			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool'),
 			array('name' => 'AD_Integration_show_attributes', 'type' => 'bool'),
-			array('name' => 'AD_Integration_attributes_to_show', 'type' => 'bool')
+			array('name' => 'AD_Integration_attributes_to_show', 'type' => 'bool'),
+			array('name' => 'AD_Integration_additional_user_attributes', 'type' => 'string')
 			//array('name' => 'AD_Integration_no_random_password', 'type' => 'bool')
 		);
 
@@ -299,6 +311,8 @@ class ADIntegrationPlugin {
 			add_action( 'edit_user_profile', array(&$this, 'show_AD_attributes'));
 			add_action( 'show_user_profile', array(&$this, 'show_AD_attributes'));
 		}
+		
+		$this->_all_user_attributes = $this->_get_all_user_attributes();
 	}
 	
 	
@@ -350,6 +364,7 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_auto_update_description', false);
 				add_site_option('AD_Integration_show_attributes', false);
 				add_site_option('AD_Integration_attributes_to_show', '');
+				add_site_option('AD_Integration_additionl_user_attributes', '');
 				
 				//add_site_option('AD_Integration_no_random_password', false);
 			}
@@ -380,6 +395,7 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_auto_update_description', false);
 				add_option('AD_Integration_show_attributes', false);
 				add_option('AD_Integration_attributes_to_show', '');
+				add_option('AD_Integration_additionl_user_attributes', '');
 				
 				//add_option('AD_Integration_no_random_password', false);
 				
@@ -629,7 +645,7 @@ class ADIntegrationPlugin {
 		$user_role = $this->_get_user_role_equiv($ad_username); // important: use $ad_username not $username
 
 		// userinfo from AD
-		$userinfo = $this->_adldap->user_info($ad_username, $this->_user_attributes);
+		$userinfo = $this->_adldap->user_info($ad_username, $this->_all_user_attributes);
 		$userinfo = $userinfo[0];
 		$this->_log(ADI_LOG_DEBUG,"USERINFO[0]: \n".print_r($userinfo,true));
 		
@@ -773,7 +789,7 @@ class ADIntegrationPlugin {
 					if (isset($descriptions[$attribute])) {
 						$description = trim($descriptions[$attribute]);
 					} else {
-						// if value is empty and we've found no description we use $description as a headline
+						// if value is empty and we've found no description we look at the additional attributes
 						if ($value == '') {
 							$no_attribute = true;
 						}
@@ -942,6 +958,7 @@ class ADIntegrationPlugin {
 			$this->_auto_update_description		= (bool)get_site_option('AD_Integration_auto_update_description');
 			$this->_show_attributes				= (bool)get_site_option('AD_Integration_show_attributes');
 			$this->_attributes_to_show			= get_site_option('AD_Integration_attributes_to_show');
+			$this->_additional_user_attributes	= get_site_option('AD_Integration_additional_user_attributes');
 			//$this->_no_random_password			= (bool)get_site_option('AD_Integration_no_random_password');
 		} else {
 			$this->_log(ADI_LOG_INFO,'loading options (WPMU) ...');
@@ -970,6 +987,7 @@ class ADIntegrationPlugin {
 			$this->_auto_update_description		= (bool)get_option('AD_Integration_auto_update_description');
 			$this->_show_attributes				= (bool)get_option('AD_Integration_show_attributes');
 			$this->_attributes_to_show			= get_option('AD_Integration_attributes_to_show');
+			$this->_additional_user_attributes	= get_option('AD_Integration_additional_user_attributes');
 			//$this->_no_random_password			= (bool)get_option('AD_Integration_no_random_password');
 		}
 	}
@@ -1027,10 +1045,110 @@ class ADIntegrationPlugin {
 		$descriptions['company'] = __('Company','ad-integration');
 		$descriptions['manager'] = __('Manager','ad-integration');
 		$descriptions['directreports'] = __('Direct reports','ad-integration');
+		
+		// additional attributes
+		if (trim($this->_additional_user_attributes) != '') {
+			$lines = explode("\n", $this->_additional_user_attributes);
+			foreach ($lines AS $line) {
+			$parts = explode(":",$line);
+				if ($parts[0] != '') {
+					
+					$description = trim($parts[0]);
+					if (isset($parts[2])) {
+						$description = trim($parts[2]);
+					}
+					$descriptions[trim($parts[0])] = $description;
+				}
+			}
+		}
 
 		return $descriptions;
 	}
+
 	
+	/**
+	 * Adds user defined additional attributes to list of attributes to load from AD
+	 * 
+	 * @return array all attributes to load
+	 */
+	protected function _get_all_user_attributes() {
+		$attributes = $this->_user_attributes;
+		if (trim($this->_additional_user_attributes) != '') {
+			$lines = explode("\n", $this->_additional_user_attributes);
+			foreach ($lines AS $line) {
+				$parts = explode(":",$line);
+				if ($parts[0] != '') {
+					$attributes[] = $parts[0];
+				}
+			}
+		}
+		return $attributes;
+	}
+	
+	protected function _generate_attribute_type_list()
+	{
+		$types = array();
+		
+		// all default attributes are strings
+		foreach($this->_user_attributes AS $attribute) {
+			$types[$attribute] = 'string';
+		}
+		
+		// additional attributes
+		if (trim($this->_additional_user_attributes) != '') {
+			$lines = explode("\n", $this->_additional_user_attributes);
+			foreach ($lines AS $line) {
+			$parts = explode(":",$line);
+				if ($parts[0] != '') {
+					
+					if (!isset($parts[1])) {
+						$parts[1] = 'string';
+					} else {
+						$parts[1] = strtolower($parts[1]);
+					}
+					
+					if (!in_array($parts[1], array('string','integer','bool','time','timestamp','octet'))) {
+						$parts[1] = 'string';
+					}
+					
+					$types[$parts[0]] = $parts[1];
+				}
+			}
+		}
+		return $types;
+	}
+	
+	/**
+	 * Returns formatted value according to attribute type
+	 * 
+	 * @param string $attribute
+	 * @param mixed $value
+	 * @return mixed formatted value
+	 */
+	protected function _format_attribute_value($attribute, $value)
+	{
+		$types = $this->_generate_attribute_type_list();
+		if (isset($types[$attribute])) {
+			switch ($types[$attribute]) {
+				case 'string': return $value;
+				case 'integer': return (int)$value;
+				case 'bool': return (bool)$value;
+				case 'time': // ASN.1 GeneralizedTime
+					$timestamp = mktime(substr($value,8,2),substr($value,10,2),substr(12,2),substr($value,4,2),substr($value,6,2),substr($value,0,4));
+					if (substr($value, -1) == 'Z') {
+						$offset = get_option('gmt_offset',0) * 3600;
+					} else {
+						$offset = 0;
+					}
+					return date_i18n(get_option('date_format','Y-m-d').' / '.get_option('time_format','H:i:s'), $timestamp + $offset, true); 
+				case 'timestamp': 
+					$timestamp = ($value / 10000000) - 11644473600 + get_option('gmt_offset',0) * 3600; 
+					return date_i18n(get_option('date_format','Y-m-d').' / '.get_option('time_format','H:i:s'), $timestamp, true);
+				case 'octet': return base64_encode($value);
+			}
+		}
+		return $value;
+	}
 	
 	/**
 	 * Saves the options to the sitewide options store. This is only needed for WPMU.
@@ -1039,19 +1157,30 @@ class ADIntegrationPlugin {
 	 * @return unknown_type
 	 */
 	protected function _save_wpmu_options($arrPost) {
- 		if (IS_WPMU) {	
+		
+ 		if (IS_WPMU) {
+
+ 			if ( !empty( $arrPost['AD_Integration_additional_user_attributes'] ) )
+			 	update_site_option('AD_Integration_additional_user_attributes', $arrPost['AD_Integration_additional_user_attributes']);
+ 			
 			if ( !empty( $arrPost['AD_Integration_auto_create_user'] ) )
 			 	update_site_option('AD_Integration_auto_create_user', (bool)$arrPost['AD_Integration_auto_create_user']);
 			 
 			if ( !empty( $arrPost['AD_Integration_auto_update_user'] ) )
 			 	update_site_option('AD_Integration_auto_update_user', (bool)$arrPost['AD_Integration_auto_update_user']);
+			
+			 	if ( !empty( $arrPost['AD_Integration_auto_update_description'] ) )
+			 	update_site_option('AD_Integration_auto_update_description', (bool)$arrPost['AD_Integration_auto_update_description']);
 			 
 			if ( !empty( $arrPost['AD_Integration_account_suffix'] ) )
 			 	update_site_option('AD_Integration_account_suffix', $arrPost['AD_Integration_account_suffix']);
 			 
 			if ( !empty( $arrPost['AD_Integration_append_suffix_to_new_users'] ) )
 			 	update_site_option('AD_Integration_append_suffix_to_new_users', $arrPost['AD_Integration_append_suffix_to_new_users']);
-			 
+
+ 			if ( !empty( $arrPost['AD_Integration_attributes_to_show'] ) )
+			 	update_site_option('AD_Integration_attributes_to_show', $arrPost['AD_Integration_attributes_to_show']);
+			 	
 			if ( !empty( $arrPost['AD_Integration_domain_controllers'] ) )
 			 	update_site_option('AD_Integration_domain_controllers', $arrPost['AD_Integration_domain_controllers']);
 			 
@@ -1102,6 +1231,10 @@ class ADIntegrationPlugin {
 			 
 			if ( !empty( $arrPost['AD_Integration_enable_password_change'] ) )
 				update_site_option('AD_Integration_enable_password_change', $arrPost['AD_Integration_enable_password_change']);
+
+			if ( !empty( $arrPost['AD_Integration_show_attributes'] ) )
+				update_site_option('AD_Integration_show_attributes', $arrPost['AD_Integration_show_attributes']);
+				
 
 			/*if ( !empty( $arrPost['AD_Integration_no_random_password'] ) )				
 				update_site_option('AD_Integration_no_random_password', (bool)$arrPost['AD_Integration_no_random_password']);*/
@@ -1336,6 +1469,9 @@ class ADIntegrationPlugin {
 			// Update User Meta
 			if ($this->_write_usermeta === true) {
 				foreach($info AS $attribute => $value) {
+					// conversion
+					$value = $this->_format_attribute_value($attribute, $value);
+					$this->_log(ADI_LOG_DEBUG,"$attribute = $value");
 					if (version_compare($wp_version, '3', '>=')) {
 						// WP 3.0 and above
 						update_user_meta($user_id, $this->_usermeta_prefix.$attribute, $value);
@@ -1464,6 +1600,10 @@ class ADIntegrationPlugin {
 		// Update User Meta
 		if ($this->_write_usermeta === true) {
 			foreach($info AS $attribute => $value) {
+				// conversion
+				$value = $this->_format_attribute_value($attribute, $value);
+				$this->_log(ADI_LOG_DEBUG,"$attribute = $value");
+
 				if (version_compare($wp_version, '3', '>=')) {
 					// WP 3.0 and above
 					update_user_meta($user_id, $this->_usermeta_prefix.$attribute, $value);
@@ -1522,7 +1662,7 @@ class ADIntegrationPlugin {
 	protected function _create_info_array($userinfo)
 	{
 		$info = array();
-		foreach($this->_user_attributes AS $attribute) {
+		foreach($this->_all_user_attributes AS $attribute) {
 			$attribute = strtolower($attribute);
 			if (isset($userinfo[$attribute])) {
 				if (isset($userinfo[$attribute]['count'])) {
@@ -2002,12 +2142,6 @@ if (!IS_WPMU) { ?>
 							<td>
 								<input type="checkbox" name="AD_Integration_auto_update_user" id="AD_Integration_auto_update_user" <?php if ($this->_auto_update_user) echo ' checked="checked"' ?> value="1" />          
 								<?php _e('Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>', 'ad-integration'); ?>
-								<br/>
-								<?php
-								/*          
-								<input type="checkbox" name="AD_Integration_auto_update_description" id="AD_Integration_auto_update_description" <?php if ($this->_auto_update_description) echo ' checked="checked"' ?> value="1" />          
-								<?php _e('Should the users descriptions be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation <b>and</b> Automatic User Update is turned on.</b>', 'ad-integration'); ?>
-								*/?>          
 							</td>
 						</tr>
 
@@ -2209,7 +2343,7 @@ if (!IS_WPMU) { ?>
 		<div id="usermeta">
 			<form action="<?php if (!IS_WPMU)echo 'options.php#usermeta'; ?>" method="post">
 				<input type="hidden" name="action" value="update" />
-   				<input type="hidden" name="page_options" value="AD_Integration_show_attributes,AD_Integration_attributes_to_show" />
+   				<input type="hidden" name="page_options" value="AD_Integration_show_attributes,AD_Integration_auto_update_description,AD_Integration_attributes_to_show,AD_Integration_additional_user_attributes" />
    				<?php if (function_exists('wp_nonce_field')): wp_nonce_field('update-options'); endif; ?>
 				
 				<table class="form-table">
@@ -2223,11 +2357,19 @@ if (!IS_WPMU) { ?>
 						</tr>
 						
 						<tr valign="top">
-						<th scope="row"><label for="AD_Integration_show_attributes"><?php _e('Show Attributes', 'ad-integration'); ?></label></th>
-						<td>
+							<th scope="row"><label for="AD_Integration_auto_update_description"><?php _e('Auto Update User Description', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_auto_update_description" id="AD_Integration_auto_update_description" <?php if ($this->_auto_update_description) echo ' checked="checked"' ?> value="1" />          
+								<?php _e('Should the users descriptions be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation <b>and</b> Automatic User Update is turned on.</b>', 'ad-integration'); ?>
+							</td>						
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_show_attributes"><?php _e('Show Attributes', 'ad-integration'); ?></label></th>
+							<td>
 								<input type="checkbox" name="AD_Integration_show_attributes" id="AD_Integration_show_attributes"<?php if ($this->_show_attributes) echo ' checked="checked"' ?> value="1" />  
 								<?php _e('Show user attributes from AD in user profile.', 'ad-integration'); ?>
-						</td>
+							</td>
 						</tr>
 						
 
@@ -2235,14 +2377,29 @@ if (!IS_WPMU) { ?>
 							<th scope="row"><label for="AD_Integration_attributes_to_show"><?php _e('Attributes to show', 'ad-integration'); ?></label></th>
 							<td>
 								<?php _e('Enter the AD attributes (one per line) to be shown at the end of the user profile page.', 'ad-integration'); ?>
-								<?php _e('See the list below for possible values.', 'ad-integration'); ?>
+								<?php _e('See the list below for possible default values.', 'ad-integration'); ?>
 								<?php _e('If you enter something that is not in the list of attributes it will be treated as a headline. Use this to structure the output.', 'ad-integration'); ?>
 								<br/>
 								<textarea name="AD_Integration_attributes_to_show" id="AD_Integration_attributes_to_show"><?php echo $this->_attributes_to_show; ?></textarea>
 							</td>
 						</tr>
+						
 						<tr valign="top">
-							<th scope="row"><?php _e('All attributes', 'ad-integration'); ?></label></th>
+							<th scope="row"><label for="AD_Integration_additional_user_attributes"><?php _e('Additional User Attributes', 'ad-integration'); ?></label></th>
+							<td>
+								<?php _e('Enter additional AD attributes (one per line), followed by their type and description seperated by a colon (:).', 'ad-integration'); ?>
+								<?php _e('Additional Attributes that should appear on the user profile must also be placed in "Attributes to show".', 'ad-integration'); ?>
+								<?php _e('Format: <i>attribute_name:type:description</i> where <i>type</i> can be one of the following: <i>string, integer, bool, octet, time, timestamp</i>.', 'ad-integration'); ?><br/>
+								<?php _e('Example:<br/><i>lastlogon:timestamp:Last logon on<br/>whencreated:time:User Created on</i>', 'ad-integration'); ?>
+								<br/>
+								<textarea name="AD_Integration_additional_user_attributes" id="AD_Integration_additional_user_attributes"><?php echo $this->_additional_user_attributes; ?></textarea>
+								<br/>
+								<?php _e('Notice: Attributes of type <i>octet</i> are stored base64 encoded.', 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><?php _e('Default attributes', 'ad-integration'); ?></label></th>
 							<td>
 								<table class="attribute_descriptions">
 									<tr>

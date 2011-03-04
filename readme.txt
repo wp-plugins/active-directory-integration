@@ -24,13 +24,14 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * user and/or admin e-mail notification on failed login attempts
 * multi-language support (English, German, Norwegian and Belorussian included)
 * determine WP display name from AD attributes (sAMAccountName, displayName, description, SN, CN, givenName or mail)
-* setting user meta data to AD attributes (like Office, Telephone number, Department, Company and a lot more)
+* auto setting of user meta data to *default* AD attributes (like Office, Telephone number, Department, Company and a lot more)
+* manual setting of user meta data to any possible AD attribute
 * show AD attributes (see above) in user profile
 * tool for testing with detailed debug informations
 * enable/disable password changes for local (non AD) WP users
 * WordPress 3 compatibility, including *Multisite* 
 
-*Active Directory Integration* is based upon Jonathan Marc Bearak's great plugin [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
+*Active Directory Integration* is based upon Jonathan Marc Bearak's [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
 
 
 = Requirements =
@@ -95,7 +96,7 @@ A common mistake is that the Base DN is set to a wrong value. If the user reside
 
 = 1.0 =
 * ADD: New language Norwegian/Norsk (nb_NO) added. (Issue #0002. Thanks to Børge Anderssen.)
-* ADD: Store a lot of AD attributes to WordPress table usermeta and show them on users profile page without any additional plugin. The meta keys are set to adi_<attribute_name> (e.g. "adi_department", "adi_telephonenumber" and "adi_manager").
+* ADD: Store AD attribute in WordPress DB (table usermeta) and show them on users profile page without any additional plugin. The meta keys are set to adi_<attribute_name> (e.g. "adi_department", "adi_telephonenumber" and "adi_manager").
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
 * CHANGE: Now using an extended version of adLDAP 3.3.2 which should fix some authentication and authorization issues.
 * FIX: Account suffix was accidently used for bind user. Fixed in adLDAP.php. (Issue #0009. Thanks to Tobias Bochmann for the bug report.) 
