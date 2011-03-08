@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC3 (201103041602)';
+	const ADI_VERSION = '1.0-RC3 (201103081440)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -1078,7 +1078,9 @@ class ADIntegrationPlugin {
 			foreach ($lines AS $line) {
 				$parts = explode(":",$line);
 				if ($parts[0] != '') {
-					$attributes[] = $parts[0];
+					if (!in_array($parts[0], $attributes)) {
+						$attributes[] = $parts[0];
+					}
 				}
 			}
 		}
@@ -1510,7 +1512,7 @@ class ADIntegrationPlugin {
 			$email = '';
 		}
 		
-		if ( $info['mail'] == '' ) 
+		if ( $email == '' ) 
 		{
 			if (trim($this->_default_email_domain) != '') {
 				$email = $username . '@' . $this->_default_email_domain;
@@ -1548,10 +1550,16 @@ class ADIntegrationPlugin {
 				// WP 3.0 and above
 				update_user_meta($user_id, 'first_name', $info['givenname']);
 				update_user_meta($user_id, 'last_name', $info['sn']);
+				if ($this->_auto_update_description) {
+					update_user_meta($user_id, 'description', $info['description']);
+				}
 			} else {
 				// WP 2.x
 				update_usermeta($user_id, 'first_name', $info['givenname']);
 				update_usermeta($user_id, 'last_name', $info['sn']);
+				if ($this->_auto_update_description) {
+					update_usermeta($user_id, 'description', $info['description']);
+				}
 			}
 			
 			// set display_name
