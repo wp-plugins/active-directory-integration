@@ -105,6 +105,7 @@ A common mistake is that the Base DN is set to a wrong value. If the user reside
 * FIX: The stylesheet was loaded by http not https even if you use https in admin mode. (Thanks to Curtiss Grymala for the bug report and fix.)
 * FIX: On activation add_option() was used with the deprecated parameter description. (Issue #0008.)
 * FIX: Fixed problem with wrong updated email addresses when option "Email Address Conflict Handling" was set to "create".
+* FIX: The way of saving settings is deprecated since WP 2.7. Now using register_settings() and settings_fields(). Moved code for options page to admin.php.
 
 = 0.9.9.9 =
 * FIX: Automatic User Creation failed in WordPress 3.0 (Thanks to d4b for the bug report and testing.)

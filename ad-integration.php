@@ -854,10 +854,9 @@ class ADIntegrationPlugin {
 	public static function activate() {
 		global $wpdb, $wpmu_version;
 		
-		//$table_name = $wpdb->prefix . ADIntegrationPlugin::TABLE_NAME;
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
-		if ($wpmu_version != '') {
+		if (isset($wpmu_version) && $wpmu_version != '') {
 			$db_version = get_site_option('AD_Integration_db_version');
 		} else {
 			$db_version = get_option('AD_Integration_db_version');
@@ -876,10 +875,10 @@ class ADIntegrationPlugin {
 	      	dbDelta($sql);
 	      
 	   		// store db version in the options
-	      	if ($wpmu_version != '') {
-	      		add_site_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION, 'Version of the table structure');
+	      	if (isset($wpmu_version) && $wpmu_version != '') {
+	      		add_site_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION);
 	      	} else {
-		   		add_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION, 'Version of the table structure');
+		   		add_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION);
 	      	}
 	   }
 	}
@@ -898,7 +897,7 @@ class ADIntegrationPlugin {
 		$wpdb->query('DROP TABLE IF EXISTS '.$table_name);
 		
 		// delete option
-		if ($wpmu_version != '') {
+		if (isset($wpmu_version) && $wpmu_version != '') {
 			delete_site_option('AD_Integration_db_version');
 		} else {
 			delete_option('AD_Integration_db_version');
