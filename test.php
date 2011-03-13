@@ -7,6 +7,8 @@
  * @since 0.9.9-dev
  */
 
+ob_end_flush();
+
 if ( !defined('WP_LOAD_PATH') ) {
 
 	/** classic root path if wp-content and plugins is below wp-config.php */
@@ -38,11 +40,14 @@ if (!current_user_can('level_10')) {
 }
 
 // If we have WordPress MU, die silently.
-if ($wpmu_version != '') {
+if (isset($wpmu_version) && $wpmu_version != '') {
 	die();
 }
 
-
+// If the plugin class is not found, die.
+if (!class_exists('ADIntegrationPlugin')) {
+	die('ADI not installed.');
+}
 
 // Using our own debug handler for output
 class TestADIntegrationPlugin extends ADIntegrationPlugin {
