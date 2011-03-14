@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC3 (201103131748)';
+	const ADI_VERSION = '1.0-RC3 (201103141625)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -135,54 +135,17 @@ class ADIntegrationPlugin {
 	// Update users description if $_auto_update_user is true
 	protected $_auto_update_description = false;
 	
-	// any attributes that can be read from AD (Windows 2000/20003)
-	protected $_user_attributes = array (
-	
-		// General
+	// default attributes to be read from AD (Windows 2000/20003)
+	protected $_default_user_attributes = array (
 	    'cn', // Common Name
-	    'givenName', // First name
-		'initials', // Initials
+	    'givenname', // First name
 	    'sn', // Last name
-		'displayName',  // Display name
+		'displayname',  // Display name
 		'description', // Description
-		'physicalDeliveryOfficeName', // Office
-		'telephoneNumber', // Telephone number
 		'mail', // E-mail
-		'wWWHomePage',   // Web Page
-		
-		// Account
-		'samAccountName', // User logon name
-
-		// Address
-		'streetAddress', // Street
-		'postOfficeBox', // P.O. Box
-		'l', // City
-		'st', // State
-		'postalCode', // ZIP/Postal cide
-		'c', // Country abbreviation
-		'co', // Country
-		'countryCode', // Country code (number)
-
-		// Telephones
-		'homePhone', // Home
-		'otherHomePhone', // Home (other)
-		'pager', // Pager
-		'otherPager', // Pager (other)
-		'mobile', // Mobile
-		'otherMobile', // Mobile (Other)  
-		'facsimileTelephoneNumber', // Fax
-		'otherFacsimileTelephoneNumber',
-		'ipPhone', // IP Phone 
-		'otherIpPhone', // IP Phone (other)
-		'info', // Notes
-		
-		// Organization
-		'title', // Title
-		'department', // Department
-		'company', // Company
-		'manager', // Manager
-		'directReports' // Direct reports
+		'samaccountname' // User logon name
 	);
+	
 	
 	// List of additional user attributes that can be defined by the admin
 	// The attributes are seperated by a new line and have the format:
@@ -194,7 +157,6 @@ class ADIntegrationPlugin {
 	
 	// Merged array of _user_attributes and _additional_user_attributes
 	protected $_all_user_attributes = array();
-	
 	
 	// Add all user attributes from AD to WP table usermeta
 	protected $_write_usermeta = true;
@@ -290,8 +252,11 @@ class ADIntegrationPlugin {
 			add_action('password_reset', array(&$this, 'disable_function'));
 		    add_action('admin_print_styles', array(&$this, 'load_styles'));
 		    add_action('admin_print_scripts', array(&$this, 'load_scripts'));
+			// add_action('profile_update', array(&$this, 'profile_update')); // TODO for future use
 			
 			add_filter('check_password', array(&$this, 'override_password_check'), 10, 4);
+			
+			
 			
 			// Is local password change disallowed?
 			if (!$this->_enable_password_change) {
@@ -314,7 +279,7 @@ class ADIntegrationPlugin {
 			add_action( 'show_user_profile', array(&$this, 'show_AD_attributes'));
 		}
 		
-		$this->_all_user_attributes = $this->_get_all_user_attributes();
+		$this->_all_user_attributes = $this->_get_user_attributes();
 	}
 	
 	
@@ -667,7 +632,7 @@ class ADIntegrationPlugin {
 			
 			if ($this->_auto_create_user || trim($user_role) != '' ) {
 				// create user
-				$user_id = $this->_create_user_new($ad_username, $userinfo, $display_name, $user_role, $password);
+				$user_id = $this->_create_user($ad_username, $userinfo, $display_name, $user_role, $password);
 			} else {
 				// Bail out to avoid showing the login form
 				$this->_log(ADI_LOG_ERROR,'This user exists in Active Directory, but has not been granted access to this installation of WordPress.');
@@ -679,7 +644,7 @@ class ADIntegrationPlugin {
 			//  Update known users if configured
 			if ($this->_auto_create_user AND $this->_auto_update_user) {
 				// Update users role
-				$user_id = $this->_update_user_new($ad_username, $userinfo, $display_name, $user_role, $password);
+				$user_id = $this->_update_user($ad_username, $userinfo, $display_name, $user_role, $password);
 			}
 		}
 		
@@ -755,7 +720,19 @@ class ADIntegrationPlugin {
 			$help .= '</div>';
 		}
 		return $help;
-	}	
+	}
+
+	/**
+	 * Update user meta from profile page
+	 * Here we can write user meta informations back to AD
+	 * Only for future use.
+	 * 
+	 * @param integer $user_id
+	 */
+	public function profile_update($user_id)
+	{
+		// for future use
+	}
 	
 	
 	public function setLogLevel($level = 0) {
@@ -764,7 +741,9 @@ class ADIntegrationPlugin {
 	
 	
 	public function disableDebug() {
+		echo '<pre>';
 		$this->debug = false;
+		echo '</pre>';
 	}
 	
 	
@@ -773,7 +752,7 @@ class ADIntegrationPlugin {
 	 */
 	public function show_AD_attributes($user) {
 		
-		$descriptions = $this->_get_attribute_descriptions();
+		$all_attributes = $this->_get_attributes_array();
 		
 		if ($this->_show_attributes) {
 			$list = str_replace(";", "\n", $this->_attributes_to_show);
@@ -781,8 +760,11 @@ class ADIntegrationPlugin {
 			
 			$attributes = array();
 			foreach($list AS $line) {
-				if (trim($line != '')) {
-					$attributes[] = trim($line);
+				$parts = explode(':',$line);
+				if (isset($parts[0])) {
+					if (trim($parts[0] != '')) {
+						$attributes[] = trim($parts[0]);
+					}
 				}
 			}
 			
@@ -793,13 +775,18 @@ class ADIntegrationPlugin {
 				<?php 
 				foreach ($attributes AS $attribute) {
 					$no_attribute = false;
-					$value = get_user_meta($user->id, $this->_usermeta_prefix.$attribute, true);
+					if (isset($all_attributes[$attribute]['metakey'])) {
+						$metakey = $all_attributes[$attribute]['metakey'];
+						$value = get_user_meta($user->id, $metakey, true);
+					} else {
+						$value = '';
+					}
 					
 					$description = $attribute;
-					if (isset($descriptions[$attribute])) {
-						$description = trim($descriptions[$attribute]);
+					if (isset($all_attributes[$attribute]['description'])) {
+						$description = trim($all_attributes[$attribute]['description']);
 					} else {
-						// if value is empty and we've found no description we look at the additional attributes
+						// if value is empty and we've found no description then this is no attribute
 						if ($value == '') {
 							$no_attribute = true;
 						}
@@ -812,7 +799,7 @@ class ADIntegrationPlugin {
 					  	  <?php echo $description; ?>
 					  	</th>
 					  <?php } else {?>	
-					    <th><label for="<? echo $this->_usermeta_prefix.$attribute; ?>"><?php echo $description; ?></label></th>
+					    <th><label for="<? echo $metakey ?>"><?php echo $description; ?></label></th>
 					    <td><?php echo nl2br(esc_html($value)); ?></td>
 					  <?php } ?>
 					</tr>
@@ -1003,7 +990,7 @@ class ADIntegrationPlugin {
 	
 	
 	/**
-	 * Loads the descriptions for AD attributes
+	 * Get array of descriptions for default AD attributes
 	 * This function is needed for i18n.
 	 * @return array 
 	 */
@@ -1055,16 +1042,30 @@ class ADIntegrationPlugin {
 		$descriptions['manager'] = __('Manager','ad-integration');
 		$descriptions['directreports'] = __('Direct reports','ad-integration');
 		
-		// additional attributes
-		if (trim($this->_additional_user_attributes) != '') {
-			$lines = explode("\n", $this->_additional_user_attributes);
+		return $descriptions;
+		
+	}
+	
+	/**
+	 * Get array of descriptions for default AD attributes
+	 * plus additional user defined attributes
+	 * 
+	 * @return array descriptions in associative array
+	 */
+	protected function _get_all_attribute_descriptions()
+	{
+		// get descriptions for default AD attributes first
+		$descriptions = $this->_get_attribute_descriptions();
+			
+		// and now for additional AD attributes to show
+		if (trim($this->_attributes_to_show) != '') {
+			$lines = explode("\n", $this->_attributes_to_show);
 			foreach ($lines AS $line) {
-			$parts = explode(":",$line);
+			$parts = explode(":", $line, 2); // limit is important here
 				if ($parts[0] != '') {
-					
 					$description = trim($parts[0]);
-					if (isset($parts[2])) {
-						$description = trim($parts[2]);
+					if (isset($parts[1])) {
+						$description = trim($parts[1]);
 					}
 					$descriptions[trim($parts[0])] = $description;
 				}
@@ -1073,15 +1074,18 @@ class ADIntegrationPlugin {
 
 		return $descriptions;
 	}
-
 	
 	/**
-	 * Adds user defined additional attributes to list of attributes to load from AD
+	 * Get list list of attributes to load from AD (default + additional)
 	 * 
 	 * @return array all attributes to load
 	 */
-	protected function _get_all_user_attributes() {
-		$attributes = $this->_user_attributes;
+	protected function _get_user_attributes()
+	{
+		// default attributes
+		$attributes = $this->_default_user_attributes;
+		
+		// additional attributes
 		if (trim($this->_additional_user_attributes) != '') {
 			$lines = explode("\n", $this->_additional_user_attributes);
 			foreach ($lines AS $line) {
@@ -1096,67 +1100,99 @@ class ADIntegrationPlugin {
 		return $attributes;
 	}
 	
-	protected function _generate_attribute_type_list()
+	
+	/**
+	 * Get associative array of attributes, types, metakeys and descriptions for AD attributes
+	 *  
+	 * @return array
+	 */
+	protected function _get_attributes_array()
 	{
-		$types = array();
+		$attributes = array();
 		
-		// all default attributes are strings
-		foreach($this->_user_attributes AS $attribute) {
-			$types[$attribute] = 'string';
+		// default attributes
+		// type is always string, meta key is set to ADI_<attribute> and description is loaded
+		
+		$descriptions = $this->_get_attribute_descriptions();  // default descriptions
+		foreach($this->_default_user_attributes AS $attribute) {
+			$attributes[$attribute]['type'] = 'string';
+			$attributes[$attribute]['metakey'] = $this->_usermeta_prefix.$attribute;
+			if (isset($descriptions[$attribute])) {
+				$attributes[$attribute]['description'] = $descriptions[$attribute];
+			} else {
+				$attributes[$attribute]['description'] = $attribute;
+			}
 		}
 		
 		// additional attributes
+		// type and metakey
+		$descriptions = $this->_get_all_attribute_descriptions(); // all descriptions
 		if (trim($this->_additional_user_attributes) != '') {
 			$lines = explode("\n", $this->_additional_user_attributes);
 			foreach ($lines AS $line) {
-			$parts = explode(":",$line);
-				if ($parts[0] != '') {
+				$parts = explode(":",$line);
+				if (isset($parts[0]) && (trim($parts[0]) != '')) {
 					
+					$parts[0] = trim($parts[0]);
+					
+					// type
 					if (!isset($parts[1])) {
-						$parts[1] = 'string';
+						 $parts[1] = 'string';
 					} else {
-						$parts[1] = strtolower($parts[1]);
+						$parts[1] = strtolower(trim($parts[1]));
 					}
-					
 					if (!in_array($parts[1], array('string','integer','bool','time','timestamp','octet'))) {
 						$parts[1] = 'string';
 					}
+					$attributes[$parts[0]]['type'] = $parts[1];
 					
-					$types[$parts[0]] = $parts[1];
+					// meta key
+					if (!isset($parts[2])) {
+						$parts[2] = $this->_usermeta_prefix.$parts[0];
+					} else {
+						$parts[2] = trim($parts[2]);
+					}
+					$attributes[$parts[0]]['metakey'] = $parts[2];
+					
+					// description
+					if (isset($descriptions[$parts[0]])) {
+						$attributes[$parts[0]]['description'] = $descriptions[$parts[0]];
+					} else {
+						$attributes[$parts[0]]['description'] = $parts[0];
+					}
+					
 				}
 			}
 		}
-		return $types;
+		return $attributes;
 	}
+
 	
 	/**
 	 * Returns formatted value according to attribute type
 	 * 
-	 * @param string $attribute
+	 * @param string $type (string, integer, bool, time, timestamp, octet)
 	 * @param mixed $value
 	 * @return mixed formatted value
 	 */
-	protected function _format_attribute_value($attribute, $value)
+	protected function _format_attribute_value($type, $value)
 	{
-		$types = $this->_generate_attribute_type_list();
-		if (isset($types[$attribute])) {
-			switch ($types[$attribute]) {
-				case 'string': return $value;
-				case 'integer': return (int)$value;
-				case 'bool': return (bool)$value;
-				case 'time': // ASN.1 GeneralizedTime
-					$timestamp = mktime(substr($value,8,2),substr($value,10,2),substr(12,2),substr($value,4,2),substr($value,6,2),substr($value,0,4));
-					if (substr($value, -1) == 'Z') {
-						$offset = get_option('gmt_offset',0) * 3600;
-					} else {
-						$offset = 0;
-					}
-					return date_i18n(get_option('date_format','Y-m-d').' / '.get_option('time_format','H:i:s'), $timestamp + $offset, true); 
-				case 'timestamp': 
-					$timestamp = ($value / 10000000) - 11644473600 + get_option('gmt_offset',0) * 3600; 
-					return date_i18n(get_option('date_format','Y-m-d').' / '.get_option('time_format','H:i:s'), $timestamp, true);
-				case 'octet': return base64_encode($value);
-			}
+		switch ($type) {
+			case 'string': return $value;
+			case 'integer': return (int)$value;
+			case 'bool': return (bool)$value;
+			case 'time': // ASN.1 GeneralizedTime
+				$timestamp = mktime(substr($value,8,2),substr($value,10,2),substr(12,2),substr($value,4,2),substr($value,6,2),substr($value,0,4));
+				if (substr($value, -1) == 'Z') {
+					$offset = get_option('gmt_offset',0) * 3600;
+				} else {
+					$offset = 0;
+				}
+				return date_i18n(get_option('date_format','Y-m-d').' / '.get_option('time_format','H:i:s'), $timestamp + $offset, true); 
+			case 'timestamp': 
+				$timestamp = ($value / 10000000) - 11644473600 + get_option('gmt_offset',0) * 3600; 
+				return date_i18n(get_option('date_format','Y-m-d').' / '.get_option('time_format','H:i:s'), $timestamp, true);
+			case 'octet': return base64_encode($value);
 		}
 		return $value;
 	}
@@ -1379,7 +1415,7 @@ class ADIntegrationPlugin {
 	 * @param string $password
 	 * @return integer user_id
 	 */
-	protected function _create_user_new($username, $userinfo, $display_name, $role = '', $password = '')
+	protected function _create_user($username, $userinfo, $display_name, $role = '', $password = '')
 	{
 		global $wp_version;
 		
@@ -1479,16 +1515,22 @@ class ADIntegrationPlugin {
 			
 			// Update User Meta
 			if ($this->_write_usermeta === true) {
+				$attributes = $this->_get_attributes_array(); // load attribute informations: type, metakey, description
 				foreach($info AS $attribute => $value) {
-					// conversion
-					$value = $this->_format_attribute_value($attribute, $value);
-					$this->_log(ADI_LOG_DEBUG,"$attribute = $value");
+					// conversion/formatting
+					$type = $attributes[$attribute]['type'];
+					$metakey = $attributes[$attribute]['metakey'];
+					$value = $this->_format_attribute_value($type, $value);
+					
+					$this->_log(ADI_LOG_DEBUG,"$attribute = $value / type = $type / meta key = $metakey");
+					
+					// store it
 					if (version_compare($wp_version, '3', '>=')) {
 						// WP 3.0 and above
-						update_user_meta($user_id, $this->_usermeta_prefix.$attribute, $value);
+						update_user_meta($user_id, $metakey, $value);
 					} else {
 						// WP 2.x
-						update_usermeta($user_id, $this->_usermeta_prefix.$attribute, $value);
+						update_usermeta($user_id, $metakey, $value);
 					}
 				}
 			}
@@ -1509,7 +1551,7 @@ class ADIntegrationPlugin {
 	 * @param string $password
 	 * @return integer user_id
 	 */
-	protected function _update_user_new($username, $userinfo, $display_name='', $role = '', $password = '')
+	protected function _update_user($username, $userinfo, $display_name='', $role = '', $password = '')
 	{
 		global $wp_version;
 		
@@ -1614,22 +1656,29 @@ class ADIntegrationPlugin {
 			}
 		}
 		
+		
 		// Update User Meta
 		if ($this->_write_usermeta === true) {
+			$attributes = $this->_get_attributes_array(); // load attribute informations: type, metakey, description
 			foreach($info AS $attribute => $value) {
-				// conversion
-				$value = $this->_format_attribute_value($attribute, $value);
-				$this->_log(ADI_LOG_DEBUG,"$attribute = $value");
-
+				// conversion/formatting
+				$type = $attributes[$attribute]['type'];
+				$metakey = $attributes[$attribute]['metakey'];
+				$value = $this->_format_attribute_value($type, $value);
+				
+				$this->_log(ADI_LOG_DEBUG,"$attribute = $value / type = $type / meta key = $metakey");
+				
+				// store it
 				if (version_compare($wp_version, '3', '>=')) {
 					// WP 3.0 and above
-					update_user_meta($user_id, $this->_usermeta_prefix.$attribute, $value);
+					update_user_meta($user_id, $metakey, $value);
 				} else {
 					// WP 2.x
-					update_usermeta($user_id, $this->_usermeta_prefix.$attribute, $value);
+					update_usermeta($user_id, $metakey, $value);
 				}
 			}
 		}
+		
 		
 		// log errors
 		if (isset($return)) {

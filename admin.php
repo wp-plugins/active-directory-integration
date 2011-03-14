@@ -373,12 +373,9 @@ if (!IS_WPMU) { ?>
 			</form>	    	
 		</div> <!-- END OF TAB SECURITY -->	
 
+
 		<!-- TAB: User Meta -->
-		
-		<?php 
-		$descriptions = $this->_get_attribute_descriptions();
-		?>
-		
+	
 		<div id="usermeta">
 			<form action="<?php if (!IS_WPMU)echo 'options.php#usermeta'; ?>" method="post">
    				<?php settings_fields('ADI-usermeta-settings'); ?>
@@ -387,8 +384,29 @@ if (!IS_WPMU) { ?>
 						<tr>
 							<td scope="col" colspan="2">
 								<h2 style="font-size: 150%; font-weight: bold;"><?php _e('User Meta','ad-integration'); ?></h2>
-								<?php _e('User attributes from the AD are stored as User Meta Data. You can use these attributes in your themes and they can be shown on the profile page of your users.','ad-integration'); ?>
+								<?php _e('User attributes from the AD are can be stored as User Meta Data. These attributes can then be used in your themes and they can be shown on the profile page of your users.','ad-integration'); ?>
 								<?php _e('The attributes are only stored in the WordPress database if you activate "Automatic User Creation" and are only updated if you activate "Automatic User Update" on tab "User".','ad-integration'); ?>
+							</td>
+						</tr>
+
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_additional_user_attributes"><?php _e('Additional User Attributes', 'ad-integration'); ?></label></th>
+							<td>
+								<?php _e('Enter additional AD attributes (one per line), followed by their type and the associated meta key seperated by a colon (:).', 'ad-integration'); ?>
+								<?php _e('Additional Attributes that should appear on the user profile must also be placed in "Attributes to show".', 'ad-integration'); ?>
+								</br>
+								<?php _e('Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where <i>&lt;type&gt;</i> can be one of the following: <i>string, integer, bool, octet, time, timestamp</i>.', 'ad-integration'); ?>
+								<br/>
+								<?php _e('If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as <i>adi_&lt;attribute_name&gt;</i>.', 'ad-integration'); ?>
+								<br/>
+								<?php _e('Example:', 'ad-integration'); ?>
+								<br/>
+								<pre class="AD-example"><?php _e("lastlogon:timestamp:last_logon_time\nwhencreated:time:user_created_on\nhomephone:string", 'ad_integration'); ?></pre>
+								<br/>
+								<textarea name="AD_Integration_additional_user_attributes" id="AD_Integration_additional_user_attributes"><?php echo $this->_additional_user_attributes; ?></textarea>
+								<br/>
+								<?php _e('Notice: Attributes of type <i>octet</i> are stored base64 encoded.', 'ad-integration'); ?>
 							</td>
 						</tr>
 						
@@ -404,27 +422,18 @@ if (!IS_WPMU) { ?>
 						<tr valign="top">
 							<th scope="row"><label for="AD_Integration_attributes_to_show"><?php _e('Attributes to show', 'ad-integration'); ?></label></th>
 							<td>
-								<?php _e('Enter the AD attributes (one per line) to be shown at the end of the user profile page.', 'ad-integration'); ?>
-								<?php _e('See the list below for possible default values.', 'ad-integration'); ?>
-								<?php _e('If you enter something that is not in the list of attributes it will be treated as a headline. Use this to structure the output.', 'ad-integration'); ?>
+								<?php _e('Enter the AD attributes (one per line) followed by a description seperated by a colon (:) to be shown at the end of the user profile page. If no description is given the descriptions for standard attributes (see below) is used. If there is no description for the attribute then the attribute name itself will be displayed.', 'ad-integration'); ?>
+								<?php _e('The attributes to be shown must appear on the list of Additional User Attributes.'); ?>
+								<?php _e('If you enter something that is not in the list of Additional User Attributes it will be treated as normal text. Use this to structure the output.', 'ad-integration'); ?>
+								<br/>
+								<?php _e('Example:', 'ad-integration'); ?>
+								<br/>
+								<pre class="AD-example"><?php _e("lastlogon\nwhencreated:User Created on\nhomephone", 'ad_integration'); ?></pre>
 								<br/>
 								<textarea name="AD_Integration_attributes_to_show" id="AD_Integration_attributes_to_show"><?php echo $this->_attributes_to_show; ?></textarea>
 							</td>
 						</tr>
-						
-						<tr valign="top">
-							<th scope="row"><label for="AD_Integration_additional_user_attributes"><?php _e('Additional User Attributes', 'ad-integration'); ?></label></th>
-							<td>
-								<?php _e('Enter additional AD attributes (one per line), followed by their type and description seperated by a colon (:).', 'ad-integration'); ?>
-								<?php _e('Additional Attributes that should appear on the user profile must also be placed in "Attributes to show".', 'ad-integration'); ?>
-								<?php _e('Format: <i>attribute_name:type:description</i> where <i>type</i> can be one of the following: <i>string, integer, bool, octet, time, timestamp</i>.', 'ad-integration'); ?><br/>
-								<?php _e('Example:<br/><i>lastlogon:timestamp:Last logon on<br/>whencreated:time:User Created on</i>', 'ad-integration'); ?>
-								<br/>
-								<textarea name="AD_Integration_additional_user_attributes" id="AD_Integration_additional_user_attributes"><?php echo $this->_additional_user_attributes; ?></textarea>
-								<br/>
-								<?php _e('Notice: Attributes of type <i>octet</i> are stored base64 encoded.', 'ad-integration'); ?>
-							</td>
-						</tr>
+
 						
 						<tr valign="top">
 							<th scope="row"><?php _e('Default attributes', 'ad-integration'); ?></label></th>
@@ -432,9 +441,10 @@ if (!IS_WPMU) { ?>
 								<table class="attribute_descriptions">
 									<tr>
 										<th><?php _e('AD Attribute','ad-integration');?></th>
-										<th><?php _e('Desription','ad-integration');?></th>
+										<th><?php _e('Description','ad-integration');?></th>
 									</tr>
-								<?php 
+								<?php
+								$descriptions = $this->_get_attribute_descriptions();
 								foreach($descriptions AS $attribute => $description) {?>
 									<tr>
 										<th><?php echo $attribute; ?></th>

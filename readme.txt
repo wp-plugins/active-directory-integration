@@ -24,9 +24,8 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * user and/or admin e-mail notification on failed login attempts
 * multi-language support (English, German, Norwegian and Belorussian included)
 * determine WP display name from AD attributes (sAMAccountName, displayName, description, SN, CN, givenName or mail)
-* auto setting of user meta data to *default* AD attributes (like Office, Telephone number, Department, Company and a lot more)
-* manual setting of user meta data to any possible AD attribute
-* show AD attributes (see above) in user profile
+* setting of user meta data to any possible AD attribute
+* show selected AD attributes (see above) in user profile
 * tool for testing with detailed debug informations
 * enable/disable password changes for local (non AD) WP users
 * WordPress 3 compatibility, including *Multisite* 
@@ -60,7 +59,7 @@ Yes, you can. Just put "ldaps://" in front of the server in the option labeled "
 Yes. Since 1.0-RC1 you get more informations from the Test Tool by setting WordPress into debug mode. Simply add DEFINE('WP_DEBUG',true); to your wp-config.php.
 
 = Where are the AD attributes stored in WordPress? =
-If you activate "Automatic User Creation" and "Automatic User Update" a lot of AD attributes are stored in the table wp_usermeta. Their meta key is set to `adi_<attribute>` (e.g. `adi_physicaldeliveryofficename` for the Office attribute). You can find the list of supported attributes on the "User Meta" tab.
+If you activate "Automatic User Creation" and "Automatic User Update" you may store any AD attribute to the table wp_usermeta. You can set the meta key as you like or use the default behavior, where the meta key is set to `adi_<attribute>` (e.g. `adi_physicaldeliveryofficename` for the Office attribute). You can find a list of common attributes on the "User Meta" tab.
 
 = Is there an official bug tracker for ADI? =
 Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues anonymously but it is recommended to create an account. This is also the right place for feature requests.
@@ -96,7 +95,7 @@ A common mistake is that the Base DN is set to a wrong value. If the user reside
 
 = 1.0 =
 * ADD: New language Norwegian/Norsk (nb_NO) added. (Issue #0002. Thanks to Børge Anderssen.)
-* ADD: Store AD attribute in WordPress DB (table usermeta) and show them on users profile page without any additional plugin. The meta keys are set to adi_<attribute_name> (e.g. "adi_department", "adi_telephonenumber" and "adi_manager").
+* ADD: Store AD attribute in WordPress DB (table usermeta) and show them on users profile page without any additional plugin.
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
 * CHANGE: Now using an extended version of adLDAP 3.3.2 which should fix some authentication and authorization issues.
 * FIX: Account suffix was accidently used for bind user. Fixed in adLDAP.php. (Issue #0009. Thanks to Tobias Bochmann for the bug report.) 
