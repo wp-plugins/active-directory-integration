@@ -799,7 +799,7 @@ class ADIntegrationPlugin {
 					  	  <?php echo $description; ?>
 					  	</th>
 					  <?php } else {?>	
-					    <th><label for="<? echo $metakey ?>"><?php echo $description; ?></label></th>
+					    <th><label for="<?php echo $metakey ?>"><?php echo $description; ?></label></th>
 					    <td><?php echo nl2br(esc_html($value)); ?></td>
 					  <?php } ?>
 					</tr>
