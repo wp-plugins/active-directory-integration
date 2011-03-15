@@ -620,6 +620,7 @@ class ADIntegrationPlugin {
 		$user_role = $this->_get_user_role_equiv($ad_username); // important: use $ad_username not $username
 
 		// userinfo from AD
+		$this->_log(ADI_LOG_DEBUG, 'ATTRIBUTES TO LOAD: '.print_r($this->_all_user_attributes, true));
 		$userinfo = $this->_adldap->user_info($ad_username, $this->_all_user_attributes);
 		$userinfo = $userinfo[0];
 		$this->_log(ADI_LOG_DEBUG,"USERINFO[0]: \n".print_r($userinfo,true));
@@ -1087,7 +1088,7 @@ class ADIntegrationPlugin {
 		
 		// additional attributes
 		if (trim($this->_additional_user_attributes) != '') {
-			$lines = explode("\n", $this->_additional_user_attributes);
+			$lines = explode("\n", str_replace("\r",'',$this->_additional_user_attributes));
 			foreach ($lines AS $line) {
 				$parts = explode(":",$line);
 				if ($parts[0] != '') {
@@ -1128,7 +1129,7 @@ class ADIntegrationPlugin {
 		// type and metakey
 		$descriptions = $this->_get_all_attribute_descriptions(); // all descriptions
 		if (trim($this->_additional_user_attributes) != '') {
-			$lines = explode("\n", $this->_additional_user_attributes);
+			$lines = explode("\n", str_replace("\r",'',$this->_additional_user_attributes));
 			foreach ($lines AS $line) {
 				$parts = explode(":",$line);
 				if (isset($parts[0]) && (trim($parts[0]) != '')) {
@@ -1660,6 +1661,7 @@ class ADIntegrationPlugin {
 		// Update User Meta
 		if ($this->_write_usermeta === true) {
 			$attributes = $this->_get_attributes_array(); // load attribute informations: type, metakey, description
+			
 			foreach($info AS $attribute => $value) {
 				// conversion/formatting
 				$type = $attributes[$attribute]['type'];
