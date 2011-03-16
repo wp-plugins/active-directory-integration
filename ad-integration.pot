@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-04 15:50+0100\n"
+"POT-Creation-Date: 2011-03-16 15:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,519 +16,529 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ad-integration.php:450 ad-integration.php:2008
+#: ad-integration.php:425 admin.php:52
 msgid "Active Directory Integration"
 msgstr ""
 
-#: ad-integration.php:664
+#: ad-integration.php:640
 msgid ""
 "<strong>ERROR</strong>: This user exists in Active Directory, but has not "
 "been granted access to this installation of WordPress."
 msgstr ""
 
-#: ad-integration.php:739
+#: ad-integration.php:715
 msgid "Active Directory Integration Help"
 msgstr ""
 
-#: ad-integration.php:740
+#: ad-integration.php:716
 msgid "Overview"
 msgstr ""
 
-#: ad-integration.php:741
+#: ad-integration.php:717
 msgid "FAQ"
 msgstr ""
 
-#: ad-integration.php:742
+#: ad-integration.php:718
 msgid "Changelog"
 msgstr ""
 
-#: ad-integration.php:743
+#: ad-integration.php:719
 msgid "Support-Forum"
 msgstr ""
 
-#: ad-integration.php:744
+#: ad-integration.php:720
 msgid "Bug Tracker"
 msgstr ""
 
-#: ad-integration.php:780
+#: ad-integration.php:853
 msgid "Additional Informations"
 msgstr ""
 
-#: ad-integration.php:908
+#: ad-integration.php:985
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr ""
 
-#: ad-integration.php:912
+#: ad-integration.php:989
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr ""
 
-#: ad-integration.php:1005
+#: ad-integration.php:1082
 msgid "Common Name"
 msgstr ""
 
-#: ad-integration.php:1006
+#: ad-integration.php:1083
 msgid "First name"
 msgstr ""
 
-#: ad-integration.php:1007
+#: ad-integration.php:1084
 msgid "Initials"
 msgstr ""
 
-#: ad-integration.php:1008
+#: ad-integration.php:1085
 msgid "Last name"
 msgstr ""
 
-#: ad-integration.php:1009 ad-integration.php:2186
+#: ad-integration.php:1086 admin.php:231
 msgid "Display name"
 msgstr ""
 
-#: ad-integration.php:1010
+#: ad-integration.php:1087 admin.php:444
 msgid "Description"
 msgstr ""
 
-#: ad-integration.php:1011
+#: ad-integration.php:1088
 msgid "Office"
 msgstr ""
 
-#: ad-integration.php:1012
+#: ad-integration.php:1089
 msgid "Telephone number"
 msgstr ""
 
-#: ad-integration.php:1013
+#: ad-integration.php:1090
 msgid "E-mail"
 msgstr ""
 
-#: ad-integration.php:1014
+#: ad-integration.php:1091
 msgid "Web Page"
 msgstr ""
 
-#: ad-integration.php:1017
+#: ad-integration.php:1094
 msgid "User logon name"
 msgstr ""
 
-#: ad-integration.php:1020
+#: ad-integration.php:1097
 msgid "Street"
 msgstr ""
 
-#: ad-integration.php:1021
+#: ad-integration.php:1098
 msgid "P.O. Box"
 msgstr ""
 
-#: ad-integration.php:1022
+#: ad-integration.php:1099
 msgid "City"
 msgstr ""
 
-#: ad-integration.php:1023
+#: ad-integration.php:1100
 msgid "State"
 msgstr ""
 
-#: ad-integration.php:1024
+#: ad-integration.php:1101
 msgid "ZIP/Postal cide"
 msgstr ""
 
-#: ad-integration.php:1025
+#: ad-integration.php:1102
 msgid "Country abbreviation"
 msgstr ""
 
-#: ad-integration.php:1026
+#: ad-integration.php:1103
 msgid "Country"
 msgstr ""
 
-#: ad-integration.php:1027
+#: ad-integration.php:1104
 msgid "Country code (number)"
 msgstr ""
 
-#: ad-integration.php:1030
+#: ad-integration.php:1107
 msgid "Home"
 msgstr ""
 
-#: ad-integration.php:1031
+#: ad-integration.php:1108
 msgid "Home (other)"
 msgstr ""
 
-#: ad-integration.php:1032
+#: ad-integration.php:1109
 msgid "Pager"
 msgstr ""
 
-#: ad-integration.php:1033
+#: ad-integration.php:1110
 msgid "Pager (other)"
 msgstr ""
 
-#: ad-integration.php:1034
+#: ad-integration.php:1111
 msgid "Mobile"
 msgstr ""
 
-#: ad-integration.php:1035
+#: ad-integration.php:1112
 msgid "Mobile (Other)"
 msgstr ""
 
-#: ad-integration.php:1036
+#: ad-integration.php:1113
 msgid "Fax"
 msgstr ""
 
-#: ad-integration.php:1037
+#: ad-integration.php:1114
 msgid "Fax (other)"
 msgstr ""
 
-#: ad-integration.php:1038
+#: ad-integration.php:1115
 msgid "IP Phone"
 msgstr ""
 
-#: ad-integration.php:1039
+#: ad-integration.php:1116
 msgid "IP Phone (other)"
 msgstr ""
 
-#: ad-integration.php:1040
+#: ad-integration.php:1117
 msgid "Notes"
 msgstr ""
 
-#: ad-integration.php:1043
+#: ad-integration.php:1120
 msgid "Title"
 msgstr ""
 
-#: ad-integration.php:1044
+#: ad-integration.php:1121
 msgid "Department"
 msgstr ""
 
-#: ad-integration.php:1045
+#: ad-integration.php:1122
 msgid "Company"
 msgstr ""
 
-#: ad-integration.php:1046
+#: ad-integration.php:1123
 msgid "Manager"
 msgstr ""
 
-#: ad-integration.php:1047
+#: ad-integration.php:1124
 msgid "Direct reports"
 msgstr ""
 
-#: ad-integration.php:1785 ad-integration.php:1862
+#: ad-integration.php:1933 ad-integration.php:2010
 msgid "Account blocked"
 msgstr ""
 
-#: ad-integration.php:1786
+#: ad-integration.php:1934
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
 "security reasons your account is now blocked for %d seconds."
 msgstr ""
 
-#: ad-integration.php:1788 ad-integration.php:1867
+#: ad-integration.php:1936 ad-integration.php:2015
 msgid ""
 "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
 "ADDRESS SPECIFIED ABOVE."
 msgstr ""
 
-#: ad-integration.php:1863
+#: ad-integration.php:2011
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
 "vain. For security reasons this account is now blocked for %d seconds."
 msgstr ""
 
-#: ad-integration.php:1865
+#: ad-integration.php:2013
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr ""
 
-#: ad-integration.php:1940
+#: ad-integration.php:2088
 msgid "Powered by WordPress"
 msgstr ""
 
-#: ad-integration.php:1942
+#: ad-integration.php:2090
 msgid "Account blocked for"
 msgstr ""
 
-#: ad-integration.php:1942
+#: ad-integration.php:2090
 msgid "seconds"
 msgstr ""
 
-#: ad-integration.php:1961
+#: admin.php:5
 msgid "Access denied."
 msgstr ""
 
-#: ad-integration.php:2010
+#: admin.php:54
 msgid "Active Directory Integration Settings"
 msgstr ""
 
-#: ad-integration.php:2016
+#: admin.php:60
 msgid "ATTENTION: You have no LDAP support. This plugin won´t work."
 msgstr ""
 
-#: ad-integration.php:2026
+#: admin.php:70
 msgid "Server"
 msgstr ""
 
-#: ad-integration.php:2027
+#: admin.php:71
 msgid "User"
 msgstr ""
 
-#: ad-integration.php:2028 ad-integration.php:2233
+#: admin.php:72 admin.php:275
 msgid "Authorization"
 msgstr ""
 
-#: ad-integration.php:2029
+#: admin.php:73
 msgid "Security"
 msgstr ""
 
-#: ad-integration.php:2030 ad-integration.php:2353
+#: admin.php:74 admin.php:386
 msgid "User Meta"
 msgstr ""
 
-#: ad-integration.php:2034 ad-integration.php:2436
+#: admin.php:78 admin.php:474
 msgid "Test Tool"
 msgstr ""
 
-#: ad-integration.php:2049
+#: admin.php:90
 msgid "Active Directory Server"
 msgstr ""
 
-#: ad-integration.php:2053
+#: admin.php:94
 msgid "Domain Controllers"
 msgstr ""
 
-#: ad-integration.php:2056
+#: admin.php:97
 msgid ""
 "Domain Controllers (separate with semicolons, e.g. \"dc1.domain.tld;dc2."
 "domain.tld\")"
 msgstr ""
 
-#: ad-integration.php:2061
+#: admin.php:102
 msgid "Port"
 msgstr ""
 
-#: ad-integration.php:2065
+#: admin.php:106
 msgid "Port on which the AD listens (defaults to \"389\")"
 msgstr ""
 
-#: ad-integration.php:2070
+#: admin.php:111
 msgid "Use TLS"
 msgstr ""
 
-#: ad-integration.php:2073
+#: admin.php:114
 msgid ""
 "Secure the connection between the WordPress and the Active Directory Servers "
 "using TLS. Note: To use TLS, you must set the LDAP Port to 389."
 msgstr ""
 
-#: ad-integration.php:2077
+#: admin.php:118
 msgid "Bind User"
 msgstr ""
 
-#: ad-integration.php:2081
+#: admin.php:122
 msgid ""
 "Username for non-anonymous requests to AD (e.g. \"ldapuser@domain.tld\"). "
 "Leave empty for anonymous requests."
 msgstr ""
 
-#: ad-integration.php:2085
+#: admin.php:126
 msgid "Bind User Password"
 msgstr ""
 
-#: ad-integration.php:2089
+#: admin.php:130
 msgid "Password for non-anonymous requests to AD"
 msgstr ""
 
-#: ad-integration.php:2093
+#: admin.php:134
 msgid "Base DN"
 msgstr ""
 
-#: ad-integration.php:2097
+#: admin.php:138
 msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
 msgstr ""
 
-#: ad-integration.php:2103 ad-integration.php:2216 ad-integration.php:2268
-#: ad-integration.php:2332 ad-integration.php:2423
+#: admin.php:144 admin.php:261 admin.php:310 admin.php:371 admin.php:461
 msgid "Save Changes"
 msgstr ""
 
-#: ad-integration.php:2122
+#: admin.php:159
 msgid "User specific settings"
 msgstr ""
 
-#: ad-integration.php:2126
+#: admin.php:163
 msgid "Automatic User Creation"
 msgstr ""
 
-#: ad-integration.php:2129
+#: admin.php:166
 msgid ""
 "Should a new user be created automatically if not already in the WordPress "
 "database?"
 msgstr ""
 
-#: ad-integration.php:2131
+#: admin.php:168
 msgid ""
 "Created users will obtain the role defined under \"New User Default Role\" "
 "on the <a href=\"options-general.php\">General Options</a> page."
 msgstr ""
 
-#: ad-integration.php:2133
+#: admin.php:170
 msgid "This setting is separate from the Role Equivalent Groups option, below."
 msgstr ""
 
-#: ad-integration.php:2136
+#: admin.php:173
 msgid ""
 "<b>Users with role equivalent groups will be created even if this setting is "
 "turned off</b> (because if you didn't want this to happen, you would leave "
 "that option blank.)"
 msgstr ""
 
-#: ad-integration.php:2141
+#: admin.php:178
 msgid "Automatic User Update"
 msgstr ""
 
-#: ad-integration.php:2144
+#: admin.php:181
 msgid ""
 "Should the users be updated in the WordPress database everytime they logon?"
 "<br /><b>Works only if Automatic User Creation is turned on.</b>"
 msgstr ""
 
-#: ad-integration.php:2149
+#: admin.php:186
+msgid "Auto Update User Description"
+msgstr ""
+
+#: admin.php:189
+msgid ""
+"Should the users descriptions be updated in the WordPress database everytime "
+"they logon?<br /><b>Works only if Automatic User Creation <b>and</b> "
+"Automatic User Update is turned on.</b>"
+msgstr ""
+
+#: admin.php:194
 msgid "Default email domain"
 msgstr ""
 
-#: ad-integration.php:2152
+#: admin.php:197
 msgid ""
 "If the Active Directory attribute 'mail' is blank, a user's email will be "
 "set to username@whatever-this-says"
 msgstr ""
 
-#: ad-integration.php:2157
+#: admin.php:202
 msgid "Email Address Conflict Handling"
 msgstr ""
 
-#: ad-integration.php:2160
+#: admin.php:205
 msgid "Prevent (recommended)"
 msgstr ""
 
-#: ad-integration.php:2161
+#: admin.php:206
 msgid "Allow (UNSAFE)"
 msgstr ""
 
-#: ad-integration.php:2162
+#: admin.php:207
 msgid "Create"
 msgstr ""
 
-#: ad-integration.php:2164
+#: admin.php:209
 msgid "Choose how to handle email address conflicts."
 msgstr ""
 
-#: ad-integration.php:2166
+#: admin.php:211
 msgid ""
 "Prevent: User is not created, if his email address is already in use by "
 "another user. (recommended)"
 msgstr ""
 
-#: ad-integration.php:2167
+#: admin.php:212
 msgid "Allow: Allow users to share one email address. (UNSAFE)"
 msgstr ""
 
-#: ad-integration.php:2168
+#: admin.php:213
 msgid ""
 "Create: In case of conflict, the new user is created with a unique email "
 "address."
 msgstr ""
 
-#: ad-integration.php:2174
+#: admin.php:219
 msgid "Account Suffix"
 msgstr ""
 
-#: ad-integration.php:2177
+#: admin.php:222
 msgid ""
 "Account Suffix (will be appended to all usernames in the Active Directory "
 "authentication process; e.g., \"@domain.tld\".)"
 msgstr ""
 
-#: ad-integration.php:2181
+#: admin.php:226
 msgid ""
 "Append account suffix to new created usernames. If checked, the account "
 "suffix (see above) will be appended to the usernames of new created users."
 msgstr ""
 
-#: ad-integration.php:2189
+#: admin.php:234
 msgid "LDAP Attribute: "
 msgstr ""
 
-#: ad-integration.php:2190
+#: admin.php:235
 msgid "sAMAccountName (the username)"
 msgstr ""
 
-#: ad-integration.php:2191
+#: admin.php:236
 msgid "displayName"
 msgstr ""
 
-#: ad-integration.php:2192
+#: admin.php:237
 msgid "description"
 msgstr ""
 
-#: ad-integration.php:2193
+#: admin.php:238
 msgid "givenName (firstname)"
 msgstr ""
 
-#: ad-integration.php:2194
+#: admin.php:239
 msgid "SN (lastname)"
 msgstr ""
 
-#: ad-integration.php:2195
+#: admin.php:240
 msgid "CN (Common Name, the whole name)"
 msgstr ""
 
-#: ad-integration.php:2196
+#: admin.php:241
 msgid "mail"
 msgstr ""
 
-#: ad-integration.php:2198
+#: admin.php:243
 msgid "Choose user's Active Directory attribute to be used as display name."
 msgstr ""
 
-#: ad-integration.php:2203
+#: admin.php:248
 msgid "Enable local password changes"
 msgstr ""
 
-#: ad-integration.php:2206
+#: admin.php:251
 msgid ""
 "Allow users to change their local (<strong>non AD</strong>) WordPress "
 "password"
 msgstr ""
 
-#: ad-integration.php:2208
+#: admin.php:253
 msgid ""
 "<strong>If activated, a password change will update the local WordPress "
 "database only. No changes in Active Directory will be made.</strong>"
 msgstr ""
 
-#: ad-integration.php:2237
+#: admin.php:279
 msgid "Authorize by group membership"
 msgstr ""
 
-#: ad-integration.php:2240
+#: admin.php:282
 msgid ""
 "Users are authorized for login only when they are members of a specific AD "
 "group."
 msgstr ""
 
-#: ad-integration.php:2242
+#: admin.php:284
 msgid "Group(s)"
 msgstr ""
 
-#: ad-integration.php:2245
+#: admin.php:287
 msgid ""
 "Seperate multiple groups by semicolon (e.g. \"domain-users;WP-Users;test-"
 "users\")."
 msgstr ""
 
-#: ad-integration.php:2251
+#: admin.php:293
 msgid "Role Equivalent Groups"
 msgstr ""
 
-#: ad-integration.php:2255
+#: admin.php:297
 msgid ""
 "List of Active Directory groups which correspond to WordPress user roles."
 msgstr ""
 
-#: ad-integration.php:2256
+#: admin.php:298
 msgid ""
 "When a user is first created, his role will correspond to what is specified "
 "here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/"
@@ -537,21 +547,21 @@ msgid ""
 "so you should obviously put the more powerful groups first."
 msgstr ""
 
-#: ad-integration.php:2257
+#: admin.php:299
 msgid "NOTES"
 msgstr ""
 
-#: ad-integration.php:2259
+#: admin.php:301
 msgid ""
 "WordPress stores roles as lower case (\"Subscriber\" is stored as "
 "\"subscriber\")"
 msgstr ""
 
-#: ad-integration.php:2260
+#: admin.php:302
 msgid "Active Directory groups are case-sensitive."
 msgstr ""
 
-#: ad-integration.php:2261
+#: admin.php:303
 msgid ""
 "Group memberships cannot be checked across domains.  So if you have two "
 "domains, instr and qc, and qc is the domain specified above, if instr is "
@@ -559,161 +569,170 @@ msgid ""
 "memberships."
 msgstr ""
 
-#: ad-integration.php:2285
+#: admin.php:324
 msgid "Brute Force Protection"
 msgstr ""
 
-#: ad-integration.php:2286
+#: admin.php:325
 msgid ""
 "For security reasons you can use the following options to prevent brute "
 "force attacks on your user accounts."
 msgstr ""
 
-#: ad-integration.php:2291
+#: admin.php:330
 msgid "Maximum number of allowed login attempts"
 msgstr ""
 
-#: ad-integration.php:2295
+#: admin.php:334
 msgid ""
 "Maximum number of failed login attempts before a user account is blocked. If "
 "empty or \"0\" Brute Force Protection is turned off."
 msgstr ""
 
-#: ad-integration.php:2300
+#: admin.php:339
 msgid "Blocking Time"
 msgstr ""
 
-#: ad-integration.php:2304
+#: admin.php:343
 msgid ""
 "Number of seconds an account is blocked after the maximum number of failed "
 "login attempts is reached."
 msgstr ""
 
-#: ad-integration.php:2309
+#: admin.php:348
 msgid "User Notification"
 msgstr ""
 
-#: ad-integration.php:2312
+#: admin.php:351
 msgid "Notify user by e-mail when his account is blocked."
 msgstr ""
 
-#: ad-integration.php:2317
+#: admin.php:356
 msgid "Admin Notification"
 msgstr ""
 
-#: ad-integration.php:2320
+#: admin.php:359
 msgid "Notify admin(s) by e-mail when an user account is blocked."
 msgstr ""
 
-#: ad-integration.php:2322
+#: admin.php:361
 msgid "E-mail addresses for notifications:"
 msgstr ""
 
-#: ad-integration.php:2326
+#: admin.php:365
 msgid ""
 "Seperate multiple addresses by semicolon (e.g. \"admin@domain.tld;"
 "me@mydomain.tld\"). If left blank, notifications will be sent to the blog-"
 "administrator only."
 msgstr ""
 
-#: ad-integration.php:2354
+#: admin.php:387
 msgid ""
-"User attributes from the AD are stored as User Meta Data. You can use these "
-"attributes in your themes and they can be shown on the profile page of your "
-"users."
+"User attributes from the AD are can be stored as User Meta Data. These "
+"attributes can then be used in your themes and they can be shown on the "
+"profile page of your users."
 msgstr ""
 
-#: ad-integration.php:2355
+#: admin.php:388
 msgid ""
 "The attributes are only stored in the WordPress database if you activate "
 "\"Automatic User Creation\" and are only updated if you activate \"Automatic "
 "User Update\" on tab \"User\"."
 msgstr ""
 
-#: ad-integration.php:2360
-msgid "Auto Update User Description"
-msgstr ""
-
-#: ad-integration.php:2363
-msgid ""
-"Should the users descriptions be updated in the WordPress database everytime "
-"they logon?<br /><b>Works only if Automatic User Creation <b>and</b> "
-"Automatic User Update is turned on.</b>"
-msgstr ""
-
-#: ad-integration.php:2368
-msgid "Show Attributes"
-msgstr ""
-
-#: ad-integration.php:2371
-msgid "Show user attributes from AD in user profile."
-msgstr ""
-
-#: ad-integration.php:2377
-msgid "Attributes to show"
-msgstr ""
-
-#: ad-integration.php:2379
-msgid ""
-"Enter the AD attributes (one per line) to be shown at the end of the user "
-"profile page."
-msgstr ""
-
-#: ad-integration.php:2380
-msgid "See the list below for possible default values."
-msgstr ""
-
-#: ad-integration.php:2381
-msgid ""
-"If you enter something that is not in the list of attributes it will be "
-"treated as a headline. Use this to structure the output."
-msgstr ""
-
-#: ad-integration.php:2388
+#: admin.php:394
 msgid "Additional User Attributes"
 msgstr ""
 
-#: ad-integration.php:2390
+#: admin.php:396
 msgid ""
 "Enter additional AD attributes (one per line), followed by their type and "
-"description seperated by a colon (:)."
+"the associated meta key seperated by a colon (:)."
 msgstr ""
 
-#: ad-integration.php:2391
+#: admin.php:397
 msgid ""
 "Additional Attributes that should appear on the user profile must also be "
 "placed in \"Attributes to show\"."
 msgstr ""
 
-#: ad-integration.php:2392
+#: admin.php:399
 msgid ""
-"Format: <i>attribute_name:type:description</i> where <i>type</i> can be one "
-"of the following: <i>string, integer, bool, octet, time, timestamp</i>."
+"Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where "
+"<i>&lt;type&gt;</i> can be one of the following: <i>string, integer, bool, "
+"octet, time, timestamp</i>."
 msgstr ""
 
-#: ad-integration.php:2393
+#: admin.php:401
 msgid ""
-"Example:<br/><i>lastlogon:timestamp:Last logon on<br/>whencreated:time:User "
-"Created on</i>"
+"If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as "
+"<i>adi_&lt;attribute_name&gt;</i>."
 msgstr ""
 
-#: ad-integration.php:2397
+#: admin.php:403 admin.php:429
+msgid "Example:"
+msgstr ""
+
+#: admin.php:405
+msgid ""
+"lastlogon:timestamp:last_logon_time\n"
+"whencreated:time:user_created_on\n"
+"homephone:string"
+msgstr ""
+
+#: admin.php:409
 msgid "Notice: Attributes of type <i>octet</i> are stored base64 encoded."
 msgstr ""
 
-#: ad-integration.php:2402
+#: admin.php:414
+msgid "Show Attributes"
+msgstr ""
+
+#: admin.php:417
+msgid "Show user attributes from AD in user profile."
+msgstr ""
+
+#: admin.php:423
+msgid "Attributes to show"
+msgstr ""
+
+#: admin.php:425
+msgid ""
+"Enter the AD attributes (one per line) followed by a description seperated "
+"by a colon (:) to be shown at the end of the user profile page. If no "
+"description is given the descriptions for standard attributes (see below) is "
+"used. If there is no description for the attribute then the attribute name "
+"itself will be displayed."
+msgstr ""
+
+#: admin.php:426
+msgid ""
+"The attributes to be shown must appear on the list of Additional User "
+"Attributes."
+msgstr ""
+
+#: admin.php:427
+msgid ""
+"If you enter something that is not in the list of Additional User Attributes "
+"it will be treated as normal text. Use this to structure the output."
+msgstr ""
+
+#: admin.php:431
+msgid ""
+"lastlogon\n"
+"whencreated:User Created on\n"
+"homephone"
+msgstr ""
+
+#: admin.php:439
 msgid "Default attributes"
 msgstr ""
 
-#: ad-integration.php:2406
+#: admin.php:443
 msgid "AD Attribute"
 msgstr ""
 
-#: ad-integration.php:2407
-msgid "Desription"
-msgstr ""
-
-#: ad-integration.php:2437
+#: admin.php:475
 msgid ""
 "Enter a username and password to test logon. If you click the button below, "
 "a new window with detailed debug information opens. <strong>Be sure, that no "
@@ -721,14 +740,14 @@ msgid ""
 "plaintext.</strong>"
 msgstr ""
 
-#: ad-integration.php:2443
+#: admin.php:481
 msgid "Username"
 msgstr ""
 
-#: ad-integration.php:2452
+#: admin.php:490
 msgid "Password"
 msgstr ""
 
-#: ad-integration.php:2461
+#: admin.php:499
 msgid "Perform Test"
 msgstr ""

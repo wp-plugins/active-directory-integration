@@ -376,7 +376,7 @@ class ADIntegrationPlugin {
 
 		// Server
 		register_setting('ADI-server-settings',	'AD_Integration_domain_controllers');
-		register_setting('ADI-server-settings', 'AD_Integration_port');
+		register_setting('ADI-server-settings', 'AD_Integration_port', array(&$this, 'sanitize_port'));
 		register_setting('ADI-server-settings', 'AD_Integration_use_tls');
 		register_setting('ADI-server-settings', 'AD_Integration_bind_user');
 		register_setting('ADI-server-settings', 'AD_Integration_bind_pwd');
@@ -386,7 +386,7 @@ class ADIntegrationPlugin {
 		register_setting('ADI-user-settings', 'AD_Integration_auto_create_user');
 		register_setting('ADI-user-settings', 'AD_Integration_auto_update_user');
 		register_setting('ADI-user-settings', 'AD_Integration_auto_update_description');
-		register_setting('ADI-user-settings', 'AD_Integration_default_email_domain');
+		register_setting('ADI-user-settings', 'AD_Integration_default_email_domain', array(&$this, 'sanitize_default_email_domain'));
 		register_setting('ADI-user-settings', 'AD_Integration_account_suffix');
 		register_setting('ADI-user-settings', 'AD_Integration_append_suffix_to_new_users');
 		register_setting('ADI-user-settings', 'AD_Integration_display_name');
@@ -401,16 +401,16 @@ class ADIntegrationPlugin {
 		register_setting('ADI-auth-settings', 'AD_Integration_role_equivalent_groups');
 		
 		// Security
-		register_setting('ADI-security-settings', 'AD_Integration_max_login_attempts');
-		register_setting('ADI-security-settings', 'AD_Integration_block_time');
+		register_setting('ADI-security-settings', 'AD_Integration_max_login_attempts', array(&$this, 'sanitize_max_login_attempts'));
+		register_setting('ADI-security-settings', 'AD_Integration_block_time', array(&$this, 'sanitize_block_time'));
 		register_setting('ADI-security-settings', 'AD_Integration_user_notification');
 		register_setting('ADI-security-settings', 'AD_Integration_admin_notification');
-		register_setting('ADI-security-settings', 'AD_Integration_admin_email');
+		register_setting('ADI-security-settings', 'AD_Integration_admin_email', array(&$this, 'sanitize_admin_email'));
 		
 		// User Meta
 		register_setting('ADI-usermeta-settings', 'AD_Integration_show_attributes');
-		register_setting('ADI-usermeta-settings', 'AD_Integration_attributes_to_show');
-		register_setting('ADI-usermeta-settings', 'AD_Integration_additional_user_attributes');
+		register_setting('ADI-usermeta-settings', 'AD_Integration_attributes_to_show', array(&$this, 'sanitize_attributes_to_show'));
+		register_setting('ADI-usermeta-settings', 'AD_Integration_additional_user_attributes', array(&$this, 'sanitize_additional_user_attributes'));
 	}
 	
 
@@ -746,6 +746,86 @@ class ADIntegrationPlugin {
 		$this->debug = false;
 		echo '</pre>';
 	}
+	
+	
+	/**
+	 * Sanitize methods for register_settings
+	 */
+	
+	/**
+	 * Sanitize AD Servers port
+	 * 
+	 * @param string $port
+	 * @return integer sanitized port number
+	 */
+	public function sanitize_port($port) {
+		$port = intval($port);
+		if (($port < 0) || ($port > 65535)) {
+			$port = 389;
+		} 
+		return $port;
+	}
+	
+	/**
+	 * Sanitize default email domain
+	 * trim, strip possible @
+	 * 
+	 * @param string $domain
+	 * @return string sanitized domain
+	 */
+	public function sanitize_default_email_domain($domain) {
+		$domain = preg_replace('/[^\A-Za-z0-9-\.]/', '', $domain);
+		return $domain;
+	}
+	
+	
+	public function sanitize_attributes_to_show($text) {
+		$lines = explode("\n", $text);
+		$sanitized_lines = array();
+		foreach ($lines AS $line) {
+			$line = trim($line);
+			if ($line != '') {
+				$sanitized_lines[] = $line;
+			}
+		}
+		return implode("\n", $sanitized_lines);
+	}	
+			
+	public function sanitize_additional_user_attributes($text) {
+		$lines = explode("\n", $text);
+		$sanitized_lines = array();
+		foreach ($lines AS $line) {
+			$line = trim($line);
+			if ($line != '') {
+				$sanitized_lines[] = $line;
+			}
+		}
+		return implode("\n", $sanitized_lines);
+	}
+
+	public function sanitize_max_login_attempts($attempts) {
+		$attempts = intval($attempts);
+		if ($attempts < 1) {
+			$attempts = 3;
+		}
+		return $attempts;
+	}
+	
+	public function sanitize_block_time($seconds) {
+		$seconds = intval($seconds);
+		if ($seconds < 1) {
+			$seconds = 30;
+		}
+		return $seconds;
+	}
+	
+	public function sanitize_admin_email($email) {
+		if (!is_email($email)) {
+			return '';
+		}
+		return $email;
+	}
+	
 	
 	
 	/**
