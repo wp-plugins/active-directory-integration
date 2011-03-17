@@ -377,38 +377,38 @@ class ADIntegrationPlugin {
 		// Server
 		register_setting('ADI-server-settings',	'AD_Integration_domain_controllers');
 		register_setting('ADI-server-settings', 'AD_Integration_port', array(&$this, 'sanitize_port'));
-		register_setting('ADI-server-settings', 'AD_Integration_use_tls');
+		register_setting('ADI-server-settings', 'AD_Integration_use_tls', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-server-settings', 'AD_Integration_bind_user');
 		register_setting('ADI-server-settings', 'AD_Integration_bind_pwd');
 		register_setting('ADI-server-settings', 'AD_Integration_base_dn');
 		
 		// User
-		register_setting('ADI-user-settings', 'AD_Integration_auto_create_user');
-		register_setting('ADI-user-settings', 'AD_Integration_auto_update_user');
-		register_setting('ADI-user-settings', 'AD_Integration_auto_update_description');
+		register_setting('ADI-user-settings', 'AD_Integration_auto_create_user', array(&$this, 'sanitize_bool'));
+		register_setting('ADI-user-settings', 'AD_Integration_auto_update_user', array(&$this, 'sanitize_bool'));
+		register_setting('ADI-user-settings', 'AD_Integration_auto_update_description', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_default_email_domain', array(&$this, 'sanitize_default_email_domain'));
 		register_setting('ADI-user-settings', 'AD_Integration_account_suffix');
-		register_setting('ADI-user-settings', 'AD_Integration_append_suffix_to_new_users');
+		register_setting('ADI-user-settings', 'AD_Integration_append_suffix_to_new_users', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_display_name');
-		register_setting('ADI-user-settings', 'AD_Integration_enable_password_change');
+		register_setting('ADI-user-settings', 'AD_Integration_enable_password_change', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_duplicate_email_prevention');
-		register_setting('ADI-user-settings', 'AD_Integration_no_random_password');
+		register_setting('ADI-user-settings', 'AD_Integration_no_random_password', array(&$this, 'sanitize_bool'));
 		
 		
 		// Authorization
-		register_setting('ADI-auth-settings', 'AD_Integration_authorize_by_group');
+		register_setting('ADI-auth-settings', 'AD_Integration_authorize_by_group', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-auth-settings', 'AD_Integration_authorization_group');
 		register_setting('ADI-auth-settings', 'AD_Integration_role_equivalent_groups');
 		
 		// Security
 		register_setting('ADI-security-settings', 'AD_Integration_max_login_attempts', array(&$this, 'sanitize_max_login_attempts'));
 		register_setting('ADI-security-settings', 'AD_Integration_block_time', array(&$this, 'sanitize_block_time'));
-		register_setting('ADI-security-settings', 'AD_Integration_user_notification');
-		register_setting('ADI-security-settings', 'AD_Integration_admin_notification');
+		register_setting('ADI-security-settings', 'AD_Integration_user_notification', array(&$this, 'sanitize_bool'));
+		register_setting('ADI-security-settings', 'AD_Integration_admin_notification', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-security-settings', 'AD_Integration_admin_email', array(&$this, 'sanitize_admin_email'));
 		
 		// User Meta
-		register_setting('ADI-usermeta-settings', 'AD_Integration_show_attributes');
+		register_setting('ADI-usermeta-settings', 'AD_Integration_show_attributes', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-usermeta-settings', 'AD_Integration_attributes_to_show', array(&$this, 'sanitize_attributes_to_show'));
 		register_setting('ADI-usermeta-settings', 'AD_Integration_additional_user_attributes', array(&$this, 'sanitize_additional_user_attributes'));
 	}
@@ -748,9 +748,9 @@ class ADIntegrationPlugin {
 	}
 	
 	
-	/**
+	/********************************************
 	 * Sanitize methods for register_settings
-	 */
+	 ********************************************/
 	
 	/**
 	 * Sanitize AD Servers port
@@ -826,6 +826,15 @@ class ADIntegrationPlugin {
 		return $email;
 	}
 	
+	/**
+	 * If $value is true (as expression) returns true, otherwise false
+	 * 
+	 * @param mixed $value
+	 * @return bool
+	 */
+	public function sanitize_bool($value) {
+		return ($value == true);
+	}
 	
 	
 	/**
