@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.0-RC3
+Version: 1.0-RC4
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC3 (201103141625)';
+	const ADI_VERSION = '1.0-RC4 (201103181213)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -149,10 +149,10 @@ class ADIntegrationPlugin {
 	
 	// List of additional user attributes that can be defined by the admin
 	// The attributes are seperated by a new line and have the format:
-	//   <Attribute name>:<type>:<description>
+	//   <Attribute name>:<type>
 	// where type can be one of the following: string, integer, bool, image, time, timestamp
-	//   thumbnailphoto:image:Photo
-	//   whencreated:time:Account Created
+	//   thumbnailphoto:image
+	//   whencreated:time
 	protected $_additional_user_attributes = '';
 	
 	// Merged array of _user_attributes and _additional_user_attributes
@@ -168,11 +168,16 @@ class ADIntegrationPlugin {
 	protected $_show_attributes = false;
 
 	// List of AD attributes in the order they should appear on users profile page
-	// Attributes are separated by semicolon or linefeed / newline
+	// Attributes are separated by semicolon or linefeed / newline and have to format:
+	//   <Attribute name>:<desription>
+	// <description> is used on the profile page
 	protected $_attributes_to_show = '';
 
 	// Use the real password when a user is created
-	//protected $_no_random_password = false;
+	protected $_no_random_password = false;
+	
+	// Update password on every successfull login
+	protected $_auto_update_password = false;
 
 	// All options and its types
 	// Has to be static for static call of method uninstall()
@@ -202,8 +207,9 @@ class ADIntegrationPlugin {
 			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool'),
 			array('name' => 'AD_Integration_show_attributes', 'type' => 'bool'),
 			array('name' => 'AD_Integration_attributes_to_show', 'type' => 'bool'),
-			array('name' => 'AD_Integration_additional_user_attributes', 'type' => 'string')
-			//array('name' => 'AD_Integration_no_random_password', 'type' => 'bool')
+			array('name' => 'AD_Integration_additional_user_attributes', 'type' => 'string'),
+			array('name' => 'AD_Integration_no_random_password', 'type' => 'bool'),
+			array('name' => 'AD_Integration_auto_update_password', 'type' => 'bool')
 		);
 
 	/**
@@ -331,8 +337,8 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_show_attributes', false);
 				add_site_option('AD_Integration_attributes_to_show', '');
 				add_site_option('AD_Integration_additionl_user_attributes', '');
-				
-				//add_site_option('AD_Integration_no_random_password', false);
+				add_site_option('AD_Integration_no_random_password', false);
+				add_site_option('AD_Integration_auto_update_password', false);
 			}
 		} else {
 			if (current_user_can('manage_options')) {
@@ -362,9 +368,8 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_show_attributes', false);
 				add_option('AD_Integration_attributes_to_show', '');
 				add_option('AD_Integration_additional_user_attributes', '');
-				
-				//add_option('AD_Integration_no_random_password', false);
-				
+				add_option('AD_Integration_no_random_password', false);
+				add_option('AD_Integration_auto_update_password', false);
 			}
 		}
 		
@@ -393,7 +398,7 @@ class ADIntegrationPlugin {
 		register_setting('ADI-user-settings', 'AD_Integration_enable_password_change', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_duplicate_email_prevention');
 		register_setting('ADI-user-settings', 'AD_Integration_no_random_password', array(&$this, 'sanitize_bool'));
-		
+		register_setting('ADI-user-settings', 'AD_Integration_auto_update_password', array(&$this, 'sanitize_bool'));
 		
 		// Authorization
 		register_setting('ADI-auth-settings', 'AD_Integration_authorize_by_group', array(&$this, 'sanitize_bool'));
@@ -1045,7 +1050,8 @@ class ADIntegrationPlugin {
 			$this->_show_attributes				= (bool)get_site_option('AD_Integration_show_attributes');
 			$this->_attributes_to_show			= get_site_option('AD_Integration_attributes_to_show');
 			$this->_additional_user_attributes	= get_site_option('AD_Integration_additional_user_attributes');
-			//$this->_no_random_password			= (bool)get_site_option('AD_Integration_no_random_password');
+			$this->_no_random_password			= (bool)get_site_option('AD_Integration_no_random_password');
+			$this->_auto_update_password		= (bool)get_site_option('AD_Integration_auto_update_password');
 		} else {
 			$this->_log(ADI_LOG_INFO,'loading options (WPMU) ...');
 			$this->_auto_create_user 			= (bool)get_option('AD_Integration_auto_create_user');
@@ -1074,7 +1080,8 @@ class ADIntegrationPlugin {
 			$this->_show_attributes				= (bool)get_option('AD_Integration_show_attributes');
 			$this->_attributes_to_show			= get_option('AD_Integration_attributes_to_show');
 			$this->_additional_user_attributes	= get_option('AD_Integration_additional_user_attributes');
-			//$this->_no_random_password			= (bool)get_option('AD_Integration_no_random_password');
+			$this->_no_random_password			= (bool)get_option('AD_Integration_no_random_password');
+			$this->_auto_update_password		= (bool)get_option('AD_Integration_auto_update_password');
 		}
 	}
 	
@@ -1372,10 +1379,12 @@ class ADIntegrationPlugin {
 			if ( !empty( $arrPost['AD_Integration_show_attributes'] ) )
 				update_site_option('AD_Integration_show_attributes', $arrPost['AD_Integration_show_attributes']);
 				
+			if ( !empty( $arrPost['AD_Integration_no_random_password'] ) )				
+				update_site_option('AD_Integration_no_random_password', (bool)$arrPost['AD_Integration_no_random_password']);
 
-			/*if ( !empty( $arrPost['AD_Integration_no_random_password'] ) )				
-				update_site_option('AD_Integration_no_random_password', (bool)$arrPost['AD_Integration_no_random_password']);*/
-			
+			if ( !empty( $arrPost['AD_Integration_auto_update_password'] ) )				
+				update_site_option('AD_Integration_auto_update_password', (bool)$arrPost['AD_Integration_auto_update_password']);
+				
 			// let's load the new values
 			$this->_load_options();
 		}
@@ -1509,9 +1518,6 @@ class ADIntegrationPlugin {
 	{
 		global $wp_version;
 		
-		/*if (!$this->_no_random_password) {
-			$password = $this->_get_password();
-		}*/
 		
 		$info = $this->_create_info_array($userinfo);
 		
@@ -1544,7 +1550,14 @@ class ADIntegrationPlugin {
 					  "- display name: $display_name\n".
 					  "- role: $role");
 		
-		
+
+		// set local password if needed
+		if (!$this->_no_random_password) {
+			$password = $this->_get_password();
+			$this->_log(ADI_LOG_DEBUG,'Setting random password.');
+		} else {
+			$this->_log(ADI_LOG_DEBUG,'Setting local password to the used for this login.');
+		}
 		
 		require_once(ABSPATH . WPINC . DIRECTORY_SEPARATOR . 'registration.php');
 		
@@ -1746,6 +1759,11 @@ class ADIntegrationPlugin {
 			}
 		}
 		
+		// Update password if needed
+		if ($this->_auto_update_password === true) {
+			$this->_log(ADI_LOG_NOTICE,'Setting local password to the one used for this login.');
+			wp_update_user(array('ID' => $user_id, 'user_pass' => $password));
+		}
 		
 		// Update User Meta
 		if ($this->_write_usermeta === true) {

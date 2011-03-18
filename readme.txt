@@ -28,6 +28,7 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * show selected AD attributes (see above) in user profile
 * tool for testing with detailed debug informations
 * enable/disable password changes for local (non AD) WP users
+* set users local WordPress password on first and/or on every successfull login 
 * WordPress 3 compatibility, including *Multisite* 
 
 *Active Directory Integration* is based upon Jonathan Marc Bearak's [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
@@ -97,6 +98,7 @@ A common mistake is that the Base DN is set to a wrong value. If the user reside
 * ADD: New language Norwegian/Norsk (nb_NO) added. (Issue #0002. Thanks to Børge Anderssen.)
 * ADD: Store AD attribute in WordPress DB (table usermeta) and show them on users profile page without any additional plugin.
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
+* ADD: Set users local WordPress password on first and/or on every successfull login. (Issue #0006. Thanks to Eduardo Ribeiro for the feature request.)
 * CHANGE: Now using an extended version of adLDAP 3.3.2 which should fix some authentication and authorization issues.
 * FIX: Account suffix was accidently used for bind user. Fixed in adLDAP.php. (Issue #0009. Thanks to Tobias Bochmann for the bug report.) 
 * FIX: Uninstall crashed. (Issue #0007. Thanks to z3c from hosthis.org for the bug report.)

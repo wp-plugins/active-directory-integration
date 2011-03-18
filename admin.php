@@ -243,6 +243,12 @@ if (!IS_WPMU) { ?>
 								<?php _e("Choose user's Active Directory attribute to be used as display name.", 'ad-integration'); ?>
 							</td>
 						</tr>
+						
+						<tr valign="top">
+						   <th colspan="2">
+						     <h4><?php _e('Password handling','ad-integration'); ?></h4>
+						   </th>
+						</tr>
 		
 						<tr valign="top">
 							<th scope="row"><label for="AD_Integration_enable_password_change"><?php _e('Enable local password changes', 'ad-integration'); ?></label></th>
@@ -254,6 +260,33 @@ if (!IS_WPMU) { ?>
 								</label>          
 							</td>
 						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_no_random_password"><?php _e('Set local password on first successfull login', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_no_random_password" id="AD_Integration_no_random_password" <?php if ($this->_no_random_password) echo ' checked="checked"' ?> value="1" />          
+								<label for="AD_Integration_no_random_password"><?php _e('First time a user logs on successfully and is created, his local WordPress password is set to the one used for this login.', 'ad-integration'); ?>
+								<br/>
+								<?php _e('If this option is deactivated a random password for this user will be set.','ad-integration','ad-integration'); ?>
+								<br/>
+								<?php _e('<b>Works only if "Automatic User Creation" is turned on.</b>','ad-integration'); ?>
+								</label>          
+							</td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_auto_update_password"><?php _e('Automatic Password Update', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_auto_update_password" id="AD_Integration_auto_update_password" <?php if ($this->_auto_update_password) echo ' checked="checked"' ?> value="1" />          
+								<label for="AD_Integration_auto_update_password"><?php _e('Every time a user logs on successfully, his local WordPress password is set to the one used for this login.', 'ad-integration'); ?>
+								<br/>
+								<?php _e('Note: Activating this option makes little sense when "Enable local password changes" is turned on.','ad-integration'); ?>
+								<br/>
+								<?php _e('<b>Works only if "Automatic User Creation" and "Automatic User Update" is turned on.</b>','ad-integration'); ?>
+								</label>          
+							</td>
+						</tr>
+						
 						
 					</tbody>
 				</table>
