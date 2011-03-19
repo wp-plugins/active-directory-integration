@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC4 (201103181213)';
+	const ADI_VERSION = '1.0-RC4 (201103191240)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
