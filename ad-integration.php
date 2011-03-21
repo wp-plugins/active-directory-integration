@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0-RC4 (201103191240)';
+	const ADI_VERSION = '1.0-RC4 (201103212044)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -493,6 +493,8 @@ class ADIntegrationPlugin {
 		
 		// IMPORTANT!
 		$username = strtolower($username);
+		$password = stripslashes($password);
+		
 		
 		// extract account suffix from username if not set
 		// (after loading of options)
@@ -583,6 +585,7 @@ class ADIntegrationPlugin {
 			} 
 		}
 		
+				
 		// This is where the action is.
 		if ( $this->_adldap->authenticate($username, $password) )
 		{	
