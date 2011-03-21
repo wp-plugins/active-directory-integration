@@ -100,6 +100,7 @@ A common mistake is that the Base DN is set to a wrong value. If the user reside
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
 * ADD: Set users local WordPress password on first and/or on every successfull login. (Issue #0006. Thanks to Eduardo Ribeiro for the feature request.)
 * CHANGE: Now using an extended version of adLDAP 3.3.2 which should fix some authentication and authorization issues.
+* FIX: LDAP plugin won't work when user has apostrophe in password (Issue #0016. Thanks to Bas Ruijters for the bug report.)
 * FIX: Account suffix was accidently used for bind user. Fixed in adLDAP.php. (Issue #0009. Thanks to Tobias Bochmann for the bug report.) 
 * FIX: Uninstall crashed. (Issue #0007. Thanks to z3c from hosthis.org for the bug report.)
 * FIX: Bug in adLDAP->recursive_groups() fixed.
