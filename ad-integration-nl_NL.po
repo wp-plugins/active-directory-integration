@@ -5,7 +5,7 @@ msgstr ""
 "POT-Creation-Date: 2011-03-19 11:28+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Christoph Steindorff <cst@ecw.de>\n"
-"Language-Team: Bas Ruijters\n"
+"Language-Team: Bas Ruijters | kantoffis <info@kantoffis.nl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,319 +16,321 @@ msgstr ""
 #: ad-integration.php:430
 #: admin.php:52
 msgid "Active Directory Integration"
-msgstr ""
+msgstr "Active Directory Integratie"
 
 #: ad-integration.php:645
 msgid "<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress."
-msgstr ""
+msgstr "<strong>FOUT</strong>: Deze gebruiker bestaat in de Active Directory, maar is niet gemachtigd in deze WordPress installatie."
 
 #: ad-integration.php:720
 msgid "Active Directory Integration Help"
-msgstr ""
+msgstr "Active Directory Integration Help"
 
 #: ad-integration.php:721
 msgid "Overview"
-msgstr ""
+msgstr "Overzicht"
 
 #: ad-integration.php:722
 msgid "FAQ"
-msgstr ""
+msgstr "FAQ"
 
 #: ad-integration.php:723
 msgid "Changelog"
-msgstr ""
+msgstr "Wijzigingenlog"
 
 #: ad-integration.php:724
 msgid "Support-Forum"
-msgstr ""
+msgstr "Ondersteuning Forum"
 
 #: ad-integration.php:725
+#, fuzzy
 msgid "Bug Tracker"
-msgstr ""
+msgstr "Bug Tracker"
 
 #: ad-integration.php:867
 msgid "Additional Informations"
-msgstr ""
+msgstr "Aanvullende informatie"
 
 #: ad-integration.php:999
 #, php-format
 msgid "Setting Key '%s' has been deleted."
-msgstr ""
+msgstr "Instelling '%s' is verwijderd."
 
 #: ad-integration.php:1003
 #, php-format
 msgid "Error deleting Setting Key '%s'."
-msgstr ""
+msgstr "Fout in het verwijderen van instelling '%s'."
 
 #: ad-integration.php:1098
 msgid "Common Name"
-msgstr ""
+msgstr "Gangbare naam"
 
 #: ad-integration.php:1099
 msgid "First name"
-msgstr ""
+msgstr "Voornaam"
 
 #: ad-integration.php:1100
 msgid "Initials"
-msgstr ""
+msgstr "Initialen"
 
 #: ad-integration.php:1101
 msgid "Last name"
-msgstr ""
+msgstr "Achternaam"
 
 #: ad-integration.php:1102
 #: admin.php:231
 msgid "Display name"
-msgstr ""
+msgstr "Schermnaam"
 
 #: ad-integration.php:1103
 #: admin.php:477
 msgid "Description"
-msgstr ""
+msgstr "Omschrijving"
 
 #: ad-integration.php:1104
 msgid "Office"
-msgstr ""
+msgstr "Kantoor"
 
 #: ad-integration.php:1105
 msgid "Telephone number"
-msgstr ""
+msgstr "Telefoonnummer"
 
 #: ad-integration.php:1106
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: ad-integration.php:1107
 msgid "Web Page"
-msgstr ""
+msgstr "Webpagina"
 
 #: ad-integration.php:1110
 msgid "User logon name"
-msgstr ""
+msgstr "Gebruikersnaam"
 
 #: ad-integration.php:1113
 msgid "Street"
-msgstr ""
+msgstr "Straat"
 
 #: ad-integration.php:1114
 msgid "P.O. Box"
-msgstr ""
+msgstr "Postbus"
 
 #: ad-integration.php:1115
 msgid "City"
-msgstr ""
+msgstr "Plaats"
 
 #: ad-integration.php:1116
 msgid "State"
-msgstr ""
+msgstr "Provincie"
 
 #: ad-integration.php:1117
 msgid "ZIP/Postal cide"
-msgstr ""
+msgstr "Postcode"
 
 #: ad-integration.php:1118
 msgid "Country abbreviation"
-msgstr ""
+msgstr "Land afkorting"
 
 #: ad-integration.php:1119
 msgid "Country"
-msgstr ""
+msgstr "Land"
 
 #: ad-integration.php:1120
 msgid "Country code (number)"
-msgstr ""
+msgstr "Landcode (nummer)"
 
 #: ad-integration.php:1123
 msgid "Home"
-msgstr ""
+msgstr "Thuis"
 
 #: ad-integration.php:1124
 msgid "Home (other)"
-msgstr ""
+msgstr "Thuis (anders)"
 
 #: ad-integration.php:1125
 msgid "Pager"
-msgstr ""
+msgstr "Pieper"
 
 #: ad-integration.php:1126
 msgid "Pager (other)"
-msgstr ""
+msgstr "Pieper (anders)"
 
 #: ad-integration.php:1127
 msgid "Mobile"
-msgstr ""
+msgstr "Mobiel"
 
 #: ad-integration.php:1128
 msgid "Mobile (Other)"
-msgstr ""
+msgstr "Mobiel (anders)"
 
 #: ad-integration.php:1129
 msgid "Fax"
-msgstr ""
+msgstr "Fax"
 
 #: ad-integration.php:1130
 msgid "Fax (other)"
-msgstr ""
+msgstr "Fax (anders)"
 
 #: ad-integration.php:1131
 msgid "IP Phone"
-msgstr ""
+msgstr "IP telefoon"
 
 #: ad-integration.php:1132
 msgid "IP Phone (other)"
-msgstr ""
+msgstr "IP telefoon (anders)"
 
 #: ad-integration.php:1133
 msgid "Notes"
-msgstr ""
+msgstr "Opmerkingen"
 
 #: ad-integration.php:1136
 msgid "Title"
-msgstr ""
+msgstr "Titel"
 
 #: ad-integration.php:1137
 msgid "Department"
-msgstr ""
+msgstr "Afdeling"
 
 #: ad-integration.php:1138
 msgid "Company"
-msgstr ""
+msgstr "Bedrijf"
 
 #: ad-integration.php:1139
 msgid "Manager"
-msgstr ""
+msgstr "Leidinggevende"
 
 #: ad-integration.php:1140
+#, fuzzy
 msgid "Direct reports"
-msgstr ""
+msgstr "Directe rapporten"
 
 #: ad-integration.php:1960
 #: ad-integration.php:2037
 msgid "Account blocked"
-msgstr ""
+msgstr "Account vergrendeld"
 
 #: ad-integration.php:1961
 #, php-format
 msgid "Someone tried to login to %s (%s) with your username (%s) - but in vain. For security reasons your account is now blocked for %d seconds."
-msgstr ""
+msgstr "Iemand heeft geprobeerd om in te loggen op %s (%s) met deze gebruikersnaam (%s) - maar dat is niet gelukt. Uit veiligheidsoverweging is het account vergrendeld voor %d seconden."
 
 #: ad-integration.php:1963
 #: ad-integration.php:2042
 msgid "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE."
-msgstr ""
+msgstr "DIT IS EEN AUTOMATISCH GEGENEREERDE EMAIL, NIET ANTWOORDEN NAAR DIT EMAIL ADRES."
 
 #: ad-integration.php:2038
 #, php-format
 msgid "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in vain. For security reasons this account is now blocked for %d seconds."
-msgstr ""
+msgstr "Iemand probeerde in te loggen op %s (%s) met de gebruikersnaam \"%s\" (%s %s) - maar dat is niet gelukt. Uit veiligheidsoverweging is het account geblokkeerd voor %d seconden."
 
 #: ad-integration.php:2040
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
-msgstr ""
+msgstr "De inlog poging kwam van dit IP-adres: %s"
 
 #: ad-integration.php:2115
 msgid "Powered by WordPress"
-msgstr ""
+msgstr "Aangedreven door WordPress"
 
 #: ad-integration.php:2117
 msgid "Account blocked for"
-msgstr ""
+msgstr "Account vergrendeld voor"
 
 #: ad-integration.php:2117
 msgid "seconds"
-msgstr ""
+msgstr "seconden"
 
 #: admin.php:5
 msgid "Access denied."
-msgstr ""
+msgstr "Toegang geweigerd"
 
 #: admin.php:54
 msgid "Active Directory Integration Settings"
-msgstr ""
+msgstr "Active Directory Integratie Instellingen"
 
 #: admin.php:60
 msgid "ATTENTION: You have no LDAP support. This plugin won´t work."
-msgstr ""
+msgstr "OPGELET: Er is geen LDAP ondersteuning. De Plugin zal niet werken."
 
 #: admin.php:70
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: admin.php:71
 msgid "User"
-msgstr ""
+msgstr "Gebruiker"
 
 #: admin.php:72
 #: admin.php:308
 msgid "Authorization"
-msgstr ""
+msgstr "Autorisatie"
 
 #: admin.php:73
 msgid "Security"
-msgstr ""
+msgstr "Beveiliging"
 
 #: admin.php:74
 #: admin.php:419
 msgid "User Meta"
-msgstr ""
+msgstr "Gebruikersgegevens"
 
 #: admin.php:78
 #: admin.php:507
 msgid "Test Tool"
-msgstr ""
+msgstr "Test programma"
 
 #: admin.php:90
 msgid "Active Directory Server"
-msgstr ""
+msgstr "Active Directory Server"
 
 #: admin.php:94
 msgid "Domain Controllers"
-msgstr ""
+msgstr "Domein Controllers"
 
 #: admin.php:97
 msgid "Domain Controllers (separate with semicolons, e.g. \"dc1.domain.tld;dc2.domain.tld\")"
-msgstr ""
+msgstr "Domein Controllers (gescheiden door puntkomma's, bijv. \"dc1.domein.nl;dc2.domein.nl\")"
 
 #: admin.php:102
 msgid "Port"
-msgstr ""
+msgstr "Poort"
 
 #: admin.php:106
 msgid "Port on which the AD listens (defaults to \"389\")"
-msgstr ""
+msgstr "Poort waarop de AD luistert (standaard op \"389\")"
 
 #: admin.php:111
 msgid "Use TLS"
-msgstr ""
+msgstr "Gebruik TLS"
 
 #: admin.php:114
 msgid "Secure the connection between the WordPress and the Active Directory Servers using TLS. Note: To use TLS, you must set the LDAP Port to 389."
-msgstr ""
+msgstr "Beveilig de verbinding tussen WordPress en de Active Directory Servers met TLS. Opmerking: Om TLS te gebruiken moet de LDAP poort op 389 gezet worden."
 
 #: admin.php:118
 msgid "Bind User"
-msgstr ""
+msgstr "Verbind gebruiker"
 
 #: admin.php:122
 msgid "Username for non-anonymous requests to AD (e.g. \"ldapuser@domain.tld\"). Leave empty for anonymous requests."
-msgstr ""
+msgstr "Gebruikersnaam voor niet-anonieme AD verzoeken (bijv. \"ldapgebruiker@domain.nl\"). Leeg laten voor anonieme verzoeken."
 
 #: admin.php:126
 msgid "Bind User Password"
-msgstr ""
+msgstr "Verbind gebruiker wachtwoord"
 
 #: admin.php:130
 msgid "Password for non-anonymous requests to AD"
-msgstr ""
+msgstr "Wachtwoord voor niet-anonieme AD verzoeken."
 
 #: admin.php:134
 msgid "Base DN"
-msgstr ""
+msgstr "Basis DN"
 
 #: admin.php:138
 msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
-msgstr ""
+msgstr "Basis DN (bijv. \"ou=unit,dc=domein,dc=nl\")"
 
 #: admin.php:144
 #: admin.php:294
@@ -336,308 +338,308 @@ msgstr ""
 #: admin.php:404
 #: admin.php:494
 msgid "Save Changes"
-msgstr ""
+msgstr "Wijzigingen opslaan"
 
 #: admin.php:159
 msgid "User specific settings"
-msgstr ""
+msgstr "Gebruiker specifieke instellingen"
 
 #: admin.php:163
 msgid "Automatic User Creation"
-msgstr ""
+msgstr "Automatisch gebruikers aanmaken"
 
 #: admin.php:166
 msgid "Should a new user be created automatically if not already in the WordPress database?"
-msgstr ""
+msgstr "Moet een nieuwe gebruiker automatisch aangemaakt worden als deze niet bestaat in de WordPress database?"
 
 #: admin.php:168
 msgid "Created users will obtain the role defined under \"New User Default Role\" on the <a href=\"options-general.php\">General Options</a> page."
-msgstr ""
+msgstr "Aangemaakte gebruikers krijgen de rol die bij \"Standaard rol voor nieuwe gebruiker \" is ingesteld op de <a href=\"options-general.php\">Algemene opties</a> pagina."
 
 #: admin.php:170
 msgid "This setting is separate from the Role Equivalent Groups option, below."
-msgstr ""
+msgstr "Deze instelling staat los van de Rol - Groep optie, hieronder."
 
 #: admin.php:173
 msgid "<b>Users with role equivalent groups will be created even if this setting is turned off</b> (because if you didn't want this to happen, you would leave that option blank.)"
-msgstr ""
+msgstr "<b>Gebruikers met de Rol - Groep optie, zullen aangemaakt worden, zelfs als deze instelling uitgeschakeld is</b> (Als je niet had gewild dat dit zou gebeuren, zou deze optie niet aangevinkt zijn.)"
 
 #: admin.php:178
 msgid "Automatic User Update"
-msgstr ""
+msgstr "Automatisch gebruikers bijwerken"
 
 #: admin.php:181
 msgid "Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>"
-msgstr ""
+msgstr "Gebruikers elke keer bijwerken in de WordPress database als ze inloggen? <br /> <b> Werkt alleen als Automatisch gebruikers aanmaken aanstaat. </b>"
 
 #: admin.php:186
 msgid "Auto Update User Description"
-msgstr ""
+msgstr "Automatisch bijwerken van gebruiker omschrijving"
 
 #: admin.php:189
 msgid "Should the users descriptions be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation <b>and</b> Automatic User Update is turned on.</b>"
-msgstr ""
+msgstr "Gebruikers omschrijving elke keer bijwerken in de WordPress database als ze inloggen? <br /> <b>Werkt alleen als Automatisch gebruikers aanmaken aanstaat. </b>"
 
 #: admin.php:194
 msgid "Default email domain"
-msgstr ""
+msgstr "Standaard email domein"
 
 #: admin.php:197
 msgid "If the Active Directory attribute 'mail' is blank, a user's email will be set to username@whatever-this-says"
-msgstr ""
+msgstr "Als het Active Directory attribuut 'mail' leeg is, zal het gebruikers emailadres gebruikersnaam@wat-hier-staat worden"
 
 #: admin.php:202
 msgid "Email Address Conflict Handling"
-msgstr ""
+msgstr "Email adres conflict afhandeling"
 
 #: admin.php:205
 msgid "Prevent (recommended)"
-msgstr ""
+msgstr "Voorkomen (aanbevolen)"
 
 #: admin.php:206
 msgid "Allow (UNSAFE)"
-msgstr ""
+msgstr "Toestaan (NIET VEILIG)"
 
 #: admin.php:207
 msgid "Create"
-msgstr ""
+msgstr "Aanmaken"
 
 #: admin.php:209
 msgid "Choose how to handle email address conflicts."
-msgstr ""
+msgstr "Kies de methode om email adres conflicten af te handelen."
 
 #: admin.php:211
 msgid "Prevent: User is not created, if his email address is already in use by another user. (recommended)"
-msgstr ""
+msgstr "Voorkomen: Gebruiker wordt niet aangemaakt als het email adres reeds bestaat. (aanbevolen)"
 
 #: admin.php:212
 msgid "Allow: Allow users to share one email address. (UNSAFE)"
-msgstr ""
+msgstr "Toestaan: Sta toe dat gebruikers een email adres delen. (ONVEILIG)"
 
 #: admin.php:213
 msgid "Create: In case of conflict, the new user is created with a unique email address."
-msgstr ""
+msgstr "Aanmaken: In het geval van een conflict, zal de nieuwe gebruiker worden aangemaakt met een uniek email adres."
 
 #: admin.php:219
 msgid "Account Suffix"
-msgstr ""
+msgstr "Account achtervoegsel"
 
 #: admin.php:222
 msgid "Account Suffix (will be appended to all usernames in the Active Directory authentication process; e.g., \"@domain.tld\".)"
-msgstr ""
+msgstr "Account achtervoegsel (zal worden toegevoegd aan alle gebruikersnamen in het Active Directory authenticatie proces: bijv. \"@domein.nl\")"
 
 #: admin.php:226
 msgid "Append account suffix to new created usernames. If checked, the account suffix (see above) will be appended to the usernames of new created users."
-msgstr ""
+msgstr "Account achtervoegsel toevoegen aan de nieuw gegenereerde gebruikersnaam. Indien aangevinkt, zal het account achtervoegsel (zie hierboven)  worden toegevoegd aan de gebruikersnaam van de nieuw gegenereerde gebruikers."
 
 #: admin.php:234
 msgid "LDAP Attribute: "
-msgstr ""
+msgstr "LDAP attribuut:"
 
 #: admin.php:235
 msgid "sAMAccountName (the username)"
-msgstr ""
+msgstr "sAMAccountName (gebruikersnaam)"
 
 #: admin.php:236
 msgid "displayName"
-msgstr ""
+msgstr "Weergavenaam"
 
 #: admin.php:237
 msgid "description"
-msgstr ""
+msgstr "omschrijving"
 
 #: admin.php:238
 msgid "givenName (firstname)"
-msgstr ""
+msgstr "givenName (voornaam)"
 
 #: admin.php:239
 msgid "SN (lastname)"
-msgstr ""
+msgstr "SN (achternaam)"
 
 #: admin.php:240
 msgid "CN (Common Name, the whole name)"
-msgstr ""
+msgstr "CN (gangbare naam, de gehele naam)"
 
 #: admin.php:241
 msgid "mail"
-msgstr ""
+msgstr "email"
 
 #: admin.php:243
 msgid "Choose user's Active Directory attribute to be used as display name."
-msgstr ""
+msgstr "Kies gebruikers Active Directory attribuut welke als weergavenaam wordt gebruikt."
 
 #: admin.php:249
 msgid "Password handling"
-msgstr ""
+msgstr "Wachtwoord afhandeling"
 
 #: admin.php:254
 msgid "Enable local password changes"
-msgstr ""
+msgstr "Locale wachtwoord wijzigen toestaan"
 
 #: admin.php:257
 msgid "Allow users to change their local (<strong>non AD</strong>) WordPress password"
-msgstr ""
+msgstr "Sta toe dat gebruikers hun locale (<strong> niet AD </strong>) WordPress wachtwoord mogen wijzigen."
 
 #: admin.php:259
 msgid "<strong>If activated, a password change will update the local WordPress database only. No changes in Active Directory will be made.</strong>"
-msgstr ""
+msgstr "<strong> Indien ingeschakeld zal het wijzigen van het wachtwoord alleen voor de locale WordPress database gelden. Er zullen geen wijzigingen in de Active Directory plaatsvinden. </strong>"
 
 #: admin.php:265
 msgid "Set local password on first successfull login"
-msgstr ""
+msgstr "Zet lokaal wachtwoord bij succesvolle inlog poging"
 
 #: admin.php:268
 msgid "First time a user logs on successfully and is created, his local WordPress password is set to the one used for this login."
-msgstr ""
+msgstr "De eerste keer dat een gebruiker succesvol inlogt en aangemaakt is, wordt zijn locale WordPress wachtwoord vervangen met degene waarmee hij ingelogd heeft."
 
 #: admin.php:270
 msgid "If this option is deactivated a random password for this user will be set."
-msgstr ""
+msgstr "Indien deze optie is uitgeschakeld, zal er een willekeurig wachtwoord voor de gebruiker worden ingesteld."
 
 #: admin.php:272
 msgid "<b>Works only if \"Automatic User Creation\" is turned on.</b>"
-msgstr ""
+msgstr "<b>Werkt alleen als \"Automatisch gebruikers aanmaken \" is ingeschakeld. </b>"
 
 #: admin.php:278
 msgid "Automatic Password Update"
-msgstr ""
+msgstr "Automatisch wachtwoord bijwerken"
 
 #: admin.php:281
 msgid "Every time a user logs on successfully, his local WordPress password is set to the one used for this login."
-msgstr ""
+msgstr "Bij iedere succesvolle inlog poging, zal het locale WordPress wachtwoord worden overschreven met degene waarmee hij inlogt."
 
 #: admin.php:283
 msgid "Note: Activating this option makes little sense when \"Enable local password changes\" is turned on."
-msgstr ""
+msgstr "Opmerking: Deze optie activeren heeft weinig zin als \"Locale wachtwoord wijzigen inschakelen \" staat ingeschakeld."
 
 #: admin.php:285
 msgid "<b>Works only if \"Automatic User Creation\" and \"Automatic User Update\" is turned on.</b>"
-msgstr ""
+msgstr "<b>Werkt alleen als \"Automatisch gebruikers aanmaken\" en \"Automatisch gebruikers bijwerken\" staat ingeschakeld. </b>"
 
 #: admin.php:312
 msgid "Authorize by group membership"
-msgstr ""
+msgstr "Autorisatie per groeplidmaatschap"
 
 #: admin.php:315
 msgid "Users are authorized for login only when they are members of a specific AD group."
-msgstr ""
+msgstr "Gebruikers zijn geautoriseerd om in te loggen, alleen als ze lid zijn van een bepaalde AD groep."
 
 #: admin.php:317
 msgid "Group(s)"
-msgstr ""
+msgstr "Groep(en)"
 
 #: admin.php:320
 msgid "Seperate multiple groups by semicolon (e.g. \"domain-users;WP-Users;test-users\")."
-msgstr ""
+msgstr "Scheid meerdere groepen door een puntkomma (bijv. \"domein-gebruikers;WP-gebruikers;test-gebruikers\")."
 
 #: admin.php:326
 msgid "Role Equivalent Groups"
-msgstr ""
+msgstr "Rol - Groep"
 
 #: admin.php:330
 msgid "List of Active Directory groups which correspond to WordPress user roles."
-msgstr ""
+msgstr "Lijst met Active Directory groepen welke corresponderen met WordPress rollen"
 
 #: admin.php:331
 msgid "When a user is first created, his role will correspond to what is specified here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., \"Soc-Faculty=faculty\" or \"Faculty=faculty;Students=subscriber\"<br/>A user will be created based on the first math, from left to right, so you should obviously put the more powerful groups first."
-msgstr ""
+msgstr "Wanneer een gebruiker voor het eerst is aangemaakt, zal zijn rol corresponderen met wat hier is gespecificeerd. <br/> Opmaak: AD-group1=WordPress-rol1;AD-group2=WordPress-rol2;...<br/>Bijv. \"Soc-Faculty=faculty\" of \"Faculty=faculty;Students=subscriber\"<br/>Een gebruiker zal worden aangemaakt, gebaseerd op de eerste overeenkomstige groep en rol, van links naar rechts. Logischerwijs zet je beheerders groepen als eerste."
 
 #: admin.php:332
 msgid "NOTES"
-msgstr ""
+msgstr "OPMERKINGEN"
 
 #: admin.php:334
 msgid "WordPress stores roles as lower case (\"Subscriber\" is stored as \"subscriber\")"
-msgstr ""
+msgstr "WordPress slaat rollen op in kleine letters (\"Subscriber\" is opgeslagen als \"subscriber\")"
 
 #: admin.php:335
 msgid "Active Directory groups are case-sensitive."
-msgstr ""
+msgstr "Active Directory groepen zijn hoofdletter gevoelig."
 
 #: admin.php:336
 msgid "Group memberships cannot be checked across domains.  So if you have two domains, instr and qc, and qc is the domain specified above, if instr is linked to qc, I can authenticate instr users, but not check instr group memberships."
-msgstr ""
+msgstr "Groeplidmaatschappen kunnen niet worden gecontroleerd over verschillende domeinen. Als je dus 2 domeinen hebt, domein1 en domein2, en domein2 is het hierboven gespecificeerde domein, als domein1 is gelinkt met domein2 kan ik gebruikers van domein2 authenticeren, maar niet hun groep lidmaatschappen controleren."
 
 #: admin.php:357
 msgid "Brute Force Protection"
-msgstr ""
+msgstr "Forceer strenge beveiliging"
 
 #: admin.php:358
 msgid "For security reasons you can use the following options to prevent brute force attacks on your user accounts."
-msgstr ""
+msgstr "Uit veiligheidsoverweging kunt u de volgende opties gebruiken om geforceerde strenge aanvallen te voorkomen."
 
 #: admin.php:363
 msgid "Maximum number of allowed login attempts"
-msgstr ""
+msgstr "Maximaal aantal toegestane inlog pogingen"
 
 #: admin.php:367
 msgid "Maximum number of failed login attempts before a user account is blocked. If empty or \"0\" Brute Force Protection is turned off."
-msgstr ""
+msgstr "Maximaal aantal foutieve inlog pogingen voordat een account wordt geblokkeerd. Indien leeg of \"0\", zal Forceer strenge beveiliging uitgeschakeld zijn."
 
 #: admin.php:372
 msgid "Blocking Time"
-msgstr ""
+msgstr "Blokkade tijd"
 
 #: admin.php:376
 msgid "Number of seconds an account is blocked after the maximum number of failed login attempts is reached."
-msgstr ""
+msgstr "Aantal seconden dan een account is geblokkeerd na het bereiken van het maximaal aantal foutieve inlog pogingen."
 
 #: admin.php:381
 msgid "User Notification"
-msgstr ""
+msgstr "Gebruiker notificatie"
 
 #: admin.php:384
 msgid "Notify user by e-mail when his account is blocked."
-msgstr ""
+msgstr "Gebruiker informeren per email als zijn account is vergrendeld."
 
 #: admin.php:389
 msgid "Admin Notification"
-msgstr ""
+msgstr "Admin notificatie"
 
 #: admin.php:392
 msgid "Notify admin(s) by e-mail when an user account is blocked."
-msgstr ""
+msgstr "Administrator(s) informeren per email als een gebruiker zijn account is geblokkeerd."
 
 #: admin.php:394
 msgid "E-mail addresses for notifications:"
-msgstr ""
+msgstr "Email adres voor notificaties:"
 
 #: admin.php:398
 msgid "Seperate multiple addresses by semicolon (e.g. \"admin@domain.tld;me@mydomain.tld\"). If left blank, notifications will be sent to the blog-administrator only."
-msgstr ""
+msgstr "Meerdere adressen scheiden met een puntkomma (bijv. \"admin@domein.nl;ik@domein.nl\").  Indien leeg, zullen notificaties alleen naar de blog-administrator worden gestuurd."
 
 #: admin.php:420
 msgid "User attributes from the AD are can be stored as User Meta Data. These attributes can then be used in your themes and they can be shown on the profile page of your users."
-msgstr ""
+msgstr "Gebruikers attributen uit de AD worden opgeslagen als Gebruikers Meta Data. Deze attributen kunnen dan in themas gebruikt en getoond worden op de profiel pagina van uw gebruikers."
 
 #: admin.php:421
 msgid "The attributes are only stored in the WordPress database if you activate \"Automatic User Creation\" and are only updated if you activate \"Automatic User Update\" on tab \"User\"."
-msgstr ""
+msgstr "De attributen worden alleen maar opgeslagen in de WordPress database als de optie \"Automatisch gebruikers aanmaken\" aanstaat en wordt alleen bijgewerkt als de optie \"Automatisch gebruikers bijwerken\" aanstaat op het tabblad \"Gebruikers\"."
 
 #: admin.php:427
 msgid "Additional User Attributes"
-msgstr ""
+msgstr "Aanvullende gebruikers attributen"
 
 #: admin.php:429
 msgid "Enter additional AD attributes (one per line), followed by their type and the associated meta key seperated by a colon (:)."
-msgstr ""
+msgstr "Aanvullende AD attributen (één per regel), gevolgd door het type en de geassocieerde meta sleutel, gescheiden door een dubbele punt (:)."
 
 #: admin.php:430
 msgid "Additional Attributes that should appear on the user profile must also be placed in \"Attributes to show\"."
-msgstr ""
+msgstr "Aanvullende attributen die ook in het profiel getoond moeten worden, dienen ook in \"Te tonen Attributen\" geplaatst worden."
 
 #: admin.php:432
 msgid "Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where <i>&lt;type&gt;</i> can be one of the following: <i>string, integer, bool, octet, time, timestamp</i>."
-msgstr ""
+msgstr "Notatie: <i>&lt;attribuut_naam&gt;:&lt;type&gt;:&lt;meta sleutel&gt;</i> waar <i> &lt;type&gt;</i> een van de volgende kan zijn: <i>string, integer, bool, octet, time, timestamp</i>"
 
 #: admin.php:434
 msgid "If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as <i>adi_&lt;attribute_name&gt;</i>."
-msgstr ""
+msgstr "Als geen <i>&lt;meta sleutel&gt;</i> is opgegeven zullen de AD attributen worden opgeslagen als <i>adi_&lt;attribuut_naam&gt;</i>."
 
 #: admin.php:436
 #: admin.php:462
 msgid "Example:"
-msgstr ""
+msgstr "Bijvoorbeeld:"
 
 #: admin.php:438
 msgid ""
@@ -645,34 +647,37 @@ msgid ""
 "whencreated:time:user_created_on\n"
 "homephone:string"
 msgstr ""
+"lastlogon:timestamp:last_logon_time\n"
+"whencreated:time:user_created_on\n"
+"homephone:string"
 
 #: admin.php:442
 msgid "Notice: Attributes of type <i>octet</i> are stored base64 encoded."
-msgstr ""
+msgstr "Opmerking: Attributen van het type <i>octet</i> worden base64 encoded opgeslagen."
 
 #: admin.php:447
 msgid "Show Attributes"
-msgstr ""
+msgstr "Toon attributen"
 
 #: admin.php:450
 msgid "Show user attributes from AD in user profile."
-msgstr ""
+msgstr "Toon gebruikers attributen uit de AD op het profiel."
 
 #: admin.php:456
 msgid "Attributes to show"
-msgstr ""
+msgstr "Te tonen Attributen"
 
 #: admin.php:458
 msgid "Enter the AD attributes (one per line) followed by a description seperated by a colon (:) to be shown at the end of the user profile page. If no description is given the descriptions for standard attributes (see below) is used. If there is no description for the attribute then the attribute name itself will be displayed."
-msgstr ""
+msgstr "Voer de AD attributen in (één per regel),  gevolgd door een omschrijving, gescheiden door een puntkomma (:) die getoond moeten worden op het gebruikers profiel. Indien geen omschrijving is ingegeven, zal de omschrijving voor standaard attributen (zie hieronder) worden gebruikt.  Als er geen omschrijving bestaat voor het attribuut, zal de naam van het attribuut worden getoond."
 
 #: admin.php:459
 msgid "The attributes to be shown must appear on the list of Additional User Attributes."
-msgstr ""
+msgstr "De attributen die getoond moeten worden, dienen in de lijst met aanvullende gebruikers attributen staan."
 
 #: admin.php:460
 msgid "If you enter something that is not in the list of Additional User Attributes it will be treated as normal text. Use this to structure the output."
-msgstr ""
+msgstr "Indien er iets ingevoerd is wat niet staat op de lijst staat met Aanvullende gebruikers attributen, zal deze worden gezien als gewone tekst. Gebruik dit om structuur aan te brengen."
 
 #: admin.php:464
 msgid ""
@@ -680,28 +685,31 @@ msgid ""
 "whencreated:User Created on\n"
 "homephone"
 msgstr ""
+"lastlogon\n"
+"whencreated:User Created on\n"
+"homephone"
 
 #: admin.php:472
 msgid "Default attributes"
-msgstr ""
+msgstr "Standaard attributen"
 
 #: admin.php:476
 msgid "AD Attribute"
-msgstr ""
+msgstr "AD attribuut"
 
 #: admin.php:508
 msgid "Enter a username and password to test logon. If you click the button below, a new window with detailed debug information opens. <strong>Be sure, that no unauthorized person can see the output, because passwords will be shown in plaintext.</strong>"
-msgstr ""
+msgstr "Voer gebruikersnaam en wachtwoord in om het inloggen te testen. Zodra je op de button klikt zal er een nieuw venster openen met foutopsporings informatie. <strong>Zorg ervoor dat geen ongeautoriseerde personen kunnen meekijken aangezien het wachtwoord vrij te zien is. </strong>"
 
 #: admin.php:514
 msgid "Username"
-msgstr ""
+msgstr "Gebruikersnaam"
 
 #: admin.php:523
 msgid "Password"
-msgstr ""
+msgstr "Wachtwoord"
 
 #: admin.php:532
 msgid "Perform Test"
-msgstr ""
+msgstr "Test uitvoeren"
 

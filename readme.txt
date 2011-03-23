@@ -1,9 +1,9 @@
 === Active Directory Integration ===
 Contributors: glatze
-Tags: authentication, active directory, ldap, authorization, security
+Tags: authentication, active directory, ldap, authorization, security, windows
 Requires at least: 2.8
 Tested up to: 3.1
-Stable tag: 0.9.9.9
+Stable tag: 1.0
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -95,7 +95,7 @@ A common mistake is that the Base DN is set to a wrong value. If the user reside
 == Changelog ==
 
 = 1.0 =
-* ADD: New language Norwegian/Norsk (nb_NO) added. (Issue #0002. Thanks to Børge Anderssen.)
+* ADD: New language Dutch (nl_NL) added. (Issue #0002. Thanks to Bas Ruijters.)
 * ADD: Store AD attribute in WordPress DB (table usermeta) and show them on users profile page without any additional plugin.
 * ADD: More debug information from Test Tool. You have to set WP_DEBUG to true in wp_config.php for extra debug information from the Test Tool.
 * ADD: Set users local WordPress password on first and/or on every successfull login. (Issue #0006. Thanks to Eduardo Ribeiro for the feature request.)
