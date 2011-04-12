@@ -28,8 +28,12 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * show selected AD attributes (see above) in user profile
 * tool for testing with detailed debug informations
 * enable/disable password changes for local (non AD) WP users
-* set users local WordPress password on first and/or on every successfull login 
-* WordPress 3 compatibility, including *Multisite* 
+* set users local WordPress password on first and/or on every successfull login
+* WordPress 3 compatibility, including *Multisite* (work in progress) 
+* **NEW**: SyncBack - write changed "Additional User Attributes" back to Active Directory if you want.
+* **NEW**: Bulk Import - import and update users from Active Directory, for example by cron job.
+* **NEW**: Support for multiple account suffixes.
+* **NEW**: Using LDAP_OPT_NETWORK_TIMEOUT (default 5 seconds) to fall back to local authorization when your Active Directory Server is unreachable.
 
 *Active Directory Integration* is based upon Jonathan Marc Bearak's [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
 
@@ -44,7 +48,7 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 
 = Known Issues =
 * XMLRPC will only work with WordPress 2.8 and above.
-* There are some issues with MultiSite. This is tracked [here](http://bt.ecw.de/view.php?id=4 and [here](http://bt.ecw.de/view.php?id=11).
+* There are some issues with MultiSite. This is tracked [here](http://bt.ecw.de/view.php?id=4) and [here](http://bt.ecw.de/view.php?id=11).
 
 
 == Frequently Asked Questions ==
@@ -52,6 +56,7 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 = Is it possible to use TLS with a self-signed certificate on the AD server? =
 Yes, this works. But you have to add the line `TLS_REQCERT never` to your ldap.conf on your web server.
 If yout don't already have one create it. On Windows systems the path should be `c:\openldap\sysconf\ldap.conf`.
+Another and even simpler way is to add LDAPTLS_REQCERT=never to your environment settings. 
 
 = Can I use LDAPS instead of TLS? =
 Yes, you can. Just put "ldaps://" in front of the server in the option labeled "Domain Controller" (e.g. "ldaps://dc.domain.tld"), enter 636 as port and deactivate the option "Use TLS". But have in mind, that 
@@ -70,7 +75,22 @@ Use the [bug tracker](http://bt.ecw.de/) (see above) at http://bt.ecw.de/.
 
 = Authentication is successfull but the user is not authorized by group membership. What is wrong? =
 A common mistake is that the Base DN is set to a wrong value. If the user resides in an Organizational Unit (OU) that is not "below" the Base DN the groups the user belongs to can not be determined. A quick solution is to set the Base DN to something like `dc=mydomain,dc=local` without any OU.
-    
+
+= I want to use Sync Back but don't want to use a Global Sync User. What can I do? =
+You must give your users the permission to change their own attributes in Active Directory. To do so, you must give write permission on "SELF" (internal security principal). Run ADSIedit.msc, right click the OU all your users belong to, choose "Properties", go on tab "Security", add the user "SELF" and give him the permission to write.  
+
+= I use the User Meta feature. Which type I should use for which attribute? =
+Not all attribute types from the Active Directory schema are supported and there are some special types. Types marked as SyncBack can be synced back to AD (if the attribute is writeable). 
+* string: **Unicode String**s like "homePhone" - SyncBack
+* list: a list of **Unicode String**s like "otherHomePhone" - SyncBack
+* integer: **Integer**s or **Large Integer* attributes like "logonCount" - SyncBack
+* bool: **Boolean**s use it from boolean attributes like "fromEntry"
+* octet: **Octet String**s like  "jpegPhoto"
+* time: **UTC Coded Time** like "whenCreated"
+* timestamp: **Integer**s which store timestamps (not the unix ones) like "lastLogon"
+
+= Why will no users be imported if I'm using "Domain Users" as security group for Bulk Import? =
+Here we have a special problem with the builtin security group "Domain Users". In detail: the security group "Domain Users" is usually the primary group of all users. In this case the members of this security group are not listed in the members attribute of the group. To import all users of the security group "Domain Users" you must set the option "Import members of security groups" to "**Domain Users;id:513**". The part "id:513" means "Import all users whos primaryGroupID is 513." And as you might have guessed, 513 is the ID of the security group "Domain Users". 
 
 == Screenshots ==
 
@@ -93,6 +113,18 @@ A common mistake is that the Base DN is set to a wrong value. If the user reside
 
 
 == Changelog ==
+
+= 1.1 =
+* ADD: SyncBack feature to write Additional User Attributes back to Active Directory. (Issue #0015. Thanks to Bas Ruijters for the feature request and testing.)
+* ADD: Bulk Import feature to import and update users from Active Directory (for use in cron jobs). (Issue #0012. Thanks to Bas Ruijters for the feature request and testing.)
+* ADD: Support for multiple account suffixes so users like user1@emea.company.com, user2@africa.company.com and user3@company.com can log on. (Issue #0018. Feature Request by DonChino.)
+* ADD: Logging to file <plugindir>/adi.log if WordPress is in debug mode (WP_DEBUG is true). Don't forget to delete it in production environments.
+* ADD: Using LDAP_OPT_NETWORK_TIMEOUT (default 5 seconds) to fall back to local authorization when your Active Directory Server is unreachable (only PHP 5.3.0 and above). (Issue #0020.) 
+* CHANGE: adLDAP 3.3.2 extended for SyncBack and Bulk Import features (see above).
+* CHANGE: Passwords are not logged anymore even if WP_DEBUG is true.
+* CHANGE: Active Directory authentication for admin user (ID 1) is not used anymore. Fall back to local authentication. (Issue #0024)
+* CHANGE: Removed Bind User. It is not needed any more.
+* FIX: Including registration.php is deprecated/obsolete since WP 3.1. (Issue #0017)
 
 = 1.0 =
 * ADD: New language Dutch (nl_NL) added. (Issue #0002. Thanks to Bas Ruijters.)

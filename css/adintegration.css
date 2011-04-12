@@ -17,7 +17,7 @@
 
 table.attribute_descriptions {
 	border: 1px solid #BBB;
-	border-collapse: collapse;	
+	border-collapse: collapse;
 }
 
 table.attribute_descriptions tr:nth-of-type(2n+2) {
@@ -27,7 +27,8 @@ table.attribute_descriptions tr:nth-of-type(2n+2) {
 table.attribute_descriptions td {
 	border: 1px solid #BBB;
 	border-collapse: collapse;
-	padding: 1px 4px;
+	padding: 1px 2px;
+	font-size: 9px;
 }
   
 table.attribute_descriptions th {
@@ -35,7 +36,8 @@ table.attribute_descriptions th {
 	border-collapse: collapse;
 	text-align: left;
 	font-weight: bold;
-	padding: 1px 4px;
+	padding: 1px 2px;
+	font-size: 9px;
 }
 
 pre.AD-example {
@@ -75,12 +77,17 @@ pre.AD-example {
 	border-width:1px;
 	margin:15px 15% 0pt 15px;
 	padding:2px;
+	font-size: 12px;
 }
 #tabs{
 	display: block;
 	background:#F1F1F1 none repeat scroll 0%;
-	font-size:14px;
+	font-size:12px;
 	overflow:hidden;
+}
+
+#showCommonAttributes {
+	vertical-align: top;
 }
 
 .ui-tabs-nav {
@@ -202,6 +209,69 @@ pre.AD-example {
 .ui-tabs-panel a {
 	display:inline;
 }
+
+
+/* Dialog
+----------------------------------*/
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+
+/*
+.ui-widget { font-family: Verdana,Arial,sans-serif; font-size: 1.1em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif; font-size: 1em; }
+*/
+/*
+.ui-widget-header { border: 1px solid #aaaaaa; background: #cccccc url(images/ui-bg_highlight-soft_75_cccccc_1x100.png) 50% 50% repeat-x; color: #222222; font-weight: bold; }
+*/
+
+.ui-widget-content { border: 1px solid #aaaaaa; background: #ffffff url(images/ui-bg_glass_75_ffffff_1x400.png) 50% 50% repeat-x; color: #222222; }
+.ui-widget-header { background-color: #F1F1F1; }
+
+.ui-icon { width: 16px; height: 16px; background-image: url(images/ui-icons_222222_256x240.png); text-indent: -99999px;}
+.ui-icon-closethick { background-position: -96px -128px; }
+.ui-icon-grip-diagonal-se { background-position: -80px -224px; }
+
+.ui-corner-all { -moz-border-radius: 4px; -webkit-border-radius: 4px; }
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default, .ui-widget-content .ui-state-default { border: 1px solid #d3d3d3; background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #555555; outline: none; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #555555; text-decoration: none; outline: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus { border: 1px solid #999999; background: #dadada url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #212121; outline: none; }
+.ui-state-hover a, .ui-state-hover a:hover { color: #212121; text-decoration: none; outline: none; }
+.ui-state-active, .ui-widget-content .ui-state-active { border: 1px solid #aaaaaa; background: #ffffff url(images/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x; font-weight: normal; color: #212121; outline: none; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #212121; outline: none; text-decoration: none; }
+
+
+.ui-resizable { position: relative;}
+.ui-resizable-handle { position: absolute;font-size: 0.1px;z-index: 99999; display: block;}
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+.ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0px; }
+.ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0px; }
+.ui-resizable-e { cursor: e-resize; width: 7px; right: -5px; top: 0px; height: 100%; }
+.ui-resizable-w { cursor: w-resize; width: 7px; left: -5px; top: 0px; height: 100%; }
+.ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }
+.ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }
+.ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }
+.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}
+
+/* Dialog */
+.ui-dialog { position: relative; padding: .2em; width: 300px; }
+.ui-dialog-titlebar { padding: .5em .3em .3em 1em; position: relative;  }
+.ui-dialog-title { float: left; margin: .1em 0 .2em; } 
+.ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
+.ui-dialog-titlebar-close span { display: block; margin: 1px; }
+.ui-dialog-titlebar-close:hover, .ui-dialog .ui-dialog-titlebar-close:focus { padding: 0; }
+.ui-dialog-content { border: 0; padding: .5em 1em; background: none; overflow: auto; zoom: 1; }
+.ui-dialog-buttonpane { text-align: left; border-width: 1px 0 0 0; background-image: none; margin: .5em 0 0 0; padding: .3em 1em .5em .4em; }
+.ui-dialog-buttonpane button { float: right; margin: .5em .4em .5em 0; cursor: pointer; padding: .2em .6em .3em .6em; line-height: 1.4em; width:auto; overflow:visible; }
+.ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
+.ui-draggable .ui-dialog-titlebar { cursor: move; }
+
 
 
 /* Additional IE specific bug fixes... */

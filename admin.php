@@ -24,9 +24,26 @@
 
 ?>
 <script type="text/javascript">
-	jQuery(document).ready(function(){
-		jQuery('#slider').tabs({ fxFade: true, fxSpeed: 'fast' });	
+
+	jQuery(document).ready(function($) {
+
+		$('#slider').tabs({ fxFade: true, fxSpeed: 'fast' });
+		$(function() {
+			$( "#commonAttributes" ).dialog({
+				autoOpen: false,
+				show: "fade",
+				hide: "fade",
+				width: "360",
+				height: "500"
+			});
+
+			$( "#showCommonAttributes" ).click(function() {
+				$( "#commonAttributes" ).dialog( "open" );
+				return false;
+			});
+		});
 	});
+
 
 	function submitTestForm() {
 		openTestWindow();
@@ -72,6 +89,7 @@
 			<li><a href="#authorization"><?php _e('Authorization', 'ad-integration'); ?></a></li>
 			<li><a href="#security"><?php _e('Security', 'ad-integration'); ?></a></li>
 			<li><a href="#usermeta"><?php _e('User Meta', 'ad-integration'); ?></a></li>
+			<li><a href="#bulkimport"><?php _e('Bulk Import', 'ad-integration'); ?></a></li>
 <?php 
 // Test Tool nicht für WordPress MU 
 if (!IS_WPMU) { ?>		
@@ -94,7 +112,7 @@ if (!IS_WPMU) { ?>
 							<th scope="row"><label for="AD_Integration_domain_controllers"><?php _e('Domain Controllers', 'ad-integration'); ?></label></th>
 							<td>
 								<input type="text" name="AD_Integration_domain_controllers" id="AD_Integration_domain_controllers" class="regular-text" value="<?php echo $this->_domain_controllers; ?>" /><br />
-								<?php _e('Domain Controllers (separate with semicolons, e.g. "dc1.domain.tld;dc2.domain.tld")', 'ad-integration'); ?>
+								<?php _e('Domain Controllers (separate with semicolons, e.g. "dc1.company.local;dc2.company.local")', 'ad-integration'); ?>
 							</td>
 						</tr>
 		
@@ -114,12 +132,23 @@ if (!IS_WPMU) { ?>
 								<?php _e('Secure the connection between the WordPress and the Active Directory Servers using TLS. Note: To use TLS, you must set the LDAP Port to 389.', 'ad-integration'); ?>
 							</td>
 						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_network_timeout"><?php _e('LDAP Network Timeout', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="text" name="AD_Integration_network_timeout" id="AD_Integration_network_timeout" value="<?php echo $this->_network_timeout; ?>" /> <?php _e('seconds','ad-integration'); ?>
+								<br/>
+								<?php _e('Time in seconds after connection attempt to Active Directory times out and WordPress falls back to local authorization (defaults to "5").', 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<!-- THIS IS NOT NEEDED ANYMORE 
 						<tr valign="top">
 							<th scope="row"><label for="AD_Integration_bind_user"><?php _e('Bind User', 'ad-integration'); ?></label></th>
 							<td>
 								<input type="text" name="AD_Integration_bind_user" id="AD_Integration_bind_user" class="regular-text" 
 								value="<?php echo $this->_bind_user; ?>" /><br />
-								<?php _e('Username for non-anonymous requests to AD (e.g. "ldapuser@domain.tld"). Leave empty for anonymous requests.', 'ad-integration'); ?>
+								<?php _e('Username for non-anonymous requests to AD (e.g. "ldapuser@company.local"). Leave empty for anonymous requests.', 'ad-integration'); ?>
 							</td>
 						</tr>
 						<tr valign="top">
@@ -130,6 +159,8 @@ if (!IS_WPMU) { ?>
 								<?php _e('Password for non-anonymous requests to AD', 'ad-integration'); ?>
 							</td>
 						</tr>
+						 -->
+						 
 						<tr valign="top">
 							<th scope="row"><label for="AD_Integration_base_dn"><?php _e('Base DN', 'ad-integration'); ?></label></th>
 							<td>
@@ -157,6 +188,20 @@ if (!IS_WPMU) { ?>
 					<tbody>
 						<tr>
 							<td colspan="2"><h2 style="font-size: 150%; font-weight: bold;"><?php _e('User specific settings','ad-integration'); ?></h2></td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_account_suffix"><?php _e('Account Suffix', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="text" name="AD_Integration_account_suffix" id="AD_Integration_account_suffix" class="regular-text" value="<?php echo $this->_account_suffix; ?>" /><br />
+								<?php _e('Account Suffix (will be appended to all usernames in the Active Directory authentication process; e.g., "@company.local".)', 'ad-integration'); ?>
+								<?php _e('If you have multiple account suffixes like @emea.company.local, @africa.company.local seperate them by a semicolon (;) and put the main (@company.local) at the last position (e.g. "@emea.company.local;@africa.company.local;@company.local").', 'ad-integration'); ?>
+								<?php _e('<strong>Don\'t forget to set the @.</strong>', 'ad-integration'); ?>
+								<br />
+								<br />
+								<input type="checkbox" name="AD_Integration_append_suffix_to_new_users" id="AD_Integration_append_suffix_to_new_users"<?php if ($this->_append_suffix_to_new_users) echo ' checked="checked"' ?> value="1" />
+								<label for="AD_Integration_append_suffix_to_new_users"><?php _e('Append account suffix to new created usernames. If checked, the account suffix (see above) will be appended to the usernames of new created users.', 'ad-integration'); ?></label>
+							</td>
 						</tr>
 
 						<tr valign="top">
@@ -212,18 +257,6 @@ if (!IS_WPMU) { ?>
 									<li><?php _e('Allow: Allow users to share one email address. (UNSAFE)', 'ad-integration'); ?></li>
 									<li><?php _e('Create: In case of conflict, the new user is created with a unique email address.', 'ad-integration'); ?></li>
 								</ul>
-							</td>
-						</tr>
-
-						<tr valign="top">
-							<th scope="row"><label for="AD_Integration_account_suffix"><?php _e('Account Suffix', 'ad-integration'); ?></label></th>
-							<td>
-								<input type="text" name="AD_Integration_account_suffix" id="AD_Integration_account_suffix" class="regular-text" value="<?php echo $this->_account_suffix; ?>" /><br />
-								<?php _e('Account Suffix (will be appended to all usernames in the Active Directory authentication process; e.g., "@domain.tld".)', 'ad-integration'); ?>
-								<br />
-								<br />
-								<input type="checkbox" name="AD_Integration_append_suffix_to_new_users" id="AD_Integration_append_suffix_to_new_users"<?php if ($this->_append_suffix_to_new_users) echo ' checked="checked"' ?> value="1" />
-								<label for="AD_Integration_append_suffix_to_new_users"><?php _e('Append account suffix to new created usernames. If checked, the account suffix (see above) will be appended to the usernames of new created users.', 'ad-integration'); ?></label>
 							</td>
 						</tr>
 
@@ -395,7 +428,7 @@ if (!IS_WPMU) { ?>
 								<input type="text" name="AD_Integration_admin_email" id="AD_Integration_admin_email" class="regular-text"  
 								value="<?php echo $this->_admin_email; ?>" />
 								<br />
-								<?php _e('Seperate multiple addresses by semicolon (e.g. "admin@domain.tld;me@mydomain.tld"). If left blank, notifications will be sent to the blog-administrator only.', 'ad-integration'); ?>
+								<?php _e('Seperate multiple addresses by semicolon (e.g. "admin@company.com;me@mydomain.org"). If left blank, notifications will be sent to the blog-administrator only.', 'ad-integration'); ?>
 							</td>
 						</tr>
 					</tbody>
@@ -410,6 +443,23 @@ if (!IS_WPMU) { ?>
 		<!-- TAB: User Meta -->
 	
 		<div id="usermeta">
+			<div id="commonAttributes" title="<?php _e('Commonn attributes', 'ad-integration'); ?>">
+				<table class="attribute_descriptions">
+					<tr>
+						<th><?php _e('AD Attribute','ad-integration');?></th>
+						<th><?php _e('Description','ad-integration');?></th>
+					</tr>
+				<?php
+				$descriptions = $this->_get_attribute_descriptions();
+				foreach($descriptions AS $attribute => $description) {?>
+					<tr>
+						<th><?php echo $attribute; ?></th>
+						<td><?php echo $description; ?></td>
+					</tr>	
+				<?php } ?>
+				</table>
+			</div>
+			
 			<form action="<?php if (!IS_WPMU)echo 'options.php#usermeta'; ?>" method="post">
    				<?php settings_fields('ADI-usermeta-settings'); ?>
 				<table class="form-table">
@@ -419,6 +469,8 @@ if (!IS_WPMU) { ?>
 								<h2 style="font-size: 150%; font-weight: bold;"><?php _e('User Meta','ad-integration'); ?></h2>
 								<?php _e('User attributes from the AD are can be stored as User Meta Data. These attributes can then be used in your themes and they can be shown on the profile page of your users.','ad-integration'); ?>
 								<?php _e('The attributes are only stored in the WordPress database if you activate "Automatic User Creation" and are only updated if you activate "Automatic User Update" on tab "User".','ad-integration'); ?>
+								<br/>
+								
 							</td>
 						</tr>
 
@@ -428,18 +480,27 @@ if (!IS_WPMU) { ?>
 							<td>
 								<?php _e('Enter additional AD attributes (one per line), followed by their type and the associated meta key seperated by a colon (:).', 'ad-integration'); ?>
 								<?php _e('Additional Attributes that should appear on the user profile must also be placed in "Attributes to show".', 'ad-integration'); ?>
-								</br>
-								<?php _e('Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where <i>&lt;type&gt;</i> can be one of the following: <i>string, integer, bool, octet, time, timestamp</i>.', 'ad-integration'); ?>
+								<br/>
+								<?php _e('Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where <i>&lt;type&gt;</i> can be one of the following: <i>string, list, integer, bool, octet, time, timestamp</i>.', 'ad-integration'); ?>
 								<br/>
 								<?php _e('If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as <i>adi_&lt;attribute_name&gt;</i>.', 'ad-integration'); ?>
 								<br/>
 								<?php _e('Example:', 'ad-integration'); ?>
 								<br/>
-								<pre class="AD-example"><?php _e("lastlogon:timestamp:last_logon_time\nwhencreated:time:user_created_on\nhomephone:string", 'ad_integration'); ?></pre>
+								<pre class="AD-example"><?php _e("lastlogon:timestamp:last_logon_time\nwhencreated:time:user_created_on\nhomephone:string\notherhomephone:list", 'ad_integration'); ?></pre>
 								<br/>
 								<textarea name="AD_Integration_additional_user_attributes" id="AD_Integration_additional_user_attributes"><?php echo $this->_additional_user_attributes; ?></textarea>
+								<button id="showCommonAttributes"><?php _e('Show Common Attributes','ad-integration'); ?></button>
 								<br/>
 								<?php _e('Notice: Attributes of type <i>octet</i> are stored base64 encoded.', 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_usermeta_empty_overwrite"><?php _e('Overwrite with empty values', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_usermeta_empty_overwrite" id="AD_Integration_usermeta_empty_overwrite"<?php if ($this->_usermeta_empty_overwrite) echo ' checked="checked"' ?> value="1" />  
+								<?php _e('Overwrite local values even if the attribute values in Active Directory are empty.', 'ad-integration'); ?>
 							</td>
 						</tr>
 						
@@ -451,42 +512,68 @@ if (!IS_WPMU) { ?>
 							</td>
 						</tr>
 						
+						
 
 						<tr valign="top">
 							<th scope="row"><label for="AD_Integration_attributes_to_show"><?php _e('Attributes to show', 'ad-integration'); ?></label></th>
 							<td>
 								<?php _e('Enter the AD attributes (one per line) followed by a description seperated by a colon (:) to be shown at the end of the user profile page. If no description is given the descriptions for standard attributes (see below) is used. If there is no description for the attribute then the attribute name itself will be displayed.', 'ad-integration'); ?>
 								<?php _e('The attributes to be shown must appear on the list of Additional User Attributes.'); ?>
+								<?php _e('If want to make some attributes editable and written back to AD on profile update add a trailing ":*" (Sync Back must be turned on, see below).'); ?>
 								<?php _e('If you enter something that is not in the list of Additional User Attributes it will be treated as normal text. Use this to structure the output.', 'ad-integration'); ?>
 								<br/>
 								<?php _e('Example:', 'ad-integration'); ?>
 								<br/>
-								<pre class="AD-example"><?php _e("lastlogon\nwhencreated:User Created on\nhomephone", 'ad_integration'); ?></pre>
+								<pre class="AD-example"><?php _e("lastlogon\nwhencreated:User Created on\n&lt;h4&gt;A headline&lt;/h4&gt;\nhomephone:Phone (home):*\notherhomephone::*", 'ad_integration'); ?></pre>
 								<br/>
 								<textarea name="AD_Integration_attributes_to_show" id="AD_Integration_attributes_to_show"><?php echo $this->_attributes_to_show; ?></textarea>
 							</td>
 						</tr>
-
 						
 						<tr valign="top">
-							<th scope="row"><?php _e('Default attributes', 'ad-integration'); ?></label></th>
+						   <th colspan="2">
+						     <h4><?php _e('Sync Back','ad-integration'); ?></h4>
+						   </th>
+						</tr>						
+
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_syncback"><?php _e('Sync Back to AD', 'ad-integration'); ?></label></th>
 							<td>
-								<table class="attribute_descriptions">
-									<tr>
-										<th><?php _e('AD Attribute','ad-integration');?></th>
-										<th><?php _e('Description','ad-integration');?></th>
-									</tr>
-								<?php
-								$descriptions = $this->_get_attribute_descriptions();
-								foreach($descriptions AS $attribute => $description) {?>
-									<tr>
-										<th><?php echo $attribute; ?></th>
-										<td><?php echo $description; ?></td>
-									</tr>	
-								<?php } ?>
-								</table>
+								<input type="checkbox" name="AD_Integration_syncback" id="AD_Integration_syncback"<?php if ($this->_syncback) echo ' checked="checked"' ?> value="1" />  
+								<?php _e('Sync changed values of attributes marked with an asterisk (*) back to Active Directory on update of user profile.', 'ad-integration'); ?>
 							</td>
 						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_syncback_use_gobal_user"><?php _e('Use Global Sync User', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_syncback_use_global_user" id="AD_Integration_syncback_use_global_user"<?php if ($this->_syncback_use_global_user) echo ' checked="checked"' ?> value="1" />  
+								<?php _e('Use a Global Sync User for all writes to AD. Leave this unchecked to ask for the users password on every sync back/profile update.', 'ad-integration'); ?>
+								<br/>
+								<?php // _e('NOTICE: This is not recommended, because you must store account and password of a user that has write permission on all users in Active Directory. USE AT YOUR OWN RISK. To get around this you must give your users the permission to change their own AD attributes. See FAQ for details.', 'ad-integration'); ?>
+								<?php _e('NOTICE: The password of the Global Sync User is stored encrypted, but USE AT YOUR OWN RISK. To get around this you must give your users the permission to change their own AD attributes. See FAQ for details.', 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_syncback_global_user"><?php _e('Global Sync User', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="text" name="AD_Integration_syncback_global_user" id="AD_Integration_syncback_global_user" class="regular-text" 
+								value="<?php echo $this->_syncback_global_user; ?>" /><br />
+								<?php _e('Username of an AD account with write permissions for the users in the Active Directory (e.g. administrator@company.local).', 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_syncback_global_pwd"><?php _e('Global Sync User Password', 'ad-integration'); ?></label></th>
+							<td>
+							<input type="password" name="AD_Integration_syncback_global_pwd" id="AD_Integration_syncback_global_pwd" class="regular-text" 
+								value="" /><br />
+								<?php _e('Password for Global Sync User.', 'ad-integration'); ?>
+								<?php _e('Leave empty if password should not be changed.', 'ad-integration'); ?>
+							</td>
+						</tr>												
+
 					</tbody>
 				</table>
 				
@@ -494,7 +581,89 @@ if (!IS_WPMU) { ?>
 					<input type="submit" class="button-primary" name="Submit" value="<?php _e("Save Changes"); ?>" />
 				</p>
 			</form>	    	
-		</div> <!-- END OF TAB USER META -->	
+		</div> <!-- END OF TAB USER META -->
+		
+		<!-- TAB: Bulk Import -->
+	
+		<div id="bulkimport">
+			<form action="<?php if (!IS_WPMU)echo 'options.php#bulkimport'; ?>" method="post">
+   				<?php settings_fields('ADI-bulkimport-settings'); ?>
+				<table class="form-table">
+					<tbody>
+						<tr>
+							<td scope="col" colspan="2">
+								<h2 style="font-size: 150%; font-weight: bold;"><?php _e('User Bulk Import & Update','ad-integration'); ?></h2>
+								<?php _e('You can import/update the users from Active Directory, for example by using a cron job.','ad-integration'); ?>
+							</td>
+						</tr>
+
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_additional_user_attributes"><?php _e('Enable Bulk Import & Update', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_bulkimport_enabled" id="AD_Integration_bulkimport_enabled"<?php if ($this->_bulkimport_enabled) echo ' checked="checked"' ?> value="1" />  
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_bulkimport_authcode"><?php _e('Auth Code', 'ad-integration'); ?></label></th>
+							<td>
+								<p><strong><?php echo $this->_bulkimport_authcode; ?></strong></p>
+								<input type="checkbox" name="AD_Integration_bulkimport_new_authcode" id="AD_Integration_bulkimport_new_authcode" value="1" />
+								<?php _e('Select this to generate a new Auth Code.', 'ad-integration'); ?>
+							</td>
+						</tr>
+
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_bulkimport_url"><?php _e('Bulk Import URL', 'ad-integration'); ?></label></th>
+							<td>
+								<a href="<?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/bulkimport.php?auth=' . $this->_bulkimport_authcode; ?>" target="_blank"><?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/bulkimport.php?auth=' . $this->_bulkimport_authcode; ?></a>
+								<br/>
+								<?php _e('Use this URL in your cron jobs.', 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_bulkimport_security_groups"><?php _e('Import members of security groups','ad-integration'); ?></label></th>
+							<td>
+								<label for="AD_Integration_bulkimport_security_groups"><?php _e('Group(s)','ad-integration'); ?>: </label>
+								<input type="text" name="AD_Integration_bulkimport_security_groups" id="AD_Integration_bulkimport_security_groups" class="regular-text"
+								value="<?php echo $this->_bulkimport_security_groups; ?>" /><br />
+								<?php _e('The members of the security groups entered here, will be imported or updated autimatically if the Bulk Import URL is opened. Seperate multiple groups by semicolon (e.g. "company user;WP-Users;test-users").', 'ad-integration'); ?>
+								<?php _e('If you want to include the users of the built in user group "domain users" you have to enter "domain users;id:513" (see FAQ for details).', 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_bulkimport_user"><?php _e('Bulk Import User', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="text" name="AD_Integration_bulkimport_user" id="AD_Integration_bulkimport_user" class="regular-text" 
+								value="<?php echo $this->_bulkimport_user; ?>" /><br />
+								<?php _e('Username of an AD account with read permissions for the users in the Active Directory (e.g. "ldapuser@company.local").', 'ad-integration'); ?>
+							</td>
+						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_bulkimport_pwd"><?php _e('Bulk Import User Password', 'ad-integration'); ?></label></th>
+							<td>
+							<input type="password" name="AD_Integration_bulkimport_pwd" id="AD_Integration_bulkimport_pwd" class="regular-text" 
+								value="" /><br />
+								<?php _e('Password for Bulk Import User.', 'ad-integration'); ?>
+								<?php _e('Leave empty if password should not be changed.', 'ad-integration'); ?>
+							</td>
+						</tr>								
+						
+						
+						
+					</tbody>
+				</table>
+				
+				<p class="submit">
+					<input type="submit" class="button-primary" name="Submit" value="<?php _e("Save Changes"); ?>" />
+				</p>
+			</form>	    	
+		</div> <!-- END OF TAB BULK IMPORT -->
+						
 		
 		<!-- TAB: Test -->
 		

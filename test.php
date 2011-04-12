@@ -145,7 +145,8 @@ $ADI->setLogLevel(ADI_LOG_DEBUG);
 	</head>
 	<body>
 		<h1 style="font-size: 14pt">AD Integration Logon Test</h1>
-		
+
+	
 <?php 
 if (function_exists('ldap_connect')) {
 	echo "openLDAP installed\n";
@@ -158,6 +159,7 @@ if (function_exists('ldap_connect')) {
 
 // Let's go!
 $result = $ADI->authenticate(NULL, $_GET['user'], $_GET['password']);
+
 
 ?>
 		</div>
