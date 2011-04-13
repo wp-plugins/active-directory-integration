@@ -494,7 +494,7 @@ class ADIntegrationPlugin {
 		register_setting('ADI-user-settings', 'AD_Integration_auto_update_user', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_auto_update_description', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_default_email_domain', array(&$this, 'sanitize_default_email_domain'));
-		register_setting('ADI-user-settings', 'AD_Integration_account_suffix');
+		register_setting('ADI-user-settings', 'AD_Integration_account_suffix', array(&$this, 'sanitize_account_suffix'));
 		register_setting('ADI-user-settings', 'AD_Integration_append_suffix_to_new_users', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_display_name');
 		register_setting('ADI-user-settings', 'AD_Integration_enable_password_change', array(&$this, 'sanitize_bool'));
@@ -703,6 +703,7 @@ class ADIntegrationPlugin {
 		// This is where the action is.
 		$account_suffixes = explode(";",$this->_account_suffix);
 		foreach($account_suffixes AS $account_suffix) {
+			$account_suffix = trim($account_suffix);
 			$this->_log(ADI_LOG_NOTICE,'trying account suffix "'.$account_suffix.'"');			
 			$this->_adldap->set_account_suffix($account_suffix);
 			if ( $this->_adldap->authenticate($username, $password) === true ) // Authenticate
@@ -1043,16 +1044,35 @@ class ADIntegrationPlugin {
 	 * @param string $domain
 	 * @return string sanitized domain
 	 */
-	public function sanitize_default_email_domain($domain) {
+	public function sanitize_default_email_domain($domain)
+	{
 		$domain = preg_replace('/[^\A-Za-z0-9-\.]/', '', $domain);
 		return $domain;
 	}
 	
+	/**
+	 * Strip spaces from beginning or end of suffixes
+	 * Our seperator (;) is an allowed character in UPN suffixes but not recommended, so fuck the shit.
+	 * @param string $suffix
+	 */
+	public function sanitize_account_suffix($suffix)
+	{
+		$parts = explode(';', $suffix);
+		$results = array();
+		foreach($parts as $part)
+		{
+			$results[] = trim($part);
+		}
+		return implode(';', $results);	
+	}
 	
-	public function sanitize_attributes_to_show($text) {
+	
+	public function sanitize_attributes_to_show($text)
+	{
 		$lines = explode("\n", $text);
 		$sanitized_lines = array();
-		foreach ($lines AS $line) {
+		foreach ($lines AS $line)
+		{
 			$line = trim($line);
 			if ($line != '') {
 				$sanitized_lines[] = $line;

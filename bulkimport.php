@@ -158,11 +158,6 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 		$this->_log(ADI_LOG_NOTICE,'adLDAP object created.');
 		$this->_log(ADI_LOG_INFO,'Domain Controller: ' . $this->_adldap->get_last_used_dc());
 		
-		// Getting Bulk User Info
-		// TODO delete this after successfull testing
-		//$userinfo = $this->_adldap->user_info($this->_bulkimport_user, array('cn','dn'));
-		//$this->_log(ADI_LOG_INFO,'Bulk User Info: ' . print_r($userinfo,true));
-		
 		// Let's give us some more time (60 minutes)
 		$max_execution_time = ini_get('max_execution_time');
 		if ($max_execution_time < 3600) {
@@ -179,8 +174,6 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 			$this->_log(ADI_LOG_WARN,'No security group.');
 			return false;
 		}
-		
-		//$groups = array('Domänen-Benutzer'); 
 		
 		foreach ($groups AS $group) {
 			// get all members of group
