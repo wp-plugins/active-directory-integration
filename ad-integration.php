@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0.1 (201104131020)';
+	const ADI_VERSION = '1.0.1 (201104140955)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -871,13 +871,16 @@ class ADIntegrationPlugin {
 		global $wp_version;
 		
 		// Add an action, so we can show errors on profile page
-		add_action( 'user_profile_update_errors', array(&$this,'generate_error'), 10, 3);
+		add_action('user_profile_update_errors', array(&$this,'generate_error'), 10, 3);
 		
 		$this->_log(ADI_LOG_DEBUG,'SyncBack: Start of profile update');
 		
 		$attributes_to_sync = array();
 		
-		if ($this->_syncback === true) {
+		// check if synback is on and we have a user from AD and not local user
+		if ($this->_syncback === true)
+		{
+		
 			// Go through attributes and update user meta if necessary.
 			$attributes = $this->_get_attributes_array();
 			foreach($attributes AS $key => $attribute) {
@@ -916,87 +919,93 @@ class ADIntegrationPlugin {
 				}
 			}
 			
-			// Get User Data
-			$userinfo = get_userdata($_POST['user_id']);
-			$username = $userinfo->user_login;
+			// Only SyncBack if we have an AD-user and not a local user
+			if (isset($_POST['adi_samaccountname']) && ($_POST['adi_samaccountname'] != '')) { 
 			
-			// use personal_account_suffix
-			$personal_account_suffix = trim(get_user_meta($user_id,'ad_integration_account_suffix', true));
-			if ($personal_account_suffix != '') {
-				$account_suffix = $personal_account_suffix;
-			} else {
-				// extract account suffix from username if not set
-				// (after loading of options)
-				if (trim($this->_account_suffix) == '') {
-					if (strpos($username,'@') !== false) {
-						$parts = explode('@',$username);
-						$username = $parts[0];
-						$this->_account_suffix = '@'.$parts[1];
-						$this->_append_suffix_to_new_users = true; // TODO not really, hm?
-					}
-				} else {				
-					// choose first possible account suffix (this should never happen)
-					$suffixes = explode(';',$this->_account_suffix);
-					$account_suffix = $suffixes[0];
-					$this->_log(ADI_LOG_WARN,'No personal account suffix found. Now using first account suffix "'.$account_suffix.'".');
-				}
-			}
-			
-			
-			// establish adLDAP connection
-			// Connect to Active Directory
-			if ($this->_syncback_use_global_user === true) {
-				$ad_username = $this->_syncback_global_user;
-				$ad_password = $this->_decrypt($this->_syncback_global_pwd);
-			} else {
-				if ($_POST['adi_synback_password'] != '') {
-					$ad_username = $username.$account_suffix;  
-					$ad_password = $_POST['adi_synback_password'];
+				// Get User Data
+				$userinfo = get_userdata($_POST['user_id']);
+				$username = $userinfo->user_login;
+				
+				// use personal_account_suffix
+				$personal_account_suffix = trim(get_user_meta($user_id,'ad_integration_account_suffix', true));
+				if ($personal_account_suffix != '') {
+					$account_suffix = $personal_account_suffix;
 				} else {
-					// No Global Sync User and no password given, so stop here.
-					$this->errors->add('syncback_no_password',__('No password given, so additional attributes are not written back to Active Directory','ad-integration'));
-					return false;
+					// extract account suffix from username if not set
+					// (after loading of options)
+					if (trim($this->_account_suffix) == '') {
+						if (strpos($username,'@') !== false) {
+							$parts = explode('@',$username);
+							$username = $parts[0];
+							$this->_account_suffix = '@'.$parts[1];
+							$this->_append_suffix_to_new_users = true; // TODO not really, hm?
+						}
+					} else {				
+						// choose first possible account suffix (this should never happen)
+						$suffixes = explode(';',$this->_account_suffix);
+						$account_suffix = $suffixes[0];
+						$this->_log(ADI_LOG_WARN,'No personal account suffix found. Now using first account suffix "'.$account_suffix.'".');
+					}
 				}
-			}
-			
-			// Log informations
-			$this->_log(ADI_LOG_INFO,"SyncBack: Options for adLDAP connection:\n".
-						  "- base_dn: $this->_base_dn\n".
-						  "- domain_controllers: $this->_domain_controllers\n".
-						  "- ad_username: $ad_username\n".
-						  "- ad_password: **not shown**\n".
-						  "- ad_port: $this->_port\n".
-						  "- use_tls: ".(int) $this->_use_tls."\n".
-						  "- network timeout: ". $this->_network_timeout);
-						
-			try {
-				$ad =  @new adLDAP(array(
-										"base_dn" => $this->_base_dn, 
-										"domain_controllers" => explode(';', $this->_domain_controllers),
-										"ad_username" => $ad_username,      // AD Bind User
-										"ad_password" => $ad_password,      // password
-										"ad_port" => $this->_port,          // AD port
-										"use_tls" => $this->_use_tls,             		// secure?
-										"network_timeout" => $this->_network_timeout	// network timeout
-										));
-			} catch (Exception $e) {
-	    		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
-	    		$this->errors->add('syncback_wrong_password',__('Error on writing additional attributes back to Active Directory. Wrong password?','ad-integration'),'');
-				return  false;
-			}
-			$this->_log(ADI_LOG_DEBUG,'Connected to AD');
-			
-			//  Now we can modify the user
-			$this->_log(ADI_LOG_DEBUG,'attributes to sync: '.print_r($attributes_to_sync, true));
-			$this->_log(ADI_LOG_DEBUG,'modifying user: '.$username);
-			$modified = @$ad->user_modify_without_schema($username, $attributes_to_sync);
-			if (!$modified) {
-				$this->_log(ADI_LOG_WARN,'SyncBack: modifying user failed');
-				$this->_log(ADI_LOG_DEBUG,$ad->get_last_errno().': '.$ad->get_last_error());
-	    		$this->errors->add('syncback_modify_failed',__('Error on writing additional attributes back to Active Directory. Please contact your administrator.','ad-integration'),'');
-	    		return false;
+				
+				
+				// establish adLDAP connection
+				// Connect to Active Directory
+				if ($this->_syncback_use_global_user === true) {
+					$ad_username = $this->_syncback_global_user;
+					$ad_password = $this->_decrypt($this->_syncback_global_pwd);
+				} else {
+					if ($_POST['adi_synback_password'] != '') {
+						$ad_username = $username.$account_suffix;  
+						$ad_password = $_POST['adi_synback_password'];
+					} else {
+						// No Global Sync User and no password given, so stop here.
+						$this->errors->add('syncback_no_password',__('No password given, so additional attributes are not written back to Active Directory','ad-integration'));
+						return false;
+					}
+				}
+				
+				// Log informations
+				$this->_log(ADI_LOG_INFO,"SyncBack: Options for adLDAP connection:\n".
+							  "- base_dn: $this->_base_dn\n".
+							  "- domain_controllers: $this->_domain_controllers\n".
+							  "- ad_username: $ad_username\n".
+							  "- ad_password: **not shown**\n".
+							  "- ad_port: $this->_port\n".
+							  "- use_tls: ".(int) $this->_use_tls."\n".
+							  "- network timeout: ". $this->_network_timeout);
+							
+				try {
+					$ad =  @new adLDAP(array(
+											"base_dn" => $this->_base_dn, 
+											"domain_controllers" => explode(';', $this->_domain_controllers),
+											"ad_username" => $ad_username,      // AD Bind User
+											"ad_password" => $ad_password,      // password
+											"ad_port" => $this->_port,          // AD port
+											"use_tls" => $this->_use_tls,             		// secure?
+											"network_timeout" => $this->_network_timeout	// network timeout
+											));
+				} catch (Exception $e) {
+		    		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
+		    		$this->errors->add('syncback_wrong_password',__('Error on writing additional attributes back to Active Directory. Wrong password?','ad-integration'),'');
+					return false; 
+				}
+				$this->_log(ADI_LOG_DEBUG,'Connected to AD');
+				
+				//  Now we can modify the user
+				$this->_log(ADI_LOG_DEBUG,'attributes to sync: '.print_r($attributes_to_sync, true));
+				$this->_log(ADI_LOG_DEBUG,'modifying user: '.$username);
+				$modified = @$ad->user_modify_without_schema($username, $attributes_to_sync);
+				if (!$modified) {
+					$this->_log(ADI_LOG_WARN,'SyncBack: modifying user failed');
+					$this->_log(ADI_LOG_DEBUG,$ad->get_last_errno().': '.$ad->get_last_error());
+		    		$this->errors->add('syncback_modify_failed',__('Error on writing additional attributes back to Active Directory. Please contact your administrator.','ad-integration'),'');
+		    		return false;
+				} else {
+					$this->_log(ADI_LOG_NOTICE,'SyncBack: User successfully modified.');
+					return true;
+				}
 			} else {
-				$this->_log(ADI_LOG_NOTICE,'SyncBack: User successfully modified.');
 				return true;
 			}
 		}
@@ -1273,7 +1282,10 @@ class ADIntegrationPlugin {
 			if (count($attributes) > 0) {
 				wp_nonce_field('ADI_UserProfileUpdate','ADI_UserProfileUpdate_NONCE');
 				echo '<h3>' . __('Additional Informations', 'ad-integration').'</h3>';
+				
+				$adi_samaccountname = get_user_meta($user->id, 'adi_samaccountname', true); 
 				?>
+				<input type="hidden" name="adi_samaccountname" value="<?php echo $adi_samaccountname; ?>">
 				<table class="form-table">
 				<?php 
 				foreach ($attributes AS $attribute) {
@@ -1322,10 +1334,11 @@ class ADIntegrationPlugin {
 					</tr>
 				<?php 
 				}
-				    // show this only if Global Sync Back user is not set and your are your own personal profile page.
+				    // show this only if Global Sync Back user is not set AND your are your own personal profile page AND we have an AD-user
 					if (($this->_syncback_use_global_user === false)
 						 && ($user->id == $user_ID)
-						 && ($this->_syncback == true)) {
+						 && ($this->_syncback == true)
+						 && ($adi_samaccountname != '')) {
 					?>
 					<tr>
 						<th><label for="adi_syncback_password"><?php _e('Your password','ad-integration');?></label></th>
@@ -2138,7 +2151,12 @@ class ADIntegrationPlugin {
 		$this->_log(ADI_LOG_NOTICE,'- user_id       : '.$user_id);
 		if ( !$user_id ) {
 			$this->_log(ADI_LOG_FATAL,'Error creating user.');
-			die("Error creating user!");
+			// do not die on bulk import
+			if (!$bulkimport) {
+				die("Error creating user!");
+			} else {
+				return false;
+			}
 		} else {
 			if (version_compare($wp_version, '3', '>=')) {
 				// WP 3.0 and above
