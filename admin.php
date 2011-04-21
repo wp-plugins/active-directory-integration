@@ -141,25 +141,6 @@ if (!IS_WPMU) { ?>
 								<?php _e('Time in seconds after connection attempt to Active Directory times out and WordPress falls back to local authorization (defaults to "5").', 'ad-integration'); ?>
 							</td>
 						</tr>
-						
-						<!-- THIS IS NOT NEEDED ANYMORE 
-						<tr valign="top">
-							<th scope="row"><label for="AD_Integration_bind_user"><?php _e('Bind User', 'ad-integration'); ?></label></th>
-							<td>
-								<input type="text" name="AD_Integration_bind_user" id="AD_Integration_bind_user" class="regular-text" 
-								value="<?php echo $this->_bind_user; ?>" /><br />
-								<?php _e('Username for non-anonymous requests to AD (e.g. "ldapuser@company.local"). Leave empty for anonymous requests.', 'ad-integration'); ?>
-							</td>
-						</tr>
-						<tr valign="top">
-							<th scope="row"><label for="AD_Integration_bind_pwd"><?php _e('Bind User Password', 'ad-integration'); ?></label></th>
-							<td>
-							<input type="password" name="AD_Integration_bind_pwd" id="AD_Integration_bind_pwd" class="regular-text" 
-								value="<?php echo $this->_bind_pwd; ?>" /><br />
-								<?php _e('Password for non-anonymous requests to AD', 'ad-integration'); ?>
-							</td>
-						</tr>
-						 -->
 						 
 						<tr valign="top">
 							<th scope="row"><label for="AD_Integration_base_dn"><?php _e('Base DN', 'ad-integration'); ?></label></th>
@@ -674,7 +655,7 @@ if (!IS_WPMU) { ?>
 						<tr>
 							<td scope="col" colspan="2">
 								<h2 style="font-size: 150%; font-weight: bold;"><?php _e('Test Tool','ad-integration'); ?></h2>
-								<p><?php _e('Enter a username and password to test logon. If you click the button below, a new window with detailed debug information opens. <strong>Be sure, that no unauthorized person can see the output, because passwords will be shown in plaintext.</strong>','ad-integration'); ?></p>
+								<p><?php _e('Enter a username and password to test logon. If you click the button below, a new window with detailed debug information opens. <strong>Be sure, that no unauthorized person can see the output.</strong>','ad-integration'); ?></p>
 							</td>
 						</tr>
 	

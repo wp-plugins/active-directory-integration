@@ -35,6 +35,8 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * **NEW**: Support for multiple account suffixes.
 * **NEW**: Using LDAP_OPT_NETWORK_TIMEOUT (default 5 seconds) to fall back to local authorization when your Active Directory Server is unreachable.
 
+The latest version 1.1 is sponsored by [VARA](http://vara.nl). Many thanks to Bas Ruijters.
+
 *Active Directory Integration* is based upon Jonathan Marc Bearak's [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
 
 
@@ -80,28 +82,35 @@ A common mistake is that the Base DN is set to a wrong value. If the user reside
 You must give your users the permission to change their own attributes in Active Directory. To do so, you must give write permission on "SELF" (internal security principal). Run ADSIedit.msc, right click the OU all your users belong to, choose "Properties", go on tab "Security", add the user "SELF" and give him the permission to write.  
 
 = I use the User Meta feature. Which type I should use for which attribute? =
-Not all attribute types from the Active Directory schema are supported and there are some special types. Types marked as SyncBack can be synced back to AD (if the attribute is writeable). 
+Not all attribute types from the Active Directory schema are supported and there are some special types. Types marked as SyncBack can be synced back to AD (if the attribute is writeable).
+
 * string: **Unicode String**s like "homePhone" - SyncBack
 * list: a list of **Unicode String**s like "otherHomePhone" - SyncBack
-* integer: **Integer**s or **Large Integer* attributes like "logonCount" - SyncBack
+* integer: **Integer**s or **Large Integer** attributes like "logonCount" - SyncBack
 * bool: **Boolean**s use it from boolean attributes like "fromEntry"
 * octet: **Octet String**s like  "jpegPhoto"
 * time: **UTC Coded Time** like "whenCreated"
 * timestamp: **Integer**s which store timestamps (not the unix ones) like "lastLogon"
 
 = Why will no users be imported if I'm using "Domain Users" as security group for Bulk Import? =
-Here we have a special problem with the builtin security group "Domain Users". In detail: the security group "Domain Users" is usually the primary group of all users. In this case the members of this security group are not listed in the members attribute of the group. To import all users of the security group "Domain Users" you must set the option "Import members of security groups" to "**Domain Users;id:513**". The part "id:513" means "Import all users whos primaryGroupID is 513." And as you might have guessed, 513 is the ID of the security group "Domain Users". 
+Here we have a special problem with the builtin security group "Domain Users". In detail: the security group "Domain Users" is usually the primary group of all users. In this case the members of this security group are not listed in the members attribute of the group. To import all users of the security group "Domain Users" you must set the option "Import members of security groups" to "**Domain Users;id:513**". The part "id:513" means "Import all users whos primaryGroupID is 513." And as you might have guessed, 513 is the ID of the security group "Domain Users".
+
+= I'm interested in the further development of ADI. How to keep up to date? =
+* Follow the development on [Twitter](http://twitter.com/#!/adintegration).
+* Go to http://blog.ecw.de
+* See the bug tracker on http://bt.ecw.de 
 
 == Screenshots ==
 
-1. Server Settings 
+1. Server settings 
 2. User specific settings
 3. Settings for authorization
 4. Security related stuff
-5. User Meta Settings
-6. Test Tool
-7. Sample output of the Test Tool
-8. User Profile Page with additional informations from Active Directory (see User Meta)
+5. User Meta settings
+6. Bulk Import settings
+7. Test Tool
+8. Sample output of the Test Tool
+9. User Profile Page with additional informations from Active Directory (see User Meta)
 
 
 == Installation ==
@@ -114,7 +123,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 
 == Changelog ==
 
-= 1.1 =
+= 1.1 (VARA Edition) =
 * ADD: SyncBack feature to write Additional User Attributes back to Active Directory. (Issue #0015. Thanks to Bas Ruijters for the feature request and testing.)
 * ADD: Bulk Import feature to import and update users from Active Directory (for use in cron jobs). (Issue #0012. Thanks to Bas Ruijters for the feature request and testing.)
 * ADD: Support for multiple account suffixes so users like user1@emea.company.com, user2@africa.company.com and user3@company.com can log on. (Issue #0018. Feature Request by DonChino.)
@@ -123,7 +132,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 * CHANGE: adLDAP 3.3.2 extended for SyncBack and Bulk Import features (see above).
 * CHANGE: Passwords are not logged anymore even if WP_DEBUG is true.
 * CHANGE: Active Directory authentication for admin user (ID 1) is not used anymore. Fall back to local authentication. (Issue #0024)
-* CHANGE: Removed Bind User. It is not needed any more.
+* CHANGE: Removed the Bind User. It is not needed any more.
 * FIX: Including registration.php is deprecated/obsolete since WP 3.1. (Issue #0017)
 
 = 1.0 =
@@ -220,4 +229,4 @@ It is highly recommended to update to this version, because of a security vulner
 * some minor changes 
 
 = 0.9.0 =
-* first published version 
+* first published version

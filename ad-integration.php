@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0.1 (201104140955)';
+	const ADI_VERSION = '1.0.1 (201104211600)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -93,12 +93,6 @@ class ADIntegrationPlugin {
 	
 	// Port on which AD listens (default 389)
 	protected $_port = 389;
-	
-	// Username for non-anonymous requests to AD
-	protected $_bind_user = ''; 
-	
-	// Password for non-anonymous requests to AD
-	protected $_bind_pwd = '';
 	
 	// Secure the connection between the Drupal and the LDAP servers using TLS.
 	protected $_use_tls = false; 
@@ -226,8 +220,6 @@ class ADIntegrationPlugin {
 			array('name' => 'AD_Integration_role_equivalent_groups', 'type' => 'string'),
 			array('name' => 'AD_Integration_default_email_domain', 'type' => 'string'),
 			array('name' => 'AD_Integration_port', 'type' => 'int'),
-			array('name' => 'AD_Integration_bind_user', 'type' => 'string'),
-			array('name' => 'AD_Integration_bind_pwd', 'type' => 'string'),
 			array('name' => 'AD_Integration_use_tls', 'type' => 'bool'),
 			array('name' => 'AD_Integration_network_timeout', 'type' => 'integer'),
 			
@@ -391,8 +383,6 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_role_equivalent_groups', '');
 				add_site_option('AD_Integration_default_email_domain', '');
 				add_site_option('AD_Integration_port', '389');
-				add_site_option('AD_Integration_bind_user', '');
-				add_site_option('AD_Integration_bind_pwd', '');
 				add_site_option('AD_Integration_use_tls', false);
 				add_site_option('AD_Integration_network_timeout', 5);
 				add_site_option('AD_Integration_authorize_by_group', false);
@@ -436,8 +426,6 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_role_equivalent_groups', '');
 				add_option('AD_Integration_default_email_domain', '');
 				add_option('AD_Integration_port', '389');
-				add_option('AD_Integration_bind_user', '');
-				add_option('AD_Integration_bind_pwd', '');
 				add_option('AD_Integration_use_tls', false);
 				add_option('AD_Integration_network_timeout', 5);
 				
@@ -484,8 +472,6 @@ class ADIntegrationPlugin {
 		register_setting('ADI-server-settings',	'AD_Integration_domain_controllers');
 		register_setting('ADI-server-settings', 'AD_Integration_port', array(&$this, 'sanitize_port'));
 		register_setting('ADI-server-settings', 'AD_Integration_use_tls', array(&$this, 'sanitize_bool'));
-		register_setting('ADI-server-settings', 'AD_Integration_bind_user', array(&$this, 'sanitize_bind_user'));
-		register_setting('ADI-server-settings', 'AD_Integration_bind_pwd');
 		register_setting('ADI-server-settings', 'AD_Integration_base_dn');
 		register_setting('ADI-server-settings', 'AD_Integration_network_timeout', array(&$this, 'sanitize_network_timeout'));
 		
@@ -633,34 +619,19 @@ class ADIntegrationPlugin {
 					  "- account_suffix: $this->_account_suffix\n".					
 					  "- base_dn: $this->_base_dn\n".
 					  "- domain_controllers: $this->_domain_controllers\n".
-					  "- ad_username: $this->_bind_user\n".
-					  "- ad_password: **not shown**\n".
 					  "- ad_port: $this->_port\n".
 					  "- use_tls: ".(int) $this->_use_tls."\n".
 					  "- network timeout: ". $this->_network_timeout);
 
 		// Connect to Active Directory
 		try {
-			if (trim($this->_bind_user != '')) {
-				$this->_adldap = @new adLDAP(array(
-							"base_dn" => $this->_base_dn, 
-							"domain_controllers" => explode(';', $this->_domain_controllers),
-							"ad_username" => $this->_bind_user,      		// AD Bind User
-							"ad_password" => $this->_bind_pwd,       		// password
-							"ad_port" => $this->_port,               		// AD port
-							"use_tls" => $this->_use_tls,             		// secure?
-							"network_timeout" => $this->_network_timeout	// network timeout*/ 
-							));
-			} else {
-				$this->_log(ADI_LOG_INFO,"Bind User not set and will not be used.");
-				$this->_adldap = @new adLDAP(array(
-							"base_dn" => $this->_base_dn, 
-							"domain_controllers" => explode(';', $this->_domain_controllers),
-							"ad_port" => $this->_port,               		// AD port
-							"use_tls" => $this->_use_tls,             		// secure?
-							"network_timeout" => $this->_network_timeout	// network timeout*/ 
-							));
-			}
+			$this->_adldap = @new adLDAP(array(
+						"base_dn" => $this->_base_dn, 
+						"domain_controllers" => explode(';', $this->_domain_controllers),
+						"ad_port" => $this->_port,               		// AD port
+						"use_tls" => $this->_use_tls,             		// secure?
+						"network_timeout" => $this->_network_timeout	// network timeout*/ 
+						));
 		} catch (Exception $e) {
     		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
     		return false;
@@ -1156,18 +1127,6 @@ class ADIntegrationPlugin {
 
 	
 	/**
-	 * Sanitize Bind User
-	 * 
-	 * @param string $user
-	 * @return string sanitized username
-	 */
-	public function sanitize_bind_user($user)
-	{
-		return trim($user);
-	}
-
-	
-	/**
 	 * Sanitize Global Sync User
 	 * 
 	 * @param string $user
@@ -1175,8 +1134,7 @@ class ADIntegrationPlugin {
 	 */
 	public function sanitize_syncback_global_user($user)
 	{
-		// we use the same as for bind_user
-		return $this->sanitize_bind_user($user);
+		return trim($user);
 	}
 	
 	
@@ -1204,8 +1162,7 @@ class ADIntegrationPlugin {
 	 */
 	public function sanitize_bulkimport_user($user)
 	{
-		// we use the same as for bind_user
-		return $this->sanitize_bind_user($user);
+		return trim($user);
 	}
 	
 	
@@ -1387,6 +1344,18 @@ class ADIntegrationPlugin {
 		
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
+		// 
+		
+		// get current version and write version of plugin to options table
+		if (isset($wpmu_version) && $wpmu_version != '') {
+			$version_installed = get_site_option('AD_Integration_version');
+			update_site_option('AD_Integration_version', ADIntegrationPlugin::ADI_VERSION);
+		} else {
+			$version_installed = get_option('AD_Integration_version');
+			update_option('AD_Integration_version', ADIntegrationPlugin::ADI_VERSION);
+		}
+		
+		// get current db version
 		if (isset($wpmu_version) && $wpmu_version != '') {
 			$db_version = get_site_option('AD_Integration_db_version');
 		} else {
@@ -1411,7 +1380,23 @@ class ADIntegrationPlugin {
 	      	} else {
 		   		add_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION);
 	      	}
-	   }
+		}
+
+		// Upgrade?
+		if (version_compare(ADIntegrationPlugin::ADI_VERSION, $version_installed,'>')) {
+			
+			if (version_compare('1.0.1', $version_installed, '>') || ($version_installed == false)) {
+				// remove old needless options
+		      	if (isset($wpmu_version) && $wpmu_version != '') {
+		      		delete_site_option('AD_Integration_bind_user');
+		      		delete_site_option('AD_Integration_bind_pwd');
+		      	} else {
+			   		delete_option('AD_Integration_bind_user');
+		      		delete_option('AD_Integration_bind_pwd');
+		      	}
+			}
+		}
+		
 	}
 	
 	
@@ -1479,8 +1464,6 @@ class ADIntegrationPlugin {
 			$this->_append_suffix_to_new_users 	= get_site_option('AD_Integration_append_suffix_to_new_users');
 			$this->_domain_controllers 			= get_site_option('AD_Integration_domain_controllers');
 			$this->_base_dn						= get_site_option('AD_Integration_base_dn');
-			$this->_bind_user 					= get_site_option('AD_Integration_bind_user');
-			$this->_bind_pwd 					= get_site_option('AD_Integration_bind_pwd');
 			$this->_port 						= get_site_option('AD_Integration_port');
 			$this->_use_tls 					= get_site_option('AD_Integration_use_tls');
 			$this->_network_timeout				= (int)get_site_option('AD_Integration_network_timeout');
@@ -1525,8 +1508,6 @@ class ADIntegrationPlugin {
 			$this->_append_suffix_to_new_users 	= get_option('AD_Integration_append_suffix_to_new_users');
 			$this->_domain_controllers 			= get_option('AD_Integration_domain_controllers');
 			$this->_base_dn						= get_option('AD_Integration_base_dn');
-			$this->_bind_user 					= get_option('AD_Integration_bind_user');
-			$this->_bind_pwd 					= get_option('AD_Integration_bind_pwd');
 			$this->_port 						= get_option('AD_Integration_port');
 			$this->_use_tls 					= get_option('AD_Integration_use_tls');
 			$this->_network_timeout				= (int)get_option('AD_Integration_network_timeout');
@@ -1867,12 +1848,6 @@ class ADIntegrationPlugin {
 			if ( !empty( $arrPost['AD_Integration_base_dn'] ) )
 			 	update_site_option('AD_Integration_base_dn', $arrPost['AD_Integration_base_dn']);
 			 
-			if ( !empty( $arrPost['AD_Integration_bind_user'] ) )
-			 	update_site_option('AD_Integration_bind_user', $arrPost['AD_Integration_bind_user']);
-			 
-			if ( !empty( $arrPost['AD_Integration_bind_pwd'] ) )
-			 	update_site_option('AD_Integration_bind_pwd', $arrPost['AD_Integration_bind_pwd']);
-			 
 			if ( !empty( $arrPost['AD_Integration_port'] ) )
 			 	update_site_option('AD_Integration_port', $arrPost['AD_Integration_port']);
 			 
@@ -2150,11 +2125,12 @@ class ADIntegrationPlugin {
 		$user_id = username_exists($username);
 		$this->_log(ADI_LOG_NOTICE,'- user_id       : '.$user_id);
 		if ( !$user_id ) {
-			$this->_log(ADI_LOG_FATAL,'Error creating user.');
 			// do not die on bulk import
 			if (!$bulkimport) {
+				$this->_log(ADI_LOG_FATAL,'Error creating user.');
 				die("Error creating user!");
 			} else {
+				$this->_log(ADI_LOG_ERROR,'Error creating user.');
 				return false;
 			}
 		} else {
@@ -2812,7 +2788,6 @@ class ADIntegrationPlugin {
 
 } // END OF CLASS
 } // ENDIF
-
 
 
 // create the needed tables on plugin activation
