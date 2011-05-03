@@ -1,5 +1,10 @@
 <?php
-		
+
+		// Load up the localization file if we're using WordPress in a different language
+		// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
+		load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
+
+
 		if (IS_WPMU) {
 			if (!is_site_admin()) {
 				_e('Access denied.', 'ad-integration');
@@ -251,6 +256,7 @@ if (!IS_WPMU) { ?>
 									<option value="description"<?php if ($this->_display_name == 'description') echo ' selected="selected"' ?>><?php _e('description', 'ad-integration'); ?></option>
 									<option value="givenname"<?php if ($this->_display_name == 'givenname') echo ' selected="selected"' ?>><?php _e('givenName (firstname)', 'ad-integration'); ?></option>
 									<option value="sn"<?php if ($this->_display_name == 'sn') echo ' selected="selected"' ?>><?php _e('SN (lastname)', 'ad-integration'); ?></option>
+									<option value="givenname sn"<?php if ($this->_display_name == 'givenname sn') echo ' selected="selected"' ?>><?php _e('givenName SN (firstname lastname)', 'ad-integration'); ?></option>
 									<option value="cn"<?php if ($this->_display_name == 'cn') echo ' selected="selected"' ?>><?php _e('CN (Common Name, the whole name)', 'ad-integration'); ?></option>
 									<option value="mail"<?php if ($this->_display_name == 'mail') echo ' selected="selected"' ?>><?php _e('mail', 'ad-integration'); ?></option>
 								</select>

@@ -2,7 +2,7 @@
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security, windows
 Requires at least: 2.8
-Tested up to: 3.1
+Tested up to: 3.1.2
 Stable tag: 1.0
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
@@ -128,12 +128,17 @@ Here we have a special problem with the builtin security group "Domain Users". I
 * ADD: Bulk Import feature to import and update users from Active Directory (for use in cron jobs). (Issue #0012. Thanks to Bas Ruijters for the feature request and testing.)
 * ADD: Support for multiple account suffixes so users like user1@emea.company.com, user2@africa.company.com and user3@company.com can log on. (Issue #0018. Feature Request by DonChino.)
 * ADD: Logging to file <plugindir>/adi.log if WordPress is in debug mode (WP_DEBUG is true). Don't forget to delete it in production environments.
-* ADD: Using LDAP_OPT_NETWORK_TIMEOUT (default 5 seconds) to fall back to local authorization when your Active Directory Server is unreachable (only PHP 5.3.0 and above). (Issue #0020.) 
+* ADD: Using LDAP_OPT_NETWORK_TIMEOUT (default 5 seconds) to fall back to local authorization when your Active Directory Server is unreachable (only PHP 5.3.0 and above). (Issue #0020.)
+* ADD: You can use "givenName SN" as display name now. (Issue #0029. Feature request by Aren Cambre.) 
 * CHANGE: adLDAP 3.3.2 extended for SyncBack and Bulk Import features (see above).
 * CHANGE: Passwords are not logged anymore even if WP_DEBUG is true.
 * CHANGE: Active Directory authentication for admin user (ID 1) is not used anymore. Fall back to local authentication. (Issue #0024)
 * CHANGE: Removed the Bind User. It is not needed any more.
 * FIX: Including registration.php is deprecated/obsolete since WP 3.1. (Issue #0017)
+* FIX: Language files were not loaded. (Issue #0030)
+
+= 1.0.1 (unreleased version) =
+This version was not released.
 
 = 1.0 =
 * ADD: New language Dutch (nl_NL) added. (Issue #0002. Thanks to Bas Ruijters.)

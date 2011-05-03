@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.0.1 (201104211600)';
+	const ADI_VERSION = '1.0.1 (201105030902)';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -122,7 +122,7 @@ class ADIntegrationPlugin {
 	protected $_admin_email = '';
 	
 	// Set user's display_name to an AD attribute or to username if left blank
-	// Possible values: description, displayname, mail, sn, cn, givenname, samaccountname
+	// Possible values: description, displayname, mail, sn, cn, givenname, samaccountname, givenname sn
 	protected $_display_name = '';
 	
 	// Enable/Disable password changes 
@@ -278,9 +278,6 @@ class ADIntegrationPlugin {
 		
 		$this->errors = new WP_Error();
 		
-		// Load up the localization file if we're using WordPress in a different language
-		// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
-		load_plugin_textdomain( 'ad-integration', ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER, ADINTEGRATION_FOLDER );
 
 		// Load Options
 		$this->_load_options();
@@ -1220,9 +1217,14 @@ class ADIntegrationPlugin {
 		
 		global $user_ID;
 		
-		$all_attributes = $this->_get_attributes_array();
-		
 		if ($this->_show_attributes) {
+			
+			// Load up the localization file if we're using WordPress in a different language
+			// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
+			load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
+			
+			$all_attributes = $this->_get_attributes_array();
+		
 			$list = str_replace(";", "\n", $this->_attributes_to_show);
 			$list = explode("\n", $list);
 			
@@ -1924,15 +1926,22 @@ class ADIntegrationPlugin {
 	 * @return string  display_name
 	 */
 	protected function _get_display_name_from_AD($username, $userinfo) {
+		
+		$display_name = '';
+		
 		if (($this->_display_name == '') OR ($this->_display_name == 'sAMAccountName')) {
 			return $username;
 		}
-		
-		if (isset($userinfo[$this->_display_name][0])) {
-			$display_name = $userinfo[$this->_display_name][0];
-		} else {
-			$display_name = '';
-		}
+
+		if ($this->_display_name == 'givenname sn') {
+			if (isset($userinfo['givenname'][0]) && isset($userinfo['sn'][0])) {
+				$display_name = $userinfo['givenname'][0].' '.$userinfo['sn'][0];
+			}
+		 } else {
+			if (isset($userinfo[$this->_display_name][0])) {
+				$display_name = $userinfo[$this->_display_name][0];
+			}
+		 }
 		
 		if ($display_name == '') {
 			return $username;
@@ -2561,7 +2570,12 @@ class ADIntegrationPlugin {
 		}
 
 		// do we have a correct email address?
-		if (is_email($email)) { 
+		if (is_email($email)) {
+
+			// Load up the localization file if we're using WordPress in a different language
+			// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
+			load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
+			
 			$blog_url = get_bloginfo('url');
 			$blog_name = get_bloginfo('name');
 			$blog_domain = preg_replace ('/^(http:\/\/)(.+)\/.*$/i','$2', $blog_url);
@@ -2641,7 +2655,11 @@ class ADIntegrationPlugin {
 						return false;
 					}
 				}
-			
+				
+				// Load up the localization file if we're using WordPress in a different language
+				// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
+				load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
+				
 				$blog_url = get_bloginfo('url');
 				$blog_name = get_bloginfo('name');
 				$blog_domain = preg_replace ('/^(http:\/\/)(.+)\/.*$/i','$2', $blog_url);
@@ -2736,6 +2754,11 @@ class ADIntegrationPlugin {
 	 */
 	protected function _display_blocking_page($username) {
 		$seconds = $this->_get_rest_of_blocking_time($username);
+		
+		// Load up the localization file if we're using WordPress in a different language
+		// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
+		load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
+		
 			
 				?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
