@@ -233,9 +233,9 @@ if (!IS_WPMU) { ?>
 						<th scope="row"><label for="AD_Integration_duplicate_email_prevention"><?php _e('Email Address Conflict Handling', 'ad-integration'); ?></label></th>
 							<td>
 								<select name="AD_Integration_duplicate_email_prevention" id="AD_Integration_duplicate_email_prevention">
-									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT;?>"<?php if (($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT) OR ($this->_display_name == '')) echo ' selected="selected"' ?>><?php _e('Prevent (recommended)', 'ad-integration'); ?></option>
-									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW;?>"<?php if (($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW) OR ($this->_display_name == '')) echo ' selected="selected"' ?>><?php _e('Allow (UNSAFE)', 'ad-integration'); ?></option>
-									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_CREATE;?>"<?php if (($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_CREATE) OR ($this->_display_name == '')) echo ' selected="selected"' ?>><?php _e('Create', 'ad-integration'); ?></option>
+									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT;?>"<?php if (($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT) OR ($this->_duplicate_email_prevention == '')) echo ' selected="selected"' ?>><?php _e('Prevent (recommended)', 'ad-integration'); ?></option>
+									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW;?>"<?php if ($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW) echo ' selected="selected"' ?>><?php _e('Allow (UNSAFE)', 'ad-integration'); ?></option>
+									<option value="<?php echo ADI_DUPLICATE_EMAIL_ADDRESS_CREATE;?>"<?php if ($this->_duplicate_email_prevention == ADI_DUPLICATE_EMAIL_ADDRESS_CREATE) echo ' selected="selected"' ?>><?php _e('Create', 'ad-integration'); ?></option>
 								</select>
 								<?php _e("Choose how to handle email address conflicts.", 'ad-integration'); ?><br />
 								<ul style="list-style-type:disc; margin-left:2em;font-size:11px;">

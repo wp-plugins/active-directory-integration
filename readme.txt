@@ -136,6 +136,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 * CHANGE: Removed the Bind User. It is not needed any more.
 * FIX: Including registration.php is deprecated/obsolete since WP 3.1. (Issue #0017)
 * FIX: Language files were not loaded. (Issue #0030)
+* FIX: "Email Address Conflict Handling" not secure by default. (Issue #0032. Thanks to Aren Cambre for the bug report.)
 
 = 1.0.1 (unreleased version) =
 This version was not released.
