@@ -54,6 +54,14 @@ pre.AD-example {
 	background-color: white;
 }
 
+#adi_syncback_password {
+	background-color: #FCC;
+}
+
+label.adi_syncback_password {
+	font-weight: bold;
+}
+
 
 
 /* Caution! Ensure accessibility in print and other media types... */

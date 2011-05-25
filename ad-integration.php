@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.1
+Version: 1.1.1
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -47,7 +47,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.1';
+	const ADI_VERSION = '1.1.1';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -925,7 +925,7 @@ class ADIntegrationPlugin {
 				} else {
 					if ($_POST['adi_synback_password'] != '') {
 						$ad_username = $username.$account_suffix;  
-						$ad_password = $_POST['adi_synback_password'];
+						$ad_password = stripslashes($_POST['adi_synback_password']);
 					} else {
 						// No Global Sync User and no password given, so stop here.
 						$this->errors->add('syncback_no_password',__('No password given, so additional attributes are not written back to Active Directory','ad-integration'));
@@ -1237,7 +1237,7 @@ class ADIntegrationPlugin {
 					}
 				}
 			}
-			
+
 			if (count($attributes) > 0) {
 				wp_nonce_field('ADI_UserProfileUpdate','ADI_UserProfileUpdate_NONCE');
 				echo '<h3>' . __('Additional Informations', 'ad-integration').'</h3>';
@@ -1254,6 +1254,7 @@ class ADIntegrationPlugin {
 						$value = get_user_meta($user->id, $metakey, true);
 					} else {
 						$value = '';
+						$no_attribute = true;
 					}
 					
 					if (isset($all_attributes[$attribute]['description'])) {
@@ -1280,7 +1281,7 @@ class ADIntegrationPlugin {
 					        	&& ($all_attributes[$attribute]['sync'] == true) 
 					        	&& (($user->id == $user_ID) || ($this->_syncback_use_global_user === true))) {
 					        // use textarea if we have a list
-					        if ($all_attributes[$attribute]['type'] == 'list') {
+					        if (isset($all_attributes[$attribute]['type']) && ($all_attributes[$attribute]['type'] == 'list')) {
 					        	echo '<textarea name="'.$metakey.'" id="'.$metakey.'" cols="30" rows="3">'.esc_html($value).'</textarea>';
 					        } else {
 						    	echo '<input type="text" name="'.$metakey.'" id="'.$metakey.'" value="'.esc_html($value).'" class="regular-text code">';
@@ -1300,7 +1301,7 @@ class ADIntegrationPlugin {
 						 && ($adi_samaccountname != '')) {
 					?>
 					<tr>
-						<th><label for="adi_syncback_password"><?php _e('Your password','ad-integration');?></label></th>
+						<th><label for="adi_syncback_password" class="adi_syncback_password"><?php _e('Your password','ad-integration');?></label></th>
 						<td>
 							<input type="password" name="adi_synback_password" id="adi_syncback_password" class="regulat-text code" />
 							<?php _e('If you want to save the changes on "Additional Informations" back to the Active Directory you must enter your password.')?>

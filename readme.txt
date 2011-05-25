@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security, windows
 Requires at least: 2.8
 Tested up to: 3.1.2
-Stable tag: 1.1
+Stable tag: 1.1.1
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -122,6 +122,8 @@ Here we have a special problem with the builtin security group "Domain Users". I
 
 
 == Changelog ==
+= 1.1.1 =
+* FIX: Password with special characters not accepted for SyncBack if Global SyncBack User is not used. (Issue #0036)
 
 = 1.1 (VARA Edition) =
 * ADD: SyncBack feature to write Additional User Attributes back to Active Directory. (Issue #0015. Thanks to Bas Ruijters for the feature request and testing.)
