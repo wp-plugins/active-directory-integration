@@ -132,7 +132,7 @@ label.adi_syncback_password {
     outline: 0; /* prevent dotted border in Firefox */
 }
 .ui-tabs-nav .ui-tabs-selected{
-	background: #6D6D6D url(../images/menu-bits.gif) repeat-x scroll left top !important;
+	background: #6D6D6D url(images/menu-bits.gif) repeat-x scroll left top !important;
 	border-color: #6D6D6D;
 	color: #FFFFFF;
 	text-shadow:0 -1px 0 #666666;

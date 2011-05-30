@@ -967,7 +967,7 @@ class ADIntegrationPlugin {
 				if (!$modified) {
 					$this->_log(ADI_LOG_WARN,'SyncBack: modifying user failed');
 					$this->_log(ADI_LOG_DEBUG,$ad->get_last_errno().': '.$ad->get_last_error());
-		    		$this->errors->add('syncback_modify_failed',__('Error on writing additional attributes back to Active Directory. Please contact your administrator.','ad-integration'),'');
+		    		$this->errors->add('syncback_modify_failed',__('Error on writing additional attributes back to Active Directory. Please contact your administrator.','ad-integration') . "<br/>[Error " . $ad->get_last_errno().'] '.$ad->get_last_error(),'');
 		    		return false;
 				} else {
 					$this->_log(ADI_LOG_NOTICE,'SyncBack: User successfully modified.');
