@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.1.1
+Version: 1.1.2
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -595,17 +595,66 @@ class ADIntegrationPlugin {
 			return false;
 		}
 		
-		
-		// extract account suffix from username if not set
+		// extract account suffix from username if not set or this is enanbled
 		// (after loading of options)
-		if (trim($this->_account_suffix) == '') {
-			if (strpos($username,'@') !== false) {
-				$parts = explode('@',$username);
+		// TODO: enable login with user@domain2.local if account suffix @domain1.local is set
+		/*
+		if (strpos($username,'@') !== false) {
+			$this->_log(ADI_LOG_NOTICE,'Logon with @domain detected.');
+			$parts = explode('@',$username);
+			if (trim($this->_account_suffix) == '') {
 				$username = $parts[0];
 				$this->_account_suffix = '@'.$parts[1];
 				$this->_append_suffix_to_new_users = true;
+			} else {
+				$this->_log(ADI_LOG_NOTICE,'Try domain ' . $parts[1] . ' from username.');
+				if (trim($this->_account_suffix) !== '@'.trim($parts[1])) {
+					$this->_log(ADI_LOG_NOTICE,'Temporarily reseting account_suffix and switching off append_suffix_to_new_users.');
+					$username = $parts[0];
+					$this->_account_suffix = '@'.trim($parts[1]);
+					$this->_append_suffix_to_new_users = true;
+				}
+			}
+		}*/
+		
+		// extract account suffix from username if not set
+		// (after loading of options)
+		// Extended for issue #0043
+		if (strpos($username,'@') !== false) {
+			$this->_log(ADI_LOG_NOTICE,'@domain found.');
+			$parts = explode('@',trim($username));
+			$puser = $parts[0];
+			$pdomain = '@'.$parts[1];
+			if (trim($this->_account_suffix) == '') {
+				// without Account Suffix
+				$username = $puser;
+				$this->_account_suffix = $pdomain;
+				$this->_append_suffix_to_new_users = true;
+				$this->_log(ADI_LOG_NOTICE,'No account suffix set. Using user domain "' . $pdomain . '" as account suffix.');
+			} else {
+				// with Account Suffix
+				// let's see if users domain is in the list of all account suffixes
+				$account_suffix_found = false;
+				$account_suffixes = explode(";", $this->_account_suffix);
+				foreach($account_suffixes AS $account_suffix) {
+					if (trim($account_suffix) == $pdomain) {
+						// user domain same as _account_suffix (leave _append_suffix_to_new_users untouched)
+						$username = $puser;
+						$account_suffix_found = true;
+						$this->_log(ADI_LOG_NOTICE,'user domain "' . $pdomain . '" in list of account suffixes.');
+						break;
+					}
+				}
+				if ($account_suffix_found === false) {
+					// 
+					$this->_append_suffix_to_new_users = false;
+					$this->_account_suffix = '';
+					$this->_log(ADI_LOG_NOTICE,'user domain "' . $pdomain . '" NOT in list of account suffixes.');
+				}
 			}
 		}
+		
+		
 		
 		$this->_log(ADI_LOG_NOTICE,'username: '.$username);
 		$this->_log(ADI_LOG_NOTICE,'password: **not shown**');

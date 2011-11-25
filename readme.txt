@@ -122,6 +122,9 @@ Here we have a special problem with the builtin security group "Domain Users". I
 
 
 == Changelog ==
+= 1.1.2 =
+* ADD: Allow logon of users with domains different from Account Suffix (Issue #0043. Feature Request by Greg Fenton.)
+
 = 1.1.1 =
 * FIX: Password with special characters not accepted for SyncBack if Global SyncBack User is not used. (Issue #0036)
 
