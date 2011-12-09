@@ -883,7 +883,7 @@ class ADIntegrationPlugin {
 	 * 
 	 * @param integer $user_id
 	 */
-	public function profile_update($user_id)
+	public function profile_update($user_id, $bulksyncback = false)
 	{
 		global $wp_version;
 		
@@ -965,49 +965,52 @@ class ADIntegrationPlugin {
 					}
 				}
 				
-				
-				// establish adLDAP connection
-				// Connect to Active Directory
-				if ($this->_syncback_use_global_user === true) {
-					$ad_username = $this->_syncback_global_user;
-					$ad_password = $this->_decrypt($this->_syncback_global_pwd);
+				if (true == $bulksyncback) { 
+					$ad = $this->_adldap;
 				} else {
-					if ($_POST['adi_synback_password'] != '') {
-						$ad_username = $username.$account_suffix;  
-						$ad_password = stripslashes($_POST['adi_synback_password']);
+					// establish adLDAP connection
+					// Connect to Active Directory
+					if ($this->_syncback_use_global_user === true) {
+						$ad_username = $this->_syncback_global_user;
+						$ad_password = $this->_decrypt($this->_syncback_global_pwd);
 					} else {
-						// No Global Sync User and no password given, so stop here.
-						$this->errors->add('syncback_no_password',__('No password given, so additional attributes are not written back to Active Directory','ad-integration'));
-						return false;
+						if ($_POST['adi_synback_password'] != '') {
+							$ad_username = $username.$account_suffix;  
+							$ad_password = stripslashes($_POST['adi_synback_password']);
+						} else {
+							// No Global Sync User and no password given, so stop here.
+							$this->errors->add('syncback_no_password',__('No password given, so additional attributes are not written back to Active Directory','ad-integration'));
+							return false;
+						}
 					}
+					
+					// Log informations
+					$this->_log(ADI_LOG_INFO,"SyncBack: Options for adLDAP connection:\n".
+								  "- base_dn: $this->_base_dn\n".
+								  "- domain_controllers: $this->_domain_controllers\n".
+								  "- ad_username: $ad_username\n".
+								  "- ad_password: **not shown**\n".
+								  "- ad_port: $this->_port\n".
+								  "- use_tls: ".(int) $this->_use_tls."\n".
+								  "- network timeout: ". $this->_network_timeout);
+								
+					try {
+						$ad =  @new adLDAP(array(
+												"base_dn" => $this->_base_dn, 
+												"domain_controllers" => explode(';', $this->_domain_controllers),
+												"ad_username" => $ad_username,      // AD Bind User
+												"ad_password" => $ad_password,      // password
+												"ad_port" => $this->_port,          // AD port
+												"use_tls" => $this->_use_tls,             		// secure?
+												"network_timeout" => $this->_network_timeout	// network timeout
+												));
+					} catch (Exception $e) {
+			    		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
+			    		$this->errors->add('syncback_wrong_password',__('Error on writing additional attributes back to Active Directory. Wrong password?','ad-integration'),'');
+						return false; 
+					}
+					$this->_log(ADI_LOG_DEBUG,'Connected to AD');
 				}
-				
-				// Log informations
-				$this->_log(ADI_LOG_INFO,"SyncBack: Options for adLDAP connection:\n".
-							  "- base_dn: $this->_base_dn\n".
-							  "- domain_controllers: $this->_domain_controllers\n".
-							  "- ad_username: $ad_username\n".
-							  "- ad_password: **not shown**\n".
-							  "- ad_port: $this->_port\n".
-							  "- use_tls: ".(int) $this->_use_tls."\n".
-							  "- network timeout: ". $this->_network_timeout);
-							
-				try {
-					$ad =  @new adLDAP(array(
-											"base_dn" => $this->_base_dn, 
-											"domain_controllers" => explode(';', $this->_domain_controllers),
-											"ad_username" => $ad_username,      // AD Bind User
-											"ad_password" => $ad_password,      // password
-											"ad_port" => $this->_port,          // AD port
-											"use_tls" => $this->_use_tls,             		// secure?
-											"network_timeout" => $this->_network_timeout	// network timeout
-											));
-				} catch (Exception $e) {
-		    		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
-		    		$this->errors->add('syncback_wrong_password',__('Error on writing additional attributes back to Active Directory. Wrong password?','ad-integration'),'');
-					return false; 
-				}
-				$this->_log(ADI_LOG_DEBUG,'Connected to AD');
 				
 				//  Now we can modify the user
 				$this->_log(ADI_LOG_DEBUG,'attributes to sync: '.print_r($attributes_to_sync, true));

@@ -559,8 +559,16 @@ if (!IS_WPMU) { ?>
 								<?php _e('Password for Global Sync User.', 'ad-integration'); ?>
 								<?php _e('Leave empty if password should not be changed.', 'ad-integration'); ?>
 							</td>
-						</tr>												
+						</tr>				
 
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_syncback_manually"><?php _e('Perform SyncBack for all users', 'ad-integration'); ?></label></th>
+							<td>
+								<?php _e('Click on the following link to perform a SyncBack of all users to Active Directory. "Global Sync User" and "Global Sync User Password" must be set (but it is not necessary to turn on "Use Global Sync User").', 'ad-integration'); ?>
+								<br>
+								<a href="<?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/syncback.php'; ?>" target="_blank"><?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/syncback.php'; ?></a>
+							</td>
+						</tr>									
 					</tbody>
 				</table>
 				
