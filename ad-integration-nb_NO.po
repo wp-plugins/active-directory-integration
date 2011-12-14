@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Active Directory Integration 0.9.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-16 13:04+0200\n"
+"POT-Creation-Date: 2011-12-14 15:00+0100\n"
 "PO-Revision-Date: 2011-03-16 16:21+0100\n"
 "Last-Translator: \n"
 "Language-Team: Norsk <info@ecw.de>\n"
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Active Directory Integration"
 msgstr "Active Directory Integrasjon"
 
-#: ad-integration.php:737
+#: ad-integration.php:786
 msgid ""
 "<strong>ERROR</strong>: This user exists in Active Directory, but has not "
 "been granted access to this installation of WordPress."
@@ -29,218 +29,228 @@ msgstr ""
 "<strong>FEHLER</strong>: Denne brukeren finnes i Active Directory, men er "
 "ikke berettiget til å installere WordPress."
 
-#: ad-integration.php:813
+#: ad-integration.php:862
 msgid "Active Directory Integration Help"
 msgstr "Active Directory Integrasjons Hjelp"
 
-#: ad-integration.php:814
+#: ad-integration.php:863
 msgid "Overview"
 msgstr "Oversikt"
 
-#: ad-integration.php:815
+#: ad-integration.php:864
 msgid "FAQ"
 msgstr "FAQ"
 
-#: ad-integration.php:816
+#: ad-integration.php:865
 msgid "Changelog"
 msgstr "Endringslogg"
 
-#: ad-integration.php:817
+#: ad-integration.php:866
 msgid "Support-Forum"
 msgstr "Support-Forum"
 
-#: ad-integration.php:818
+#: ad-integration.php:867
 msgid "Bug Tracker"
 msgstr "Bug Tracker"
 
-#: ad-integration.php:931
+#: ad-integration.php:980
 msgid ""
 "No password given, so additional attributes are not written back to Active "
 "Directory"
 msgstr ""
 
-#: ad-integration.php:958
+#: ad-integration.php:1007
 msgid ""
 "Error on writing additional attributes back to Active Directory. Wrong "
 "password?"
 msgstr ""
 
-#: ad-integration.php:970
+#: ad-integration.php:1020
 msgid ""
 "Error on writing additional attributes back to Active Directory. Please "
 "contact your administrator."
 msgstr ""
 
-#: ad-integration.php:1243
+#: ad-integration.php:1293
 msgid "Additional Informations"
 msgstr ""
 
-#: ad-integration.php:1304
+#: ad-integration.php:1354
 #, fuzzy
 msgid "Your password"
 msgstr "Passord"
 
-#: ad-integration.php:1307
+#: ad-integration.php:1357
 msgid ""
 "If you want to save the changes on \"Additional Informations\" back to the "
 "Active Directory you must enter your password."
 msgstr ""
 
-#: ad-integration.php:1436
+#: ad-integration.php:1370
+msgid "Perform SyncBack for this user"
+msgstr ""
+
+#: ad-integration.php:1372
+msgid ""
+"Click on the following link to perform a SyncBack of this user to Active "
+"Directory. Only pre-stored data will be transmitted."
+msgstr ""
+
+#: ad-integration.php:1503
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr "Einstellung '%s' wurde entfernt."
 
-#: ad-integration.php:1440
+#: ad-integration.php:1507
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr "Fehler beim Löschen der Einstellung '%s'."
 
-#: ad-integration.php:1563
+#: ad-integration.php:1630
 msgid "Common Name"
 msgstr ""
 
-#: ad-integration.php:1564
+#: ad-integration.php:1631
 msgid "First name"
 msgstr ""
 
-#: ad-integration.php:1565
+#: ad-integration.php:1632
 msgid "Initials"
 msgstr ""
 
-#: ad-integration.php:1566
+#: ad-integration.php:1633
 msgid "Last name"
 msgstr ""
 
-#: ad-integration.php:1567 admin.php:250
+#: ad-integration.php:1634 admin.php:250
 msgid "Display name"
 msgstr "Den Namen wiefolgt darstellen"
 
-#: ad-integration.php:1568 admin.php:437
+#: ad-integration.php:1635 admin.php:437
 msgid "Description"
 msgstr ""
 
-#: ad-integration.php:1569
+#: ad-integration.php:1636
 msgid "Office"
 msgstr ""
 
-#: ad-integration.php:1570
+#: ad-integration.php:1637
 msgid "Telephone number"
 msgstr ""
 
-#: ad-integration.php:1571
+#: ad-integration.php:1638
 msgid "E-mail"
 msgstr ""
 
-#: ad-integration.php:1572
+#: ad-integration.php:1639
 msgid "Web Page"
 msgstr ""
 
-#: ad-integration.php:1575
+#: ad-integration.php:1642
 msgid "User logon name"
 msgstr "User logon name"
 
-#: ad-integration.php:1578
+#: ad-integration.php:1645
 msgid "Street"
 msgstr ""
 
-#: ad-integration.php:1579
+#: ad-integration.php:1646
 msgid "P.O. Box"
 msgstr ""
 
-#: ad-integration.php:1580
+#: ad-integration.php:1647
 msgid "City"
 msgstr ""
 
-#: ad-integration.php:1581
+#: ad-integration.php:1648
 msgid "State"
 msgstr ""
 
-#: ad-integration.php:1582
+#: ad-integration.php:1649
 msgid "ZIP/Postal cide"
 msgstr ""
 
-#: ad-integration.php:1583
+#: ad-integration.php:1650
 msgid "Country abbreviation"
 msgstr ""
 
-#: ad-integration.php:1584
+#: ad-integration.php:1651
 msgid "Country"
 msgstr ""
 
-#: ad-integration.php:1585
+#: ad-integration.php:1652
 msgid "Country code (number)"
 msgstr ""
 
-#: ad-integration.php:1588
+#: ad-integration.php:1655
 msgid "Home"
 msgstr ""
 
-#: ad-integration.php:1589
+#: ad-integration.php:1656
 msgid "Home (other)"
 msgstr ""
 
-#: ad-integration.php:1590
+#: ad-integration.php:1657
 msgid "Pager"
 msgstr ""
 
-#: ad-integration.php:1591
+#: ad-integration.php:1658
 msgid "Pager (other)"
 msgstr ""
 
-#: ad-integration.php:1592
+#: ad-integration.php:1659
 msgid "Mobile"
 msgstr ""
 
-#: ad-integration.php:1593
+#: ad-integration.php:1660
 msgid "Mobile (Other)"
 msgstr ""
 
-#: ad-integration.php:1594
+#: ad-integration.php:1661
 msgid "Fax"
 msgstr ""
 
-#: ad-integration.php:1595
+#: ad-integration.php:1662
 msgid "Fax (other)"
 msgstr ""
 
-#: ad-integration.php:1596
+#: ad-integration.php:1663
 msgid "IP Phone"
 msgstr ""
 
-#: ad-integration.php:1597
+#: ad-integration.php:1664
 msgid "IP Phone (other)"
 msgstr ""
 
-#: ad-integration.php:1598
+#: ad-integration.php:1665
 msgid "Notes"
 msgstr ""
 
-#: ad-integration.php:1601
+#: ad-integration.php:1668
 msgid "Title"
 msgstr ""
 
-#: ad-integration.php:1602
+#: ad-integration.php:1669
 msgid "Department"
 msgstr ""
 
-#: ad-integration.php:1603
+#: ad-integration.php:1670
 msgid "Company"
 msgstr ""
 
-#: ad-integration.php:1604
+#: ad-integration.php:1671
 msgid "Manager"
 msgstr ""
 
-#: ad-integration.php:1605
+#: ad-integration.php:1672
 msgid "Direct reports"
 msgstr ""
 
-#: ad-integration.php:2585 ad-integration.php:2668
+#: ad-integration.php:2652 ad-integration.php:2735
 msgid "Account blocked"
 msgstr "Konto gesperrt"
 
-#: ad-integration.php:2586
+#: ad-integration.php:2653
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
@@ -250,7 +260,7 @@ msgstr ""
 "anzumelden. Aus Sicherheitsgründen, ist Dein Konto nun für %d Sekunden "
 "gesperrt."
 
-#: ad-integration.php:2588 ad-integration.php:2673
+#: ad-integration.php:2655 ad-integration.php:2740
 msgid ""
 "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
 "ADDRESS SPECIFIED ABOVE."
@@ -258,7 +268,7 @@ msgstr ""
 "DIESE E-MAIL WURDE VOM SYSTEM AUTOMATISCH ERSTELLT, BITTE SENDEN SIE KEINE "
 "ANTWORT AN DIE ABSENDERADRESSE."
 
-#: ad-integration.php:2669
+#: ad-integration.php:2736
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
@@ -268,20 +278,20 @@ msgstr ""
 "\" (%s %s) anzumelden. Aus Sicherheitsgründen, ist dieses Konto nun für %d "
 "Sekunden gesperrt."
 
-#: ad-integration.php:2671
+#: ad-integration.php:2738
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "Der Loginversuch ging aus von der IP-Adresse: %s"
 
-#: ad-integration.php:2792
+#: ad-integration.php:2859
 msgid "Powered by WordPress"
 msgstr "Powered by WordPress"
 
-#: ad-integration.php:2794
+#: ad-integration.php:2861
 msgid "Account blocked for"
 msgstr "Konto gesperrt"
 
-#: ad-integration.php:2794 admin.php:144
+#: ad-integration.php:2861 admin.php:144
 msgid "seconds"
 msgstr "Sekunden"
 
@@ -323,7 +333,7 @@ msgstr "User Meta"
 msgid "Bulk Import"
 msgstr ""
 
-#: admin.php:101 admin.php:663
+#: admin.php:101 admin.php:674
 msgid "Test Tool"
 msgstr "Test Tool"
 
@@ -382,8 +392,8 @@ msgstr "Base DN"
 msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
 msgstr "Base DN (z.B. \"ou=unit,dc=domain,dc=tld\")"
 
-#: admin.php:161 admin.php:314 admin.php:363 admin.php:424 admin.php:568
-#: admin.php:649
+#: admin.php:161 admin.php:314 admin.php:363 admin.php:424 admin.php:579
+#: admin.php:660
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
@@ -671,7 +681,7 @@ msgstr ""
 "Die Benutzer haben die Berichtigung zum Anmelden nur, wenn sie Mitglied "
 "einer bestimmten Gruppe sind."
 
-#: admin.php:337 admin.php:616
+#: admin.php:337 admin.php:627
 msgid "Group(s)"
 msgstr "Gruppe(n)"
 
@@ -995,77 +1005,88 @@ msgstr "Bind User Kennwort"
 msgid "Password for Global Sync User."
 msgstr ""
 
-#: admin.php:560 admin.php:639
+#: admin.php:560 admin.php:650
 msgid "Leave empty if password should not be changed."
 msgstr ""
 
-#: admin.php:582
+#: admin.php:568
+msgid "Perform SyncBack for all users"
+msgstr ""
+
+#: admin.php:570
+msgid ""
+"Click on the following link to perform a SyncBack of all users to Active "
+"Directory. \"Global Sync User\" and \"Global Sync User Password\" must be "
+"set (but it is not necessary to turn on \"Use Global Sync User\")."
+msgstr ""
+
+#: admin.php:593
 msgid "User Bulk Import & Update"
 msgstr ""
 
-#: admin.php:583
+#: admin.php:594
 msgid ""
 "You can import/update the users from Active Directory, for example by using "
 "a cron job."
 msgstr ""
 
-#: admin.php:589
+#: admin.php:600
 msgid "Enable Bulk Import & Update"
 msgstr ""
 
-#: admin.php:596
+#: admin.php:607
 msgid "Auth Code"
 msgstr ""
 
-#: admin.php:600
+#: admin.php:611
 msgid "Select this to generate a new Auth Code."
 msgstr ""
 
-#: admin.php:605
+#: admin.php:616
 msgid "Bulk Import URL"
 msgstr ""
 
-#: admin.php:609
+#: admin.php:620
 msgid "Use this URL in your cron jobs."
 msgstr ""
 
-#: admin.php:614
+#: admin.php:625
 msgid "Import members of security groups"
 msgstr ""
 
-#: admin.php:619
+#: admin.php:630
 msgid ""
 "The members of the security groups entered here, will be imported or updated "
 "autimatically if the Bulk Import URL is opened. Seperate multiple groups by "
 "semicolon (e.g. \"company user;WP-Users;test-users\")."
 msgstr ""
 
-#: admin.php:620
+#: admin.php:631
 msgid ""
 "If you want to include the users of the built in user group \"domain users\" "
 "you have to enter \"domain users;id:513\" (see FAQ for details)."
 msgstr ""
 
-#: admin.php:625
+#: admin.php:636
 msgid "Bulk Import User"
 msgstr ""
 
-#: admin.php:629
+#: admin.php:640
 msgid ""
 "Username of an AD account with read permissions for the users in the Active "
 "Directory (e.g. \"ldapuser@company.local\")."
 msgstr ""
 
-#: admin.php:634
+#: admin.php:645
 #, fuzzy
 msgid "Bulk Import User Password"
 msgstr "Bind User Kennwort"
 
-#: admin.php:638
+#: admin.php:649
 msgid "Password for Bulk Import User."
 msgstr ""
 
-#: admin.php:664
+#: admin.php:675
 #, fuzzy
 msgid ""
 "Enter a username and password to test logon. If you click the button below, "
@@ -1077,15 +1098,15 @@ msgstr ""
 "Informationen. <strong>Stelle sicher, daß nur authorisierte Personen die "
 "Ausgabe sehen können, da Kennwörter im Klartext dargestellt werden.</strong>"
 
-#: admin.php:670
+#: admin.php:681
 msgid "Username"
 msgstr "Bruker"
 
-#: admin.php:679
+#: admin.php:690
 msgid "Password"
 msgstr "Passord"
 
-#: admin.php:688
+#: admin.php:699
 msgid "Perform Test"
 msgstr "Kjør Test"
 

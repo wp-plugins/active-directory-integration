@@ -561,6 +561,9 @@ if (!IS_WPMU) { ?>
 							</td>
 						</tr>				
 
+						<?php 
+						// Testing for Issue #0046
+						?>
 						<tr valign="top">
 							<th scope="row"><label for="AD_Integration_syncback_manually"><?php _e('Perform SyncBack for all users', 'ad-integration'); ?></label></th>
 							<td>
