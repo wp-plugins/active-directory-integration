@@ -1360,11 +1360,13 @@ class ADIntegrationPlugin {
 					<?php
 				}
 				
-				// Show SyncBack for this user if you are an admin
+				/*
+				// Show SyncBack for this user if you are an admin and Global SyncBack is deactivated
 				if (($adi_samaccountname != '')
 					&& (current_user_can('level_10'))
 					&& ($this->_syncback_global_pwd != '')
-					&& ($this->_syncback_global_user != '')) {
+					&& ($this->_syncback_global_user != '')
+					&& ($this->_syncback_use_global_user != true)) {
 					?>
 					<tr style="border: 1px solid #999; background-color: white;">
 						<th scope="row"><label for="AD_Integration_syncback_manually"><?php _e('Perform SyncBack for this user', 'ad-integration'); ?></label></th>
@@ -1372,10 +1374,12 @@ class ADIntegrationPlugin {
 							<?php _e('Click on the following link to perform a SyncBack of this user to Active Directory. Only pre-stored data will be transmitted.', 'ad-integration'); ?>
 							<br>
 							<a href="<?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/syncback.php?userid=' . $user->id; ?>" target="_blank"><?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/syncback.php?userid=' . $user->id; ?></a>
+							<a href="<?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/syncback.php?userid=' . $user->id; ?>" target="_blank" class="button">SyncBack</a>
 						</td>
 					</tr>
 					<?php 
 				}
+				*/
 				?>
 				</table>
 				<?php
