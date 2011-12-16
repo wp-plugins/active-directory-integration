@@ -2,8 +2,8 @@
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security, windows
 Requires at least: 2.8
-Tested up to: 3.1.2
-Stable tag: 1.1.1
+Tested up to: 3.3
+Stable tag: 1.1.2
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -30,10 +30,11 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * enable/disable password changes for local (non AD) WP users
 * set users local WordPress password on first and/or on every successfull login
 * WordPress 3 compatibility, including *Multisite* (work in progress) 
-* **NEW**: SyncBack - write changed "Additional User Attributes" back to Active Directory if you want.
-* **NEW**: Bulk Import - import and update users from Active Directory, for example by cron job.
-* **NEW**: Support for multiple account suffixes.
-* **NEW**: Using LDAP_OPT_NETWORK_TIMEOUT (default 5 seconds) to fall back to local authorization when your Active Directory Server is unreachable.
+* SyncBack - write changed "Additional User Attributes" back to Active Directory if you want.
+* Bulk Import - import and update users from Active Directory, for example by cron job.
+* Support for multiple account suffixes.
+* Using LDAP_OPT_NETWORK_TIMEOUT (default 5 seconds) to fall back to local authorization when your Active Directory Server is unreachable.
+* **NEW** Bulk SyncBack to manually write all "Additional User Attributes" back to Active Directory.
 
 The latest version 1.1 is sponsored by [VARA](http://vara.nl). Many thanks to Bas Ruijters.
 
@@ -124,7 +125,8 @@ Here we have a special problem with the builtin security group "Domain Users". I
 == Changelog ==
 = 1.1.2 =
 * ADD: Allow logon of users with domains different from Account Suffix. (Issue #0043. Feature Request by Greg Fenton.)
-* ADD: Manually sync of locally modified attributes (for example after manipulating the database) back to Active Directory. (Issue #0046. Feature Request by Bas Ruijters.) 
+* ADD: Manually sync of locally modified attributes (for example after manipulating the database) back to Active Directory. (Issue #0046. Feature Request by Bas Ruijters.)
+* FIX: Option AD_Integration_version was not removed from options table on unintall. (Issue #0047) 
 
 = 1.1.1 =
 * FIX: Password with special characters not accepted for SyncBack if Global SyncBack User is not used. (Issue #0036)

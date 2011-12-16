@@ -211,6 +211,9 @@ class ADIntegrationPlugin {
 	// All options and its types
 	// Has to be static for static call of method uninstall()
 	protected static $_all_options = array(
+	
+			array('name' => 'AD_Integration_version', 'type' => 'string'),
+		
 			array('name' => 'AD_Integration_account_suffix', 'type' => 'string'),
 			array('name' => 'AD_Integration_auto_create_user', 'type' => 'bool'),
 			array('name' => 'AD_Integration_auto_update_user', 'type' => 'bool'),
@@ -253,6 +256,8 @@ class ADIntegrationPlugin {
 			array('name' => 'AD_Integration_bulkimport_security_groups', 'type' => 'string'),
 			array('name' => 'AD_Integration_bulkimport_user', 'type' => 'string'),
 			array('name' => 'AD_Integration_bulkimport_pwd', 'type' => 'string')
+			
+			
 		);
 		
 
