@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.1.2
+Version: 1.1.3-dev
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -143,7 +143,8 @@ class ADIntegrationPlugin {
 		'description', // Description
 		'mail', // E-mail
 		'samaccountname', // User logon name
-		'userprincipalname' // userPrincipalName
+		'userprincipalname', // userPrincipalName
+		'useraccountcontrol' // userAccountControl
 	);
 	
 	
@@ -206,6 +207,12 @@ class ADIntegrationPlugin {
 	protected $_bulkimport_user = '';
 	
 	protected $_bulkimport_pwd = '';
+	
+	protected $_disable_users = false;
+	
+	protected $_fallback_to_local_password = false;
+	
+	protected $_show_user_status = true;
 		
 
 	// All options and its types
@@ -228,15 +235,20 @@ class ADIntegrationPlugin {
 			
 			array('name' => 'AD_Integration_authorize_by_group', 'type' => 'bool'),
 			array('name' => 'AD_Integration_authorization_group', 'type' => 'string'),
+			array('name' => 'AD_Integration_display_name', 'type' => 'string'),
+			array('name' => 'AD_Integration_enable_password_change', 'type' => 'bool'),
+			array('name' => 'AD_Integration_duplicate_email_prevention', 'type' => 'string'),
+			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool'),
+			array('name' => 'AD_Integration_show_user_status', 'type' => 'bool'),
+			
+			// Security
 			array('name' => 'AD_Integration_max_login_attempts', 'type' => 'int'),
 			array('name' => 'AD_Integration_block_time', 'type' => 'int'),
 			array('name' => 'AD_Integration_user_notification', 'type' => 'bool'),
 			array('name' => 'AD_Integration_admin_notification', 'type' => 'bool'),
 			array('name' => 'AD_Integration_admin_email', 'type' => 'string'),
-			array('name' => 'AD_Integration_display_name', 'type' => 'string'),
-			array('name' => 'AD_Integration_enable_password_change', 'type' => 'bool'),
-			array('name' => 'AD_Integration_duplicate_email_prevention', 'type' => 'string'),
-			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool'),
+			array('name' => 'AD_Integration_disable_users', 'type' => 'bool'),
+			array('name' => 'AD_Integration_fallback_to_local_password', 'type' => 'bool'),
 
 			array('name' => 'AD_Integration_show_attributes', 'type' => 'bool'),
 			array('name' => 'AD_Integration_attributes_to_show', 'type' => 'bool'),
@@ -304,12 +316,7 @@ class ADIntegrationPlugin {
 		// DO WE HAVE LDAP SUPPORT?
 		if (function_exists('ldap_connect')) {
 			
-			// WP 2.8 and above?
-			if (version_compare($wp_version, '2.8', '>=')) {
-				add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
-			} else {
-				add_action('wp_authenticate', array(&$this, 'authenticate'), 10, 2);
-			}
+			add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
 			
 			add_action('lost_password', array(&$this, 'disable_function'));
 			add_action('retrieve_password', array(&$this, 'disable_function'));
@@ -317,13 +324,25 @@ class ADIntegrationPlugin {
 		    add_action('admin_print_styles', array(&$this, 'load_styles'));
 		    add_action('admin_print_scripts', array(&$this, 'load_scripts'));
 		    
+		    // Add new column to the user list
+		    if ($this->_show_user_status) {
+				add_filter( 'manage_users_columns', array( &$this, 'manage_users_columns' ) );
+				add_filter( 'manage_users_custom_column', array( &$this, 'manage_users_custom_column' ), 10, 3 );
+			}
+
+			// actions for user disabling
+			add_action('personal_options_update', array(&$this, 'profile_update_disable_user'));
+			add_action('edit_user_profile_update', array(&$this, 'profile_update_disable_user'));
+			add_action('edit_user_profile', array(&$this, 'show_user_profile_disable_user'));
+			add_action('show_user_profile', array(&$this, 'show_user_profile_disable_user'));			
+			
+		    
 		    // Sync Back?
 		    if ($this->_syncback === true) {
-		    	
-				//add_action('profile_update', array(&$this, 'profile_update'));
 				add_action('personal_options_update', array(&$this, 'profile_update'));
 				add_action('edit_user_profile_update', array(&$this, 'profile_update'));
 		    }
+		    
 			
 			add_filter('check_password', array(&$this, 'override_password_check'), 10, 4);
 			
@@ -389,21 +408,26 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_network_timeout', 5);
 				add_site_option('AD_Integration_authorize_by_group', false);
 				add_site_option('AD_Integration_authorization_group', '');
-				add_site_option('AD_Integration_max_login_attempts', '3');
-				add_site_option('AD_Integration_block_time', '30');
-				add_site_option('AD_Integration_user_notification', false);
-				add_site_option('AD_Integration_admin_notification', false);
-				add_site_option('AD_Integration_admin_email', '');
 				add_site_option('AD_Integration_display_name', '');
 				add_site_option('AD_Integration_enable_password_change', false);
 				add_site_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT);
 				add_site_option('AD_Integration_auto_update_description', false);
+				add_site_option('AD_Integration_show_user_status', false);
+				
 				add_site_option('AD_Integration_show_attributes', false);
 				add_site_option('AD_Integration_attributes_to_show', '');
 				add_site_option('AD_Integration_additionl_user_attributes', '');
 				add_site_option('AD_Integration_usermeta_empty_overwrite', false);
 				add_site_option('AD_Integration_no_random_password', false);
 				add_site_option('AD_Integration_auto_update_password', false);
+
+				add_site_option('AD_Integration_max_login_attempts', '3');
+				add_site_option('AD_Integration_block_time', '30');
+				add_site_option('AD_Integration_user_notification', false);
+				add_site_option('AD_Integration_admin_notification', false);
+				add_site_option('AD_Integration_admin_email', '');
+				add_site_option('AD_Integration_disable_users', false);
+				add_site_option('AD_Integration_fallback_to_local_password', false);
 				
 				add_site_option('AD_Integration_syncback', false);
 				add_site_option('AD_Integration_syncback_use_global_user', false);
@@ -433,15 +457,12 @@ class ADIntegrationPlugin {
 				
 				add_option('AD_Integration_authorize_by_group', false);
 				add_option('AD_Integration_authorization_group', '');
-				add_option('AD_Integration_max_login_attempts', '3');
-				add_option('AD_Integration_block_time', '30');
-				add_option('AD_Integration_user_notification', false);
-				add_option('AD_Integration_admin_notification', false);
-				add_option('AD_Integration_admin_email', '');
 				add_option('AD_Integration_display_name', '');
 				add_option('AD_Integration_enable_password_change', false);
 				add_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT);
 				add_option('AD_Integration_auto_update_description', false);
+				add_option('AD_Integration_show_user_status', false);
+				
 				add_option('AD_Integration_show_attributes', false);
 				add_option('AD_Integration_attributes_to_show', '');
 				add_option('AD_Integration_additional_user_attributes', '');
@@ -449,6 +470,14 @@ class ADIntegrationPlugin {
 				
 				add_option('AD_Integration_no_random_password', false);
 				add_option('AD_Integration_auto_update_password', false);
+				
+				add_option('AD_Integration_max_login_attempts', '3');
+				add_option('AD_Integration_block_time', '30');
+				add_option('AD_Integration_user_notification', false);
+				add_option('AD_Integration_admin_notification', false);
+				add_option('AD_Integration_admin_email', '');
+				add_option('AD_Integration_disable_users', false);
+				add_option('AD_Integration_fallback_to_local_password', false);
 				
 				add_option('AD_Integration_syncback', false);
 				add_option('AD_Integration_syncback_use_global_user', false);
@@ -489,6 +518,7 @@ class ADIntegrationPlugin {
 		register_setting('ADI-user-settings', 'AD_Integration_duplicate_email_prevention');
 		register_setting('ADI-user-settings', 'AD_Integration_no_random_password', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_auto_update_password', array(&$this, 'sanitize_bool'));
+		register_setting('ADI-user-settings', 'AD_Integration_show_user_status', array(&$this, 'sanitize_bool'));
 		
 		// Authorization
 		register_setting('ADI-auth-settings', 'AD_Integration_authorize_by_group', array(&$this, 'sanitize_bool'));
@@ -496,11 +526,13 @@ class ADIntegrationPlugin {
 		register_setting('ADI-auth-settings', 'AD_Integration_role_equivalent_groups');
 		
 		// Security
+		register_setting('ADI-security-settings', 'AD_Integration_fallback_to_local_password', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-security-settings', 'AD_Integration_max_login_attempts', array(&$this, 'sanitize_max_login_attempts'));
 		register_setting('ADI-security-settings', 'AD_Integration_block_time', array(&$this, 'sanitize_block_time'));
 		register_setting('ADI-security-settings', 'AD_Integration_user_notification', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-security-settings', 'AD_Integration_admin_notification', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-security-settings', 'AD_Integration_admin_email', array(&$this, 'sanitize_admin_email'));
+						
 		
 		// User Meta
 		register_setting('ADI-usermeta-settings', 'AD_Integration_show_attributes', array(&$this, 'sanitize_bool'));
@@ -518,6 +550,7 @@ class ADIntegrationPlugin {
 		register_setting('ADI-bulkimport-settings', 'AD_Integration_bulkimport_security_groups');
 		register_setting('ADI-bulkimport-settings', 'AD_Integration_bulkimport_user', array(&$this, 'sanitize_bulkimport_user'));
 		register_setting('ADI-bulkimport-settings', 'AD_Integration_bulkimport_pwd', array(&$this, 'sanitize_bulkimport_user_pwd'));
+		register_setting('ADI-bulkimport-settings', 'AD_Integration_disable_users', array(&$this, 'sanitize_bool'));
 	}
 	
 
@@ -541,25 +574,23 @@ class ADIntegrationPlugin {
 		}
 	}
 
+	
 	/**
-	 * Wrapper
-	 * 
-	 * @param $arg1 WP_User or username
-	 * @param $arg2 username or password
-	 * @param $arg3 password or empty
-	 * @return WP_User
+	 * If the REMOTE_USER evironment is set, use it as the username.
+	 * This assumes that you have externally authenticated the user.
 	 */
-	public function authenticate($arg1 = NULL, $arg2 = NULL, $arg3 = NULL) {
+	public function authenticate($user = NULL, $username = '', $password = '') {
+		
 		global $wp_version, $wpmu_version;
 		
-		$this->_log(ADI_LOG_INFO,'method authenticate() called');
+		$this->_log(ADI_LOG_INFO,'method authenticate() called');		
 		
 		if (IS_WPMU) {
 			$version = $wpmu_version;
 		} else {
 			$version = $wp_version;
 		}
-
+		
 		// log debug informations
 		$this->_log(ADI_LOG_INFO,"------------------------------------------\n".
 								 'PHP version: '.phpversion()."\n".
@@ -570,28 +601,12 @@ class ADIntegrationPlugin {
 								 'adLDAP ver.: '.adLDAP::VERSION."\n".
 								 '------------------------------------------');
 		
-		if (version_compare($version, '2.8', '>=')) {
-			return $this->ad_authenticate($arg1, $arg2, $arg3); 
-		} else {
-			return $this->ad_authenticate(NULL, $arg1, $arg2);
-		}
-	}
-	
-
-	
-	/**
-	 * If the REMOTE_USER evironment is set, use it as the username.
-	 * This assumes that you have externally authenticated the user.
-	 */
-	public function ad_authenticate($user = NULL, $username = '', $password = '') {
-
-		$user_id = NULL;
-		
-		$this->_authenticated = false;
-		
 		// IMPORTANT!
+		$this->_authenticated = false;
+		$user_id = NULL;
 		$username = strtolower($username);
 		$password = stripslashes($password);
+
 		
 		// Don't use Active Directory for admin user (ID 1)
 		$user = get_userdatabylogin($username);
@@ -599,28 +614,6 @@ class ADIntegrationPlugin {
 			$this->_log(ADI_LOG_NOTICE,'User with ID 1 will never be authenticated by Active Directory Integration.');
 			return false;
 		}
-		
-		// extract account suffix from username if not set or this is enanbled
-		// (after loading of options)
-		// TODO: enable login with user@domain2.local if account suffix @domain1.local is set
-		/*
-		if (strpos($username,'@') !== false) {
-			$this->_log(ADI_LOG_NOTICE,'Logon with @domain detected.');
-			$parts = explode('@',$username);
-			if (trim($this->_account_suffix) == '') {
-				$username = $parts[0];
-				$this->_account_suffix = '@'.$parts[1];
-				$this->_append_suffix_to_new_users = true;
-			} else {
-				$this->_log(ADI_LOG_NOTICE,'Try domain ' . $parts[1] . ' from username.');
-				if (trim($this->_account_suffix) !== '@'.trim($parts[1])) {
-					$this->_log(ADI_LOG_NOTICE,'Temporarily reseting account_suffix and switching off append_suffix_to_new_users.');
-					$username = $parts[0];
-					$this->_account_suffix = '@'.trim($parts[1]);
-					$this->_append_suffix_to_new_users = true;
-				}
-			}
-		}*/
 		
 		// extract account suffix from username if not set
 		// (after loading of options)
@@ -721,7 +714,8 @@ class ADIntegrationPlugin {
 			} 
 		}
 		
-				
+		
+
 		// This is where the action is.
 		$account_suffixes = explode(";",$this->_account_suffix);
 		foreach($account_suffixes AS $account_suffix) {
@@ -735,6 +729,7 @@ class ADIntegrationPlugin {
 				break;
 			}
 		}
+		
 
 		if ( $this->_authenticated == false )
 		{
@@ -809,6 +804,13 @@ class ADIntegrationPlugin {
 			$this->_log(ADI_LOG_NOTICE,'user_id: '.$user_id);
 		}
 		$user = new WP_User($user_id);
+		
+		// user disabled?
+		if (get_user_meta($user_id, 'adi_user_disabled', true)) {
+			$this->_log(ADI_LOG_WARN,'User with ID ' . $user_id .' is disabled.');
+			$this->_authenticated = false;
+			return false;
+		}
 
 		$this->_log(ADI_LOG_NOTICE,'FINISHED');
 		return $user;
@@ -816,17 +818,46 @@ class ADIntegrationPlugin {
 	
 
 	/*
-	 * Skip the password check, since we've externally authenticated.
+	 * Use local (WordPress) password check if needed and allowed
 	 */
 	public function override_password_check($check, $password, $hash, $user_id) {
-		if ( $this->_authenticated == true ) 
-		{
-			return true;
-		}
-		else
-		{
+		
+		// Always use local password handling for user_id 1 (admin)
+		if ($user_id == 1) {
+			$this->_log(ADI_LOG_DEBUG,'UserID 1: using local (WordPress) password check.');
 			return $check;
 		}
+		
+		// return true for users authenticated by ADI (should never happen, but who knows?)
+		if ( $this->_authenticated == true ) 
+		{
+			$this->_log(ADI_LOG_DEBUG,'User successfully authenticated by ADI: override local (WordPress) password check.');
+			return true;
+		}
+		
+		// return false if user is disabled
+		if (get_user_meta($user_id,'adi_user_disabled', true)) {
+			$reason = get_user_meta($user_id,'adi_user_disabled_reason', true);
+			$this->_log(ADI_LOG_DEBUG,'User is disabled. Reason: '.$reason);
+			return false;
+		}
+		
+		
+		// Only check for local password if this is not an AD user and if fallback to local password is active
+		$usercheck =  get_user_meta($user_id,'adi_samaccountname', true);
+		if ($usercheck != '') {
+			if ($this->_fallback_to_local_password) {
+				$this->_log(ADI_LOG_DEBUG,'User from AD. Falling back to local (WordPress) password check.');
+				return $check;
+			} else {
+				$this->_log(ADI_LOG_DEBUG,'User from AD and fallback to local (WordPress) password deactivated. Authentication failed.');
+				return false;
+			}
+		}
+		
+		// use local password check in all other cases
+		$this->_log(ADI_LOG_DEBUG,'Using local (WordPress) password check.');
+		return $check;
 	}
 
 	/*
@@ -882,157 +913,6 @@ class ADIntegrationPlugin {
 		$errors = $this->errors;
 	}
 	
-	/**
-	 * Update user meta from profile page
-	 * Here we can write user meta informations back to AD
-	 * 
-	 * @param integer $user_id
-	 */
-	public function profile_update($user_id)
-	{
-		global $wp_version;
-		
-		// Add an action, so we can show errors on profile page
-		add_action('user_profile_update_errors', array(&$this,'generate_error'), 10, 3);
-		
-		$this->_log(ADI_LOG_DEBUG,'SyncBack: Start of profile update');
-		
-		$attributes_to_sync = array();
-		
-		// check if synback is on and we have a user from AD and not local user
-		if ($this->_syncback === true)
-		{
-		
-			// Go through attributes and update user meta if necessary.
-			$attributes = $this->_get_attributes_array();
-			foreach($attributes AS $key => $attribute) {
-				if ($attribute['sync'] == true) {
-					if (isset($_POST[$attribute['metakey']])) {
-						
-						if ($attribute['type'] == 'list') {
-							// List
-							$list = explode("\n",str_replace("\r",'',$_POST[$attribute['metakey']]));
-							$i=0;
-							foreach ($list AS $line) {
-								if (trim($line) != '') {
-									$attributes_to_sync[$key][$i] = $line;
-									$i++;
-								}
-							}
-							if ($i == 0) {
-								$attributes_to_sync[$key][0] = ' '; // Use a SPACE !!!
-							}
-						} else {
-							// single value
-							if ($_POST[$attribute['metakey']] == '') {
-								$attributes_to_sync[$key][0] = ' '; // Use a SPACE !!!!
-							} else {
-								$attributes_to_sync[$key][0] = $_POST[$attribute['metakey']];
-							}
-						}
-						// WP 3.x					
-						if (version_compare($wp_version, '3', '>=')) {
-							update_user_meta($user_id, $attribute['metakey'], $_POST[$attribute['metakey']]);
-						} else {
-							// WP 2.x
-							update_usermeta($user_id, $attribute['metakey'], $_POST[$attribute['metakey']]);
-						}
-					}
-				}
-			}
-			
-			// Only SyncBack if we have an AD-user and not a local user
-			if (isset($_POST['adi_samaccountname']) && ($_POST['adi_samaccountname'] != '')) { 
-			
-				// Get User Data
-				$userinfo = get_userdata($_POST['user_id']);
-				$username = $userinfo->user_login;
-				
-				// use personal_account_suffix
-				$personal_account_suffix = trim(get_user_meta($user_id,'ad_integration_account_suffix', true));
-				if ($personal_account_suffix != '') {
-					$account_suffix = $personal_account_suffix;
-				} else {
-					// extract account suffix from username if not set
-					// (after loading of options)
-					if (trim($this->_account_suffix) == '') {
-						if (strpos($username,'@') !== false) {
-							$parts = explode('@',$username);
-							$username = $parts[0];
-							$this->_account_suffix = '@'.$parts[1];
-							$this->_append_suffix_to_new_users = true; // TODO not really, hm?
-						}
-					} else {				
-						// choose first possible account suffix (this should never happen)
-						$suffixes = explode(';',$this->_account_suffix);
-						$account_suffix = $suffixes[0];
-						$this->_log(ADI_LOG_WARN,'No personal account suffix found. Now using first account suffix "'.$account_suffix.'".');
-					}
-				}
-				
-
-				// establish adLDAP connection
-				// Connect to Active Directory
-				if ($this->_syncback_use_global_user === true) {
-					$ad_username = $this->_syncback_global_user;
-					$ad_password = $this->_decrypt($this->_syncback_global_pwd);
-				} else {
-					if ($_POST['adi_synback_password'] != '') {
-						$ad_username = $username.$account_suffix;  
-						$ad_password = stripslashes($_POST['adi_synback_password']);
-					} else {
-						// No Global Sync User and no password given, so stop here.
-						$this->errors->add('syncback_no_password',__('No password given, so additional attributes are not written back to Active Directory','ad-integration'));
-						return false;
-					}
-				}
-				
-				// Log informations
-				$this->_log(ADI_LOG_INFO,"SyncBack: Options for adLDAP connection:\n".
-							  "- base_dn: $this->_base_dn\n".
-							  "- domain_controllers: $this->_domain_controllers\n".
-							  "- ad_username: $ad_username\n".
-							  "- ad_password: **not shown**\n".
-							  "- ad_port: $this->_port\n".
-							  "- use_tls: ".(int) $this->_use_tls."\n".
-							  "- network timeout: ". $this->_network_timeout);
-							
-				try {
-					$ad =  @new adLDAP(array(
-											"base_dn" => $this->_base_dn, 
-											"domain_controllers" => explode(';', $this->_domain_controllers),
-											"ad_username" => $ad_username,      // AD Bind User
-											"ad_password" => $ad_password,      // password
-											"ad_port" => $this->_port,          // AD port
-											"use_tls" => $this->_use_tls,             		// secure?
-											"network_timeout" => $this->_network_timeout	// network timeout
-											));
-				} catch (Exception $e) {
-		    		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
-		    		$this->errors->add('syncback_wrong_password',__('Error on writing additional attributes back to Active Directory. Wrong password?','ad-integration'),'');
-					return false; 
-				}
-				$this->_log(ADI_LOG_DEBUG,'Connected to AD');
-				
-				
-				//  Now we can modify the user
-				$this->_log(ADI_LOG_DEBUG,'attributes to sync: '.print_r($attributes_to_sync, true));
-				$this->_log(ADI_LOG_DEBUG,'modifying user: '.$username);
-				$modified = @$ad->user_modify_without_schema($username, $attributes_to_sync);
-				if (!$modified) {
-					$this->_log(ADI_LOG_WARN,'SyncBack: modifying user failed');
-					$this->_log(ADI_LOG_DEBUG,$ad->get_last_errno().': '.$ad->get_last_error());
-		    		$this->errors->add('syncback_modify_failed',__('Error on writing additional attributes back to Active Directory. Please contact your administrator.','ad-integration') . "<br/>[Error " . $ad->get_last_errno().'] '.$ad->get_last_error(),'');
-		    		return false;
-				} else {
-					$this->_log(ADI_LOG_NOTICE,'SyncBack: User successfully modified.');
-					return true;
-				}
-			} else {
-				return true;
-			}
-		}
-	}
 	
 	
 	public function setLogLevel($level = 0) {
@@ -1266,17 +1146,109 @@ class ADIntegrationPlugin {
 	}
 	
 	/**
+	 * Show the disable user checkbox if needed
+	 * 
+	 * @param object $user 
+	 */
+	public function show_user_profile_disable_user($user) {
+		
+		global $user_ID;
+		
+		// User disabled only visible for admins and not for user with ID 1 (admin) and not for ourselves
+		if (current_user_can('level_10') && ($user->id != 1) && ($user->id != $user_ID)) {
+
+			// Load up the localization file if we're using WordPress in a different language
+			// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
+			load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
+			
+			$user_disabled = get_user_meta($user->id, 'adi_user_disabled', true);
+			?>
+			<input type="hidden" name="adi_user_disabling" value="1" />
+			<table class="form-table">
+				<tr>
+					<th><label><?php _e('User Disabled','ad-integration');?></label>
+					<td>
+						<input type="checkbox" name="adi_user_disabled" id="adi_user_disabled"<?php if ($user_disabled) echo ' checked="checked"' ?> value="1" />
+						<?php _e('If selected, the user can not log in and his e-mail address will be changed for security reasons. The e-mail address is restored if the user is reenabled.','ad-integration'); ?>
+						<?php 
+						if ($user_disabled) {
+							?>
+							<p class="description"><?php _e('Information on last disabling: ', 'ad-integration');
+							echo get_user_meta($user->id, 'adi_user_disabled_reason', true);?></p>
+							<?php 
+						}?>
+						<p class="description"><?php _e('Attention: This flag is automatically set (or unset) by Bulk Import and its state may change on next run of Bulk Import.','ad-integration'); ?></p>
+					</td>
+				</tr>
+			</table>
+		<?php 
+		}	
+	}
+
+	
+	/**
+	 * Update disable state as set on profile page
+	 * 
+	 * @param object $user_id
+	 */
+	public function profile_update_disable_user($user_id)
+	{
+		global $user_login;
+		
+		// Disable User
+		if (isset($_POST['adi_user_disabling'])) {
+			if (isset($_POST['adi_user_disabled'])) {
+				// Disable if user was not disabled only
+				if (get_user_meta($user_id, 'adi_user_disabled', true) == false) {
+					$this->_disable_user($user_id, sprintf(__('User manually disabled by "%s".', 'ad-integration'), $user_login));
+				}
+			} else {
+				// Reenable if user was disabled only
+				if (get_user_meta($user_id, 'adi_user_disabled', true) == true) {
+					$this->_enable_user($user_id);
+				}
+			}
+		}
+	}
+				
+	
+	/**
 	 * Show defined AD attributes on profile page
 	 */
 	public function show_AD_attributes($user) {
 		
 		global $user_ID;
 		
+		// Load up the localization file if we're using WordPress in a different language
+		// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
+		load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
+		
+		/*
+		// User disabled only visible for admins and not for user with ID 1 (admin) and not for ourselves
+		if (current_user_can('level_10') && ($user->id != 1) && ($user->id != $user_ID)) {
+			$user_disabled = get_user_meta($user->id, 'adi_user_disabled', true);
+			?>
+			<input type="hidden" name="adi_user_disabling" value="1" />
+			<table class="form-table">
+				<tr>
+					<th><label><?php _e('User Disabled','ad-integration');?></label>
+					<td>
+						<input type="checkbox" name="adi_user_disabled" id="adi_user_disabled"<?php if ($user_disabled) echo ' checked="checked"' ?> value="1" />
+						<?php 
+						if ($user_disabled) {
+							_e('Reason', 'ad-integration');
+							echo ': ' . get_user_meta($user->id, 'adi_user_disabled_reason', true);
+						}?>
+						<p class="description"><?php _e('Attention: This flag is automatically set (or unset) by Bulk Import and its state may change on next run of Bulk Import.','ad-integration'); ?></p>
+					</td>
+				</tr>
+			</table>
+		<?php 
+		}*/
+				
+		
+		// Additional Attributes
 		if ($this->_show_attributes) {
-			
-			// Load up the localization file if we're using WordPress in a different language
-			// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
-			load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
 			
 			$all_attributes = $this->_get_attributes_array();
 		
@@ -1349,7 +1321,8 @@ class ADIntegrationPlugin {
 					</tr>
 				<?php 
 				}
-				   // show this only if Global Sync Back user is not set AND your are your own personal profile page AND we have an AD-user
+				
+				// show this only if Global Sync Back user is not set AND your are your own personal profile page AND we have an AD-user
 				if (($this->_syncback_use_global_user === false)
 					 && ($user->id == $user_ID)
 					 && ($this->_syncback == true)
@@ -1391,6 +1364,218 @@ class ADIntegrationPlugin {
 			}
 		}
 	}
+	
+	/**
+	 * Update user meta from profile page
+	 * Here we can write user meta informations back to AD and set disable status.
+	 * 
+	 * @param integer $user_id
+	 */
+	public function profile_update($user_id)
+	{
+		global $wp_version, $user_login;
+		
+		// Add an action, so we can show errors on profile page
+		add_action('user_profile_update_errors', array(&$this,'generate_error'), 10, 3);
+		
+		/*
+		// Disable User
+		if (isset($_POST['adi_user_disabling'])) {
+			if (isset($_POST['adi_user_disabled'])) {
+				// Disable if user was not disabled only
+				if (get_user_meta($user_id, 'adi_user_disabled', true) == false) {
+					$this->_disable_user($user_id, sprintf(__('User manually disabled by "%s".', 'ad-integration'), $user_login));
+				}
+			} else {
+				// Reenable if user was disabled only
+				if (get_user_meta($user_id, 'adi_user_disabled', true) == true) {
+					$this->_enable_user($user_id);
+				}
+			}
+		}*/
+		
+		$this->_log(ADI_LOG_DEBUG,'SyncBack: Start of profile update');
+		
+		$attributes_to_sync = array();
+		
+		// check if synback is on and we have a user from AD and not local user
+		if ($this->_syncback === true)
+		{
+		
+			// Go through attributes and update user meta if necessary.
+			$attributes = $this->_get_attributes_array();
+			foreach($attributes AS $key => $attribute) {
+				if ($attribute['sync'] == true) {
+					if (isset($_POST[$attribute['metakey']])) {
+						
+						if ($attribute['type'] == 'list') {
+							// List
+							$list = explode("\n",str_replace("\r",'',$_POST[$attribute['metakey']]));
+							$i=0;
+							foreach ($list AS $line) {
+								if (trim($line) != '') {
+									$attributes_to_sync[$key][$i] = $line;
+									$i++;
+								}
+							}
+							if ($i == 0) {
+								$attributes_to_sync[$key][0] = ' '; // Use a SPACE !!!
+							}
+						} else {
+							// single value
+							if ($_POST[$attribute['metakey']] == '') {
+								$attributes_to_sync[$key][0] = ' '; // Use a SPACE !!!!
+							} else {
+								$attributes_to_sync[$key][0] = $_POST[$attribute['metakey']];
+							}
+						}
+						// WP 3.x					
+						if (version_compare($wp_version, '3', '>=')) {
+							update_user_meta($user_id, $attribute['metakey'], $_POST[$attribute['metakey']]);
+						} else {
+							// WP 2.x
+							update_usermeta($user_id, $attribute['metakey'], $_POST[$attribute['metakey']]);
+						}
+					}
+				}
+			}
+			
+			// Only SyncBack if we have an AD-user and not a local user
+			if (isset($_POST['adi_samaccountname']) && ($_POST['adi_samaccountname'] != '')) { 
+			
+				// Get User Data
+				$userinfo = get_userdata($_POST['user_id']);
+				$username = $userinfo->user_login;
+				
+				// use personal_account_suffix
+				$personal_account_suffix = trim(get_user_meta($user_id,'ad_integration_account_suffix', true));
+				if ($personal_account_suffix != '') {
+					$account_suffix = $personal_account_suffix;
+				} else {
+					// extract account suffix from username if not set
+					// (after loading of options)
+					if (trim($this->_account_suffix) == '') {
+						if (strpos($username,'@') !== false) {
+							$parts = explode('@',$username);
+							$username = $parts[0];
+							$this->_account_suffix = '@'.$parts[1];
+							$this->_append_suffix_to_new_users = true; // TODO not really, hm?
+						}
+					} else {				
+						// choose first possible account suffix (this should never happen)
+						$suffixes = explode(';',$this->_account_suffix);
+						$account_suffix = $suffixes[0];
+						$this->_log(ADI_LOG_WARN,'No personal account suffix found. Now using first account suffix "'.$account_suffix.'".');
+					}
+				}
+				
+
+				// establish adLDAP connection
+				// Connect to Active Directory
+				if ($this->_syncback_use_global_user === true) {
+					$ad_username = $this->_syncback_global_user;
+					$ad_password = $this->_decrypt($this->_syncback_global_pwd);
+				} else {
+					if (isset($_POST['adi_synback_password']) && ($_POST['adi_synback_password'] != '')) {
+						$ad_username = $username.$account_suffix;  
+						$ad_password = stripslashes($_POST['adi_synback_password']);
+					} else {
+						// No Global Sync User and no password given, so stop here.
+						$this->errors->add('syncback_no_password',__('No password given, so additional attributes are not written back to Active Directory','ad-integration'));
+						return false;
+					}
+				}
+				
+				// Log informations
+				$this->_log(ADI_LOG_INFO,"SyncBack: Options for adLDAP connection:\n".
+							  "- base_dn: $this->_base_dn\n".
+							  "- domain_controllers: $this->_domain_controllers\n".
+							  "- ad_username: $ad_username\n".
+							  "- ad_password: **not shown**\n".
+							  "- ad_port: $this->_port\n".
+							  "- use_tls: ".(int) $this->_use_tls."\n".
+							  "- network timeout: ". $this->_network_timeout);
+							
+				try {
+					$ad =  @new adLDAP(array(
+											"base_dn" => $this->_base_dn, 
+											"domain_controllers" => explode(';', $this->_domain_controllers),
+											"ad_username" => $ad_username,      // AD Bind User
+											"ad_password" => $ad_password,      // password
+											"ad_port" => $this->_port,          // AD port
+											"use_tls" => $this->_use_tls,             		// secure?
+											"network_timeout" => $this->_network_timeout	// network timeout
+											));
+				} catch (Exception $e) {
+		    		$this->_log(ADI_LOG_ERROR,'adLDAP exception: ' . $e->getMessage());
+		    		$this->errors->add('syncback_wrong_password',__('Error on writing additional attributes back to Active Directory. Wrong password?','ad-integration'),'');
+					return false; 
+				}
+				$this->_log(ADI_LOG_DEBUG,'Connected to AD');
+				
+				
+				//  Now we can modify the user
+				$this->_log(ADI_LOG_DEBUG,'attributes to sync: '.print_r($attributes_to_sync, true));
+				$this->_log(ADI_LOG_DEBUG,'modifying user: '.$username);
+				$modified = @$ad->user_modify_without_schema($username, $attributes_to_sync);
+				if (!$modified) {
+					$this->_log(ADI_LOG_WARN,'SyncBack: modifying user failed');
+					$this->_log(ADI_LOG_DEBUG,$ad->get_last_errno().': '.$ad->get_last_error());
+		    		$this->errors->add('syncback_modify_failed',__('Error on writing additional attributes back to Active Directory. Please contact your administrator.','ad-integration') . "<br/>[Error " . $ad->get_last_errno().'] '.$ad->get_last_error(),'');
+		    		return false;
+				} else {
+					$this->_log(ADI_LOG_NOTICE,'SyncBack: User successfully modified.');
+					return true;
+				}
+			} else {
+				return true;
+			}
+		}
+	}
+	
+	
+	/**
+	 *  Add new column to the user list page
+	 */
+	function manage_users_columns( $columns ) {
+		// This requires WP 2.8+
+		global $wp_version;
+		if ( version_compare( $wp_version, '2.8', '>=' ) ) {
+			$columns['adi_user'] = __('ADI User', 'ad-integration');
+			$columns['adi_user_disabled'] = __('Disabled', 'ad-integration');
+		}
+		return $columns;
+	}
+	
+
+	
+	/*
+	 *  Add column content for each user on user list
+	 */
+	function manage_users_custom_column( $value, $column_name, $user_id ) {
+
+		// Column "Disabled"
+		if ( $column_name == 'adi_user' ) {
+			$sam = get_user_meta($user_id, 'adi_samaccountname', true);
+			if ($sam != '') {
+				$value = '<div class="user_adi">&nbsp;</div>';
+			} else {
+				$value = '';
+			}
+		}
+		
+		// Column "Reason"
+		if ( $column_name == 'adi_user_disabled' ) {
+			if (get_user_meta($user_id, 'adi_user_disabled', true)) {
+				//$value = __('Yes', 'ad-integration'). ' - ';
+				$value = '<div class="user_disabled">' . __(get_user_meta($user_id, 'adi_user_disabled_reason', true), 'ad-integration') . '</div>';
+			} else {
+				$value = '';
+			}
+		}
+		
+		return $value;
+	}	
 		
 	
 	/****************************************************************
@@ -1551,19 +1736,23 @@ class ADIntegrationPlugin {
 			$this->_authorize_by_group 			= (bool)get_site_option('AD_Integration_authorize_by_group');
 			$this->_authorization_group 		= get_site_option('AD_Integration_authorization_group');
 			$this->_role_equivalent_groups 		= get_site_option('AD_Integration_role_equivalent_groups');
+			$this->_display_name				= get_site_option('AD_Integration_display_name');
+			$this->_enable_password_change      = get_site_option('AD_Integration_enable_password_change');
+			$this->_duplicate_email_prevention  = get_site_option('AD_Integration_duplicate_email_prevention');
+			$this->_auto_update_description		= (bool)get_site_option('AD_Integration_auto_update_description');
+			$this->_show_user_status			= (bool)get_site_option('AD_Integration_show_user_status');
+			
+			$this->_show_attributes				= (bool)get_site_option('AD_Integration_show_attributes');
+			$this->_attributes_to_show			= get_site_option('AD_Integration_attributes_to_show');
+			$this->_additional_user_attributes	= get_site_option('AD_Integration_additional_user_attributes');
+			$this->_usermeta_empty_overwrite	= (bool)get_site_option('AD_Integration_usermeta_empty_overwrite');
+			
+			$this->_fallback_to_local_password	= get_site_option('AD_Integration_fallback_to_local_password');
 			$this->_max_login_attempts 			= (int)get_site_option('AD_Integration_max_login_attempts');
 			$this->_block_time 					= (int)get_site_option('AD_Integration_block_time');
 			$this->_user_notification	  		= (bool)get_site_option('AD_Integration_user_notification');
 			$this->_admin_notification			= (bool)get_site_option('AD_Integration_admin_notification');
 			$this->_admin_email					= get_site_option('AD_Integration_admin_email');
-			$this->_display_name				= get_site_option('AD_Integration_display_name');
-			$this->_enable_password_change      = get_site_option('AD_Integration_enable_password_change');
-			$this->_duplicate_email_prevention  = get_site_option('AD_Integration_duplicate_email_prevention');
-			$this->_auto_update_description		= (bool)get_site_option('AD_Integration_auto_update_description');
-			$this->_show_attributes				= (bool)get_site_option('AD_Integration_show_attributes');
-			$this->_attributes_to_show			= get_site_option('AD_Integration_attributes_to_show');
-			$this->_additional_user_attributes	= get_site_option('AD_Integration_additional_user_attributes');
-			$this->_usermeta_empty_overwrite	= (bool)get_site_option('AD_Integration_usermeta_empty_overwrite');
 			
 			$this->_no_random_password			= (bool)get_site_option('AD_Integration_no_random_password');
 			$this->_auto_update_password		= (bool)get_site_option('AD_Integration_auto_update_password');
@@ -1578,6 +1767,7 @@ class ADIntegrationPlugin {
 			$this->_bulkimport_security_groups	= get_site_option('AD_Integration_bulkimport_security_groups');
 			$this->_bulkimport_user				= get_site_option('AD_Integration_bulkimport_user');
 			$this->_bulkimport_pwd				= get_site_option('AD_Integration_bulkimport_pwd');
+			$this->_disable_users				= (bool)get_site_option('AD_Integration_disable_users');
 						
 		} else {
 			$this->_log(ADI_LOG_INFO,'loading options ...');
@@ -1595,19 +1785,23 @@ class ADIntegrationPlugin {
 			$this->_authorize_by_group 			= (bool)get_option('AD_Integration_authorize_by_group');
 			$this->_authorization_group 		= get_option('AD_Integration_authorization_group');
 			$this->_role_equivalent_groups 		= get_option('AD_Integration_role_equivalent_groups');
+			$this->_display_name				= get_option('AD_Integration_display_name');
+			$this->_enable_password_change      = get_option('AD_Integration_enable_password_change');
+			$this->_duplicate_email_prevention  = get_option('AD_Integration_duplicate_email_prevention');
+			$this->_auto_update_description		= (bool)get_option('AD_Integration_auto_update_description');
+			$this->_show_user_status			= (bool)get_option('AD_Integration_show_user_status');
+			
+			$this->_show_attributes				= (bool)get_option('AD_Integration_show_attributes');
+			$this->_attributes_to_show			= get_option('AD_Integration_attributes_to_show');
+			$this->_additional_user_attributes	= get_option('AD_Integration_additional_user_attributes');
+			$this->_usermeta_empty_overwrite	= (bool)get_option('AD_Integration_usermeta_empty_overwrite');
+			
+			$this->_fallback_to_local_password	= (bool)get_option('AD_Integration_fallback_to_local_password');
 			$this->_max_login_attempts 			= (int)get_option('AD_Integration_max_login_attempts');
 			$this->_block_time 					= (int)get_option('AD_Integration_block_time');
 			$this->_user_notification	  		= (bool)get_option('AD_Integration_user_notification');
 			$this->_admin_notification			= (bool)get_option('AD_Integration_admin_notification');
 			$this->_admin_email					= get_option('AD_Integration_admin_email');
-			$this->_display_name				= get_option('AD_Integration_display_name');
-			$this->_enable_password_change      = get_option('AD_Integration_enable_password_change');
-			$this->_duplicate_email_prevention  = get_option('AD_Integration_duplicate_email_prevention');
-			$this->_auto_update_description		= (bool)get_option('AD_Integration_auto_update_description');
-			$this->_show_attributes				= (bool)get_option('AD_Integration_show_attributes');
-			$this->_attributes_to_show			= get_option('AD_Integration_attributes_to_show');
-			$this->_additional_user_attributes	= get_option('AD_Integration_additional_user_attributes');
-			$this->_usermeta_empty_overwrite	= (bool)get_option('AD_Integration_usermeta_empty_overwrite');
 			
 			$this->_no_random_password			= (bool)get_option('AD_Integration_no_random_password');
 			$this->_auto_update_password		= (bool)get_option('AD_Integration_auto_update_password');
@@ -1622,6 +1816,7 @@ class ADIntegrationPlugin {
 			$this->_bulkimport_security_groups	= get_option('AD_Integration_bulkimport_security_groups');
 			$this->_bulkimport_user				= get_option('AD_Integration_bulkimport_user');
 			$this->_bulkimport_pwd				= get_option('AD_Integration_bulkimport_pwd');
+			$this->_disable_users				= (bool)get_option('AD_Integration_disable_users');
 			
 		}
 	}
@@ -2471,6 +2666,64 @@ class ADIntegrationPlugin {
 	}
 	
 	
+	/**
+	 * Disable a user by setting adi_user_disabled to true in usermeta and changing the email
+	 * 
+	 * @param int $user_id User ID 
+	 * @param string $reason Reason for disabling the user
+	 */
+	protected function _disable_user($user_id, $reason)
+	{
+		$userdata = get_userdata($user_id);
+		if (strpos($userdata->user_email,'DISABLED-USER-') !== 0) {
+			$new_email = 'DISABLED-USER-' . $userdata->user_email;
+		} else {
+			$new_email = $userdata->user_email;
+		}
+		
+		update_user_meta($user_id, 'adi_user_disabled', true); // set disabled flag
+		update_user_meta($user_id, 'adi_user_disabled_reason', $reason); // store reason
+		
+		// Do not overwrite previously stored email
+		if (get_user_meta($user_id, 'adi_user_disabled_email', true) == '') {
+			update_user_meta($user_id, 'adi_user_disabled_email', $userdata->user_email); // store email in meta
+		}
+		
+		wp_update_user( array ('ID' => $user_id, 'user_email' => $new_email) ) ; // change email of user
+		
+		// DIRTY: if we come from profile page, we have to change to POST data.
+		if (isset($_POST['email'])) {
+			$_POST['email'] = $new_email;
+		}
+		
+	}
+
+	
+	/**
+	 * Enables a user by setting adi_user_disabled to false in usermeta and restoring the email
+	 * 
+	 * @param int $user_id User ID
+	 */
+	protected function _enable_user($user_id)
+	{
+		update_user_meta($user_id, 'adi_user_disabled', false);  // remove disabled flag
+		update_user_meta($user_id, 'adi_user_disabled_reason', '');  // remove reaon
+		
+		$email = get_user_meta($user_id, 'adi_user_disabled_email', true); // fetch stored email from meta
+
+		// Only restore email if it has been previously stored
+		if ($email != '') {
+			wp_update_user( array ('ID' => $user_id, 'user_email' => $email) ) ; // restore email
+		}
+		
+		delete_user_meta($user_id, 'adi_user_disabled_email'); // delete stored email from meta
+		
+		// DIRTY: if we come from profile page, we have to change the POST data.
+		if (isset($_POST['email'])) {
+			$_POST['email'] = $email;
+		}		
+	}
+
 	
 	/**
 	 * Returns the given email address or a newly created so no 2 users

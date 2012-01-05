@@ -62,6 +62,21 @@ label.adi_syncback_password {
 	font-weight: bold;
 }
 
+div.user_adi {
+	background: url(images/adiicon.png);
+	background-repeat:no-repeat;
+	background-position: left center;
+	padding: 0;
+	margin: 0;
+	height: 36px;
+}
+
+div.user_disabled {
+	background: url(images/disabled.png);
+	background-repeat:no-repeat;
+	background-position: left center;
+	padding-left: 28px;
+}
 
 
 /* Caution! Ensure accessibility in print and other media types... */

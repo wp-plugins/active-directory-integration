@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Active Directory Integration\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-14 15:00+0100\n"
+"POT-Creation-Date: 2012-01-04 17:02+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bas Ruijters <ruijt@me.com>\n"
 "Language-Team: Bas Ruijters | kantoffis <info@kantoffis.nl>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-Country: NETHERLANDS\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ad-integration.php:527 admin.php:74
+#: ad-integration.php:565 admin.php:74
 msgid "Active Directory Integration"
 msgstr "Active Directory Integratie"
 
@@ -25,65 +25,67 @@ msgstr ""
 "<strong>FOUT</strong>: Deze gebruiker bestaat in de Active Directory, maar "
 "is niet gemachtigd in deze WordPress installatie."
 
-#: ad-integration.php:862
+#: ad-integration.php:898
 msgid "Active Directory Integration Help"
 msgstr "Active Directory Integration Help"
 
-#: ad-integration.php:863
+#: ad-integration.php:899
 msgid "Overview"
 msgstr "Overzicht"
 
-#: ad-integration.php:864
+#: ad-integration.php:900
 msgid "FAQ"
 msgstr "FAQ"
 
-#: ad-integration.php:865
+#: ad-integration.php:901
 msgid "Changelog"
 msgstr "Wijzigingenlog"
 
-#: ad-integration.php:866
+#: ad-integration.php:902
 msgid "Support-Forum"
 msgstr "Ondersteuning Forum"
 
-#: ad-integration.php:867
+#: ad-integration.php:903
 #, fuzzy
 msgid "Bug Tracker"
 msgstr "Bug Tracker"
 
-#: ad-integration.php:980
-msgid ""
-"No password given, so additional attributes are not written back to Active "
-"Directory"
+#: ad-integration.php:1169
+msgid "User Disabled"
 msgstr ""
-"Geen wachtwoord ingevoerd dus overige attributen zullen niet worden "
-"weggeschreven in de Active Directory"
 
-#: ad-integration.php:1007
+#: ad-integration.php:1172
 msgid ""
-"Error on writing additional attributes back to Active Directory. Wrong "
-"password?"
+"If selected, the user can not log in and his e-mail address will be changed "
+"for security reasons. The e-mail address is restored if the user is "
+"reenabled."
 msgstr ""
-"Fout in het wegschrijven van overige attributen naar de Active Directory. "
-"Verkeerd wachtwoord?"
 
-#: ad-integration.php:1020
+#: ad-integration.php:1176
+msgid "Information on last disabling: "
+msgstr ""
+
+#: ad-integration.php:1180
 msgid ""
-"Error on writing additional attributes back to Active Directory. Please "
-"contact your administrator."
+"Attention: This flag is automatically set (or unset) by Bulk Import and its "
+"state may change on next run of Bulk Import."
 msgstr ""
-"Fout in het wegschrijven van overige attributen naar de Active Directory. "
-"Neem contact op met uw administrator."
 
-#: ad-integration.php:1293
+#: ad-integration.php:1203
+#, php-format
+msgid "User manually disabled by \"%s\"."
+msgstr ""
+
+#: ad-integration.php:1270
 #, fuzzy
 msgid "Additional Informations"
 msgstr "Aanvullende informatie"
 
-#: ad-integration.php:1354
+#: ad-integration.php:1332
 msgid "Your password"
 msgstr "Uw wachtwoord"
 
-#: ad-integration.php:1357
+#: ad-integration.php:1335
 #, fuzzy
 msgid ""
 "If you want to save the changes on \"Additional Informations\" back to the "
@@ -92,172 +94,195 @@ msgstr ""
 "Als je de wijzigingen in \"Overige Informatie\" wilt opslaan en wegschrijven "
 "naar de Active Directory, dan moet je hier je wachtwoord ingeven."
 
-#: ad-integration.php:1370
-msgid "Perform SyncBack for this user"
-msgstr ""
-
-#: ad-integration.php:1372
+#: ad-integration.php:1484
 msgid ""
-"Click on the following link to perform a SyncBack of this user to Active "
-"Directory. Only pre-stored data will be transmitted."
+"No password given, so additional attributes are not written back to Active "
+"Directory"
+msgstr ""
+"Geen wachtwoord ingevoerd dus overige attributen zullen niet worden "
+"weggeschreven in de Active Directory"
+
+#: ad-integration.php:1511
+msgid ""
+"Error on writing additional attributes back to Active Directory. Wrong "
+"password?"
+msgstr ""
+"Fout in het wegschrijven van overige attributen naar de Active Directory. "
+"Verkeerd wachtwoord?"
+
+#: ad-integration.php:1524
+msgid ""
+"Error on writing additional attributes back to Active Directory. Please "
+"contact your administrator."
+msgstr ""
+"Fout in het wegschrijven van overige attributen naar de Active Directory. "
+"Neem contact op met uw administrator."
+
+#: ad-integration.php:1544
+#, fuzzy
+msgid "ADI User"
+msgstr "Gebruiker"
+
+#: ad-integration.php:1545
+msgid "Disabled"
 msgstr ""
 
-#: ad-integration.php:1503
+#: ad-integration.php:1697
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr "Instelling '%s' is verwijderd."
 
-#: ad-integration.php:1507
+#: ad-integration.php:1701
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr "Fout in het verwijderen van instelling '%s'."
 
-#: ad-integration.php:1630
+#: ad-integration.php:1834
 msgid "Common Name"
 msgstr "Gangbare naam"
 
-#: ad-integration.php:1631
+#: ad-integration.php:1835
 msgid "First name"
 msgstr "Voornaam"
 
-#: ad-integration.php:1632
+#: ad-integration.php:1836
 msgid "Initials"
 msgstr "Initialen"
 
-#: ad-integration.php:1633
+#: ad-integration.php:1837
 msgid "Last name"
 msgstr "Achternaam"
 
-#: ad-integration.php:1634 admin.php:250
+#: ad-integration.php:1838 admin.php:250
 msgid "Display name"
 msgstr "Schermnaam"
 
-#: ad-integration.php:1635 admin.php:437
+#: ad-integration.php:1839 admin.php:454
 msgid "Description"
 msgstr "Omschrijving"
 
-#: ad-integration.php:1636
+#: ad-integration.php:1840
 msgid "Office"
 msgstr "Kantoor"
 
-#: ad-integration.php:1637
+#: ad-integration.php:1841
 msgid "Telephone number"
 msgstr "Telefoonnummer"
 
-#: ad-integration.php:1638
+#: ad-integration.php:1842
 msgid "E-mail"
 msgstr "E-mail"
 
-#: ad-integration.php:1639
+#: ad-integration.php:1843
 msgid "Web Page"
 msgstr "Webpagina"
 
-#: ad-integration.php:1642
+#: ad-integration.php:1846
 msgid "User logon name"
 msgstr "Gebruikersnaam"
 
-#: ad-integration.php:1645
+#: ad-integration.php:1849
 msgid "Street"
 msgstr "Straat"
 
-#: ad-integration.php:1646
+#: ad-integration.php:1850
 msgid "P.O. Box"
 msgstr "Postbus"
 
-#: ad-integration.php:1647
+#: ad-integration.php:1851
 msgid "City"
 msgstr "Plaats"
 
-#: ad-integration.php:1648
+#: ad-integration.php:1852
 msgid "State"
 msgstr "Provincie"
 
-#: ad-integration.php:1649
+#: ad-integration.php:1853
 msgid "ZIP/Postal cide"
 msgstr "Postcode"
 
-#: ad-integration.php:1650
+#: ad-integration.php:1854
 msgid "Country abbreviation"
 msgstr "Land afkorting"
 
-#: ad-integration.php:1651
+#: ad-integration.php:1855
 msgid "Country"
 msgstr "Land"
 
-#: ad-integration.php:1652
+#: ad-integration.php:1856
 msgid "Country code (number)"
 msgstr "Landcode (nummer)"
 
-#: ad-integration.php:1655
+#: ad-integration.php:1859
 msgid "Home"
 msgstr "Thuis"
 
-#: ad-integration.php:1656
+#: ad-integration.php:1860
 msgid "Home (other)"
 msgstr "Thuis (anders)"
 
-#: ad-integration.php:1657
+#: ad-integration.php:1861
 msgid "Pager"
 msgstr "Pieper"
 
-#: ad-integration.php:1658
+#: ad-integration.php:1862
 msgid "Pager (other)"
 msgstr "Pieper (anders)"
 
-#: ad-integration.php:1659
+#: ad-integration.php:1863
 msgid "Mobile"
 msgstr "Mobiel"
 
-#: ad-integration.php:1660
+#: ad-integration.php:1864
 msgid "Mobile (Other)"
 msgstr "Mobiel (anders)"
 
-#: ad-integration.php:1661
+#: ad-integration.php:1865
 msgid "Fax"
 msgstr "Fax"
 
-#: ad-integration.php:1662
+#: ad-integration.php:1866
 msgid "Fax (other)"
 msgstr "Fax (anders)"
 
-#: ad-integration.php:1663
+#: ad-integration.php:1867
 msgid "IP Phone"
 msgstr "IP telefoon"
 
-#: ad-integration.php:1664
+#: ad-integration.php:1868
 msgid "IP Phone (other)"
 msgstr "IP telefoon (anders)"
 
-#: ad-integration.php:1665
+#: ad-integration.php:1869
 msgid "Notes"
 msgstr "Opmerkingen"
 
-#: ad-integration.php:1668
+#: ad-integration.php:1872
 msgid "Title"
 msgstr "Titel"
 
-#: ad-integration.php:1669
+#: ad-integration.php:1873
 msgid "Department"
 msgstr "Afdeling"
 
-#: ad-integration.php:1670
+#: ad-integration.php:1874
 msgid "Company"
 msgstr "Bedrijf"
 
-#: ad-integration.php:1671
+#: ad-integration.php:1875
 msgid "Manager"
 msgstr "Leidinggevende"
 
-#: ad-integration.php:1672
+#: ad-integration.php:1876
 #, fuzzy
 msgid "Direct reports"
 msgstr "Directe rapporten"
 
-#: ad-integration.php:2652 ad-integration.php:2735
+#: ad-integration.php:2914 ad-integration.php:2997
 msgid "Account blocked"
 msgstr "Account vergrendeld"
 
-#: ad-integration.php:2653
+#: ad-integration.php:2915
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
@@ -267,7 +292,7 @@ msgstr ""
 "s) - maar dat is niet gelukt. Uit veiligheidsoverweging is het account "
 "vergrendeld voor %d seconden."
 
-#: ad-integration.php:2655 ad-integration.php:2740
+#: ad-integration.php:2917 ad-integration.php:3002
 msgid ""
 "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
 "ADDRESS SPECIFIED ABOVE."
@@ -275,7 +300,7 @@ msgstr ""
 "DIT IS EEN AUTOMATISCH GEGENEREERDE EMAIL, NIET ANTWOORDEN NAAR DIT EMAIL "
 "ADRES."
 
-#: ad-integration.php:2736
+#: ad-integration.php:2998
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
@@ -285,20 +310,20 @@ msgstr ""
 "s) - maar dat is niet gelukt. Uit veiligheidsoverweging is het account "
 "geblokkeerd voor %d seconden."
 
-#: ad-integration.php:2738
+#: ad-integration.php:3000
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "De inlog poging kwam van dit IP-adres: %s"
 
-#: ad-integration.php:2859
+#: ad-integration.php:3121
 msgid "Powered by WordPress"
 msgstr "Aangedreven door WordPress"
 
-#: ad-integration.php:2861
+#: ad-integration.php:3123
 msgid "Account blocked for"
 msgstr "Account vergrendeld voor"
 
-#: ad-integration.php:2861 admin.php:144
+#: ad-integration.php:3123 admin.php:144
 msgid "seconds"
 msgstr "seconden"
 
@@ -322,7 +347,7 @@ msgstr "Server"
 msgid "User"
 msgstr "Gebruiker"
 
-#: admin.php:94 admin.php:328
+#: admin.php:94 admin.php:336
 msgid "Authorization"
 msgstr "Autorisatie"
 
@@ -330,7 +355,7 @@ msgstr "Autorisatie"
 msgid "Security"
 msgstr "Beveiliging"
 
-#: admin.php:96 admin.php:456
+#: admin.php:96 admin.php:473
 msgid "User Meta"
 msgstr "Gebruikersgegevens"
 
@@ -338,7 +363,7 @@ msgstr "Gebruikersgegevens"
 msgid "Bulk Import"
 msgstr "Massa Import"
 
-#: admin.php:101 admin.php:674
+#: admin.php:101 admin.php:700
 msgid "Test Tool"
 msgstr "Test programma"
 
@@ -398,8 +423,8 @@ msgstr "Basis DN"
 msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
 msgstr "Basis DN (bijv. \"ou=unit,dc=domein,dc=nl\")"
 
-#: admin.php:161 admin.php:314 admin.php:363 admin.php:424 admin.php:579
-#: admin.php:660
+#: admin.php:161 admin.php:322 admin.php:371 admin.php:441 admin.php:596
+#: admin.php:686
 msgid "Save Changes"
 msgstr "Wijzigingen opslaan"
 
@@ -599,15 +624,23 @@ msgstr ""
 "Kies gebruikers Active Directory attribuut welke als weergavenaam wordt "
 "gebruikt."
 
-#: admin.php:269
+#: admin.php:268
+msgid "Show User Status"
+msgstr ""
+
+#: admin.php:271
+msgid "Show additional columns (ADI User, disabled) in the user list."
+msgstr ""
+
+#: admin.php:277
 msgid "Password handling"
 msgstr "Wachtwoord afhandeling"
 
-#: admin.php:274
+#: admin.php:282
 msgid "Enable local password changes"
 msgstr "Locale wachtwoord wijzigen toestaan"
 
-#: admin.php:277
+#: admin.php:285
 msgid ""
 "Allow users to change their local (<strong>non AD</strong>) WordPress "
 "password"
@@ -615,7 +648,7 @@ msgstr ""
 "Sta toe dat gebruikers hun locale (<strong> niet AD </strong>) WordPress "
 "wachtwoord mogen wijzigen."
 
-#: admin.php:279
+#: admin.php:287
 msgid ""
 "<strong>If activated, a password change will update the local WordPress "
 "database only. No changes in Active Directory will be made.</strong>"
@@ -624,11 +657,11 @@ msgstr ""
 "de locale WordPress database gelden. Er zullen geen wijzigingen in de Active "
 "Directory plaatsvinden. </strong>"
 
-#: admin.php:285
+#: admin.php:293
 msgid "Set local password on first successfull login"
 msgstr "Zet lokaal wachtwoord bij succesvolle inlog poging"
 
-#: admin.php:288
+#: admin.php:296
 msgid ""
 "First time a user logs on successfully and is created, his local WordPress "
 "password is set to the one used for this login."
@@ -637,24 +670,24 @@ msgstr ""
 "zijn locale WordPress wachtwoord vervangen met degene waarmee hij ingelogd "
 "heeft."
 
-#: admin.php:290
+#: admin.php:298
 msgid ""
 "If this option is deactivated a random password for this user will be set."
 msgstr ""
 "Indien deze optie is uitgeschakeld, zal er een willekeurig wachtwoord voor "
 "de gebruiker worden ingesteld."
 
-#: admin.php:292
+#: admin.php:300
 msgid "<b>Works only if \"Automatic User Creation\" is turned on.</b>"
 msgstr ""
 "<b>Werkt alleen als \"Automatisch gebruikers aanmaken \" is ingeschakeld. </"
 "b>"
 
-#: admin.php:298
+#: admin.php:306
 msgid "Automatic Password Update"
 msgstr "Automatisch wachtwoord bijwerken"
 
-#: admin.php:301
+#: admin.php:309
 msgid ""
 "Every time a user logs on successfully, his local WordPress password is set "
 "to the one used for this login."
@@ -662,7 +695,7 @@ msgstr ""
 "Bij iedere succesvolle inlog poging, zal het locale WordPress wachtwoord "
 "worden overschreven met degene waarmee hij inlogt."
 
-#: admin.php:303
+#: admin.php:311
 msgid ""
 "Note: Activating this option makes little sense when \"Enable local password "
 "changes\" is turned on."
@@ -670,7 +703,7 @@ msgstr ""
 "Opmerking: Deze optie activeren heeft weinig zin als \"Locale wachtwoord "
 "wijzigen inschakelen \" staat ingeschakeld."
 
-#: admin.php:305
+#: admin.php:313
 msgid ""
 "<b>Works only if \"Automatic User Creation\" and \"Automatic User Update\" "
 "is turned on.</b>"
@@ -678,11 +711,11 @@ msgstr ""
 "<b>Werkt alleen als \"Automatisch gebruikers aanmaken\" en \"Automatisch "
 "gebruikers bijwerken\" staat ingeschakeld. </b>"
 
-#: admin.php:332
+#: admin.php:340
 msgid "Authorize by group membership"
 msgstr "Autorisatie per groeplidmaatschap"
 
-#: admin.php:335
+#: admin.php:343
 msgid ""
 "Users are authorized for login only when they are members of a specific AD "
 "group."
@@ -690,11 +723,11 @@ msgstr ""
 "Gebruikers zijn geautoriseerd om in te loggen, alleen als ze lid zijn van "
 "een bepaalde AD groep."
 
-#: admin.php:337 admin.php:627
+#: admin.php:345 admin.php:644
 msgid "Group(s)"
 msgstr "Groep(en)"
 
-#: admin.php:340
+#: admin.php:348
 msgid ""
 "Seperate multiple groups by semicolon (e.g. \"domain-users;WP-Users;test-"
 "users\")."
@@ -702,17 +735,17 @@ msgstr ""
 "Scheid meerdere groepen door een puntkomma (bijv. \"domein-gebruikers;WP-"
 "gebruikers;test-gebruikers\")."
 
-#: admin.php:346
+#: admin.php:354
 msgid "Role Equivalent Groups"
 msgstr "Rol - Groep"
 
-#: admin.php:350
+#: admin.php:358
 msgid ""
 "List of Active Directory groups which correspond to WordPress user roles."
 msgstr ""
 "Lijst met Active Directory groepen welke corresponderen met WordPress rollen"
 
-#: admin.php:351
+#: admin.php:359
 msgid ""
 "When a user is first created, his role will correspond to what is specified "
 "here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/"
@@ -728,11 +761,11 @@ msgstr ""
 "groep en rol, van links naar rechts. Logischerwijs zet je beheerders groepen "
 "als eerste."
 
-#: admin.php:352
+#: admin.php:360
 msgid "NOTES"
 msgstr "OPMERKINGEN"
 
-#: admin.php:354
+#: admin.php:362
 msgid ""
 "WordPress stores roles as lower case (\"Subscriber\" is stored as "
 "\"subscriber\")"
@@ -740,11 +773,11 @@ msgstr ""
 "WordPress slaat rollen op in kleine letters (\"Subscriber\" is opgeslagen "
 "als \"subscriber\")"
 
-#: admin.php:355
+#: admin.php:363
 msgid "Active Directory groups are case-sensitive."
 msgstr "Active Directory groepen zijn hoofdletter gevoelig."
 
-#: admin.php:356
+#: admin.php:364
 msgid ""
 "Group memberships cannot be checked across domains.  So if you have two "
 "domains, instr and qc, and qc is the domain specified above, if instr is "
@@ -757,11 +790,24 @@ msgstr ""
 "gebruikers van domein2 authenticeren, maar niet hun groep lidmaatschappen "
 "controleren."
 
-#: admin.php:377
+#: admin.php:385
+#, fuzzy
+msgid "Fallback to local password"
+msgstr "Locale wachtwoord wijzigen toestaan"
+
+#: admin.php:388
+msgid ""
+"Fallback to local (WordPress) password check if authentication against AD "
+"fails.</br>If turned on users can logon even if Active Directory server is "
+"unreachable. But this might be a security risk (for example, if the local "
+"password is outdated). <b>It's recommended to turn this off.</b>"
+msgstr ""
+
+#: admin.php:394
 msgid "Brute Force Protection"
 msgstr "Forceer strenge beveiliging"
 
-#: admin.php:378
+#: admin.php:395
 msgid ""
 "For security reasons you can use the following options to prevent brute "
 "force attacks on your user accounts."
@@ -769,11 +815,11 @@ msgstr ""
 "Uit veiligheidsoverweging kunt u de volgende opties gebruiken om geforceerde "
 "strenge aanvallen te voorkomen."
 
-#: admin.php:383
+#: admin.php:400
 msgid "Maximum number of allowed login attempts"
 msgstr "Maximaal aantal toegestane inlog pogingen"
 
-#: admin.php:387
+#: admin.php:404
 msgid ""
 "Maximum number of failed login attempts before a user account is blocked. If "
 "empty or \"0\" Brute Force Protection is turned off."
@@ -782,11 +828,11 @@ msgstr ""
 "geblokkeerd. Indien leeg of \"0\", zal Forceer strenge beveiliging "
 "uitgeschakeld zijn."
 
-#: admin.php:392
+#: admin.php:409
 msgid "Blocking Time"
 msgstr "Blokkade tijd"
 
-#: admin.php:396
+#: admin.php:413
 msgid ""
 "Number of seconds an account is blocked after the maximum number of failed "
 "login attempts is reached."
@@ -794,29 +840,29 @@ msgstr ""
 "Aantal seconden dan een account is geblokkeerd na het bereiken van het "
 "maximaal aantal foutieve inlog pogingen."
 
-#: admin.php:401
+#: admin.php:418
 msgid "User Notification"
 msgstr "Gebruiker notificatie"
 
-#: admin.php:404
+#: admin.php:421
 msgid "Notify user by e-mail when his account is blocked."
 msgstr "Gebruiker informeren per email als zijn account is vergrendeld."
 
-#: admin.php:409
+#: admin.php:426
 msgid "Admin Notification"
 msgstr "Admin notificatie"
 
-#: admin.php:412
+#: admin.php:429
 msgid "Notify admin(s) by e-mail when an user account is blocked."
 msgstr ""
 "Administrator(s) informeren per email als een gebruiker zijn account is "
 "geblokkeerd."
 
-#: admin.php:414
+#: admin.php:431
 msgid "E-mail addresses for notifications:"
 msgstr "Email adres voor notificaties:"
 
-#: admin.php:418
+#: admin.php:435
 msgid ""
 "Seperate multiple addresses by semicolon (e.g. \"admin@company.com;"
 "me@mydomain.org\"). If left blank, notifications will be sent to the blog-"
@@ -826,15 +872,15 @@ msgstr ""
 "ik@company.local\").  Indien leeg, zullen notificaties alleen naar de blog-"
 "administrator worden gestuurd."
 
-#: admin.php:433
+#: admin.php:450
 msgid "Commonn attributes"
 msgstr "Gangbare attributen"
 
-#: admin.php:436
+#: admin.php:453
 msgid "AD Attribute"
 msgstr "AD attribuut"
 
-#: admin.php:457
+#: admin.php:474
 msgid ""
 "User attributes from the AD are can be stored as User Meta Data. These "
 "attributes can then be used in your themes and they can be shown on the "
@@ -844,7 +890,7 @@ msgstr ""
 "Deze attributen kunnen dan in themas gebruikt en getoond worden op de "
 "profiel pagina van uw gebruikers."
 
-#: admin.php:458
+#: admin.php:475
 msgid ""
 "The attributes are only stored in the WordPress database if you activate "
 "\"Automatic User Creation\" and are only updated if you activate \"Automatic "
@@ -855,11 +901,11 @@ msgstr ""
 "bijgewerkt als de optie \"Automatisch gebruikers bijwerken\" aanstaat op het "
 "tabblad \"Gebruikers\"."
 
-#: admin.php:466
+#: admin.php:483
 msgid "Additional User Attributes"
 msgstr "Aanvullende gebruikers attributen"
 
-#: admin.php:468
+#: admin.php:485
 msgid ""
 "Enter additional AD attributes (one per line), followed by their type and "
 "the associated meta key seperated by a colon (:)."
@@ -867,7 +913,7 @@ msgstr ""
 "Aanvullende AD attributen (één per regel), gevolgd door het type en de "
 "geassocieerde meta sleutel, gescheiden door een dubbele punt (:)."
 
-#: admin.php:469
+#: admin.php:486
 msgid ""
 "Additional Attributes that should appear on the user profile must also be "
 "placed in \"Attributes to show\"."
@@ -875,7 +921,7 @@ msgstr ""
 "Aanvullende attributen die ook in het profiel getoond moeten worden, dienen "
 "ook in \"Te tonen Attributen\" geplaatst worden."
 
-#: admin.php:471
+#: admin.php:488
 #, fuzzy
 msgid ""
 "Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where "
@@ -886,7 +932,7 @@ msgstr ""
 "waar <i> &lt;type&gt;</i> een van de volgende kan zijn: <i>string, integer, "
 "bool, octet, time, timestamp</i>"
 
-#: admin.php:473
+#: admin.php:490
 msgid ""
 "If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as "
 "<i>adi_&lt;attribute_name&gt;</i>."
@@ -894,11 +940,11 @@ msgstr ""
 "Als geen <i>&lt;meta sleutel&gt;</i> is opgegeven zullen de AD attributen "
 "worden opgeslagen als <i>adi_&lt;attribuut_naam&gt;</i>."
 
-#: admin.php:475 admin.php:512
+#: admin.php:492 admin.php:529
 msgid "Example:"
 msgstr "Bijvoorbeeld:"
 
-#: admin.php:477
+#: admin.php:494
 msgid ""
 "lastlogon:timestamp:last_logon_time\n"
 "whencreated:time:user_created_on\n"
@@ -910,21 +956,21 @@ msgstr ""
 "homephone:string\n"
 "otherhomephone:list"
 
-#: admin.php:480
+#: admin.php:497
 msgid "Show Common Attributes"
 msgstr "Toon Algemene Attributen"
 
-#: admin.php:482
+#: admin.php:499
 msgid "Notice: Attributes of type <i>octet</i> are stored base64 encoded."
 msgstr ""
 "Opmerking: Attributen van het type <i>octet</i> worden base64 encoded "
 "opgeslagen."
 
-#: admin.php:487
+#: admin.php:504
 msgid "Overwrite with empty values"
 msgstr "Overschrijven met lege waardes"
 
-#: admin.php:490
+#: admin.php:507
 msgid ""
 "Overwrite local values even if the attribute values in Active Directory are "
 "empty."
@@ -932,19 +978,19 @@ msgstr ""
 "Overschrijf locale waardes, zelfs als de attributen in de Active Directory "
 "leeg zijn."
 
-#: admin.php:495
+#: admin.php:512
 msgid "Show Attributes"
 msgstr "Toon attributen"
 
-#: admin.php:498
+#: admin.php:515
 msgid "Show user attributes from AD in user profile."
 msgstr "Toon gebruikers attributen uit de AD op het profiel."
 
-#: admin.php:505
+#: admin.php:522
 msgid "Attributes to show"
 msgstr "Te tonen Attributen"
 
-#: admin.php:507
+#: admin.php:524
 msgid ""
 "Enter the AD attributes (one per line) followed by a description seperated "
 "by a colon (:) to be shown at the end of the user profile page. If no "
@@ -959,7 +1005,7 @@ msgstr ""
 "er geen omschrijving bestaat voor het attribuut, zal de naam van het "
 "attribuut worden getoond."
 
-#: admin.php:508
+#: admin.php:525
 msgid ""
 "The attributes to be shown must appear on the list of Additional User "
 "Attributes."
@@ -967,7 +1013,7 @@ msgstr ""
 "De attributen die getoond moeten worden, dienen in de lijst met aanvullende "
 "gebruikers attributen staan."
 
-#: admin.php:509
+#: admin.php:526
 msgid ""
 "If want to make some attributes editable and written back to AD on profile "
 "update add a trailing \":*\" (Sync Back must be turned on, see below)."
@@ -976,7 +1022,7 @@ msgstr ""
 "het wijzigen van het profiel, voeg het volgende toe: \":*\" ( Synchroniseren "
 "moet wel aanstaan, zie hieronder)."
 
-#: admin.php:510
+#: admin.php:527
 msgid ""
 "If you enter something that is not in the list of Additional User Attributes "
 "it will be treated as normal text. Use this to structure the output."
@@ -985,7 +1031,7 @@ msgstr ""
 "gebruikers attributen, zal deze worden gezien als gewone tekst. Gebruik dit "
 "om structuur aan te brengen."
 
-#: admin.php:514
+#: admin.php:531
 msgid ""
 "lastlogon\n"
 "whencreated:User Created on\n"
@@ -999,15 +1045,15 @@ msgstr ""
 "homephone:Telefoon (thuis):*\n"
 "otherhomephone::*"
 
-#: admin.php:522
+#: admin.php:539
 msgid "Sync Back"
 msgstr "Synchroniseren"
 
-#: admin.php:527
+#: admin.php:544
 msgid "Sync Back to AD"
 msgstr "Synchroniseren met de AD"
 
-#: admin.php:530
+#: admin.php:547
 msgid ""
 "Sync changed values of attributes marked with an asterisk (*) back to Active "
 "Directory on update of user profile."
@@ -1016,11 +1062,11 @@ msgstr ""
 "sterretje (*) met de Active Directory bij het opslaan van het gebruikers "
 "profiel."
 
-#: admin.php:535
+#: admin.php:552
 msgid "Use Global Sync User"
 msgstr "Gebruik Algemene Synchroniseer Gebruiker"
 
-#: admin.php:538
+#: admin.php:555
 msgid ""
 "Use a Global Sync User for all writes to AD. Leave this unchecked to ask for "
 "the users password on every sync back/profile update."
@@ -1029,7 +1075,7 @@ msgstr ""
 "AD. Laat dit uitgevinkt om gebruikers hun wachtwoord in te laten geven bij "
 "het opslaan van hun profiel."
 
-#: admin.php:541
+#: admin.php:558
 msgid ""
 "NOTICE: The password of the Global Sync User is stored encrypted, but USE AT "
 "YOUR OWN RISK. To get around this you must give your users the permission to "
@@ -1040,11 +1086,11 @@ msgstr ""
 "gebruikers rechten nodig om hun eigen AD attributen te wijzigen. Zie FAQ "
 "voor details."
 
-#: admin.php:546
+#: admin.php:563
 msgid "Global Sync User"
 msgstr "Algemene Synchroniseer Gebruiker"
 
-#: admin.php:550
+#: admin.php:567
 msgid ""
 "Username of an AD account with write permissions for the users in the Active "
 "Directory (e.g. administrator@company.local)."
@@ -1052,34 +1098,34 @@ msgstr ""
 "Gebruikersnaam van een AD account met schrijfrechten voor de gebruikers in "
 "de Active Directory (bijv. administrator@company.local)."
 
-#: admin.php:555
+#: admin.php:572
 msgid "Global Sync User Password"
 msgstr "Algemene Synchroniseer Gebruiker wachtwoord"
 
-#: admin.php:559
+#: admin.php:576
 msgid "Password for Global Sync User."
 msgstr "Wachtwoord van Algemene Synchroniseer Gebruiker"
 
-#: admin.php:560 admin.php:650
+#: admin.php:577 admin.php:667
 msgid "Leave empty if password should not be changed."
 msgstr "Laat leeg indien wachtwoord ongewijzigd blijft."
 
-#: admin.php:568
+#: admin.php:585
 msgid "Perform SyncBack for all users"
 msgstr ""
 
-#: admin.php:570
+#: admin.php:587
 msgid ""
 "Click on the following link to perform a SyncBack of all users to Active "
 "Directory. \"Global Sync User\" and \"Global Sync User Password\" must be "
 "set (but it is not necessary to turn on \"Use Global Sync User\")."
 msgstr ""
 
-#: admin.php:593
+#: admin.php:610
 msgid "User Bulk Import & Update"
 msgstr "Gebruiker Massa Import & Update"
 
-#: admin.php:594
+#: admin.php:611
 msgid ""
 "You can import/update the users from Active Directory, for example by using "
 "a cron job."
@@ -1087,31 +1133,31 @@ msgstr ""
 "Je kunt de gebruikers van de Active Directory importeren/updaten door "
 "bijvoorbeeld een cron job te gebruiken."
 
-#: admin.php:600
+#: admin.php:617
 msgid "Enable Bulk Import & Update"
 msgstr "Massa Import & Update inschakelen"
 
-#: admin.php:607
+#: admin.php:624
 msgid "Auth Code"
 msgstr "Auth Code"
 
-#: admin.php:611
+#: admin.php:628
 msgid "Select this to generate a new Auth Code."
 msgstr "Selecteer dit om een nieuwe Auth Code te genereren."
 
-#: admin.php:616
+#: admin.php:633
 msgid "Bulk Import URL"
 msgstr "Massa Import URL"
 
-#: admin.php:620
+#: admin.php:637
 msgid "Use this URL in your cron jobs."
 msgstr "Gebruik deze URL in je cron jobs."
 
-#: admin.php:625
+#: admin.php:642
 msgid "Import members of security groups"
 msgstr "Importeer gebruikers van security groepen."
 
-#: admin.php:630
+#: admin.php:647
 msgid ""
 "The members of the security groups entered here, will be imported or updated "
 "autimatically if the Bulk Import URL is opened. Seperate multiple groups by "
@@ -1122,7 +1168,7 @@ msgstr ""
 "Scheid meerdere groepen met een puntkomma (bijv. \"company user;WP-Users;"
 "test-users\")."
 
-#: admin.php:631
+#: admin.php:648
 msgid ""
 "If you want to include the users of the built in user group \"domain users\" "
 "you have to enter \"domain users;id:513\" (see FAQ for details)."
@@ -1131,11 +1177,11 @@ msgstr ""
 "users\" moet je het volgende invoeren \"domain users;id:513\"  (zie FAQ voor "
 "details)."
 
-#: admin.php:636
+#: admin.php:653
 msgid "Bulk Import User"
 msgstr "Massa Import Gebruiker"
 
-#: admin.php:640
+#: admin.php:657
 msgid ""
 "Username of an AD account with read permissions for the users in the Active "
 "Directory (e.g. \"ldapuser@company.local\")."
@@ -1143,15 +1189,31 @@ msgstr ""
 "Gebruikersnaam van een AD account met schrijfrechten voor de gebruikers in "
 "de Active Directory (bijv. \"ldapuser@company.local\")."
 
-#: admin.php:645
+#: admin.php:662
 msgid "Bulk Import User Password"
 msgstr "Massa Import Gebruiker wachtwoord"
 
-#: admin.php:649
+#: admin.php:666
 msgid "Password for Bulk Import User."
 msgstr "Wachtwoord van Massa Import Gebruiker"
 
+#: admin.php:672
+msgid "Auto Disable Users"
+msgstr ""
+
 #: admin.php:675
+msgid ""
+"Disable users previously authenticated by ADI if they are not imported "
+"anymore or if they are disabled in AD."
+msgstr ""
+
+#: admin.php:677
+msgid ""
+"<b>Disabled users can only be reenabled manually by administrators on users "
+"profile page or by Bulk Import.</b>"
+msgstr ""
+
+#: admin.php:701
 #, fuzzy
 msgid ""
 "Enter a username and password to test logon. If you click the button below, "
@@ -1163,15 +1225,15 @@ msgstr ""
 "informatie. <strong>Zorg ervoor dat geen ongeautoriseerde personen kunnen "
 "meekijken aangezien het wachtwoord vrij te zien is. </strong>"
 
-#: admin.php:681
+#: admin.php:707
 msgid "Username"
 msgstr "Gebruikersnaam"
 
-#: admin.php:690
+#: admin.php:716
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: admin.php:699
+#: admin.php:725
 msgid "Perform Test"
 msgstr "Test uitvoeren"
 

@@ -7,6 +7,18 @@
  * @since 1.0.1
  */
 
+// userAccountControl Flags
+DEFINE('UF_ACCOUNT_DISABLE',2);
+DEFINE('UF_NORMAL_ACCOUNT',512);
+DEFINE('UF_INTERDOMAIN_TRUST_ACCOUNT',2048);
+DEFINE('UF_WORKSTATION_TRUST_ACCOUNT',4096);
+DEFINE('UF_SERVER_TRUST_ACCOUNT',8192);
+DEFINE('UF_MNS_LOGON_ACCOUNT',131072);
+DEFINE('UF_SMARTCARD_REQUIRED',262144);
+DEFINE('UF_PARTIAL_SECRETS_ACCOUNT',67108864);
+
+DEFINE('ADI_NO_UF_NORMAL_ACOUNT', 67254272); // = UF_INTERDOMAIN_TRUST_ACCOUNT + UF_WORKSTATION_TRUST_ACCOUNT + UF_SERVER_TRUST_ACCOUNT + UF_MNS_LOGON_ACCOUNT + UF_PARTIAL_SECRETS_ACCOUNT
+
 
 if ( !defined('WP_LOAD_PATH') ) {
 
@@ -105,6 +117,7 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 	public function bulkimport($authcode)
 	{
 		global $wp_version;
+		global $wpdb;
 		
 		$this->setLogFile(dirname(__FILE__).'/import.log');
 		
@@ -168,7 +181,7 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 			return false;
 		}
 
-		// get all users of the chosen security groups
+		// get all users of the chosen security groups from
 		$groups = explode(";",$this->_bulkimport_security_groups);
 		if (count($groups) < 1) {
 			$this->_log(ADI_LOG_WARN,'No security group.');
@@ -200,6 +213,32 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 			} 
 		}
 		
+		// Adding all local users with non empty entry adi_samaccountname in usermeta
+		$blogusers=$wpdb->get_results( 
+			'
+			SELECT
+				users.user_login
+			FROM
+				'. $wpdb->users . ' users
+			INNER JOIN
+				' . $wpdb->usermeta ." meta ON meta.user_id = users.ID
+			where
+				meta.meta_key = 'adi_samaccountname'
+				AND
+				meta.meta_value IS NOT NULL
+				AND
+				meta.meta_value <> ''
+				AND
+				users.ID <> 1
+			"
+		);
+		if (is_array($blogusers)) {
+			foreach ($blogusers AS $user) {
+				$all_users[$user->user_login] = $user->user_login;
+			}
+		}	
+		
+		
 		$elapsed_time = time() - $time;
 		$this->_log(ADI_LOG_INFO,'Number of users to import/update: '.count($all_users).' (list generated in '. $elapsed_time .' seconds)');
 	
@@ -214,8 +253,7 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 		foreach ($all_users AS $username) {
 			
 			$ad_username = $username;
-
-	
+			
 			// getting user data
 			$user = get_userdatabylogin($username);
 			
@@ -228,24 +266,72 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 			$userinfo = $userinfo[0];
 			$this->_log(ADI_LOG_DEBUG,"USERINFO[0]: \n".print_r($userinfo,true));
 			
-			// get display name
-			$display_name = $this->_get_display_name_from_AD($username, $userinfo);
-		
-			// Create new users or update them
-			if (!$user OR ($user->user_login != $username)) {
-				$user_id = $this->_create_user($ad_username, $userinfo, $display_name, $user_role, '', true);
-				$added_users++;
+			if (empty($userinfo)) {
+				$this->_log(ADI_LOG_INFO,'User "' . $ad_username . '" not found in Active Directory.');
+				if (isset($user->ID) && ($this->_disable_users)) {
+					$this->_log(ADI_LOG_WARN,'User "' . $username . '" disabled.');
+					$this->_disable_user($user->ID, sprintf(__('User "%s" not found in Active Directory.', 'ad-integration'), $username));
+				}
+				
 			} else {
-				$user_id = $this->_update_user($ad_username, $userinfo, $display_name, $user_role, '', true);
-				$updated_users++;
-			}
-			
-			// load user object
-			if (!$user_id) {
-				$user_id = username_exists($username);
-				$this->_log(ADI_LOG_NOTICE,'user_id: '.$user_id);
+
+				// Only user accounts (UF_NORMAL_ACCOUNT is set and other account flags are unset)
+				if (($userinfo["useraccountcontrol"][0] & (UF_NORMAL_ACCOUNT | ADI_NO_UF_NORMAL_ACOUNT)) == UF_NORMAL_ACCOUNT) { 
+				   //&& (($userinfo["useraccountcontrol"][0] & ADI_NO_UF_NORMAL_ACOUNT)  == 0)) {
+
+				   	// users with flag UF_SMARTCARD_REQUIRED have no password so they can not logon with ADI
+				   	if (($userinfo["useraccountcontrol"][0] & UF_SMARTCARD_REQUIRED) == 0) {
+
+				   		// get display name
+						$display_name = $this->_get_display_name_from_AD($username, $userinfo);
+					
+						// create new users or update them
+						if (!$user OR ($user->user_login != $username)) {
+							$user_id = $this->_create_user($ad_username, $userinfo, $display_name, $user_role, '', true);
+							$added_users++;
+						} else {
+							$user_id = $this->_update_user($ad_username, $userinfo, $display_name, $user_role, '', true);
+							$updated_users++;
+						}
+						
+						// load user object (this shouldn't be necessary)
+						if (!$user_id) {
+							$user_id = username_exists($username);
+							$this->_log(ADI_LOG_NOTICE,'user_id: '.$user_id);
+						}
+						
+						// if the user is disabled
+						if (($userinfo["useraccountcontrol"][0] & UF_ACCOUNT_DISABLE) == UF_ACCOUNT_DISABLE)
+						{
+							$this->_log(ADI_LOG_INFO,'The user "' . $username .'" is disabled in Active Directory.');
+							if ($this->_disable_users) {
+								$this->_log(ADI_LOG_WARN,'Disabling user "' . $username .'".');
+								$this->_disable_user($user_id, sprintf(__('User "%s" is disabled in Active Directory.', 'ad-integration'), $username));
+							}
+						} else {
+							// Enable user / turn off user_disabled
+							$this->_log(ADI_LOG_INFO,'Enabling user "' . $username .'".');
+							$this->_enable_user($user_id);
+						}
+				   	} else {
+				   		// Flag UF_SMARTCARD_REQUIRED is set
+				   		$this->_log(ADI_LOG_INFO,'The user "' . $username .'" requires a SmartCard to logon.');
+						if (isset($user->ID) && ($this->_disable_users)) {
+							$this->_log(ADI_LOG_WARN,'Disabling user "' . $username .'".');
+							$this->_disable_user($user->ID, sprintf(__('User "%s" requires a SmartCard to logon.', 'ad-integration'), $username));
+						}
+					}
+				} else {
+					// not a normal user account
+					$this->_log(ADI_LOG_INFO,'The user "' . $username .'" has no normal user account.');
+					if (isset($user->ID) && ($this->_disable_users)) {
+						$this->_log(ADI_LOG_WARN,'Disabling user "' . $username .'".');
+						$this->_disable_user($user->ID, sprintf(__('User "%s" has no normal user account.', 'ad-integration'), $username));
+					}
+				} 
 			}
 		}
+		
 		// Logging	
 		$elapsed_time = time() - $time;
 		$this->_log(ADI_LOG_INFO,$added_users . ' Users added.');
@@ -323,6 +409,13 @@ if (isset($_REQUEST['debug'])) {
 		
 	</head>
 	<body>
+<?php 	
+echo 'test1: '. (UF_NORMAL_ACCOUNT | ADI_NO_UF_NORMAL_ACOUNT);
+
+echo '<hr>test2:'. (UF_NORMAL_ACCOUNT & (UF_NORMAL_ACCOUNT + ADI_NO_UF_NORMAL_ACOUNT));
+
+?>
+	
 		<h1 style="font-size: 14pt">AD Integration Bulk Import</h1>
 		
 <?php 

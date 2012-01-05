@@ -265,6 +265,14 @@ if (!IS_WPMU) { ?>
 						</tr>
 						
 						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_show_user_status"><?php _e('Show User Status', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_show_user_status" id="AD_Integration_show_user_status" <?php if ($this->_show_user_status) echo ' checked="checked"' ?> value="1" />          
+								<?php _e('Show additional columns (ADI User, disabled) in the user list.', 'ad-integration'); ?>
+							</td>						
+						</tr>
+						
+						<tr valign="top">
 						   <th colspan="2">
 						     <h4><?php _e('Password handling','ad-integration'); ?></h4>
 						   </th>
@@ -372,6 +380,15 @@ if (!IS_WPMU) { ?>
    				<?php settings_fields('ADI-security-settings'); ?>
 				<table class="form-table">
 					<tbody>
+
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_fallback_to_local_password"><?php _e('Fallback to local password', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_fallback_to_local_password" id="AD_Integration_fallback_to_local_password"<?php if ($this->_fallback_to_local_password) echo ' checked="checked"' ?> value="1" />
+								<?php _e('Fallback to local (WordPress) password check if authentication against AD fails.</br>If turned on users can logon even if Active Directory server is unreachable. But this might be a security risk (for example, if the local password is outdated). <b>It\'s recommended to turn this off.</b>', 'ad-integration'); ?>
+							</td>
+						</tr>
+
 						<tr>
 							<td scope="col" colspan="2">
 								<h2 style="font-size: 150%; font-weight: bold;"><?php _e('Brute Force Protection','ad-integration'); ?></h2>
@@ -651,6 +668,15 @@ if (!IS_WPMU) { ?>
 							</td>
 						</tr>								
 						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_disable_users"><?php _e('Auto Disable Users', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_disable_users" id="AD_Integration_disable_users"<?php if ($this->_disable_users) echo ' checked="checked"' ?> value="1" />
+								<?php _e('Disable users previously authenticated by ADI if they are not imported anymore or if they are disabled in AD.', 'ad-integration'); ?>
+								<br />
+								<?php _e('<b>Disabled users can only be reenabled manually by administrators on users profile page or by Bulk Import.</b>'); ?>
+							</td>
+						</tr>
 						
 						
 					</tbody>
