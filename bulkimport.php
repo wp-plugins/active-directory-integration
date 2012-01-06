@@ -409,13 +409,6 @@ if (isset($_REQUEST['debug'])) {
 		
 	</head>
 	<body>
-<?php 	
-echo 'test1: '. (UF_NORMAL_ACCOUNT | ADI_NO_UF_NORMAL_ACOUNT);
-
-echo '<hr>test2:'. (UF_NORMAL_ACCOUNT & (UF_NORMAL_ACCOUNT + ADI_NO_UF_NORMAL_ACOUNT));
-
-?>
-	
 		<h1 style="font-size: 14pt">AD Integration Bulk Import</h1>
 		
 <?php 
