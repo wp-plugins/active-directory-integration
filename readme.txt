@@ -128,6 +128,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 * ADD: Disable users by Bulk Import (or manually) who are not imported anymore or are disabled in Active Directory. (Issue #0045. Feature Request by Bas Ruijters.)
 * ADD: Option to show on user list if a user was authenticated (or imported) from Active Directory and the disabled state of user. 
 * ADD: Option to choose whether ADI should fallback to local (WordPress) password check if authentication against Active Directory fails. You should deactivate this for security reasons.
+* FIX: Username is handled as case sensitive on Bulk Import but this is a wrong behavior. (Issue #0041)	
 
 = 1.1.2 =
 * ADD: Allow logon of users with domains different from Account Suffix. (Issue #0043. Feature Request by Greg Fenton.)

@@ -203,7 +203,7 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 					$this->_log(ADI_LOG_INFO,count($members).' Members of group "'.$group.'".');
 					$this->_log(ADI_LOG_DEBUG,'Members of group "'.$group.'": ' . implode(', ',$members));
 					foreach ($members AS $user) {
-						$all_users[$user] = $user;
+						$all_users[strtolower($user)] = $user;
 					}
 				} else {
 					$this->_log(ADI_LOG_ERROR,'Error retrieving group members for group "'.$group.'".');
@@ -234,7 +234,7 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 		);
 		if (is_array($blogusers)) {
 			foreach ($blogusers AS $user) {
-				$all_users[$user->user_login] = $user->user_login;
+				$all_users[strtolower($user->user_login)] = $user->user_login;
 			}
 		}	
 		
@@ -255,7 +255,8 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 			$ad_username = $username;
 			
 			// getting user data
-			$user = get_userdatabylogin($username);
+			//$user = get_userdatabylogin($username); // deprecated
+			$user = get_user_by('login', $username);
 			
 			// role
 			$user_role = $this->_get_user_role_equiv($ad_username); // important: use $ad_username not $username
@@ -286,7 +287,7 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 						$display_name = $this->_get_display_name_from_AD($username, $userinfo);
 					
 						// create new users or update them
-						if (!$user OR ($user->user_login != $username)) {
+						if (!$user OR (strtolower($user->user_login) != strtolower($username))) { // use strtolower!!!
 							$user_id = $this->_create_user($ad_username, $userinfo, $display_name, $user_role, '', true);
 							$added_users++;
 						} else {

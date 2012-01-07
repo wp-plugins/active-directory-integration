@@ -609,7 +609,9 @@ class ADIntegrationPlugin {
 
 		
 		// Don't use Active Directory for admin user (ID 1)
-		$user = get_userdatabylogin($username);
+		// $user = get_userdatabylogin($username); // deprecated 
+		$user = get_user_by('login', $username);
+		
 		if (is_object($user) && ($user->ID == 1)) {
 			$this->_log(ADI_LOG_NOTICE,'User with ID 1 will never be authenticated by Active Directory Integration.');
 			return false;
@@ -760,7 +762,8 @@ class ADIntegrationPlugin {
 		}
 
 		// getting user data (again!)
-		$user = get_userdatabylogin($username);
+		// $user = get_userdatabylogin($username); // deprecated
+		$user = get_user_by('login', $username);
 		
 		// role
 		$user_role = $this->_get_user_role_equiv($ad_username); // important: use $ad_username not $username
@@ -2795,6 +2798,8 @@ class ADIntegrationPlugin {
 		if ($this->_authorize_by_group) {
 			$authorization_groups = explode(';', $this->_authorization_group);
 			foreach ($authorization_groups as $authorization_group) {
+				//$authorization_group = utf8_decode($authorization_group); // TODO: Dies ist ein Test.
+				//echo 'group: '.$authorization_group.'<br>';
 				if ($this->_adldap->user_ingroup($username, $authorization_group, true)) {
 					$this->_log(ADI_LOG_NOTICE,'Authorized by membership of group "'.$authorization_group.'"');
 					return true;
