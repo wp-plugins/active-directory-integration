@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ADI\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-10 11:26+0100\n"
+"POT-Creation-Date: 2012-01-09 16:15+0100\n"
 "PO-Revision-Date: 2011-02-24 15:13+0100\n"
 "Last-Translator: Christoph Steindorff <cst@ecw.de>\n"
 "Language-Team: FatCow <zhr@tut.by>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "X-Poedit-Country: BELARUS\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ad-integration.php:603 admin.php:74
+#: ad-integration.php:575 admin.php:74
 msgid "Active Directory Integration"
 msgstr "Active Directory Integration"
 
-#: ad-integration.php:828
+#: ad-integration.php:800
 msgid ""
 "<strong>ERROR</strong>: This user exists in Active Directory, but has not "
 "been granted access to this installation of WordPress."
@@ -30,253 +30,253 @@ msgstr ""
 "<strong>ОШИБКА</strong>: Этот пользователь существует в Active Directory, но "
 "не был предоставлен доступ к этой установке WordPress."
 
-#: ad-integration.php:959
+#: ad-integration.php:931
 msgid "Active Directory Integration Help"
 msgstr "Active Directory Integration Помощь"
 
-#: ad-integration.php:960
+#: ad-integration.php:932
 msgid "Overview"
 msgstr "Обзор"
 
-#: ad-integration.php:961
+#: ad-integration.php:933
 msgid "FAQ"
 msgstr "ЧАВО"
 
-#: ad-integration.php:962
+#: ad-integration.php:934
 msgid "Changelog"
 msgstr "История изменений"
 
-#: ad-integration.php:963
+#: ad-integration.php:935
 msgid "Support-Forum"
 msgstr "Форум поддержки"
 
-#: ad-integration.php:964
+#: ad-integration.php:936
 msgid "Bug Tracker"
 msgstr ""
 
-#: ad-integration.php:1230
+#: ad-integration.php:1202
 msgid "User Disabled"
 msgstr ""
 
-#: ad-integration.php:1233
+#: ad-integration.php:1205
 msgid ""
 "If selected, the user can not log in and his e-mail address will be changed "
 "for security reasons. The e-mail address is restored if the user is "
 "reenabled."
 msgstr ""
 
-#: ad-integration.php:1237
+#: ad-integration.php:1209
 msgid "Information on last disabling: "
 msgstr ""
 
-#: ad-integration.php:1241
+#: ad-integration.php:1213
 msgid ""
 "Attention: This flag is automatically set (or unset) by Bulk Import and its "
 "state may change on next run of Bulk Import."
 msgstr ""
 
-#: ad-integration.php:1264
+#: ad-integration.php:1236
 #, php-format
 msgid "User manually disabled by \"%s\"."
 msgstr ""
 
-#: ad-integration.php:1314
+#: ad-integration.php:1286
 msgid "Additional Informations"
 msgstr ""
 
-#: ad-integration.php:1376
+#: ad-integration.php:1348
 #, fuzzy
 msgid "Your password"
 msgstr "Пароль"
 
-#: ad-integration.php:1379
+#: ad-integration.php:1351
 msgid ""
 "If you want to save the changes on \"Additional Informations\" back to the "
 "Active Directory you must enter your password."
 msgstr ""
 
-#: ad-integration.php:1541
+#: ad-integration.php:1500
 msgid ""
 "No password given, so additional attributes are not written back to Active "
 "Directory"
 msgstr ""
 
-#: ad-integration.php:1568
+#: ad-integration.php:1527
 msgid ""
 "Error on writing additional attributes back to Active Directory. Wrong "
 "password?"
 msgstr ""
 
-#: ad-integration.php:1581
+#: ad-integration.php:1540
 msgid ""
 "Error on writing additional attributes back to Active Directory. Please "
 "contact your administrator."
 msgstr ""
 
-#: ad-integration.php:1620
+#: ad-integration.php:1560
 #, fuzzy
 msgid "ADI User"
 msgstr "Имя"
 
-#: ad-integration.php:1621
+#: ad-integration.php:1561
 msgid "Disabled"
 msgstr ""
 
-#: ad-integration.php:1772
+#: ad-integration.php:1712
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr "Ключевое слово '%s' было удалено."
 
-#: ad-integration.php:1776
+#: ad-integration.php:1716
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr "Ошибка при удалении настройки Ключевых '%s'."
 
-#: ad-integration.php:1911
+#: ad-integration.php:1849
 msgid "Common Name"
 msgstr ""
 
-#: ad-integration.php:1912
+#: ad-integration.php:1850
 msgid "First name"
 msgstr ""
 
-#: ad-integration.php:1913
+#: ad-integration.php:1851
 msgid "Initials"
 msgstr ""
 
-#: ad-integration.php:1914
+#: ad-integration.php:1852
 msgid "Last name"
 msgstr ""
 
-#: ad-integration.php:1915 admin.php:258
+#: ad-integration.php:1853 admin.php:250
 msgid "Display name"
 msgstr "Отображаемое имя"
 
-#: ad-integration.php:1916 admin.php:462
+#: ad-integration.php:1854 admin.php:454
 msgid "Description"
 msgstr ""
 
-#: ad-integration.php:1917
+#: ad-integration.php:1855
 msgid "Office"
 msgstr ""
 
-#: ad-integration.php:1918
+#: ad-integration.php:1856
 msgid "Telephone number"
 msgstr ""
 
-#: ad-integration.php:1919
+#: ad-integration.php:1857
 msgid "E-mail"
 msgstr ""
 
-#: ad-integration.php:1920
+#: ad-integration.php:1858
 msgid "Web Page"
 msgstr ""
 
-#: ad-integration.php:1923
+#: ad-integration.php:1861
 msgid "User logon name"
 msgstr "User logon name"
 
-#: ad-integration.php:1926
+#: ad-integration.php:1864
 msgid "Street"
 msgstr ""
 
-#: ad-integration.php:1927
+#: ad-integration.php:1865
 msgid "P.O. Box"
 msgstr ""
 
-#: ad-integration.php:1928
+#: ad-integration.php:1866
 msgid "City"
 msgstr ""
 
-#: ad-integration.php:1929
+#: ad-integration.php:1867
 msgid "State"
 msgstr ""
 
-#: ad-integration.php:1930
+#: ad-integration.php:1868
 msgid "ZIP/Postal cide"
 msgstr ""
 
-#: ad-integration.php:1931
+#: ad-integration.php:1869
 msgid "Country abbreviation"
 msgstr ""
 
-#: ad-integration.php:1932
+#: ad-integration.php:1870
 msgid "Country"
 msgstr ""
 
-#: ad-integration.php:1933
+#: ad-integration.php:1871
 msgid "Country code (number)"
 msgstr ""
 
-#: ad-integration.php:1936
+#: ad-integration.php:1874
 msgid "Home"
 msgstr ""
 
-#: ad-integration.php:1937
+#: ad-integration.php:1875
 msgid "Home (other)"
 msgstr ""
 
-#: ad-integration.php:1938
+#: ad-integration.php:1876
 msgid "Pager"
 msgstr ""
 
-#: ad-integration.php:1939
+#: ad-integration.php:1877
 msgid "Pager (other)"
 msgstr ""
 
-#: ad-integration.php:1940
+#: ad-integration.php:1878
 msgid "Mobile"
 msgstr ""
 
-#: ad-integration.php:1941
+#: ad-integration.php:1879
 msgid "Mobile (Other)"
 msgstr ""
 
-#: ad-integration.php:1942
+#: ad-integration.php:1880
 msgid "Fax"
 msgstr ""
 
-#: ad-integration.php:1943
+#: ad-integration.php:1881
 msgid "Fax (other)"
 msgstr ""
 
-#: ad-integration.php:1944
+#: ad-integration.php:1882
 msgid "IP Phone"
 msgstr ""
 
-#: ad-integration.php:1945
+#: ad-integration.php:1883
 msgid "IP Phone (other)"
 msgstr ""
 
-#: ad-integration.php:1946
+#: ad-integration.php:1884
 msgid "Notes"
 msgstr ""
 
-#: ad-integration.php:1949
+#: ad-integration.php:1887
 msgid "Title"
 msgstr ""
 
-#: ad-integration.php:1950
+#: ad-integration.php:1888
 msgid "Department"
 msgstr ""
 
-#: ad-integration.php:1951
+#: ad-integration.php:1889
 msgid "Company"
 msgstr ""
 
-#: ad-integration.php:1952
+#: ad-integration.php:1890
 msgid "Manager"
 msgstr ""
 
-#: ad-integration.php:1953
+#: ad-integration.php:1891
 msgid "Direct reports"
 msgstr ""
 
-#: ad-integration.php:3004 ad-integration.php:3087
+#: ad-integration.php:2931 ad-integration.php:3014
 msgid "Account blocked"
 msgstr "Аккаунт заблокирован"
 
-#: ad-integration.php:3005
+#: ad-integration.php:2932
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
@@ -285,7 +285,7 @@ msgstr ""
 "Попыток входа%s (%s) с вашим именем (%s) - but in vain. For security reasons "
 "your account is now blocked for %d seconds."
 
-#: ad-integration.php:3007 ad-integration.php:3092
+#: ad-integration.php:2934 ad-integration.php:3019
 msgid ""
 "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
 "ADDRESS SPECIFIED ABOVE."
@@ -293,7 +293,7 @@ msgstr ""
 "Это система найдено электронной почте, пожалуйста, не отвечайте на E-mail "
 "адрес, указанный ВЫШЕ."
 
-#: ad-integration.php:3088
+#: ad-integration.php:3015
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
@@ -302,20 +302,20 @@ msgstr ""
 "Кто-то попытался Войти в %s (%s) with the username \"%s\" (%s %s) - but in "
 "vain. For security reasons this account is now blocked for %d seconds."
 
-#: ad-integration.php:3090
+#: ad-integration.php:3017
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "Логин попытка была сделана с IP-адреса: %s"
 
-#: ad-integration.php:3211
+#: ad-integration.php:3138
 msgid "Powered by WordPress"
 msgstr "Powered by WordPress"
 
-#: ad-integration.php:3213
+#: ad-integration.php:3140
 msgid "Account blocked for"
 msgstr "Аккаунт заблокирован для"
 
-#: ad-integration.php:3213 admin.php:144
+#: ad-integration.php:3140 admin.php:144
 msgid "seconds"
 msgstr "секунд"
 
@@ -339,7 +339,7 @@ msgstr "Сервер"
 msgid "User"
 msgstr "Имя"
 
-#: admin.php:94 admin.php:344
+#: admin.php:94 admin.php:336
 msgid "Authorization"
 msgstr "Авторизация"
 
@@ -347,7 +347,7 @@ msgstr "Авторизация"
 msgid "Security"
 msgstr "Безопасность"
 
-#: admin.php:96 admin.php:481
+#: admin.php:96 admin.php:473
 msgid "User Meta"
 msgstr "User Meta"
 
@@ -355,7 +355,7 @@ msgstr "User Meta"
 msgid "Bulk Import"
 msgstr ""
 
-#: admin.php:101 admin.php:708
+#: admin.php:101 admin.php:700
 msgid "Test Tool"
 msgstr "Тестирование"
 
@@ -414,8 +414,8 @@ msgstr "Base DN"
 msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
 msgstr "Базовый DN (н.э., \"ou=unit,dc=domain,dc=tld\")"
 
-#: admin.php:161 admin.php:330 admin.php:379 admin.php:449 admin.php:604
-#: admin.php:694
+#: admin.php:161 admin.php:322 admin.php:371 admin.php:441 admin.php:596
+#: admin.php:686
 msgid "Save Changes"
 msgstr "Сохранить изменения"
 
@@ -568,77 +568,67 @@ msgid ""
 "address."
 msgstr ""
 
-#: admin.php:250
-msgid "Prevent Email Change"
-msgstr ""
-
 #: admin.php:253
-msgid ""
-"Prevents users authenticated by Active Directory from changing their email "
-"address in WordPress. This does not apply to administrators."
-msgstr ""
-
-#: admin.php:261
 msgid "LDAP Attribute: "
 msgstr "LDAP-аттрибут: "
 
-#: admin.php:262
+#: admin.php:254
 msgid "sAMAccountName (the username)"
 msgstr "sAMAccountName (имя пользователя)"
 
-#: admin.php:263
+#: admin.php:255
 msgid "displayName"
 msgstr "отображаемое имя"
 
-#: admin.php:264
+#: admin.php:256
 msgid "description"
 msgstr "описание"
 
-#: admin.php:265
+#: admin.php:257
 msgid "givenName (firstname)"
 msgstr "заданное имя (имя)"
 
-#: admin.php:266
+#: admin.php:258
 msgid "SN (lastname)"
 msgstr "SN (фамилия)"
 
-#: admin.php:267
+#: admin.php:259
 #, fuzzy
 msgid "givenName SN (firstname lastname)"
 msgstr "заданное имя (имя)"
 
-#: admin.php:268
+#: admin.php:260
 msgid "CN (Common Name, the whole name)"
 msgstr "CN (общее имя)"
 
-#: admin.php:269
+#: admin.php:261
 msgid "mail"
 msgstr "email-адрес"
 
-#: admin.php:271
+#: admin.php:263
 msgid "Choose user's Active Directory attribute to be used as display name."
 msgstr ""
 "Выберите атрибуты пользователей Active Directory для использования в "
 "качестве отображаемого имени."
 
-#: admin.php:276
+#: admin.php:268
 msgid "Show User Status"
 msgstr ""
 
-#: admin.php:279
+#: admin.php:271
 msgid "Show additional columns (ADI User, disabled) in the user list."
 msgstr ""
 
-#: admin.php:285
+#: admin.php:277
 #, fuzzy
 msgid "Password handling"
 msgstr "Пароль"
 
-#: admin.php:290
+#: admin.php:282
 msgid "Enable local password changes"
 msgstr "Включите локальные изменения пароля"
 
-#: admin.php:293
+#: admin.php:285
 msgid ""
 "Allow users to change their local (<strong>non AD</strong>) WordPress "
 "password"
@@ -646,7 +636,7 @@ msgstr ""
 "Разрешить пользователям изменять свои локальные <strong>(без АО)</strong> "
 "WordPress Пароли"
 
-#: admin.php:295
+#: admin.php:287
 msgid ""
 "<strong>If activated, a password change will update the local WordPress "
 "database only. No changes in Active Directory will be made.</strong>"
@@ -655,43 +645,43 @@ msgstr ""
 "базу данных WordPress . Никаких изменений в Active Directory не будет.</"
 "strong>"
 
-#: admin.php:301
+#: admin.php:293
 msgid "Set local password on first successfull login"
 msgstr ""
 
-#: admin.php:304
+#: admin.php:296
 msgid ""
 "First time a user logs on successfully and is created, his local WordPress "
 "password is set to the one used for this login."
 msgstr ""
 
-#: admin.php:306
+#: admin.php:298
 msgid ""
 "If this option is deactivated a random password for this user will be set."
 msgstr ""
 
-#: admin.php:308
+#: admin.php:300
 msgid "<b>Works only if \"Automatic User Creation\" is turned on.</b>"
 msgstr ""
 
-#: admin.php:314
+#: admin.php:306
 #, fuzzy
 msgid "Automatic Password Update"
 msgstr "Обновление Automatic User"
 
-#: admin.php:317
+#: admin.php:309
 msgid ""
 "Every time a user logs on successfully, his local WordPress password is set "
 "to the one used for this login."
 msgstr ""
 
-#: admin.php:319
+#: admin.php:311
 msgid ""
 "Note: Activating this option makes little sense when \"Enable local password "
 "changes\" is turned on."
 msgstr ""
 
-#: admin.php:321
+#: admin.php:313
 #, fuzzy
 msgid ""
 "<b>Works only if \"Automatic User Creation\" and \"Automatic User Update\" "
@@ -701,11 +691,11 @@ msgstr ""
 "раз они входа? <br /> <b>Работает только в случае, если автоматическое "
 "создание пользователей включено.</b>"
 
-#: admin.php:348
+#: admin.php:340
 msgid "Authorize by group membership"
 msgstr "Авторизация членства в группе"
 
-#: admin.php:351
+#: admin.php:343
 msgid ""
 "Users are authorized for login only when they are members of a specific AD "
 "group."
@@ -713,11 +703,11 @@ msgstr ""
 "Пользователи имеют право на вход только тогда, когда они являются членами "
 "конкретной группы объявлений."
 
-#: admin.php:353 admin.php:652
+#: admin.php:345 admin.php:644
 msgid "Group(s)"
 msgstr "Группа (-ы)"
 
-#: admin.php:356
+#: admin.php:348
 msgid ""
 "Seperate multiple groups by semicolon (e.g. \"domain-users;WP-Users;test-"
 "users\")."
@@ -725,18 +715,18 @@ msgstr ""
 "Отделять несколько групп с запятой (напр. \"domain-users;WP-Users;test-users"
 "\")."
 
-#: admin.php:362
+#: admin.php:354
 msgid "Role Equivalent Groups"
 msgstr "Группы с эквивалентными ролями"
 
-#: admin.php:366
+#: admin.php:358
 msgid ""
 "List of Active Directory groups which correspond to WordPress user roles."
 msgstr ""
 "Список активных групп Directory, которые соответствуют WordPress ролям "
 "пользователей."
 
-#: admin.php:367
+#: admin.php:359
 #, fuzzy
 msgid ""
 "When a user is first created, his role will correspond to what is specified "
@@ -752,11 +742,11 @@ msgstr ""
 "from left to right, so you should obviously put the more powerful groups "
 "first."
 
-#: admin.php:368
+#: admin.php:360
 msgid "NOTES"
 msgstr "ЗАМЕТКИ"
 
-#: admin.php:370
+#: admin.php:362
 msgid ""
 "WordPress stores roles as lower case (\"Subscriber\" is stored as "
 "\"subscriber\")"
@@ -764,11 +754,11 @@ msgstr ""
 "WordPress сохраняет роли в нижнем регистре (\"Subscriber\" сохранен как "
 "\"subscriber\")"
 
-#: admin.php:371
+#: admin.php:363
 msgid "Active Directory groups are case-sensitive."
 msgstr "Active Directory группы чувствительны к раскладке."
 
-#: admin.php:372
+#: admin.php:364
 msgid ""
 "Group memberships cannot be checked across domains.  So if you have two "
 "domains, instr and qc, and qc is the domain specified above, if instr is "
@@ -780,12 +770,12 @@ msgstr ""
 "домен, указанный выше, если Instr связана с КК, я могу Instr аутентификации "
 "пользователей, но не проверить Instr членство в группе."
 
-#: admin.php:393
+#: admin.php:385
 #, fuzzy
 msgid "Fallback to local password"
 msgstr "Включите локальные изменения пароля"
 
-#: admin.php:396
+#: admin.php:388
 msgid ""
 "Fallback to local (WordPress) password check if authentication against AD "
 "fails.</br>If turned on users can logon even if Active Directory server is "
@@ -793,11 +783,11 @@ msgid ""
 "password is outdated). <b>It's recommended to turn this off.</b>"
 msgstr ""
 
-#: admin.php:402
+#: admin.php:394
 msgid "Brute Force Protection"
 msgstr "Брутфорс-протекция"
 
-#: admin.php:403
+#: admin.php:395
 msgid ""
 "For security reasons you can use the following options to prevent brute "
 "force attacks on your user accounts."
@@ -805,11 +795,11 @@ msgstr ""
 "По соображениям безопасности вы можете использовать следующие опции для "
 "предотвращения брутфорса вашей учетной записи."
 
-#: admin.php:408
+#: admin.php:400
 msgid "Maximum number of allowed login attempts"
 msgstr "Максимально допустимое количество попыток входа"
 
-#: admin.php:412
+#: admin.php:404
 msgid ""
 "Maximum number of failed login attempts before a user account is blocked. If "
 "empty or \"0\" Brute Force Protection is turned off."
@@ -817,40 +807,40 @@ msgstr ""
 "Максимальное число неудачных попыток  входа учетной записи пользователя. "
 "Если пуст или \"0\" - брутфорс будет отключен."
 
-#: admin.php:417
+#: admin.php:409
 msgid "Blocking Time"
 msgstr "Время блокирования"
 
-#: admin.php:421
+#: admin.php:413
 msgid ""
 "Number of seconds an account is blocked after the maximum number of failed "
 "login attempts is reached."
 msgstr "Количество секунд после максимального числа неудачных попыток входа."
 
-#: admin.php:426
+#: admin.php:418
 msgid "User Notification"
 msgstr "Оповещение пользователя"
 
-#: admin.php:429
+#: admin.php:421
 msgid "Notify user by e-mail when his account is blocked."
 msgstr ""
 "Сообщить пользователю по электронной почте при заблокировали его аккаунта."
 
-#: admin.php:434
+#: admin.php:426
 msgid "Admin Notification"
 msgstr " Уведомления Администратору"
 
-#: admin.php:437
+#: admin.php:429
 msgid "Notify admin(s) by e-mail when an user account is blocked."
 msgstr ""
 "Сообщить администратору (ам) по электронной почте при блокировке учетной "
 "записи пользователя."
 
-#: admin.php:439
+#: admin.php:431
 msgid "E-mail addresses for notifications:"
 msgstr "Адреса электронной почты для уведомления:"
 
-#: admin.php:443
+#: admin.php:435
 #, fuzzy
 msgid ""
 "Seperate multiple addresses by semicolon (e.g. \"admin@company.com;"
@@ -861,64 +851,64 @@ msgstr ""
 "\"). Если оставить пустым, будут отправляться уведомления на блог-только "
 "администратору."
 
-#: admin.php:458
+#: admin.php:450
 #, fuzzy
 msgid "Commonn attributes"
 msgstr "LDAP-аттрибут: "
 
-#: admin.php:461
+#: admin.php:453
 #, fuzzy
 msgid "AD Attribute"
 msgstr "LDAP-аттрибут: "
 
-#: admin.php:482
+#: admin.php:474
 msgid ""
 "User attributes from the AD are can be stored as User Meta Data. These "
 "attributes can then be used in your themes and they can be shown on the "
 "profile page of your users."
 msgstr ""
 
-#: admin.php:483
+#: admin.php:475
 msgid ""
 "The attributes are only stored in the WordPress database if you activate "
 "\"Automatic User Creation\" and are only updated if you activate \"Automatic "
 "User Update\" on tab \"User\"."
 msgstr ""
 
-#: admin.php:491
+#: admin.php:483
 msgid "Additional User Attributes"
 msgstr ""
 
-#: admin.php:493
+#: admin.php:485
 msgid ""
 "Enter additional AD attributes (one per line), followed by their type and "
 "the associated meta key seperated by a colon (:)."
 msgstr ""
 
-#: admin.php:494
+#: admin.php:486
 msgid ""
 "Additional Attributes that should appear on the user profile must also be "
 "placed in \"Attributes to show\"."
 msgstr ""
 
-#: admin.php:496
+#: admin.php:488
 msgid ""
 "Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where "
 "<i>&lt;type&gt;</i> can be one of the following: <i>string, list, integer, "
 "bool, octet, time, timestamp</i>."
 msgstr ""
 
-#: admin.php:498
+#: admin.php:490
 msgid ""
 "If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as "
 "<i>adi_&lt;attribute_name&gt;</i>."
 msgstr ""
 
-#: admin.php:500 admin.php:537
+#: admin.php:492 admin.php:529
 msgid "Example:"
 msgstr ""
 
-#: admin.php:502
+#: admin.php:494
 msgid ""
 "lastlogon:timestamp:last_logon_time\n"
 "whencreated:time:user_created_on\n"
@@ -926,39 +916,39 @@ msgid ""
 "otherhomephone:list"
 msgstr ""
 
-#: admin.php:505
+#: admin.php:497
 #, fuzzy
 msgid "Show Common Attributes"
 msgstr "LDAP-аттрибут: "
 
-#: admin.php:507
+#: admin.php:499
 msgid "Notice: Attributes of type <i>octet</i> are stored base64 encoded."
 msgstr ""
 
-#: admin.php:512
+#: admin.php:504
 msgid "Overwrite with empty values"
 msgstr ""
 
-#: admin.php:515
+#: admin.php:507
 msgid ""
 "Overwrite local values even if the attribute values in Active Directory are "
 "empty."
 msgstr ""
 
-#: admin.php:520
+#: admin.php:512
 #, fuzzy
 msgid "Show Attributes"
 msgstr "LDAP-аттрибут: "
 
-#: admin.php:523
+#: admin.php:515
 msgid "Show user attributes from AD in user profile."
 msgstr ""
 
-#: admin.php:530
+#: admin.php:522
 msgid "Attributes to show"
 msgstr ""
 
-#: admin.php:532
+#: admin.php:524
 msgid ""
 "Enter the AD attributes (one per line) followed by a description seperated "
 "by a colon (:) to be shown at the end of the user profile page. If no "
@@ -967,25 +957,25 @@ msgid ""
 "itself will be displayed."
 msgstr ""
 
-#: admin.php:533
+#: admin.php:525
 msgid ""
 "The attributes to be shown must appear on the list of Additional User "
 "Attributes."
 msgstr ""
 
-#: admin.php:534
+#: admin.php:526
 msgid ""
 "If want to make some attributes editable and written back to AD on profile "
 "update add a trailing \":*\" (Sync Back must be turned on, see below)."
 msgstr ""
 
-#: admin.php:535
+#: admin.php:527
 msgid ""
 "If you enter something that is not in the list of Additional User Attributes "
 "it will be treated as normal text. Use this to structure the output."
 msgstr ""
 
-#: admin.php:539
+#: admin.php:531
 msgid ""
 "lastlogon\n"
 "whencreated:User Created on\n"
@@ -994,154 +984,154 @@ msgid ""
 "otherhomephone::*"
 msgstr ""
 
-#: admin.php:547
+#: admin.php:539
 msgid "Sync Back"
 msgstr ""
 
-#: admin.php:552
+#: admin.php:544
 msgid "Sync Back to AD"
 msgstr ""
 
-#: admin.php:555
+#: admin.php:547
 msgid ""
 "Sync changed values of attributes marked with an asterisk (*) back to Active "
 "Directory on update of user profile."
 msgstr ""
 
-#: admin.php:560
+#: admin.php:552
 msgid "Use Global Sync User"
 msgstr ""
 
-#: admin.php:563
+#: admin.php:555
 msgid ""
 "Use a Global Sync User for all writes to AD. Leave this unchecked to ask for "
 "the users password on every sync back/profile update."
 msgstr ""
 
-#: admin.php:566
+#: admin.php:558
 msgid ""
 "NOTICE: The password of the Global Sync User is stored encrypted, but USE AT "
 "YOUR OWN RISK. To get around this you must give your users the permission to "
 "change their own AD attributes. See FAQ for details."
 msgstr ""
 
-#: admin.php:571
+#: admin.php:563
 msgid "Global Sync User"
 msgstr ""
 
-#: admin.php:575
+#: admin.php:567
 msgid ""
 "Username of an AD account with write permissions for the users in the Active "
 "Directory (e.g. administrator@company.local)."
 msgstr ""
 
-#: admin.php:580
+#: admin.php:572
 #, fuzzy
 msgid "Global Sync User Password"
 msgstr "Назначить пароль"
 
-#: admin.php:584
+#: admin.php:576
 msgid "Password for Global Sync User."
 msgstr ""
 
-#: admin.php:585 admin.php:675
+#: admin.php:577 admin.php:667
 msgid "Leave empty if password should not be changed."
 msgstr ""
 
-#: admin.php:593
+#: admin.php:585
 msgid "Perform SyncBack for all users"
 msgstr ""
 
-#: admin.php:595
+#: admin.php:587
 msgid ""
 "Click on the following link to perform a SyncBack of all users to Active "
 "Directory. \"Global Sync User\" and \"Global Sync User Password\" must be "
 "set (but it is not necessary to turn on \"Use Global Sync User\")."
 msgstr ""
 
-#: admin.php:618
+#: admin.php:610
 msgid "User Bulk Import & Update"
 msgstr ""
 
-#: admin.php:619
+#: admin.php:611
 msgid ""
 "You can import/update the users from Active Directory, for example by using "
 "a cron job."
 msgstr ""
 
-#: admin.php:625
+#: admin.php:617
 msgid "Enable Bulk Import & Update"
 msgstr ""
 
-#: admin.php:632
+#: admin.php:624
 msgid "Auth Code"
 msgstr ""
 
-#: admin.php:636
+#: admin.php:628
 msgid "Select this to generate a new Auth Code."
 msgstr ""
 
-#: admin.php:641
+#: admin.php:633
 msgid "Bulk Import URL"
 msgstr ""
 
-#: admin.php:645
+#: admin.php:637
 msgid "Use this URL in your cron jobs."
 msgstr ""
 
-#: admin.php:650
+#: admin.php:642
 msgid "Import members of security groups"
 msgstr ""
 
-#: admin.php:655
+#: admin.php:647
 msgid ""
 "The members of the security groups entered here, will be imported or updated "
 "autimatically if the Bulk Import URL is opened. Seperate multiple groups by "
 "semicolon (e.g. \"company user;WP-Users;test-users\")."
 msgstr ""
 
-#: admin.php:656
+#: admin.php:648
 msgid ""
 "If you want to include the users of the built in user group \"domain users\" "
 "you have to enter \"domain users;id:513\" (see FAQ for details)."
 msgstr ""
 
-#: admin.php:661
+#: admin.php:653
 msgid "Bulk Import User"
 msgstr ""
 
-#: admin.php:665
+#: admin.php:657
 msgid ""
 "Username of an AD account with read permissions for the users in the Active "
 "Directory (e.g. \"ldapuser@company.local\")."
 msgstr ""
 
-#: admin.php:670
+#: admin.php:662
 #, fuzzy
 msgid "Bulk Import User Password"
 msgstr "Назначить пароль"
 
-#: admin.php:674
+#: admin.php:666
 msgid "Password for Bulk Import User."
 msgstr ""
 
-#: admin.php:680
+#: admin.php:672
 msgid "Auto Disable Users"
 msgstr ""
 
-#: admin.php:683
+#: admin.php:675
 msgid ""
 "Disable users previously authenticated by ADI if they are not imported "
 "anymore or if they are disabled in AD."
 msgstr ""
 
-#: admin.php:685
+#: admin.php:677
 msgid ""
 "<b>Disabled users can only be reenabled manually by administrators on users "
 "profile page or by Bulk Import.</b>"
 msgstr ""
 
-#: admin.php:709
+#: admin.php:701
 #, fuzzy
 msgid ""
 "Enter a username and password to test logon. If you click the button below, "
@@ -1154,15 +1144,15 @@ msgstr ""
 "видно выхода, потому что пароли будут показаны в виде обычного текста.</"
 "strong>"
 
-#: admin.php:715
+#: admin.php:707
 msgid "Username"
 msgstr "Имя"
 
-#: admin.php:724
+#: admin.php:716
 msgid "Password"
 msgstr "Пароль"
 
-#: admin.php:733
+#: admin.php:725
 msgid "Perform Test"
 msgstr "Выполнить тест"
 
