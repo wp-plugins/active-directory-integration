@@ -245,6 +245,14 @@ if (!IS_WPMU) { ?>
 								</ul>
 							</td>
 						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_prevent_email_change"><?php _e('Prevent Email Change', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_prevent_email_change" id="AD_Integration_prevent_email_change" <?php if ($this->_prevent_email_change) echo ' checked="checked"' ?> value="1" />          
+								<?php _e('Prevents users authenticated by Active Directory from changing their email address in WordPress. This does not apply to administrators.', 'ad-integration'); ?>
+							</td>						
+						</tr>						
 
 						<tr valign="top">
 						<th scope="row"><label for="AD_Integration_display_name"><?php _e('Display name', 'ad-integration'); ?></label></th>
@@ -356,7 +364,7 @@ if (!IS_WPMU) { ?>
 								<input type="text" name="AD_Integration_role_equivalent_groups" id="AD_Integration_role_equivalent_groups" class="regular-text" 
 								value="<?php echo $this->_role_equivalent_groups; ?>" /><br />
 								<?php _e('List of Active Directory groups which correspond to WordPress user roles.', 'ad-integration'); ?><br/>
-								<?php _e('When a user is first created, his role will correspond to what is specified here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., "Soc-Faculty=faculty" or "Faculty=faculty;Students=subscriber"<br/>A user will be created based on the first math, from left to right, so you should obviously put the more powerful groups first.', 'ad-integration'); ?><br/>
+								<?php _e('When a user is first created, his role will correspond to what is specified here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., "Soc-Faculty=faculty" or "Faculty=faculty;Students=subscriber"<br/>A user will be created based on the first match, from left to right, so you should obviously put the more powerful groups first.', 'ad-integration'); ?><br/>
 								<?php _e('NOTES', 'ad-integration'); ?>
 								<ol style="list-style-type:decimal; margin-left:2em;font-size:11px;">
 									<li><?php _e('WordPress stores roles as lower case ("Subscriber" is stored as "subscriber")', 'ad-integration'); ?></li>

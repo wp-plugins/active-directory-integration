@@ -119,6 +119,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 1. Login as an existing user, such as admin.
 1. Upload the folder named `active-directory-integration` to your plugins folder, usually `wp-content/plugins`.
 1. Activate the plugin on the Plugins screen.
+1. Configure the plugin via Settings >> Active Directory Integration
 1. Enable SSL-Admin-Mode by adding the line `define('FORCE_SSL_ADMIN', true);` to your wp-config.php so that your passwords are not sent in plain-text.
 
 
@@ -128,7 +129,13 @@ Here we have a special problem with the builtin security group "Domain Users". I
 * ADD: Disable users by Bulk Import (or manually) who are not imported anymore or are disabled in Active Directory. (Issue #0045. Feature Request by Bas Ruijters.)
 * ADD: Option to show on user list if a user was authenticated (or imported) from Active Directory and the disabled state of user. 
 * ADD: Option to choose whether ADI should fallback to local (WordPress) password check if authentication against Active Directory fails. You should deactivate this for security reasons.
+<<<<<<< .mine
+* ADD: Option to prevent users from changing their email. (Issue #0049. Feature Request by Bas Ruijters.)
+* FIX: Username is handled as case sensitive on Bulk Import but this is a wrong behavior. (Issue #0041)
+* FIX: Options Page won't load on WP 3.3. (Issue #0048)		
+=======
 * FIX: Username is handled as case sensitive on Bulk Import but this is a wrong behavior. (Issue #0041)	
+>>>>>>> .r487432
 
 = 1.1.2 =
 * ADD: Allow logon of users with domains different from Account Suffix. (Issue #0043. Feature Request by Greg Fenton.)

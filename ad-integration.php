@@ -43,11 +43,25 @@ define('ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT', 'prevent');
 define('ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW', 'allow');
 define('ADI_DUPLICATE_EMAIL_ADDRESS_CREATE', 'create');
 
+/*
+add_action( 'user_profile_update_errors', 'prevent_email_change', 10, 3 );
+
+function prevent_email_change( $errors, $update, $user ) {
+
+    $old = get_user_by('id', $user->ID);
+
+    if( $user->user_email != $old->user_email )
+        $user->user_email = $old->user_email;
+}
+
+
+*/
+
 class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.1.1';
+	const ADI_VERSION = '1.1.3-dev';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -213,6 +227,11 @@ class ADIntegrationPlugin {
 	protected $_fallback_to_local_password = false;
 	
 	protected $_show_user_status = true;
+	
+	// Prevent email change by ADI Users (not for admins)
+	protected $_prevent_email_change = false;
+	
+	// protected $_auto_login = false; // TODO: for auto login/SSO feature, has to be added to _load_options(), admin.php etc. 
 		
 
 	// All options and its types
@@ -238,6 +257,7 @@ class ADIntegrationPlugin {
 			array('name' => 'AD_Integration_display_name', 'type' => 'string'),
 			array('name' => 'AD_Integration_enable_password_change', 'type' => 'bool'),
 			array('name' => 'AD_Integration_duplicate_email_prevention', 'type' => 'string'),
+			array('name' => 'AD_Integration_prevent_email_change', 'type' => 'bool'),
 			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool'),
 			array('name' => 'AD_Integration_show_user_status', 'type' => 'bool'),
 			
@@ -342,6 +362,14 @@ class ADIntegrationPlugin {
 				add_action('personal_options_update', array(&$this, 'profile_update'));
 				add_action('edit_user_profile_update', array(&$this, 'profile_update'));
 		    }
+			
+
+			// TODO: auto_login feature must be tested
+			/*
+			if ($this->_auto_login) {
+				add_action('init', array(&$this, 'auto_login'));
+			}
+			*/
 		    
 			
 			add_filter('check_password', array(&$this, 'override_password_check'), 10, 4);
@@ -369,11 +397,16 @@ class ADIntegrationPlugin {
 		}
 		
 		$this->_all_user_attributes = $this->_get_user_attributes();
+		
+		// Prevent email change
+		if ($this->_prevent_email_change) {
+			add_action( 'user_profile_update_errors', array(&$this, 'prevent_email_change'), 10, 3 );
+		}
 	}
 	
 	
 	public function load_styles() {
-		wp_register_style('adintegration', plugins_url( '/css/adintegration.css', __FILE__ ),false, '1.7.1', 'screen');
+		wp_register_style('adintegration', plugins_url('css/adintegration.css', __FILE__ )  ,false, '1.7.1', 'screen');
 		wp_enqueue_style('adintegration');
 	}
 	
@@ -394,7 +427,7 @@ class ADIntegrationPlugin {
 	public function initialize_options() {
 		
 		if (IS_WPMU) {
-			if (is_site_admin()) {
+			if (is_super_admin()) {
 				add_site_option('AD_Integration_account_suffix', ''); 
 				add_site_option('AD_Integration_auto_create_user', false);
 				add_site_option('AD_Integration_auto_update_user', false);
@@ -406,11 +439,14 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_port', '389');
 				add_site_option('AD_Integration_use_tls', false);
 				add_site_option('AD_Integration_network_timeout', 5);
+				
+				// User
 				add_site_option('AD_Integration_authorize_by_group', false);
 				add_site_option('AD_Integration_authorization_group', '');
 				add_site_option('AD_Integration_display_name', '');
 				add_site_option('AD_Integration_enable_password_change', false);
 				add_site_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT);
+				add_site_option('AD_Integration_prevent_email_change', false);
 				add_site_option('AD_Integration_auto_update_description', false);
 				add_site_option('AD_Integration_show_user_status', false);
 				
@@ -460,6 +496,7 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_display_name', '');
 				add_option('AD_Integration_enable_password_change', false);
 				add_option('AD_Integration_duplicate_email_prevention', ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT);
+				add_option('AD_Integration_prevent_email_change', false);
 				add_option('AD_Integration_auto_update_description', false);
 				add_option('AD_Integration_show_user_status', false);
 				
@@ -516,6 +553,7 @@ class ADIntegrationPlugin {
 		register_setting('ADI-user-settings', 'AD_Integration_display_name');
 		register_setting('ADI-user-settings', 'AD_Integration_enable_password_change', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_duplicate_email_prevention');
+		register_setting('ADI-user-settings', 'AD_Integration_prevent_email_change', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_no_random_password', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_auto_update_password', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-user-settings', 'AD_Integration_show_user_status', array(&$this, 'sanitize_bool'));
@@ -559,17 +597,18 @@ class ADIntegrationPlugin {
 	 */
 	public function add_options_page() {
 	
-		if (IS_WPMU && is_site_admin()) {
+		if (IS_WPMU && is_super_admin()) {
 			// WordPress MU
 			if (function_exists('add_submenu_page')) {
-				add_submenu_page('wpmu-admin.php', __('Active Directory Integration'), __('Active Directory Integration'), 'manage_options', __FILE__, array(&$this, '_display_options_page'));
+				add_submenu_page('wpmu-admin.php', __('Active Directory Integration'), __('Active Directory Integration'), 'manage_options', 'active-directory-integration', array(&$this, 'display_options_page'));
 			}
 		}
 	
 		if (!IS_WPMU) {
 			// WordPress Standard
 			if (function_exists('add_options_page')) {
-				add_options_page('Active Directory Integration', 'Active Directory Integration', 'manage_options', __FILE__, array(&$this, '_display_options_page'));
+				//add_options_page('Active Directory Integration', 'Active Directory Integration', 'manage_options', __FILE__, array(&$this, 'display_options_page'));
+				add_options_page('Active Directory Integration', 'Active Directory Integration', 'manage_options', 'active-directory-integration', array(&$this, 'display_options_page'));
 			}
 		}
 	}
@@ -862,6 +901,25 @@ class ADIntegrationPlugin {
 		$this->_log(ADI_LOG_DEBUG,'Using local (WordPress) password check.');
 		return $check;
 	}
+	
+	/**
+	 * Auto Login / Single Sign On
+	 * Code by Alex Nolan
+	 */
+	public function auto_login() {
+		// TODO: This has to be tested - carefully
+		// looks pretty insecure
+		/*
+		if (!is_user_logged_in() && isset($_SERVER['LOGON_USER'])) {
+			$user_login = substr($_SERVER['LOGON_USER'], strrpos($_SERVER['LOGON_USER'],'\\')+1, strlen($_SERVER['LOGON_USER'])-strrpos($_SERVER['LOGON_USER'],'\\'));
+			$user = get_userdatabylogin($user_login); // TODO: deprecated
+			$user_id = $user->ID;
+			wp_set_current_user($user_id, $user_login);
+			wp_set_auth_cookie($user_id);
+			do_action('wp_login', $user_login);
+		}
+		*/
+    }	
 
 	/*
 	 * Generate a password for the user. This plugin does not
@@ -1213,6 +1271,13 @@ class ADIntegrationPlugin {
 			}
 		}
 	}
+	
+	/*
+	 * Display the options for this plugin.
+	 */
+	public function display_options_page() {
+		include dirname( __FILE__ ) .'/admin.php';
+	}	
 				
 	
 	/**
@@ -1225,30 +1290,6 @@ class ADIntegrationPlugin {
 		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
 		load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
-		
-		/*
-		// User disabled only visible for admins and not for user with ID 1 (admin) and not for ourselves
-		if (current_user_can('level_10') && ($user->id != 1) && ($user->id != $user_ID)) {
-			$user_disabled = get_user_meta($user->id, 'adi_user_disabled', true);
-			?>
-			<input type="hidden" name="adi_user_disabling" value="1" />
-			<table class="form-table">
-				<tr>
-					<th><label><?php _e('User Disabled','ad-integration');?></label>
-					<td>
-						<input type="checkbox" name="adi_user_disabled" id="adi_user_disabled"<?php if ($user_disabled) echo ' checked="checked"' ?> value="1" />
-						<?php 
-						if ($user_disabled) {
-							_e('Reason', 'ad-integration');
-							echo ': ' . get_user_meta($user->id, 'adi_user_disabled_reason', true);
-						}?>
-						<p class="description"><?php _e('Attention: This flag is automatically set (or unset) by Bulk Import and its state may change on next run of Bulk Import.','ad-integration'); ?></p>
-					</td>
-				</tr>
-			</table>
-		<?php 
-		}*/
-				
 		
 		// Additional Attributes
 		if ($this->_show_attributes) {
@@ -1274,7 +1315,7 @@ class ADIntegrationPlugin {
 				
 				$adi_samaccountname = get_user_meta($user->id, 'adi_samaccountname', true); 
 				?>
-				<input type="hidden" name="adi_samaccountname" value="<?php echo $adi_samaccountname; ?>">
+				<input type="hidden" name="adi_samaccountname" value="<?php echo $adi_samaccountname; ?>" />
 				<table class="form-table">
 				<?php 
 				foreach ($attributes AS $attribute) {
@@ -1366,6 +1407,19 @@ class ADIntegrationPlugin {
 				<?php
 			}
 		}
+	
+		// disable email field if needed (dirty hack)
+		if ($this->_prevent_email_change && ($adi_samaccountname != '') && (!current_user_can('level_10'))) {
+			?>
+			<script type="text/javascript">
+				var email = document.getElementById('email');
+				if (email) {
+					email.setAttribute('disabled','disabled');
+				}
+			</script>
+			<?php 
+		}
+		
 	}
 	
 	/**
@@ -1536,6 +1590,25 @@ class ADIntegrationPlugin {
 		}
 	}
 	
+	/**
+	 * Prevent ADI users from changing their email (action user_profile_update_errors)
+	 * 
+	 * @param object $errors
+	 * @param bool $update
+	 * @param object $user
+	 */
+	public function prevent_email_change(&$errors, $update, &$user) {
+		if ($this->_prevent_email_change && ($this->_is_adi_user($user->ID)) && (!current_user_can('level_10'))) {
+		    $old = get_user_by('id', $user->ID);
+		
+		    if( $user->user_email != $old->user_email ) {
+		    	// reset to old email
+				$this->_log(ADI_LOG_DEBUG, 'Prevent email change on profile update for user "'.$user->user_login.'" ('.$user->ID.').');
+		        $user->user_email = $old->user_email;
+		    }
+		}
+	}	
+	
 	
 	/**
 	 *  Add new column to the user list page
@@ -1611,7 +1684,6 @@ class ADIntegrationPlugin {
 		
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
-		// 
 		
 		// get current version and write version of plugin to options table
 		if (isset($wpmu_version) && $wpmu_version != '') {
@@ -1742,6 +1814,7 @@ class ADIntegrationPlugin {
 			$this->_display_name				= get_site_option('AD_Integration_display_name');
 			$this->_enable_password_change      = get_site_option('AD_Integration_enable_password_change');
 			$this->_duplicate_email_prevention  = get_site_option('AD_Integration_duplicate_email_prevention');
+			$this->_prevent_email_change  		= (bool)get_site_option('AD_Integration_prevent_email_change');
 			$this->_auto_update_description		= (bool)get_site_option('AD_Integration_auto_update_description');
 			$this->_show_user_status			= (bool)get_site_option('AD_Integration_show_user_status');
 			
@@ -1791,6 +1864,7 @@ class ADIntegrationPlugin {
 			$this->_display_name				= get_option('AD_Integration_display_name');
 			$this->_enable_password_change      = get_option('AD_Integration_enable_password_change');
 			$this->_duplicate_email_prevention  = get_option('AD_Integration_duplicate_email_prevention');
+			$this->_prevent_email_change  		= (bool)get_option('AD_Integration_prevent_email_change');
 			$this->_auto_update_description		= (bool)get_option('AD_Integration_auto_update_description');
 			$this->_show_user_status			= (bool)get_option('AD_Integration_show_user_status');
 			
@@ -2087,6 +2161,17 @@ class ADIntegrationPlugin {
 		}
 		return $value;
 	}
+	
+	/**
+	 * Returns true if the user is an ADI User
+	 * 
+	 * @param integer $user_id
+	 */
+	protected function _is_adi_user($user_id)
+	{
+		return (get_user_meta($user_id, 'adi_samaccountname', true) != ''); 
+	}
+		
 	
 	/**
 	 * Saves the options to the sitewide options store. This is only needed for WPMU.
@@ -3137,12 +3222,7 @@ class ADIntegrationPlugin {
 	
 	
 	
-	/*
-	 * Display the options for this plugin.
-	 */
-	function _display_options_page() {
-		include dirname( __FILE__ ) .'/admin.php';
-	}
+
 
 } // END OF CLASS
 } // ENDIF
