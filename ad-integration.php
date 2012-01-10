@@ -400,7 +400,9 @@ class ADIntegrationPlugin {
 		
 		// Prevent email change
 		if ($this->_prevent_email_change) {
-			add_action( 'user_profile_update_errors', array(&$this, 'prevent_email_change'), 10, 3 );
+			add_action( 'edit_user_profile', array(&$this, 'user_profile_prevent_email_change')); // cosmetic
+			add_action( 'show_user_profile', array(&$this, 'user_profile_prevent_email_change')); // cosmetic
+			add_action( 'user_profile_update_errors', array(&$this, 'prevent_email_change'), 10, 3 ); // true prevention
 		}
 	}
 	
@@ -1407,20 +1409,10 @@ class ADIntegrationPlugin {
 				<?php
 			}
 		}
-	
-		// disable email field if needed (dirty hack)
-		if ($this->_prevent_email_change && ($adi_samaccountname != '') && (!current_user_can('level_10'))) {
-			?>
-			<script type="text/javascript">
-				var email = document.getElementById('email');
-				if (email) {
-					email.setAttribute('disabled','disabled');
-				}
-			</script>
-			<?php 
-		}
-		
 	}
+	
+
+	
 	
 	/**
 	 * Update user meta from profile page
@@ -1591,13 +1583,35 @@ class ADIntegrationPlugin {
 	}
 	
 	/**
+	 * Disable email field in user profile if needed (actions edit_user_profile and show_user_profile)
+	 * This is not safe and only for cosmetic reasons, but we also have the method prevent_email_change() (see below).
+	 * 
+	 * @param object $user
+	 */
+	public function user_profile_prevent_email_change($user)
+	{
+		// disable email field if needed (dirty hack)
+		if ($this->_prevent_email_change && $this->_is_adi_user($user->ID) && (!current_user_can('level_10'))) {
+			?>
+			<script type="text/javascript">
+				var email = document.getElementById('email');
+				if (email) {
+					email.setAttribute('disabled','disabled');
+				}
+			</script>
+			<?php 
+		}		
+	}	
+	
+	/**
 	 * Prevent ADI users from changing their email (action user_profile_update_errors)
 	 * 
 	 * @param object $errors
 	 * @param bool $update
 	 * @param object $user
 	 */
-	public function prevent_email_change(&$errors, $update, &$user) {
+	public function prevent_email_change(&$errors, $update, &$user)
+	{
 		if ($this->_prevent_email_change && ($this->_is_adi_user($user->ID)) && (!current_user_can('level_10'))) {
 		    $old = get_user_by('id', $user->ID);
 		
