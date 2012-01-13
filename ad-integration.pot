@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-10 11:26+0100\n"
+"POT-Creation-Date: 2012-01-11 10:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,294 +16,294 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ad-integration.php:603 admin.php:74
+#: ad-integration.php:605 admin.php:74
 msgid "Active Directory Integration"
 msgstr ""
 
-#: ad-integration.php:828
+#: ad-integration.php:830
 msgid ""
 "<strong>ERROR</strong>: This user exists in Active Directory, but has not "
 "been granted access to this installation of WordPress."
 msgstr ""
 
-#: ad-integration.php:959
+#: ad-integration.php:961
 msgid "Active Directory Integration Help"
 msgstr ""
 
-#: ad-integration.php:960
+#: ad-integration.php:962
 msgid "Overview"
 msgstr ""
 
-#: ad-integration.php:961
+#: ad-integration.php:963
 msgid "FAQ"
 msgstr ""
 
-#: ad-integration.php:962
+#: ad-integration.php:964
 msgid "Changelog"
 msgstr ""
 
-#: ad-integration.php:963
+#: ad-integration.php:965
 msgid "Support-Forum"
 msgstr ""
 
-#: ad-integration.php:964
+#: ad-integration.php:966
 msgid "Bug Tracker"
 msgstr ""
 
-#: ad-integration.php:1230
+#: ad-integration.php:1232
 msgid "User Disabled"
 msgstr ""
 
-#: ad-integration.php:1233
+#: ad-integration.php:1235
 msgid ""
 "If selected, the user can not log in and his e-mail address will be changed "
 "for security reasons. The e-mail address is restored if the user is "
 "reenabled."
 msgstr ""
 
-#: ad-integration.php:1237
+#: ad-integration.php:1239
 msgid "Information on last disabling: "
 msgstr ""
 
-#: ad-integration.php:1241
+#: ad-integration.php:1243
 msgid ""
 "Attention: This flag is automatically set (or unset) by Bulk Import and its "
 "state may change on next run of Bulk Import."
 msgstr ""
 
-#: ad-integration.php:1264
+#: ad-integration.php:1266
 #, php-format
 msgid "User manually disabled by \"%s\"."
 msgstr ""
 
-#: ad-integration.php:1314
+#: ad-integration.php:1316
 msgid "Additional Informations"
 msgstr ""
 
-#: ad-integration.php:1376
+#: ad-integration.php:1378
 msgid "Your password"
 msgstr ""
 
-#: ad-integration.php:1379
+#: ad-integration.php:1381
 msgid ""
 "If you want to save the changes on \"Additional Informations\" back to the "
 "Active Directory you must enter your password."
 msgstr ""
 
-#: ad-integration.php:1541
+#: ad-integration.php:1533
 msgid ""
 "No password given, so additional attributes are not written back to Active "
 "Directory"
 msgstr ""
 
-#: ad-integration.php:1568
+#: ad-integration.php:1560
 msgid ""
 "Error on writing additional attributes back to Active Directory. Wrong "
 "password?"
 msgstr ""
 
-#: ad-integration.php:1581
+#: ad-integration.php:1573
 msgid ""
 "Error on writing additional attributes back to Active Directory. Please "
 "contact your administrator."
 msgstr ""
 
-#: ad-integration.php:1620
+#: ad-integration.php:1634
 msgid "ADI User"
 msgstr ""
 
-#: ad-integration.php:1621
+#: ad-integration.php:1635
 msgid "Disabled"
 msgstr ""
 
-#: ad-integration.php:1772
+#: ad-integration.php:1786
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr ""
 
-#: ad-integration.php:1776
+#: ad-integration.php:1790
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr ""
 
-#: ad-integration.php:1911
+#: ad-integration.php:1925
 msgid "Common Name"
 msgstr ""
 
-#: ad-integration.php:1912
+#: ad-integration.php:1926
 msgid "First name"
 msgstr ""
 
-#: ad-integration.php:1913
+#: ad-integration.php:1927
 msgid "Initials"
 msgstr ""
 
-#: ad-integration.php:1914
+#: ad-integration.php:1928
 msgid "Last name"
 msgstr ""
 
-#: ad-integration.php:1915 admin.php:258
+#: ad-integration.php:1929 admin.php:258
 msgid "Display name"
 msgstr ""
 
-#: ad-integration.php:1916 admin.php:462
+#: ad-integration.php:1930 admin.php:462
 msgid "Description"
 msgstr ""
 
-#: ad-integration.php:1917
+#: ad-integration.php:1931
 msgid "Office"
 msgstr ""
 
-#: ad-integration.php:1918
+#: ad-integration.php:1932
 msgid "Telephone number"
 msgstr ""
 
-#: ad-integration.php:1919
+#: ad-integration.php:1933
 msgid "E-mail"
 msgstr ""
 
-#: ad-integration.php:1920
+#: ad-integration.php:1934
 msgid "Web Page"
 msgstr ""
 
-#: ad-integration.php:1923
+#: ad-integration.php:1937
 msgid "User logon name"
 msgstr ""
 
-#: ad-integration.php:1926
+#: ad-integration.php:1940
 msgid "Street"
 msgstr ""
 
-#: ad-integration.php:1927
+#: ad-integration.php:1941
 msgid "P.O. Box"
 msgstr ""
 
-#: ad-integration.php:1928
+#: ad-integration.php:1942
 msgid "City"
 msgstr ""
 
-#: ad-integration.php:1929
+#: ad-integration.php:1943
 msgid "State"
 msgstr ""
 
-#: ad-integration.php:1930
+#: ad-integration.php:1944
 msgid "ZIP/Postal cide"
 msgstr ""
 
-#: ad-integration.php:1931
+#: ad-integration.php:1945
 msgid "Country abbreviation"
 msgstr ""
 
-#: ad-integration.php:1932
+#: ad-integration.php:1946
 msgid "Country"
 msgstr ""
 
-#: ad-integration.php:1933
+#: ad-integration.php:1947
 msgid "Country code (number)"
 msgstr ""
 
-#: ad-integration.php:1936
+#: ad-integration.php:1950
 msgid "Home"
 msgstr ""
 
-#: ad-integration.php:1937
+#: ad-integration.php:1951
 msgid "Home (other)"
 msgstr ""
 
-#: ad-integration.php:1938
+#: ad-integration.php:1952
 msgid "Pager"
 msgstr ""
 
-#: ad-integration.php:1939
+#: ad-integration.php:1953
 msgid "Pager (other)"
 msgstr ""
 
-#: ad-integration.php:1940
+#: ad-integration.php:1954
 msgid "Mobile"
 msgstr ""
 
-#: ad-integration.php:1941
+#: ad-integration.php:1955
 msgid "Mobile (Other)"
 msgstr ""
 
-#: ad-integration.php:1942
+#: ad-integration.php:1956
 msgid "Fax"
 msgstr ""
 
-#: ad-integration.php:1943
+#: ad-integration.php:1957
 msgid "Fax (other)"
 msgstr ""
 
-#: ad-integration.php:1944
+#: ad-integration.php:1958
 msgid "IP Phone"
 msgstr ""
 
-#: ad-integration.php:1945
+#: ad-integration.php:1959
 msgid "IP Phone (other)"
 msgstr ""
 
-#: ad-integration.php:1946
+#: ad-integration.php:1960
 msgid "Notes"
 msgstr ""
 
-#: ad-integration.php:1949
+#: ad-integration.php:1963
 msgid "Title"
 msgstr ""
 
-#: ad-integration.php:1950
+#: ad-integration.php:1964
 msgid "Department"
 msgstr ""
 
-#: ad-integration.php:1951
+#: ad-integration.php:1965
 msgid "Company"
 msgstr ""
 
-#: ad-integration.php:1952
+#: ad-integration.php:1966
 msgid "Manager"
 msgstr ""
 
-#: ad-integration.php:1953
+#: ad-integration.php:1967
 msgid "Direct reports"
 msgstr ""
 
-#: ad-integration.php:3004 ad-integration.php:3087
+#: ad-integration.php:3016 ad-integration.php:3099
 msgid "Account blocked"
 msgstr ""
 
-#: ad-integration.php:3005
+#: ad-integration.php:3017
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
 "security reasons your account is now blocked for %d seconds."
 msgstr ""
 
-#: ad-integration.php:3007 ad-integration.php:3092
+#: ad-integration.php:3019 ad-integration.php:3104
 msgid ""
 "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
 "ADDRESS SPECIFIED ABOVE."
 msgstr ""
 
-#: ad-integration.php:3088
+#: ad-integration.php:3100
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
 "vain. For security reasons this account is now blocked for %d seconds."
 msgstr ""
 
-#: ad-integration.php:3090
+#: ad-integration.php:3102
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr ""
 
-#: ad-integration.php:3211
+#: ad-integration.php:3223
 msgid "Powered by WordPress"
 msgstr ""
 
-#: ad-integration.php:3213
+#: ad-integration.php:3225
 msgid "Account blocked for"
 msgstr ""
 
-#: ad-integration.php:3213 admin.php:144
+#: ad-integration.php:3225 admin.php:144
 msgid "seconds"
 msgstr ""
 
@@ -394,7 +394,8 @@ msgid "Base DN"
 msgstr ""
 
 #: admin.php:155
-msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
+msgid ""
+"Base DN (e.g. \"ou=unit,dc=domain,dc=tld\" or \"cn=users,dc=domain,dc=tld\")"
 msgstr ""
 
 #: admin.php:161 admin.php:330 admin.php:379 admin.php:449 admin.php:604

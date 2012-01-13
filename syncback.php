@@ -198,7 +198,7 @@ class BulkSyncBackADIntegrationPlugin extends ADIntegrationPlugin {
 					
 					$userinfo = get_userdata($user->user_id);
 					if ($userinfo) {
-						$this->_log(ADI_LOG_INFO, 'User-Login: '.$userinfo->user_login); // TODO: check if this works for all types user (eg. user@domain.local)
+						$this->_log(ADI_LOG_INFO, 'User-Login: '.$userinfo->user_login); 
 						$this->_log(ADI_LOG_INFO, 'User-ID: '.$user->user_id);
 					
 						

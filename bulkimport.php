@@ -57,7 +57,7 @@ if (isset($wpmu_version) && $wpmu_version != '') {
 class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 
 	/**
-	 * Output debug informations
+	 * Output formatted debug informations
 	 * 
 	 * @param integer level
 	 * @param string $notice

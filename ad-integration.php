@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.1.3-dev
+Version: 1.1.3
 Plugin URI: http://blog.ecw.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff, ECW GmbH
@@ -43,25 +43,12 @@ define('ADI_DUPLICATE_EMAIL_ADDRESS_PREVENT', 'prevent');
 define('ADI_DUPLICATE_EMAIL_ADDRESS_ALLOW', 'allow');
 define('ADI_DUPLICATE_EMAIL_ADDRESS_CREATE', 'create');
 
-/*
-add_action( 'user_profile_update_errors', 'prevent_email_change', 10, 3 );
-
-function prevent_email_change( $errors, $update, $user ) {
-
-    $old = get_user_by('id', $user->ID);
-
-    if( $user->user_email != $old->user_email )
-        $user->user_email = $old->user_email;
-}
-
-
-*/
 
 class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.1.3-dev';
+	const ADI_VERSION = '1.1.3';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -70,8 +57,8 @@ class ADIntegrationPlugin {
 	// is the user authenticated?
 	public $_authenticated = false;
 	
-	protected $_minium_WPMU_version = '2.8';
-	protected $_minium_WP_version = '2.8';
+	protected $_minium_WPMU_version = '3.0';
+	protected $_minium_WP_version = '3.0';
 	
 	// log level
 	protected $_loglevel = ADI_LOG_NONE;
@@ -210,22 +197,31 @@ class ADIntegrationPlugin {
 	protected $_auto_update_password = false;
 	
 	
+	// enable Bulk Import
 	protected $_bulkimport_enabled = false;
 	
+	// AUTHCODE for Bulk Import. Bulk Import will only work, if this AUTHCODE is send as as get-parameter to bulkimport.php
 	protected $_bulkimport_authcode = '';
 	
+	// generate a new AUTHCODE for Bulk Import
 	protected $_bulkimport_new_authcode = false;
 	
+	// Import members of these security groups (separated by semicolons)
 	protected $_bulkimport_security_groups = '';
 
+	// name of Bulk Import User in Active Directory
 	protected $_bulkimport_user = '';
 	
+	// password for Bulk Import User (will be stored encrypted)
 	protected $_bulkimport_pwd = '';
 	
+	// use user disabling
 	protected $_disable_users = false;
 	
+	// use local (WordPress) password as fallback if authentication against AD fails
 	protected $_fallback_to_local_password = false;
 	
+	// show disabled and ADI user status on user list
 	protected $_show_user_status = true;
 	
 	// Prevent email change by ADI Users (not for admins)
@@ -240,56 +236,59 @@ class ADIntegrationPlugin {
 	
 			array('name' => 'AD_Integration_version', 'type' => 'string'),
 		
-			array('name' => 'AD_Integration_account_suffix', 'type' => 'string'),
-			array('name' => 'AD_Integration_auto_create_user', 'type' => 'bool'),
-			array('name' => 'AD_Integration_auto_update_user', 'type' => 'bool'),
-			array('name' => 'AD_Integration_append_suffix_to_new_users', 'type' => 'bool'),
+			// Server
 			array('name' => 'AD_Integration_domain_controllers', 'type' => 'string'),
-			array('name' => 'AD_Integration_base_dn', 'type' => 'string'),
-			array('name' => 'AD_Integration_role_equivalent_groups', 'type' => 'string'),
-			array('name' => 'AD_Integration_default_email_domain', 'type' => 'string'),
 			array('name' => 'AD_Integration_port', 'type' => 'int'),
 			array('name' => 'AD_Integration_use_tls', 'type' => 'bool'),
 			array('name' => 'AD_Integration_network_timeout', 'type' => 'integer'),
+			array('name' => 'AD_Integration_base_dn', 'type' => 'string'),
 			
-			array('name' => 'AD_Integration_authorize_by_group', 'type' => 'bool'),
-			array('name' => 'AD_Integration_authorization_group', 'type' => 'string'),
-			array('name' => 'AD_Integration_display_name', 'type' => 'string'),
-			array('name' => 'AD_Integration_enable_password_change', 'type' => 'bool'),
+			// User
+			array('name' => 'AD_Integration_account_suffix', 'type' => 'string'),
+			array('name' => 'AD_Integration_append_suffix_to_new_users', 'type' => 'bool'),
+			array('name' => 'AD_Integration_auto_create_user', 'type' => 'bool'),
+			array('name' => 'AD_Integration_auto_update_user', 'type' => 'bool'),
+			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool'),
+			array('name' => 'AD_Integration_default_email_domain', 'type' => 'string'),
 			array('name' => 'AD_Integration_duplicate_email_prevention', 'type' => 'string'),
 			array('name' => 'AD_Integration_prevent_email_change', 'type' => 'bool'),
-			array('name' => 'AD_Integration_auto_update_description', 'type' => 'bool'),
+			array('name' => 'AD_Integration_display_name', 'type' => 'string'),
 			array('name' => 'AD_Integration_show_user_status', 'type' => 'bool'),
+			array('name' => 'AD_Integration_enable_password_change', 'type' => 'bool'),
+			array('name' => 'AD_Integration_no_random_password', 'type' => 'bool'),
+			array('name' => 'AD_Integration_auto_update_password', 'type' => 'bool'),
 			
+			// Authorization
+			array('name' => 'AD_Integration_authorize_by_group', 'type' => 'bool'),
+			array('name' => 'AD_Integration_authorization_group', 'type' => 'string'),
+			array('name' => 'AD_Integration_role_equivalent_groups', 'type' => 'string'),
+
 			// Security
+			array('name' => 'AD_Integration_fallback_to_local_password', 'type' => 'bool'),
 			array('name' => 'AD_Integration_max_login_attempts', 'type' => 'int'),
 			array('name' => 'AD_Integration_block_time', 'type' => 'int'),
 			array('name' => 'AD_Integration_user_notification', 'type' => 'bool'),
 			array('name' => 'AD_Integration_admin_notification', 'type' => 'bool'),
 			array('name' => 'AD_Integration_admin_email', 'type' => 'string'),
-			array('name' => 'AD_Integration_disable_users', 'type' => 'bool'),
-			array('name' => 'AD_Integration_fallback_to_local_password', 'type' => 'bool'),
 
-			array('name' => 'AD_Integration_show_attributes', 'type' => 'bool'),
-			array('name' => 'AD_Integration_attributes_to_show', 'type' => 'bool'),
+			// User Meta
 			array('name' => 'AD_Integration_additional_user_attributes', 'type' => 'string'),
 			array('name' => 'AD_Integration_usermeta_empty_overwrite', 'type' => 'bool'),
-			array('name' => 'AD_Integration_no_random_password', 'type' => 'bool'),
-			array('name' => 'AD_Integration_auto_update_password', 'type' => 'bool'),
-			
+			array('name' => 'AD_Integration_show_attributes', 'type' => 'bool'),
+			array('name' => 'AD_Integration_attributes_to_show', 'type' => 'bool'),
 			array('name' => 'AD_Integration_syncback', 'type' => 'bool'),
 			array('name' => 'AD_Integration_syncback_use_global_user', 'type' => 'bool'),
 			array('name' => 'AD_Integration_syncback_global_user', 'type' => 'string'),
 			array('name' => 'AD_Integration_syncback_global_pwd', 'type' => 'string'),
 			
+			// Bulk Import
 			array('name' => 'AD_Integration_bulkimport_enabled', 'type' => 'bool'),
 			array('name' => 'AD_Integration_bulkimport_authcode', 'type' => 'string'),
 			array('name' => 'AD_Integration_bulkimport_new_authcode', 'type' => 'bool'),
 			array('name' => 'AD_Integration_bulkimport_security_groups', 'type' => 'string'),
 			array('name' => 'AD_Integration_bulkimport_user', 'type' => 'string'),
-			array('name' => 'AD_Integration_bulkimport_pwd', 'type' => 'string')
-			
-			
+			array('name' => 'AD_Integration_bulkimport_pwd', 'type' => 'string'),
+			array('name' => 'AD_Integration_disable_users', 'type' => 'bool')
 		);
 		
 
@@ -388,6 +387,8 @@ class ADIntegrationPlugin {
 			if (!class_exists('adLDAP')) {
 				require 'ad_ldap/adLDAP.php';
 			}
+		} else {
+			$this->_log(ADI_LOG_WARN,'openLDAP not installed or activated in PHP.');
 		}
 		
 		// Adding AD attributes to profile page
@@ -994,222 +995,16 @@ class ADIntegrationPlugin {
 	}
 	
 	
-	/********************************************
-	 * Sanitize methods for register_settings
-	 ********************************************/
-	
-	/**
-	 * Sanitize AD Servers port
-	 * 
-	 * @param string $port
-	 * @return integer sanitized port number
-	 */
-	public function sanitize_port($port) {
-		$port = intval($port);
-		if (($port < 0) || ($port > 65535)) {
-			$port = 389;
-		} 
-		return $port;
-	}
-	
-	/**
-	 * Sanitize default email domain
-	 * trim, strip possible @
-	 * 
-	 * @param string $domain
-	 * @return string sanitized domain
-	 */
-	public function sanitize_default_email_domain($domain)
-	{
-		$domain = preg_replace('/[^\A-Za-z0-9-\.]/', '', $domain);
-		return $domain;
-	}
-	
-	/**
-	 * Strip spaces from beginning or end of suffixes
-	 * Our seperator (;) is an allowed character in UPN suffixes but not recommended, so fuck the shit.
-	 * @param string $suffix
-	 */
-	public function sanitize_account_suffix($suffix)
-	{
-		$parts = explode(';', $suffix);
-		$results = array();
-		foreach($parts as $part)
-		{
-			$results[] = trim($part);
-		}
-		return implode(';', $results);	
-	}
-	
-	
-	public function sanitize_attributes_to_show($text)
-	{
-		$lines = explode("\n", $text);
-		$sanitized_lines = array();
-		foreach ($lines AS $line)
-		{
-			$line = trim($line);
-			if ($line != '') {
-				$sanitized_lines[] = $line;
-			}
-		}
-		return implode("\n", $sanitized_lines);
-	}	
-
-	
-	/**
-	 * Sanitize Additional User Attributes
-	 * trim, delete empty line, all to lowercase.
-	 * @param string $text
-	 * @return string
-	 */
-	public function sanitize_additional_user_attributes($text) {
-		$lines = explode("\n", $text);
-		$sanitized_lines = array();
-		foreach ($lines AS $line) {
-			$line = trim($line);
-			if ($line != '') {
-				$sanitized_lines[] = strtolower($line); // all in lower case
-			}
-		}
-		return implode("\n", $sanitized_lines);
-	}
-
-	public function sanitize_max_login_attempts($attempts) {
-		$attempts = intval($attempts);
-		if ($attempts < 1) {
-			$attempts = 3;
-		}
-		return $attempts;
-	}
-	
-	/**
-	 * Block time must be a postive integer.
-	 * 
-	 * @param $seconds
-	 * @return integer 30 if $seconds is lower than 1
-	 */
-	public function sanitize_block_time($seconds) {
-		$seconds = intval($seconds);
-		if ($seconds < 1) {
-			$seconds = 30;
-		}
-		return $seconds;
-	}
-	
-	/**
-	 * Check if $email is a correct email address.
-	 * 
-	 * @param string $email
-	 * @return string if we have no correct email address we return an empty string
-	 */
-	public function sanitize_admin_email($email) {
-		if (!is_email($email)) {
-			return '';
-		}
-		return $email;
-	}
-	
-	/**
-	 * If $value is true (as expression) returns true, otherwise false
-	 * 
-	 * @param mixed $value
-	 * @return bool
-	 */
-	public function sanitize_bool($value) {
-		return ($value == true);
-	}
-
-	
-	/**
-	 * Sanitize Global Sync User
-	 * 
-	 * @param string $user
-	 * @return string sanitized username
-	 */
-	public function sanitize_syncback_global_user($user)
-	{
-		return trim($user);
-	}
-	
-	
-	public function sanitize_syncback_global_user_pwd($pwd)
-	{
-		// Password left unchanged so get it from $db
-		if ($pwd == '') {
-			if (IS_WPMU) { 
-				$pwd = get_site_option('AD_Integration_syncback_global_pwd');
-			} else {
-				$pwd = get_option('AD_Integration_syncback_global_pwd');
-			}
-		} else {
-			$pwd = $this->_encrypt($pwd);
-		}
-		return $pwd;
-	}	
 	
 	
 	/**
-	 * Sanitize Buk Import User
-	 * 
-	 * @param string $user
-	 * @return string sanitized username
-	 */
-	public function sanitize_bulkimport_user($user)
-	{
-		return trim($user);
-	}
-	
-	
-	public function sanitize_bulkimport_user_pwd($pwd)
-	{
-		// Password left unchanged so get it from $db
-		if ($pwd == '') {
-			if (IS_WPMU) { 
-				$pwd = get_site_option('AD_Integration_bulkimport_pwd');
-			} else {
-				$pwd = get_option('AD_Integration_bulkimport_pwd');
-			}
-		} else {
-			$pwd = $this->_encrypt($pwd);
-		}
-		return $pwd;
-	}	
-	
-	
-	
-	/**
-	 * Sanitize new authcode
-	 * new_authcode is always resetted to false after a new authcode is generated
-	 * 
-	 * @param bool $new
-	 */
-	public function sanitize_new_authcode($new)
-	{
-		if ($new) {
-			$this->_generate_authcode();
-		}
-		return false;
-	}	
-	
-	/**
-	 * LDAP network timeout must be a postive integer.
-	 * 
-	 * @param $seconds
-	 * @return integer 5 if $seconds is lower than 1
+	 * HOOKS: Actions and Filters
 	 */
 	
-	public function sanitize_network_timeout($seconds)
-	{
-		$seconds = intval($seconds);
-		if ($seconds < 1) {
-			$seconds = 5;
-		}
-		return $seconds;
-	}
 	
 	/**
 	 * Show the disable user checkbox if needed
+	 * Action(s): edit_user_profile, show_user_profile
 	 * 
 	 * @param object $user 
 	 */
@@ -1229,7 +1024,7 @@ class ADIntegrationPlugin {
 			<input type="hidden" name="adi_user_disabling" value="1" />
 			<table class="form-table">
 				<tr>
-					<th><label><?php _e('User Disabled','ad-integration');?></label>
+					<th><label><?php _e('User Disabled','ad-integration');?></label></th>
 					<td>
 						<input type="checkbox" name="adi_user_disabled" id="adi_user_disabled"<?php if ($user_disabled) echo ' checked="checked"' ?> value="1" />
 						<?php _e('If selected, the user can not log in and his e-mail address will be changed for security reasons. The e-mail address is restored if the user is reenabled.','ad-integration'); ?>
@@ -1250,7 +1045,8 @@ class ADIntegrationPlugin {
 
 	
 	/**
-	 * Update disable state as set on profile page
+	 * Update disable status as set on profile page
+	 * Action(s): personal_options_update, edit_user_profile_update
 	 * 
 	 * @param object $user_id
 	 */
@@ -1384,26 +1180,6 @@ class ADIntegrationPlugin {
 					<?php
 				}
 				
-				/*
-				// Show SyncBack for this user if you are an admin and Global SyncBack is deactivated
-				if (($adi_samaccountname != '')
-					&& (current_user_can('level_10'))
-					&& ($this->_syncback_global_pwd != '')
-					&& ($this->_syncback_global_user != '')
-					&& ($this->_syncback_use_global_user != true)) {
-					?>
-					<tr style="border: 1px solid #999; background-color: white;">
-						<th scope="row"><label for="AD_Integration_syncback_manually"><?php _e('Perform SyncBack for this user', 'ad-integration'); ?></label></th>
-						<td>
-							<?php _e('Click on the following link to perform a SyncBack of this user to Active Directory. Only pre-stored data will be transmitted.', 'ad-integration'); ?>
-							<br>
-							<a href="<?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/syncback.php?userid=' . $user->id; ?>" target="_blank"><?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/syncback.php?userid=' . $user->id; ?></a>
-							<a href="<?php echo plugins_url() . '/'. ADINTEGRATION_FOLDER . '/syncback.php?userid=' . $user->id; ?>" target="_blank" class="button">SyncBack</a>
-						</td>
-					</tr>
-					<?php 
-				}
-				*/
 				?>
 				</table>
 				<?php
@@ -1416,7 +1192,7 @@ class ADIntegrationPlugin {
 	
 	/**
 	 * Update user meta from profile page
-	 * Here we can write user meta informations back to AD and set disable status.
+	 * Here we can write user meta informations back to AD. User disable status is set in profile_update_disable_user().
 	 * 
 	 * @param integer $user_id
 	 */
@@ -1426,22 +1202,6 @@ class ADIntegrationPlugin {
 		
 		// Add an action, so we can show errors on profile page
 		add_action('user_profile_update_errors', array(&$this,'generate_error'), 10, 3);
-		
-		/*
-		// Disable User
-		if (isset($_POST['adi_user_disabling'])) {
-			if (isset($_POST['adi_user_disabled'])) {
-				// Disable if user was not disabled only
-				if (get_user_meta($user_id, 'adi_user_disabled', true) == false) {
-					$this->_disable_user($user_id, sprintf(__('User manually disabled by "%s".', 'ad-integration'), $user_login));
-				}
-			} else {
-				// Reenable if user was disabled only
-				if (get_user_meta($user_id, 'adi_user_disabled', true) == true) {
-					$this->_enable_user($user_id);
-				}
-			}
-		}*/
 		
 		$this->_log(ADI_LOG_DEBUG,'SyncBack: Start of profile update');
 		
@@ -1478,13 +1238,7 @@ class ADIntegrationPlugin {
 								$attributes_to_sync[$key][0] = $_POST[$attribute['metakey']];
 							}
 						}
-						// WP 3.x					
-						if (version_compare($wp_version, '3', '>=')) {
-							update_user_meta($user_id, $attribute['metakey'], $_POST[$attribute['metakey']]);
-						} else {
-							// WP 2.x
-							update_usermeta($user_id, $attribute['metakey'], $_POST[$attribute['metakey']]);
-						}
+						update_user_meta($user_id, $attribute['metakey'], $_POST[$attribute['metakey']]);
 					}
 				}
 			}
@@ -1626,23 +1380,26 @@ class ADIntegrationPlugin {
 	
 	/**
 	 *  Add new column to the user list page
+	 *  
+	 *  @param array $columns 
 	 */
-	function manage_users_columns( $columns ) {
-		// This requires WP 2.8+
+	public function manage_users_columns($columns) {
 		global $wp_version;
-		if ( version_compare( $wp_version, '2.8', '>=' ) ) {
-			$columns['adi_user'] = __('ADI User', 'ad-integration');
-			$columns['adi_user_disabled'] = __('Disabled', 'ad-integration');
-		}
+		$columns['adi_user'] = __('ADI User', 'ad-integration');
+		$columns['adi_user_disabled'] = __('Disabled', 'ad-integration');
 		return $columns;
 	}
 	
 
 	
-	/*
+	/**
 	 *  Add column content for each user on user list
+	 *  
+	 * @param mixed $value Value to show
+	 * @param string $column_name Name of column in user table
+	 * @param integer $user_id ID of user (the row)  
 	 */
-	function manage_users_custom_column( $value, $column_name, $user_id ) {
+	public function manage_users_custom_column( $value, $column_name, $user_id ) {
 
 		// Column "Disabled"
 		if ( $column_name == 'adi_user' ) {
@@ -1776,6 +1533,8 @@ class ADIntegrationPlugin {
 	
 	/**
 	 * removes the plugin options from options table.
+	 * 
+	 * @param bool $echo print results as HTML  
 	 */
 	public static function uninstall($echo=false) {
 		foreach(self::$_all_options as $option) {
@@ -1795,13 +1554,250 @@ class ADIntegrationPlugin {
 	}
 	
 	
-
-
-
-	/*************************************************************
-	 * Functions
-	 *************************************************************/
+	/********************************************
+	 * Sanitize methods for register_settings
+	 ********************************************/
 	
+	/**
+	 * Sanitize AD Servers port
+	 * 
+	 * @param string $port
+	 * @return integer sanitized port number
+	 */
+	public function sanitize_port($port) {
+		$port = intval($port);
+		if (($port < 0) || ($port > 65535)) {
+			$port = 389;
+		} 
+		return $port;
+	}
+	
+	/**
+	 * Sanitize default email domain
+	 * trim, strip possible @
+	 * 
+	 * @param string $domain
+	 * @return string sanitized domain
+	 */
+	public function sanitize_default_email_domain($domain)
+	{
+		$domain = preg_replace('/[^\A-Za-z0-9-\.]/', '', $domain);
+		return $domain;
+	}
+	
+	/**
+	 * Strip spaces from beginning or end of suffixes
+	 * Our seperator (;) is an allowed character in UPN suffixes but not recommended, so fuck the shit.
+	 * 
+	 * @param string $suffix
+	 * @return string 
+	 */
+	public function sanitize_account_suffix($suffix)
+	{
+		$parts = explode(';', $suffix);
+		$results = array();
+		foreach($parts as $part)
+		{
+			$results[] = trim($part);
+		}
+		return implode(';', $results);	
+	}
+	
+	/**
+	 * Sanitize Additional User Attributes
+	 * trim, delete empty line
+	 * 
+	 * @param string $text
+	 * @return string
+	 */	
+	public function sanitize_attributes_to_show($text)
+	{
+		$lines = explode("\n", $text);
+		$sanitized_lines = array();
+		foreach ($lines AS $line) {
+			$line = trim($line);
+			if ($line != '') {
+				$sanitized_lines[] = $line;
+			}
+		}
+		return implode("\n", $sanitized_lines);
+	}	
+
+	
+	/**
+	 * Sanitize Additional User Attributes
+	 * trim, delete empty line, all to lowercase.
+	 * 
+	 * @param string $text
+	 * @return string
+	 */
+	public function sanitize_additional_user_attributes($text) {
+		$lines = explode("\n", $text);
+		$sanitized_lines = array();
+		foreach ($lines AS $line) {
+			$line = trim($line);
+			if ($line != '') {
+				$sanitized_lines[] = strtolower($line); // all in lower case
+			}
+		}
+		return implode("\n", $sanitized_lines);
+	}
+
+	/**
+	 * Maximum number of login attempts must be a postive integer.
+	 * 
+	 * @param integer $attempts
+	 * @return integer 3 if $attempts is lower than 1
+	 */
+	public function sanitize_max_login_attempts($attempts) {
+		$attempts = intval($attempts);
+		if ($attempts < 1) {
+			$attempts = 3;
+		}
+		return $attempts;
+	}
+	
+	/**
+	 * Block time must be a postive integer.
+	 * 
+	 * @param integer $seconds
+	 * @return integer 30 if $seconds is lower than 1
+	 */
+	public function sanitize_block_time($seconds) {
+		$seconds = intval($seconds);
+		if ($seconds < 1) {
+			$seconds = 30;
+		}
+		return $seconds;
+	}
+	
+	/**
+	 * Check if $email is a correct email address.
+	 * 
+	 * @param string $email
+	 * @return string if we have no correct email address we return an empty string
+	 */
+	public function sanitize_admin_email($email) {
+		if (!is_email($email)) {
+			return '';
+		}
+		return $email;
+	}
+	
+	/**
+	 * If $value is true (as expression) returns true, otherwise false
+	 * 
+	 * @param mixed $value
+	 * @return bool
+	 */
+	public function sanitize_bool($value) {
+		return ($value == true);
+	}
+
+	
+	/**
+	 * Sanitize Global Sync User
+	 * 
+	 * @param string $user
+	 * @return string sanitized username
+	 */
+	public function sanitize_syncback_global_user($user)
+	{
+		return trim($user);
+	}
+	
+	/**
+	 * Encrypts the Sync Back User Password
+	 * 
+	 * @param string $pwd unencrypted password
+	 * @return encrypted (sanitized) password
+	 */	
+	public function sanitize_syncback_global_user_pwd($pwd)
+	{
+		// Password left unchanged so get it from $db
+		if ($pwd == '') {
+			if (IS_WPMU) { 
+				$pwd = get_site_option('AD_Integration_syncback_global_pwd');
+			} else {
+				$pwd = get_option('AD_Integration_syncback_global_pwd');
+			}
+		} else {
+			$pwd = $this->_encrypt($pwd);
+		}
+		return $pwd;
+	}	
+	
+	
+	/**
+	 * Sanitize Buk Import User
+	 * 
+	 * @param string $user
+	 * @return string sanitized username
+	 */
+	public function sanitize_bulkimport_user($user)
+	{
+		return trim($user);
+	}
+	
+	
+	/**
+	 * Encrypts the Bulk Import User Password
+	 * 
+	 * @param string $pwd unencrypted password
+	 * @return encrypted (sanitized) password
+	 */
+	public function sanitize_bulkimport_user_pwd($pwd)
+	{
+		// Password left unchanged so get it from $db
+		if ($pwd == '') {
+			if (IS_WPMU) { 
+				$pwd = get_site_option('AD_Integration_bulkimport_pwd');
+			} else {
+				$pwd = get_option('AD_Integration_bulkimport_pwd');
+			}
+		} else {
+			$pwd = $this->_encrypt($pwd);
+		}
+		return $pwd;
+	}	
+	
+	
+	
+	/**
+	 * Sanitize new authcode
+	 * new_authcode is always resetted to false after a new authcode is generated
+	 * 
+	 * @param bool $new
+	 */
+	public function sanitize_new_authcode($new)
+	{
+		if ($new) {
+			$this->_generate_authcode();
+		}
+		return false;
+	}	
+	
+	/**
+	 * LDAP network timeout must be a postive integer.
+	 * 
+	 * @param $seconds
+	 * @return integer 5 if $seconds is lower than 1
+	 */
+	
+	public function sanitize_network_timeout($seconds)
+	{
+		$seconds = intval($seconds);
+		if ($seconds < 1) {
+			$seconds = 5;
+		}
+		return $seconds;
+	}
+	
+
+	
+	/*************************************************************
+	 * Protected Methods
+	 *************************************************************/
 	
 	
 	/**
@@ -1811,46 +1807,53 @@ class ADIntegrationPlugin {
 		
 		if (IS_WPMU) {
 			$this->_log(ADI_LOG_INFO,'loading options (WPMU) ...');
-			$this->_auto_create_user 			= (bool)get_site_option('AD_Integration_auto_create_user');
-			$this->_auto_update_user 			= (bool)get_site_option('AD_Integration_auto_update_user');
-			$this->_account_suffix		 		= get_site_option('AD_Integration_account_suffix');
-			$this->_append_suffix_to_new_users 	= get_site_option('AD_Integration_append_suffix_to_new_users');
+			
+			// Server (5)
 			$this->_domain_controllers 			= get_site_option('AD_Integration_domain_controllers');
-			$this->_base_dn						= get_site_option('AD_Integration_base_dn');
 			$this->_port 						= get_site_option('AD_Integration_port');
 			$this->_use_tls 					= get_site_option('AD_Integration_use_tls');
 			$this->_network_timeout				= (int)get_site_option('AD_Integration_network_timeout');
-			
+			$this->_base_dn						= get_site_option('AD_Integration_base_dn');
+
+			// User (13)
+			$this->_account_suffix		 		= get_site_option('AD_Integration_account_suffix');
+			$this->_append_suffix_to_new_users 	= get_site_option('AD_Integration_append_suffix_to_new_users');
+			$this->_auto_create_user 			= (bool)get_site_option('AD_Integration_auto_create_user');
+			$this->_auto_update_user 			= (bool)get_site_option('AD_Integration_auto_update_user');
+			$this->_auto_update_description		= (bool)get_site_option('AD_Integration_auto_update_description');
 			$this->_default_email_domain 		= get_site_option('AD_Integration_default_email_domain');
+			$this->_duplicate_email_prevention  = get_site_option('AD_Integration_duplicate_email_prevention');
+			$this->_prevent_email_change  		= (bool)get_site_option('AD_Integration_prevent_email_change');
+			$this->_display_name				= get_site_option('AD_Integration_display_name');
+			$this->_show_user_status			= (bool)get_site_option('AD_Integration_show_user_status');
+			$this->_enable_password_change      = get_site_option('AD_Integration_enable_password_change');
+			$this->_no_random_password			= (bool)get_site_option('AD_Integration_no_random_password');
+			$this->_auto_update_password		= (bool)get_site_option('AD_Integration_auto_update_password');
+			
+			// Authorization (3)
 			$this->_authorize_by_group 			= (bool)get_site_option('AD_Integration_authorize_by_group');
 			$this->_authorization_group 		= get_site_option('AD_Integration_authorization_group');
 			$this->_role_equivalent_groups 		= get_site_option('AD_Integration_role_equivalent_groups');
-			$this->_display_name				= get_site_option('AD_Integration_display_name');
-			$this->_enable_password_change      = get_site_option('AD_Integration_enable_password_change');
-			$this->_duplicate_email_prevention  = get_site_option('AD_Integration_duplicate_email_prevention');
-			$this->_prevent_email_change  		= (bool)get_site_option('AD_Integration_prevent_email_change');
-			$this->_auto_update_description		= (bool)get_site_option('AD_Integration_auto_update_description');
-			$this->_show_user_status			= (bool)get_site_option('AD_Integration_show_user_status');
 			
-			$this->_show_attributes				= (bool)get_site_option('AD_Integration_show_attributes');
-			$this->_attributes_to_show			= get_site_option('AD_Integration_attributes_to_show');
-			$this->_additional_user_attributes	= get_site_option('AD_Integration_additional_user_attributes');
-			$this->_usermeta_empty_overwrite	= (bool)get_site_option('AD_Integration_usermeta_empty_overwrite');
-			
+			// Security (6)
 			$this->_fallback_to_local_password	= get_site_option('AD_Integration_fallback_to_local_password');
 			$this->_max_login_attempts 			= (int)get_site_option('AD_Integration_max_login_attempts');
 			$this->_block_time 					= (int)get_site_option('AD_Integration_block_time');
 			$this->_user_notification	  		= (bool)get_site_option('AD_Integration_user_notification');
 			$this->_admin_notification			= (bool)get_site_option('AD_Integration_admin_notification');
 			$this->_admin_email					= get_site_option('AD_Integration_admin_email');
-			
-			$this->_no_random_password			= (bool)get_site_option('AD_Integration_no_random_password');
-			$this->_auto_update_password		= (bool)get_site_option('AD_Integration_auto_update_password');
+
+			// User Meta (8)
+			$this->_additional_user_attributes	= get_site_option('AD_Integration_additional_user_attributes');
+			$this->_usermeta_empty_overwrite	= (bool)get_site_option('AD_Integration_usermeta_empty_overwrite');
+			$this->_show_attributes				= (bool)get_site_option('AD_Integration_show_attributes');
+			$this->_attributes_to_show			= get_site_option('AD_Integration_attributes_to_show');
 			$this->_syncback					= (bool)get_site_option('AD_Integration_syncback');
 			$this->_syncback_use_global_user	= (bool)get_site_option('AD_Integration_syncback_use_global_user');
 			$this->_syncback_global_user		= get_site_option('AD_Integration_syncback_global_user');
 			$this->_syncback_global_pwd			= get_site_option('AD_Integration_syncback_global_pwd');
 			
+			// Bulk Import (7)
 			$this->_bulkimport_enabled			= (bool)get_site_option('AD_Integration_bulkimport_enabled');
 			$this->_bulkimport_authcode 		= get_site_option('AD_Integration_bulkimport_authcode');
 			$this->_bulkimport_new_authcode		= (bool)get_site_option('AD_Integration_bulkimport_new_authcode');
@@ -1861,46 +1864,53 @@ class ADIntegrationPlugin {
 						
 		} else {
 			$this->_log(ADI_LOG_INFO,'loading options ...');
-			$this->_auto_create_user 			= (bool)get_option('AD_Integration_auto_create_user');
-			$this->_auto_update_user 			= (bool)get_option('AD_Integration_auto_update_user');
-			$this->_account_suffix		 		= get_option('AD_Integration_account_suffix');
-			$this->_append_suffix_to_new_users 	= get_option('AD_Integration_append_suffix_to_new_users');
+			
+			// Server (5)
 			$this->_domain_controllers 			= get_option('AD_Integration_domain_controllers');
-			$this->_base_dn						= get_option('AD_Integration_base_dn');
 			$this->_port 						= get_option('AD_Integration_port');
 			$this->_use_tls 					= get_option('AD_Integration_use_tls');
 			$this->_network_timeout				= (int)get_option('AD_Integration_network_timeout');
-			
+			$this->_base_dn						= get_option('AD_Integration_base_dn');
+
+			// User (13)
+			$this->_account_suffix		 		= get_option('AD_Integration_account_suffix');
+			$this->_append_suffix_to_new_users 	= get_option('AD_Integration_append_suffix_to_new_users');
+			$this->_auto_create_user 			= (bool)get_option('AD_Integration_auto_create_user');
+			$this->_auto_update_user 			= (bool)get_option('AD_Integration_auto_update_user');
+			$this->_auto_update_description		= (bool)get_option('AD_Integration_auto_update_description');
 			$this->_default_email_domain 		= get_option('AD_Integration_default_email_domain');
+			$this->_duplicate_email_prevention  = get_option('AD_Integration_duplicate_email_prevention');
+			$this->_prevent_email_change  		= (bool)get_option('AD_Integration_prevent_email_change');
+			$this->_display_name				= get_option('AD_Integration_display_name');
+			$this->_show_user_status			= (bool)get_option('AD_Integration_show_user_status');
+			$this->_enable_password_change      = get_option('AD_Integration_enable_password_change');
+			$this->_no_random_password			= (bool)get_option('AD_Integration_no_random_password');
+			$this->_auto_update_password		= (bool)get_option('AD_Integration_auto_update_password');
+			
+			// Authorization (3)
 			$this->_authorize_by_group 			= (bool)get_option('AD_Integration_authorize_by_group');
 			$this->_authorization_group 		= get_option('AD_Integration_authorization_group');
 			$this->_role_equivalent_groups 		= get_option('AD_Integration_role_equivalent_groups');
-			$this->_display_name				= get_option('AD_Integration_display_name');
-			$this->_enable_password_change      = get_option('AD_Integration_enable_password_change');
-			$this->_duplicate_email_prevention  = get_option('AD_Integration_duplicate_email_prevention');
-			$this->_prevent_email_change  		= (bool)get_option('AD_Integration_prevent_email_change');
-			$this->_auto_update_description		= (bool)get_option('AD_Integration_auto_update_description');
-			$this->_show_user_status			= (bool)get_option('AD_Integration_show_user_status');
 			
-			$this->_show_attributes				= (bool)get_option('AD_Integration_show_attributes');
-			$this->_attributes_to_show			= get_option('AD_Integration_attributes_to_show');
-			$this->_additional_user_attributes	= get_option('AD_Integration_additional_user_attributes');
-			$this->_usermeta_empty_overwrite	= (bool)get_option('AD_Integration_usermeta_empty_overwrite');
-			
-			$this->_fallback_to_local_password	= (bool)get_option('AD_Integration_fallback_to_local_password');
+			// Security (6)
+			$this->_fallback_to_local_password	= get_option('AD_Integration_fallback_to_local_password');
 			$this->_max_login_attempts 			= (int)get_option('AD_Integration_max_login_attempts');
 			$this->_block_time 					= (int)get_option('AD_Integration_block_time');
 			$this->_user_notification	  		= (bool)get_option('AD_Integration_user_notification');
 			$this->_admin_notification			= (bool)get_option('AD_Integration_admin_notification');
 			$this->_admin_email					= get_option('AD_Integration_admin_email');
-			
-			$this->_no_random_password			= (bool)get_option('AD_Integration_no_random_password');
-			$this->_auto_update_password		= (bool)get_option('AD_Integration_auto_update_password');
+
+			// User Meta (8)
+			$this->_additional_user_attributes	= get_option('AD_Integration_additional_user_attributes');
+			$this->_usermeta_empty_overwrite	= (bool)get_option('AD_Integration_usermeta_empty_overwrite');
+			$this->_show_attributes				= (bool)get_option('AD_Integration_show_attributes');
+			$this->_attributes_to_show			= get_option('AD_Integration_attributes_to_show');
 			$this->_syncback					= (bool)get_option('AD_Integration_syncback');
 			$this->_syncback_use_global_user	= (bool)get_option('AD_Integration_syncback_use_global_user');
 			$this->_syncback_global_user		= get_option('AD_Integration_syncback_global_user');
 			$this->_syncback_global_pwd			= get_option('AD_Integration_syncback_global_pwd');
 			
+			// Bulk Import (7)
 			$this->_bulkimport_enabled			= (bool)get_option('AD_Integration_bulkimport_enabled');
 			$this->_bulkimport_authcode 		= get_option('AD_Integration_bulkimport_authcode');
 			$this->_bulkimport_new_authcode		= (bool)get_option('AD_Integration_bulkimport_new_authcode');
@@ -2066,8 +2076,6 @@ class ADIntegrationPlugin {
 			$attributes[$attribute]['show'] = false;
 		}
 		
-
-
 		// additional attributes
 		// type and metakey
 		if (trim($this->_additional_user_attributes) != '') {
@@ -2175,6 +2183,7 @@ class ADIntegrationPlugin {
 		}
 		return $value;
 	}
+	
 	
 	/**
 	 * Returns true if the user is an ADI User
@@ -2295,9 +2304,10 @@ class ADIntegrationPlugin {
 	
 	/**
 	 * Determine the display_name to be stored in WP database.
-	 * @param $username  the username used to login
-	 * @param $userinfo  the array with data returned from AD
-	 * @return string  display_name
+	 * 
+	 * @param $username the username used to login
+	 * @param $userinfo the array with data returned from AD
+	 * @return string display_name
 	 */
 	protected function _get_display_name_from_AD($username, $userinfo) {
 		
@@ -2328,7 +2338,7 @@ class ADIntegrationPlugin {
 	 * Stores the username and the current time in the db.
 	 * 
 	 * @param $username
-	 * @return unknown_type
+	 * @return query result
 	 */
 	protected function _store_failed_login($username) {
 		global $wpdb;
@@ -2364,7 +2374,7 @@ class ADIntegrationPlugin {
 	 * Deletes also all entries of a user, if its username is given . 
 	 *  
 	 * @param $username
-	 * @return 
+	 * @return query result
 	 */
 	protected function _cleanup_failed_logins($username = NULL) {
 		global $wpdb;
@@ -2417,6 +2427,7 @@ class ADIntegrationPlugin {
 	
 	/**
 	 * Create a new WordPress account for the specified username.
+	 * 
 	 * @param string $username
 	 * @param array $userinfo
 	 * @param string $display_name
@@ -2517,20 +2528,10 @@ class ADIntegrationPlugin {
 				return false;
 			}
 		} else {
-			if (version_compare($wp_version, '3', '>=')) {
-				// WP 3.0 and above
-				update_user_meta($user_id, 'first_name', $info['givenname']);
-				update_user_meta($user_id, 'last_name', $info['sn']);
-				if ($this->_auto_update_description) {
-					update_user_meta($user_id, 'description', $info['description']);
-				}
-			} else {
-				// WP 2.x
-				update_usermeta($user_id, 'first_name', $info['givenname']);
-				update_usermeta($user_id, 'last_name', $info['sn']);
-				if ($this->_auto_update_description) {
-					update_usermeta($user_id, 'description', $info['description']);
-				}
+			update_user_meta($user_id, 'first_name', $info['givenname']);
+			update_user_meta($user_id, 'last_name', $info['sn']);
+			if ($this->_auto_update_description) {
+				update_user_meta($user_id, 'description', $info['description']);
 			}
 			
 			// set display_name
@@ -2545,13 +2546,7 @@ class ADIntegrationPlugin {
 			}
 			
 			// Important for SyncBack: store account suffix in user meta
-			if (version_compare($wp_version, '3', '>=')) {
-				// WP 3.0 and above
-				update_user_meta($user_id, 'ad_integration_account_suffix', $account_suffix);
-			} else {
-				// WP 2.x
-				update_usermeta($user_id, 'ad_integration_account_suffix', $account_suffix);
-			}
+			update_user_meta($user_id, 'ad_integration_account_suffix', $account_suffix);
 	
 			
 			// Update User Meta
@@ -2567,13 +2562,7 @@ class ADIntegrationPlugin {
 						$this->_log(ADI_LOG_DEBUG,"$attribute = $value / type = $type / meta key = $metakey");
 						
 						// store it
-						if (version_compare($wp_version, '3', '>=')) {
-							// WP 3.0 and above
-							update_user_meta($user_id, $metakey, $value);
-						} else {
-							// WP 2.x
-							update_usermeta($user_id, $metakey, $value);
-						}
+						update_user_meta($user_id, $metakey, $value);
 					} else {
 						$this->_log(ADI_LOG_DEBUG,"$attribute is empty. Local value of meta key $metakey left unchanged.");
 					}
@@ -2654,20 +2643,10 @@ class ADIntegrationPlugin {
 			$this->_log(ADI_LOG_FATAL,'Error updating user.');
 			die('Error updating user!');
 		} else {
-			if (version_compare($wp_version, '3', '>=')) {
-				// WP 3.0 and above
-				update_user_meta($user_id, 'first_name', $info['givenname']);
-				update_user_meta($user_id, 'last_name', $info['sn']);
-				if ($this->_auto_update_description) {
-					update_user_meta($user_id, 'description', $info['description']);
-				}
-			} else {
-				// WP 2.x
-				update_usermeta($user_id, 'first_name', $info['givenname']);
-				update_usermeta($user_id, 'last_name', $info['sn']);
-				if ($this->_auto_update_description) {
-					update_usermeta($user_id, 'description', $info['description']);
-				}
+			update_user_meta($user_id, 'first_name', $info['givenname']);
+			update_user_meta($user_id, 'last_name', $info['sn']);
+			if ($this->_auto_update_description) {
+				update_user_meta($user_id, 'description', $info['description']);
 			}
 			
 			// set display_name
@@ -2717,18 +2696,12 @@ class ADIntegrationPlugin {
 		// Update password if needed (NOT on Bulk Import)
 		if (($this->_auto_update_password === true) && ($bulkimport === false)) {
 			$this->_log(ADI_LOG_NOTICE,'Setting local password to the one used for this login.');
-			@wp_update_user(array('ID' => $user_id, 'user_pass' => $password)); // can lead to notices to we use @
+			@wp_update_user(array('ID' => $user_id, 'user_pass' => $password)); // can lead to notices so we use @
 		}
 		
 		
 		// Important for SyncBack: store account suffix in user meta
-		if (version_compare($wp_version, '3', '>=')) {
-			// WP 3.0 and above
-			update_user_meta($user_id, 'ad_integration_account_suffix', $account_suffix);
-		} else {
-			// WP 2.x
-			update_usermeta($user_id, 'ad_integration_account_suffix', $account_suffix);
-		}	
+		update_user_meta($user_id, 'ad_integration_account_suffix', $account_suffix);
 		
 		// Update User Meta
 		if ($this->_write_usermeta === true) {
@@ -2743,13 +2716,8 @@ class ADIntegrationPlugin {
 					$this->_log(ADI_LOG_DEBUG,"$attribute = $value / type = $type / meta key = $metakey");
 					
 					// store it
-					if (version_compare($wp_version, '3', '>=')) {
-						// WP 3.0 and above
-						update_user_meta($user_id, $metakey, $value);
-					} else {
-						// WP 2.x
-						update_usermeta($user_id, $metakey, $value);
-					}
+					update_user_meta($user_id, $metakey, $value);
+					
 				} else {
 					$this->_log(ADI_LOG_DEBUG,"$attribute is empty. Local value of meta key $metakey left unchanged.");
 				}
@@ -2897,8 +2865,6 @@ class ADIntegrationPlugin {
 		if ($this->_authorize_by_group) {
 			$authorization_groups = explode(';', $this->_authorization_group);
 			foreach ($authorization_groups as $authorization_group) {
-				//$authorization_group = utf8_decode($authorization_group); // TODO: Dies ist ein Test.
-				//echo 'group: '.$authorization_group.'<br>';
 				if ($this->_adldap->user_ingroup($username, $authorization_group, true)) {
 					$this->_log(ADI_LOG_NOTICE,'Authorized by membership of group "'.$authorization_group.'"');
 					return true;
@@ -3233,10 +3199,6 @@ class ADIntegrationPlugin {
 		die(); // IMPORTANT
 	
 	}
-	
-	
-	
-
 
 } // END OF CLASS
 } // ENDIF

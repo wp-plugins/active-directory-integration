@@ -102,6 +102,7 @@ $ADI->setLogLevel(ADI_LOG_DEBUG);
 ?>
 <html>
 	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>ADI Test</title>
 		<style type="text/css">
 			h1 {

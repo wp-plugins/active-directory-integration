@@ -1,9 +1,9 @@
 === Active Directory Integration ===
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security, windows
-Requires at least: 2.8
+Requires at least: 3.0
 Tested up to: 3.3
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -34,24 +34,25 @@ It is very easy to set up. Just activate the plugin, type in a domain controller
 * Bulk Import - import and update users from Active Directory, for example by cron job.
 * Support for multiple account suffixes.
 * Using LDAP_OPT_NETWORK_TIMEOUT (default 5 seconds) to fall back to local authorization when your Active Directory Server is unreachable.
-* **NEW** Bulk SyncBack to manually write all "Additional User Attributes" back to Active Directory.
+* Bulk SyncBack to manually write all "Additional User Attributes" back to Active Directory.
+* **NEW** Disable user accounts in WordPress if they are disabled in Active Directory. 
+* **NEW** Option to disable fallback to local (WordPress) authentication.
 
-The latest version 1.1 is sponsored by [VARA](http://vara.nl). Many thanks to Bas Ruijters.
+The latest major release 1.1 was sponsored by [VARA](http://vara.nl). Many thanks to Bas Ruijters.
 
 *Active Directory Integration* is based upon Jonathan Marc Bearak's [Active Directory Authentication](http://wordpress.org/extend/plugins/active-directory-authentication/) and Scott Barnett's [adLDAP](http://adldap.sourceforge.net/), a very useful PHP class.
 
 
 = Requirements =
 
-* WordPress since 2.8 (or higher)
+* WordPress since 3.0
 * PHP 5
 * LDAP support
 * OpenSSL Support for TLS (recommended)
 
 
 = Known Issues =
-* XMLRPC will only work with WordPress 2.8 and above.
-* There are some issues with MultiSite. This is tracked [here](http://bt.ecw.de/view.php?id=4) and [here](http://bt.ecw.de/view.php?id=11).
+There are some issues with MultiSite. This is tracked [here](http://bt.ecw.de/view.php?id=4) and [here](http://bt.ecw.de/view.php?id=11).
 
 
 == Frequently Asked Questions ==
@@ -78,9 +79,10 @@ Use the [bug tracker](http://bt.ecw.de/) (see above) at http://bt.ecw.de/.
 
 = Authentication is successfull but the user is not authorized by group membership. What is wrong? =
 A common mistake is that the Base DN is set to a wrong value. If the user resides in an Organizational Unit (OU) that is not "below" the Base DN the groups the user belongs to can not be determined. A quick solution is to set the Base DN to something like `dc=mydomain,dc=local` without any OU.
+Another common mistake is to use `ou=users,dc=mydomain,dc=local` instead of `cn=users,dc=mydomain,dc=local` as Base DN. Do you see the difference? I recommend to use tools like [ADSIedit](http://technet.microsoft.com/en-us/library/cc773354(WS.10).aspx) to learn more about your Active Directory.  
 
 = I want to use Sync Back but don't want to use a Global Sync User. What can I do? =
-You must give your users the permission to change their own attributes in Active Directory. To do so, you must give write permission on "SELF" (internal security principal). Run ADSIedit.msc, right click the OU all your users belong to, choose "Properties", go on tab "Security", add the user "SELF" and give him the permission to write.  
+You must give your users the permission to change their own attributes in Active Directory. To do so, you must give write permission on "SELF" (internal security principal). Run ADSIedit.msc, right click the OU or CN all your users belong to, choose "Properties", go on tab "Security", add the user "SELF" and give him the permission to write.  
 
 = I use the User Meta feature. Which type I should use for which attribute? =
 Not all attribute types from the Active Directory schema are supported and there are some special types. Types marked as SyncBack can be synced back to AD (if the attribute is writeable).
@@ -112,7 +114,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 7. Test Tool
 8. Sample output of the Test Tool
 9. User Profile Page with additional informations from Active Directory (see User Meta)
-
+10. List of user with status information (ADI User, disabled) 
 
 == Installation ==
 
@@ -126,16 +128,13 @@ Here we have a special problem with the builtin security group "Domain Users". I
 == Changelog ==
 
 = 1.1.3 =
+* CHANGE: **WordPress versions lower 3.0 are not supported anymore.**
 * ADD: Disable users by Bulk Import (or manually) who are not imported anymore or are disabled in Active Directory. (Issue #0045. Feature Request by Bas Ruijters.)
-* ADD: Option to show on user list if a user was authenticated (or imported) from Active Directory and the disabled state of user. 
-* ADD: Option to choose whether ADI should fallback to local (WordPress) password check if authentication against Active Directory fails. You should deactivate this for security reasons.
-<<<<<<< .mine
+* ADD: Option to show on user list if a user was authenticated (or imported) from Active Directory and the disabled state of user. (Related to issue #0045.)
+* ADD: Option to choose whether ADI should fallback to local (WordPress) password check if authentication against Active Directory fails. You should deactivate this for security reasons. (Issue #0050.)
 * ADD: Option to prevent users from changing their email. (Issue #0049. Feature Request by Bas Ruijters.)
 * FIX: Username is handled as case sensitive on Bulk Import but this is a wrong behavior. (Issue #0041)
-* FIX: Options Page won't load on WP 3.3. (Issue #0048)		
-=======
-* FIX: Username is handled as case sensitive on Bulk Import but this is a wrong behavior. (Issue #0041)	
->>>>>>> .r487432
+* FIX: Options page won't load on WP 3.3. (Issue #0048)
 
 = 1.1.2 =
 * ADD: Allow logon of users with domains different from Account Suffix. (Issue #0043. Feature Request by Greg Fenton.)

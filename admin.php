@@ -6,7 +6,7 @@
 
 
 		if (IS_WPMU) {
-			if (!is_site_admin()) {
+			if (!is_super_admin()) {
 				_e('Access denied.', 'ad-integration');
 				$this->_log(ADI_LOG_WARN,'Access to options page denied');
 				exit();
@@ -96,7 +96,8 @@
 			<li><a href="#usermeta"><?php _e('User Meta', 'ad-integration'); ?></a></li>
 			<li><a href="#bulkimport"><?php _e('Bulk Import', 'ad-integration'); ?></a></li>
 <?php 
-// Test Tool nicht für WordPress MU 
+
+// Test Tool not for WordPress MU 
 if (!IS_WPMU) { ?>		
 			<li><a href="#test"><?php _e('Test Tool', 'ad-integration'); ?></a></li>
 <?php } ?>			
@@ -152,7 +153,7 @@ if (!IS_WPMU) { ?>
 							<td>
 								<input type="text" name="AD_Integration_base_dn" id="AD_Integration_base_dn" class="regular-text" 
 								value="<?php echo $this->_base_dn; ?>" /><br />
-								<?php _e('Base DN (e.g., "ou=unit,dc=domain,dc=tld")', 'ad-integration'); ?>
+								<?php _e('Base DN (e.g. "ou=unit,dc=domain,dc=tld" or "cn=users,dc=domain,dc=tld")', 'ad-integration'); ?>
 							</td>
 						</tr>
 					</tbody>

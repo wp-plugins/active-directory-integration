@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Active Directory Integration\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-10 11:26+0100\n"
-"PO-Revision-Date: 2012-01-10 11:28+0100\n"
+"POT-Creation-Date: 2012-01-11 10:26+0100\n"
+"PO-Revision-Date: 2012-01-11 10:28+0100\n"
 "Last-Translator: Christoph Steindorff <cst@ecw.de>\n"
 "Language-Team: Christoph Steindorff <info@ecw.de>\n"
 "MIME-Version: 1.0\n"
@@ -18,278 +18,278 @@ msgstr ""
 "X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ad-integration.php:603
+#: ad-integration.php:605
 #: admin.php:74
 msgid "Active Directory Integration"
 msgstr "Active Directory Integration"
 
-#: ad-integration.php:828
+#: ad-integration.php:830
 msgid "<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress."
 msgstr "<strong>FEHLER</strong>: Dieser Benutzer existiert im Active Directory, aber er hat kein Recht zur Anmeldung an dieser WordPress-Installation."
 
-#: ad-integration.php:959
+#: ad-integration.php:961
 msgid "Active Directory Integration Help"
 msgstr "Active Directory Integration Hilfe"
 
-#: ad-integration.php:960
+#: ad-integration.php:962
 msgid "Overview"
 msgstr "Übersicht"
 
-#: ad-integration.php:961
+#: ad-integration.php:963
 msgid "FAQ"
 msgstr "FAQ"
 
-#: ad-integration.php:962
+#: ad-integration.php:964
 msgid "Changelog"
 msgstr "Änderungshistorie (changelog)"
 
-#: ad-integration.php:963
+#: ad-integration.php:965
 msgid "Support-Forum"
 msgstr "Support-Forum"
 
-#: ad-integration.php:964
+#: ad-integration.php:966
 msgid "Bug Tracker"
 msgstr "Bug Tracker"
 
-#: ad-integration.php:1230
+#: ad-integration.php:1232
 msgid "User Disabled"
 msgstr "Benutzer deaktiviert"
 
-#: ad-integration.php:1233
+#: ad-integration.php:1235
 msgid "If selected, the user can not log in and his e-mail address will be changed for security reasons. The e-mail address is restored if the user is reenabled."
 msgstr "Wenn angewählt kann sich der Benutzer nicht anmelden und seine E-Mailadresse wird aus Sicherheitsgründen geändert. Die E-Mailadresse wird wiederhergestellt, wenn der Benutzer reaktivert wird."
 
-#: ad-integration.php:1237
+#: ad-integration.php:1239
 msgid "Information on last disabling: "
 msgstr "Information über letzte Deaktivierung:"
 
-#: ad-integration.php:1241
+#: ad-integration.php:1243
 msgid "Attention: This flag is automatically set (or unset) by Bulk Import and its state may change on next run of Bulk Import."
 msgstr "Achtung: Dieser Schalter wird durch den Bulk Import automatisch gesetzt (oder entfernt) und sein Zustand kann sich mit dem nächsten Lauf des Bulk Imports ändern."
 
-#: ad-integration.php:1264
+#: ad-integration.php:1266
 #, php-format
 msgid "User manually disabled by \"%s\"."
 msgstr "Benutzer manuell deaktiviert von \"%s\"."
 
-#: ad-integration.php:1314
+#: ad-integration.php:1316
 msgid "Additional Informations"
 msgstr "Zusätzliche Informationen"
 
-#: ad-integration.php:1376
+#: ad-integration.php:1378
 msgid "Your password"
 msgstr "Dein Kennwort"
 
-#: ad-integration.php:1379
+#: ad-integration.php:1381
 msgid "If you want to save the changes on \"Additional Informations\" back to the Active Directory you must enter your password."
 msgstr "Wenn Du deine Änderungen im Bereich \"Zusätzliche Informationen\" zurück ins Active Directory schreiben möchtest, musst Du Dein Kennwort eingeben."
 
-#: ad-integration.php:1541
+#: ad-integration.php:1533
 msgid "No password given, so additional attributes are not written back to Active Directory"
 msgstr "Es wurde kein Kennwort eingegeben. Somit konnten die zusätzlichen Informationen nicht zurück ins Active Directory geschrieben werden."
 
-#: ad-integration.php:1568
+#: ad-integration.php:1560
 msgid "Error on writing additional attributes back to Active Directory. Wrong password?"
 msgstr "Fehler beim Zurückschreiben der Daten ins Active Directory. Falsches Kennwort?"
 
-#: ad-integration.php:1581
+#: ad-integration.php:1573
 msgid "Error on writing additional attributes back to Active Directory. Please contact your administrator."
 msgstr "Fehler beim Zurückschreiben ins Active Directory. Bitte wende Dich an Deinen Administrator."
 
-#: ad-integration.php:1620
+#: ad-integration.php:1634
 msgid "ADI User"
 msgstr "ADI-Benutzer"
 
-#: ad-integration.php:1621
+#: ad-integration.php:1635
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: ad-integration.php:1772
+#: ad-integration.php:1786
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr "Einstellung '%s' wurde entfernt."
 
-#: ad-integration.php:1776
+#: ad-integration.php:1790
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr "Fehler beim Löschen der Einstellung '%s'."
 
-#: ad-integration.php:1911
+#: ad-integration.php:1925
 msgid "Common Name"
 msgstr "Common Name"
 
-#: ad-integration.php:1912
+#: ad-integration.php:1926
 msgid "First name"
 msgstr "Vorname"
 
-#: ad-integration.php:1913
+#: ad-integration.php:1927
 msgid "Initials"
 msgstr "Initialen"
 
-#: ad-integration.php:1914
+#: ad-integration.php:1928
 msgid "Last name"
 msgstr "Nachname"
 
-#: ad-integration.php:1915
+#: ad-integration.php:1929
 #: admin.php:258
 msgid "Display name"
 msgstr "Den Namen wiefolgt darstellen"
 
-#: ad-integration.php:1916
+#: ad-integration.php:1930
 #: admin.php:462
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ad-integration.php:1917
+#: ad-integration.php:1931
 msgid "Office"
 msgstr "Büro"
 
-#: ad-integration.php:1918
+#: ad-integration.php:1932
 msgid "Telephone number"
 msgstr "Telefon"
 
-#: ad-integration.php:1919
+#: ad-integration.php:1933
 msgid "E-mail"
 msgstr "E-Mail"
 
-#: ad-integration.php:1920
+#: ad-integration.php:1934
 msgid "Web Page"
 msgstr "Web-Seite"
 
-#: ad-integration.php:1923
+#: ad-integration.php:1937
 msgid "User logon name"
 msgstr "Benutzername"
 
-#: ad-integration.php:1926
+#: ad-integration.php:1940
 msgid "Street"
 msgstr "Straße"
 
-#: ad-integration.php:1927
+#: ad-integration.php:1941
 msgid "P.O. Box"
 msgstr "Postfach"
 
-#: ad-integration.php:1928
+#: ad-integration.php:1942
 msgid "City"
 msgstr "Stadt"
 
-#: ad-integration.php:1929
+#: ad-integration.php:1943
 msgid "State"
 msgstr "Bundesland/Kanton"
 
-#: ad-integration.php:1930
+#: ad-integration.php:1944
 msgid "ZIP/Postal cide"
 msgstr "Postleitzahl"
 
-#: ad-integration.php:1931
+#: ad-integration.php:1945
 msgid "Country abbreviation"
 msgstr "Länderkürzel"
 
-#: ad-integration.php:1932
+#: ad-integration.php:1946
 msgid "Country"
 msgstr "Land"
 
-#: ad-integration.php:1933
+#: ad-integration.php:1947
 msgid "Country code (number)"
 msgstr "Country code"
 
-#: ad-integration.php:1936
+#: ad-integration.php:1950
 msgid "Home"
 msgstr "Privat"
 
-#: ad-integration.php:1937
+#: ad-integration.php:1951
 msgid "Home (other)"
 msgstr "Privat (weitere)"
 
-#: ad-integration.php:1938
+#: ad-integration.php:1952
 msgid "Pager"
 msgstr "Pager"
 
-#: ad-integration.php:1939
+#: ad-integration.php:1953
 msgid "Pager (other)"
 msgstr "Pager (weitere)"
 
-#: ad-integration.php:1940
+#: ad-integration.php:1954
 msgid "Mobile"
 msgstr "Mobil"
 
-#: ad-integration.php:1941
+#: ad-integration.php:1955
 msgid "Mobile (Other)"
 msgstr "Mobil (weitere)"
 
-#: ad-integration.php:1942
+#: ad-integration.php:1956
 msgid "Fax"
 msgstr "Fax"
 
-#: ad-integration.php:1943
+#: ad-integration.php:1957
 msgid "Fax (other)"
 msgstr "Fax (weitere)"
 
-#: ad-integration.php:1944
+#: ad-integration.php:1958
 msgid "IP Phone"
 msgstr "IP-Telefon"
 
-#: ad-integration.php:1945
+#: ad-integration.php:1959
 msgid "IP Phone (other)"
 msgstr "IP-Telefon (weitere)"
 
-#: ad-integration.php:1946
+#: ad-integration.php:1960
 msgid "Notes"
 msgstr "Anmerkung"
 
-#: ad-integration.php:1949
+#: ad-integration.php:1963
 msgid "Title"
 msgstr "Position"
 
-#: ad-integration.php:1950
+#: ad-integration.php:1964
 msgid "Department"
 msgstr "Abteilung"
 
-#: ad-integration.php:1951
+#: ad-integration.php:1965
 msgid "Company"
 msgstr "Firma"
 
-#: ad-integration.php:1952
+#: ad-integration.php:1966
 msgid "Manager"
 msgstr "Vorgesetzter"
 
-#: ad-integration.php:1953
+#: ad-integration.php:1967
 msgid "Direct reports"
 msgstr "Mitarbeiter"
 
-#: ad-integration.php:3004
-#: ad-integration.php:3087
+#: ad-integration.php:3016
+#: ad-integration.php:3099
 msgid "Account blocked"
 msgstr "Konto gesperrt"
 
-#: ad-integration.php:3005
+#: ad-integration.php:3017
 #, php-format
 msgid "Someone tried to login to %s (%s) with your username (%s) - but in vain. For security reasons your account is now blocked for %d seconds."
 msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit Deinem Benutzernamen (%s) anzumelden. Aus Sicherheitsgründen, ist Dein Konto nun für %d Sekunden gesperrt."
 
-#: ad-integration.php:3007
-#: ad-integration.php:3092
+#: ad-integration.php:3019
+#: ad-integration.php:3104
 msgid "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE."
 msgstr "DIESE E-MAIL WURDE VOM SYSTEM AUTOMATISCH ERSTELLT, BITTE SENDEN SIE KEINE ANTWORT AN DIE ABSENDERADRESSE."
 
-#: ad-integration.php:3088
+#: ad-integration.php:3100
 #, php-format
 msgid "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in vain. For security reasons this account is now blocked for %d seconds."
 msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit dem Benutzernamen \"%s\" (%s %s) anzumelden. Aus Sicherheitsgründen, ist dieses Konto nun für %d Sekunden gesperrt."
 
-#: ad-integration.php:3090
+#: ad-integration.php:3102
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "Der Loginversuch ging aus von der IP-Adresse: %s"
 
-#: ad-integration.php:3211
+#: ad-integration.php:3223
 msgid "Powered by WordPress"
 msgstr "Powered by WordPress"
 
-#: ad-integration.php:3213
+#: ad-integration.php:3225
 msgid "Account blocked for"
 msgstr "Konto gesperrt"
 
-#: ad-integration.php:3213
+#: ad-integration.php:3225
 #: admin.php:144
 msgid "seconds"
 msgstr "Sekunden"
@@ -378,8 +378,8 @@ msgid "Base DN"
 msgstr "Base DN"
 
 #: admin.php:155
-msgid "Base DN (e.g., \"ou=unit,dc=domain,dc=tld\")"
-msgstr "Base DN (z.B. \"ou=unit,dc=domain,dc=tld\")"
+msgid "Base DN (e.g. \"ou=unit,dc=domain,dc=tld\" or \"cn=users,dc=domain,dc=tld\")"
+msgstr "Base DN (z.B. \"ou=unit,dc=domain,dc=tld\" oder \"cn=users,dc=domain,dc=tld\")"
 
 #: admin.php:161
 #: admin.php:330
