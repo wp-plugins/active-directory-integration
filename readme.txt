@@ -256,4 +256,4 @@ It is highly recommended to update to this version, because of a security vulner
 * some minor changes 
 
 = 0.9.0 =
-* first published version
+* first published version 
