@@ -3,10 +3,10 @@
 /*
 Plugin Name: Active Directory Integration 
 Version: 1.1.3
-Plugin URI: http://blog.ecw.de/wp-ad-integration
+Plugin URI: http://www.steindorff.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
-Author: Christoph Steindorff, ECW GmbH
-Author URI: http://blog.ecw.de/
+Author: Christoph Steindorff
+Author URI: http://www.steindorff.de/
 
 The work is derived from version 1.0.5 of the plugin Active Directory Authentication:
 OriginalPlugin URI: http://soc.qc.edu/jonathan/wordpress-ad-auth
@@ -227,7 +227,7 @@ class ADIntegrationPlugin {
 	// Prevent email change by ADI Users (not for admins)
 	protected $_prevent_email_change = false;
 	
-	// protected $_auto_login = false; // TODO: for auto login/SSO feature, has to be added to _load_options(), admin.php etc. 
+	// protected $_sso_enabled = false; // TODO: for auto login/SSO feature, has to be added to _load_options(), admin.php etc. 
 		
 
 	// All options and its types
@@ -564,7 +564,7 @@ class ADIntegrationPlugin {
 		// Authorization
 		register_setting('ADI-auth-settings', 'AD_Integration_authorize_by_group', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-auth-settings', 'AD_Integration_authorization_group');
-		register_setting('ADI-auth-settings', 'AD_Integration_role_equivalent_groups');
+		register_setting('ADI-auth-settings', 'AD_Integration_role_equivalent_groups', array(&$this, 'sanitize_role_equivalent_groups'));
 		
 		// Security
 		register_setting('ADI-security-settings', 'AD_Integration_fallback_to_local_password', array(&$this, 'sanitize_bool'));
@@ -1625,6 +1625,30 @@ class ADIntegrationPlugin {
 
 	
 	/**
+	 * Strips out wrong entries from role_equivalent_groups and converts the WP role to lowercase.
+	 * 
+	 * @param string $text
+	 * @return string
+	 */
+	public function sanitize_role_equivalent_groups($text)
+	{
+		$groups = explode(";", $text);
+		$sanitized_groups = array();
+		foreach ($groups AS $group) {
+			$group = trim($group);
+			$pos = strpos($group, '=');
+			if ($pos != 0) { // yes != 0, since int 0 is also unwanted
+				$ad_group = substr($group,0,$pos);
+				$role = strtolower(substr($group,$pos+1)); // roles are always lowercase
+				if ($role != '') {
+					$sanitized_groups[] = $ad_group . '=' . $role;
+				}
+			}
+		}
+		return implode(";", $sanitized_groups);
+	}		
+	
+	/**
 	 * Sanitize Additional User Attributes
 	 * trim, delete empty line, all to lowercase.
 	 * 
@@ -2542,7 +2566,12 @@ class ADIntegrationPlugin {
 			// set role
 			if ( $role != '' ) 
 			{
-				$return = wp_update_user(array("ID" => $user_id, "role" => $role));
+				$roles = new WP_Roles();
+				if ($roles->is_role($role)) { // Updates role only if role exists
+					wp_update_user(array('ID' => $user_id, 'role' => $role));
+				} else {
+					$this->_log(ADI_LOG_WARN, 'Role "' . $role . '" currently does not exist in WordPress. Role of "' . $username . '" is not set.');
+				}
 			}
 			
 			// Important for SyncBack: store account suffix in user meta
@@ -2657,7 +2686,12 @@ class ADIntegrationPlugin {
 			// set role
 			if ( $role != '' ) 
 			{
-				wp_update_user(array('ID' => $user_id, 'role' => $role));
+				$roles = new WP_Roles();
+				if ($roles->is_role($role)) { // Updates role only if role exists
+					wp_update_user(array('ID' => $user_id, 'role' => $role));
+				} else {
+					$this->_log(ADI_LOG_WARN, 'Role "' . $role . '" currently does not exist in WordPress. Role of "' . $username . '" is not set.');
+				}
 			}
 			
 			// set email if not empty
