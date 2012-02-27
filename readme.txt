@@ -100,7 +100,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 
 = I'm interested in the further development of ADI. How to keep up to date? =
 * Follow the development on [Twitter](http://twitter.com/#!/adintegration).
-* Go to http://blog.ecw.de
+* Go to http://www.steindorff.de
 * See the bug tracker on http://bt.steindorff.de 
 
 == Screenshots ==
