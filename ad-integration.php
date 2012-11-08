@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.1.3
+Version: 1.1.4dev
 Plugin URI: http://www.steindorff.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff
@@ -1013,13 +1013,13 @@ class ADIntegrationPlugin {
 		global $user_ID;
 		
 		// User disabled only visible for admins and not for user with ID 1 (admin) and not for ourselves
-		if (current_user_can('level_10') && ($user->id != 1) && ($user->id != $user_ID)) {
+		if (current_user_can('level_10') && ($user->ID != 1) && ($user->ID != $user_ID)) {
 
 			// Load up the localization file if we're using WordPress in a different language
 			// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
 			load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
 			
-			$user_disabled = get_user_meta($user->id, 'adi_user_disabled', true);
+			$user_disabled = get_user_meta($user->ID, 'adi_user_disabled', true);
 			?>
 			<input type="hidden" name="adi_user_disabling" value="1" />
 			<table class="form-table">
@@ -1032,7 +1032,7 @@ class ADIntegrationPlugin {
 						if ($user_disabled) {
 							?>
 							<p class="description"><?php _e('Information on last disabling: ', 'ad-integration');
-							echo get_user_meta($user->id, 'adi_user_disabled_reason', true);?></p>
+							echo get_user_meta($user->ID, 'adi_user_disabled_reason', true);?></p>
 							<?php 
 						}?>
 						<p class="description"><?php _e('Attention: This flag is automatically set (or unset) by Bulk Import and its state may change on next run of Bulk Import.','ad-integration'); ?></p>
@@ -1111,7 +1111,7 @@ class ADIntegrationPlugin {
 				wp_nonce_field('ADI_UserProfileUpdate','ADI_UserProfileUpdate_NONCE');
 				echo '<h3>' . __('Additional Informations', 'ad-integration').'</h3>';
 				
-				$adi_samaccountname = get_user_meta($user->id, 'adi_samaccountname', true); 
+				$adi_samaccountname = get_user_meta($user->ID, 'adi_samaccountname', true); 
 				?>
 				<input type="hidden" name="adi_samaccountname" value="<?php echo $adi_samaccountname; ?>" />
 				<table class="form-table">
@@ -1120,7 +1120,7 @@ class ADIntegrationPlugin {
 					$no_attribute = false;
 					if (isset($all_attributes[$attribute]['metakey'])) {
 						$metakey = $all_attributes[$attribute]['metakey'];
-						$value = get_user_meta($user->id, $metakey, true);
+						$value = get_user_meta($user->ID, $metakey, true);
 					} else {
 						$value = '';
 						$no_attribute = true;
@@ -1148,7 +1148,7 @@ class ADIntegrationPlugin {
 					    if (($this->_syncback == true)
 					    		&& isset($all_attributes[$attribute]['sync']) 
 					        	&& ($all_attributes[$attribute]['sync'] == true) 
-					        	&& (($user->id == $user_ID) || ($this->_syncback_use_global_user === true))) {
+					        	&& (($user->ID == $user_ID) || ($this->_syncback_use_global_user === true))) {
 					        // use textarea if we have a list
 					        if (isset($all_attributes[$attribute]['type']) && ($all_attributes[$attribute]['type'] == 'list')) {
 					        	echo '<textarea name="'.$metakey.'" id="'.$metakey.'" cols="30" rows="3">'.esc_html($value).'</textarea>';
@@ -1166,7 +1166,7 @@ class ADIntegrationPlugin {
 				
 				// show this only if Global Sync Back user is not set AND your are your own personal profile page AND we have an AD-user
 				if (($this->_syncback_use_global_user === false)
-					 && ($user->id == $user_ID)
+					 && ($user->ID == $user_ID)
 					 && ($this->_syncback == true)
 					 && ($adi_samaccountname != '')) {
 					?>
@@ -1639,7 +1639,7 @@ class ADIntegrationPlugin {
 			$pos = strpos($group, '=');
 			if ($pos != 0) { // yes != 0, since int 0 is also unwanted
 				$ad_group = substr($group,0,$pos);
-				$role = strtolower(substr($group,$pos+1)); // roles are always lowercase
+				$role = strtolower(substr($group,$pos+1)); // roles are always lowercase / Issue #0055
 				if ($role != '') {
 					$sanitized_groups[] = $ad_group . '=' . $role;
 				}
@@ -2567,7 +2567,7 @@ class ADIntegrationPlugin {
 			if ( $role != '' ) 
 			{
 				$roles = new WP_Roles();
-				if ($roles->is_role($role)) { // Updates role only if role exists
+				if ($roles->is_role($role)) { // Updates role only if role exists (Issue #0051)
 					wp_update_user(array('ID' => $user_id, 'role' => $role));
 				} else {
 					$this->_log(ADI_LOG_WARN, 'Role "' . $role . '" currently does not exist in WordPress. Role of "' . $username . '" is not set.');

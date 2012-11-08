@@ -2,7 +2,7 @@
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security, windows
 Requires at least: 3.0
-Tested up to: 3.3.1
+Tested up to: 3.4.2
 Stable tag: 1.1.3
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
@@ -52,7 +52,7 @@ The latest major release 1.1 was sponsored by [VARA](http://vara.nl). Many thank
 
 
 = Known Issues =
-There are some issues with MultiSite. This is tracked [here](http://bt.steindorff.de/view.php?id=4) and [here](http://bt.steindorff.de/view.php?id=11).
+There are some issues with MultiSite. This is tracked [here](http://bt.ecw.de/view.php?id=4) and [here](http://bt.ecw.de/view.php?id=11).
 
 
 == Frequently Asked Questions ==
@@ -72,10 +72,10 @@ Yes. Since 1.0-RC1 you get more informations from the Test Tool by setting WordP
 If you activate "Automatic User Creation" and "Automatic User Update" you may store any AD attribute to the table wp_usermeta. You can set the meta key as you like or use the default behavior, where the meta key is set to `adi_<attribute>` (e.g. `adi_physicaldeliveryofficename` for the Office attribute). You can find a list of common attributes on the "User Meta" tab.
 
 = Is there an official bug tracker for ADI? =
-Yes. You'll find the bug tracker at http://bt.steindorff.de/. You can report issues anonymously but it is recommended to create an account. This is also the right place for feature requests.
+Yes. You'll find the bug tracker at http://bt.ecw.de/. You can report issues anonymously but it is recommended to create an account. This is also the right place for feature requests.
 
 = I'm missing some functionality. Where can I submit a feature request? =
-Use the [bug tracker](http://bt.steindorff.de/) (see above) at http://bt.steindorff.de/.
+Use the [bug tracker](http://bt.ecw.de/) (see above) at http://bt.ecw.de/.
 
 = Authentication is successfull but the user is not authorized by group membership. What is wrong? =
 A common mistake is that the Base DN is set to a wrong value. If the user resides in an Organizational Unit (OU) that is not "below" the Base DN the groups the user belongs to can not be determined. A quick solution is to set the Base DN to something like `dc=mydomain,dc=local` without any OU.
@@ -101,7 +101,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 = I'm interested in the further development of ADI. How to keep up to date? =
 * Follow the development on [Twitter](http://twitter.com/#!/adintegration).
 * Go to http://blog.ecw.de
-* See the bug tracker on http://bt.steindorff.de 
+* See the bug tracker on http://bt.ecw.de 
 
 == Screenshots ==
 
@@ -131,6 +131,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 * CHANGE: Only set role of user if the role already exists in WordPress. (Issue #0051)
 * CHANGE: Now using POST instead of GET in Test Tool, so user and password are not shown in server log files (Change Request by Aren Cambre. Issue #0054.)
 * CHANGE: The roles in Role Equivalent Groups are now always stored in lower case. (Issue #0055)
+* FIX: ADI produces warnings due to deprecated use of id instead of ID (Issue #0062. Thanks to Liam Gladdy for the bug report.)
 
 = 1.1.3 =
 * CHANGE: **WordPress versions lower 3.0 are not supported anymore.**

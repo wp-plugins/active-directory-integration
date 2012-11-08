@@ -3,6 +3,9 @@
 		// Load up the localization file if we're using WordPress in a different language
 		// Place it in this plugin's folder and name it "ad-integration-[value in wp-config].mo"
 		load_plugin_textdomain( 'ad-integration', false, dirname( plugin_basename( __FILE__ ) ) );
+		
+		//wp_enqueue_script('jquery-ui-tabs');   // this is a wp default script 
+		//plugins_url('css/adintegration.css', __FILE__ )  ,false, '1.7.1', 'screen');
 
 
 		if (IS_WPMU) {
@@ -49,20 +52,6 @@
 		});
 	});
 
-
-	function submitTestForm() {
-		openTestWindow();
-		return false; // so the form is not submitted
-	}
-
-	function openTestWindow() {
-
-		var user = encodeURIComponent(document.getElementById('AD_Integration_test_user').value);
-		var password = encodeURIComponent(document.getElementById('AD_Integration_test_password').value);
-
-		TestWindow = window.open("<?php echo ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER;?>/test.php?user=" + user + "&password=" + password, "Test", "width=450,height=500,left=100,top=200");
-		TestWindow.focus();
-	}
 </script>
 
 <div class="wrap" style="background-image: url('<?php if (IS_WPMU) { echo WPMU_PLUGIN_URL; } else { echo WP_PLUGIN_URL; } echo '/'.basename(dirname(__FILE__)); ?>/ad-integration.png'); background-repeat: no-repeat; background-position: right 100px;">
@@ -79,7 +68,11 @@
 
   	<?php 
   	if (!function_exists('ldap_connect')) {
-  		echo '<h3>' . __('ATTENTION: You have no LDAP support. This plugin won´t work.', 'ad-integration') . '</h3>';
+  		?>
+  		<h3><?php _e('ATTENTION: You have no LDAP support. This plugin won´t work.', 'ad-integration'); ?></h3>
+  		<p><?php  _e('You must install or enable LDAP support in PHP.', 'ad-integration');?>
+  		   <?php  _e('Further information: ', 'ad-integration'); ?><a href="http://php.net/manual/en/book.ldap.php" target="_blank">http://php.net/manual/en/book.ldap.php</a></p>
+  		<?php
   		$this->_log(ADI_LOG_WARN,'No LDAP support.');
   	}
 	?>
@@ -697,11 +690,9 @@ if (!IS_WPMU) { ?>
 			</form>	    	
 		</div> <!-- END OF TAB BULK IMPORT -->
 						
-		
 		<!-- TAB: Test -->
-		
 		<div id="test">
-			<form onsubmit="return submitTestForm();">
+			<form onsubmit="window.open('','Test','width=450,height=500,left=100,top=200')" action="<?php echo ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER;?>/test.php" method="post" target="Test">
 				<table class="form-table">
 					<tbody>
 						<tr>
@@ -734,6 +725,6 @@ if (!IS_WPMU) { ?>
 					<input type="submit" class="button-primary" name="Submit" value="<?php _e('Perform Test','ad-integration'); ?>" />
 				</p>
 			</form>				
-		</div> <!-- END OF TAB TEST -->	
+		</div> <!-- END OF TAB TEST -->
 	</div>
 </div>
