@@ -52,6 +52,20 @@
 		});
 	});
 
+
+	function submitTestForm() {
+		openTestWindow();
+		return false; // so the form is not submitted
+	}
+
+	function openTestWindow() {
+
+		var user = encodeURIComponent(document.getElementById('AD_Integration_test_user').value);
+		var password = encodeURIComponent(document.getElementById('AD_Integration_test_password').value);
+
+		TestWindow = window.open("<?php echo ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER;?>/test.php?user=" + user + "&password=" + password, "Test", "width=450,height=500,left=100,top=200");
+		TestWindow.focus();
+	}
 </script>
 
 <div class="wrap" style="background-image: url('<?php if (IS_WPMU) { echo WPMU_PLUGIN_URL; } else { echo WP_PLUGIN_URL; } echo '/'.basename(dirname(__FILE__)); ?>/ad-integration.png'); background-repeat: no-repeat; background-position: right 100px;">
@@ -390,6 +404,13 @@ if (!IS_WPMU) { ?>
 								<?php _e('Fallback to local (WordPress) password check if authentication against AD fails.</br>If turned on users can logon even if Active Directory server is unreachable. But this might be a security risk (for example, if the local password is outdated). <b>It\'s recommended to turn this off.</b>', 'ad-integration'); ?>
 							</td>
 						</tr>
+						
+						<tr valign="top">
+							<th scope="row"><label for="AD_Integration_enable_lost_password_recovery"><?php _e('Enable lost password revcovery', 'ad-integration'); ?></label></th>
+							<td>
+								<input type="checkbox" name="AD_Integration_enable_lost_password_recovery" id="AD_Integration_enable_lost_password_recovery"<?php if ($this->_enable_lost_password_recovery) echo ' checked="checked"' ?> value="1" />
+							</td>
+						</tr>
 
 						<tr>
 							<td scope="col" colspan="2">
@@ -692,6 +713,7 @@ if (!IS_WPMU) { ?>
 						
 		<!-- TAB: Test -->
 		<div id="test">
+			<!-- <form onsubmit="return submitTestForm();"> -->
 			<form onsubmit="window.open('','Test','width=450,height=500,left=100,top=200')" action="<?php echo ( (IS_WPMU) ? WPMU_PLUGIN_URL : WP_PLUGIN_URL ).'/'.ADINTEGRATION_FOLDER;?>/test.php" method="post" target="Test">
 				<table class="form-table">
 					<tbody>

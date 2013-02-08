@@ -128,6 +128,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 == Changelog ==
 
 = 1.1.4 =
+* ADD: Option to (re-)enable lost password recovery. (Issue #????)
 * CHANGE: Only set role of user if the role already exists in WordPress. (Issue #0051)
 * CHANGE: Now using POST instead of GET in Test Tool, so user and password are not shown in server log files (Change Request by Aren Cambre. Issue #0054.)
 * CHANGE: The roles in Role Equivalent Groups are now always stored in lower case. (Issue #0055)

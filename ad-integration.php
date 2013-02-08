@@ -196,6 +196,9 @@ class ADIntegrationPlugin {
 	// Update password on every successfull login
 	protected $_auto_update_password = false;
 	
+	// Enable lost password recovery
+	protected $_enable_lost_password_recovery = false;
+	
 	
 	// enable Bulk Import
 	protected $_bulkimport_enabled = false;
@@ -265,6 +268,7 @@ class ADIntegrationPlugin {
 
 			// Security
 			array('name' => 'AD_Integration_fallback_to_local_password', 'type' => 'bool'),
+			array('name' => 'AD_Integration_enable_lost_password_recovery', 'type' => 'bool'),
 			array('name' => 'AD_Integration_max_login_attempts', 'type' => 'int'),
 			array('name' => 'AD_Integration_block_time', 'type' => 'int'),
 			array('name' => 'AD_Integration_user_notification', 'type' => 'bool'),
@@ -337,7 +341,9 @@ class ADIntegrationPlugin {
 			
 			add_filter('authenticate', array(&$this, 'authenticate'), 10, 3);
 			
-			add_action('lost_password', array(&$this, 'disable_function'));
+			if (!$this->_enable_lost_password_recovery) { 
+				add_action('lost_password', array(&$this, 'disable_function'));
+			}
 			add_action('retrieve_password', array(&$this, 'disable_function'));
 			add_action('password_reset', array(&$this, 'disable_function'));
 		    add_action('admin_print_styles', array(&$this, 'load_styles'));
@@ -467,6 +473,7 @@ class ADIntegrationPlugin {
 				add_site_option('AD_Integration_admin_email', '');
 				add_site_option('AD_Integration_disable_users', false);
 				add_site_option('AD_Integration_fallback_to_local_password', false);
+				add_site_option('AD_Integration_enable_lost_password_recovery', false);
 				
 				add_site_option('AD_Integration_syncback', false);
 				add_site_option('AD_Integration_syncback_use_global_user', false);
@@ -511,6 +518,7 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_no_random_password', false);
 				add_option('AD_Integration_auto_update_password', false);
 				
+				
 				add_option('AD_Integration_max_login_attempts', '3');
 				add_option('AD_Integration_block_time', '30');
 				add_option('AD_Integration_user_notification', false);
@@ -518,6 +526,8 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_admin_email', '');
 				add_option('AD_Integration_disable_users', false);
 				add_option('AD_Integration_fallback_to_local_password', false);
+				add_option('AD_Integration_enable_lost_password_recovery', false);
+
 				
 				add_option('AD_Integration_syncback', false);
 				add_option('AD_Integration_syncback_use_global_user', false);
@@ -568,6 +578,7 @@ class ADIntegrationPlugin {
 		
 		// Security
 		register_setting('ADI-security-settings', 'AD_Integration_fallback_to_local_password', array(&$this, 'sanitize_bool'));
+		register_setting('ADI-security-settings', 'AD_Integration_enable_lost_password_recovery', array(&$this, 'sanitize_bool'));
 		register_setting('ADI-security-settings', 'AD_Integration_max_login_attempts', array(&$this, 'sanitize_max_login_attempts'));
 		register_setting('ADI-security-settings', 'AD_Integration_block_time', array(&$this, 'sanitize_block_time'));
 		register_setting('ADI-security-settings', 'AD_Integration_user_notification', array(&$this, 'sanitize_bool'));
@@ -1859,8 +1870,9 @@ class ADIntegrationPlugin {
 			$this->_authorization_group 		= get_site_option('AD_Integration_authorization_group');
 			$this->_role_equivalent_groups 		= get_site_option('AD_Integration_role_equivalent_groups');
 			
-			// Security (6)
+			// Security (7)
 			$this->_fallback_to_local_password	= get_site_option('AD_Integration_fallback_to_local_password');
+			$this->_enable_lost_password_recovery = (bool)get_site_option('AD_Integration_enable_lost_password_recovery');
 			$this->_max_login_attempts 			= (int)get_site_option('AD_Integration_max_login_attempts');
 			$this->_block_time 					= (int)get_site_option('AD_Integration_block_time');
 			$this->_user_notification	  		= (bool)get_site_option('AD_Integration_user_notification');
@@ -1918,6 +1930,7 @@ class ADIntegrationPlugin {
 			
 			// Security (6)
 			$this->_fallback_to_local_password	= get_option('AD_Integration_fallback_to_local_password');
+			$this->_enable_lost_password_recovery = (bool)get_option('AD_Integration_enable_lost_password_recovery');
 			$this->_max_login_attempts 			= (int)get_option('AD_Integration_max_login_attempts');
 			$this->_block_time 					= (int)get_option('AD_Integration_block_time');
 			$this->_user_notification	  		= (bool)get_option('AD_Integration_user_notification');
@@ -2295,6 +2308,9 @@ class ADIntegrationPlugin {
 			 
 			if ( !empty( $arrPost['AD_Integration_enable_password_change'] ) )
 				update_site_option('AD_Integration_enable_password_change', $arrPost['AD_Integration_enable_password_change']);
+				
+			if ( !empty( $arrPost['AD_Integration_enable_lost_password_recovery'] ) )
+				update_site_option('AD_Integration_enable_lost_password_recovery', $arrPost['AD_Integration_enable_lost_password_recovery']);
 
 			if ( !empty( $arrPost['AD_Integration_show_attributes'] ) )
 				update_site_option('AD_Integration_show_attributes', $arrPost['AD_Integration_show_attributes']);
