@@ -343,9 +343,10 @@ class ADIntegrationPlugin {
 			
 			if (!$this->_enable_lost_password_recovery) { 
 				add_action('lost_password', array(&$this, 'disable_function'));
+				add_action('retrieve_password', array(&$this, 'disable_function'));
+				add_action('password_reset', array(&$this, 'disable_function'));
 			}
-			add_action('retrieve_password', array(&$this, 'disable_function'));
-			add_action('password_reset', array(&$this, 'disable_function'));
+			
 		    add_action('admin_print_styles', array(&$this, 'load_styles'));
 		    add_action('admin_print_scripts', array(&$this, 'load_scripts'));
 		    
