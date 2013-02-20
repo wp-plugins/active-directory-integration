@@ -7,736 +7,990 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Active Directory Integration\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-11 10:26+0100\n"
-"PO-Revision-Date: 2012-01-11 10:28+0100\n"
-"Last-Translator: Christoph Steindorff <cst@ecw.de>\n"
+"POT-Creation-Date: 2013-02-20 12:23+0100\n"
+"PO-Revision-Date: 2013-02-20 12:25+0100\n"
+"Last-Translator: Christoph Steindorff <christoph@steindorff.de>\n"
 "Language-Team: Christoph Steindorff <info@ecw.de>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: German\n"
-"X-Poedit-Country: GERMANY\n"
 "X-Poedit-SourceCharset: utf-8\n"
+"Language: de_DE\n"
+"X-Generator: Poedit 1.5.5\n"
 
-#: ad-integration.php:605
-#: admin.php:74
+#: ad-integration.php:618 admin.php:77
 msgid "Active Directory Integration"
 msgstr "Active Directory Integration"
 
-#: ad-integration.php:830
-msgid "<strong>ERROR</strong>: This user exists in Active Directory, but has not been granted access to this installation of WordPress."
-msgstr "<strong>FEHLER</strong>: Dieser Benutzer existiert im Active Directory, aber er hat kein Recht zur Anmeldung an dieser WordPress-Installation."
+#: ad-integration.php:843
+msgid ""
+"<strong>ERROR</strong>: This user exists in Active Directory, but has not "
+"been granted access to this installation of WordPress."
+msgstr ""
+"<strong>FEHLER</strong>: Dieser Benutzer existiert im Active Directory, aber "
+"er hat kein Recht zur Anmeldung an dieser WordPress-Installation."
 
-#: ad-integration.php:961
+#: ad-integration.php:974
 msgid "Active Directory Integration Help"
 msgstr "Active Directory Integration Hilfe"
 
-#: ad-integration.php:962
+#: ad-integration.php:975
 msgid "Overview"
 msgstr "Übersicht"
 
-#: ad-integration.php:963
+#: ad-integration.php:976
 msgid "FAQ"
 msgstr "FAQ"
 
-#: ad-integration.php:964
+#: ad-integration.php:977
 msgid "Changelog"
 msgstr "Änderungshistorie (changelog)"
 
-#: ad-integration.php:965
+#: ad-integration.php:978
 msgid "Support-Forum"
 msgstr "Support-Forum"
 
-#: ad-integration.php:966
+#: ad-integration.php:979
 msgid "Bug Tracker"
 msgstr "Bug Tracker"
 
-#: ad-integration.php:1232
+#: ad-integration.php:1039
 msgid "User Disabled"
 msgstr "Benutzer deaktiviert"
 
-#: ad-integration.php:1235
-msgid "If selected, the user can not log in and his e-mail address will be changed for security reasons. The e-mail address is restored if the user is reenabled."
-msgstr "Wenn angewählt kann sich der Benutzer nicht anmelden und seine E-Mailadresse wird aus Sicherheitsgründen geändert. Die E-Mailadresse wird wiederhergestellt, wenn der Benutzer reaktivert wird."
+#: ad-integration.php:1042
+msgid ""
+"If selected, the user can not log in and his e-mail address will be changed "
+"for security reasons. The e-mail address is restored if the user is "
+"reenabled."
+msgstr ""
+"Wenn angewählt kann sich der Benutzer nicht anmelden und seine E-Mailadresse "
+"wird aus Sicherheitsgründen geändert. Die E-Mailadresse wird "
+"wiederhergestellt, wenn der Benutzer reaktivert wird."
 
-#: ad-integration.php:1239
+#: ad-integration.php:1046
 msgid "Information on last disabling: "
 msgstr "Information über letzte Deaktivierung:"
 
-#: ad-integration.php:1243
-msgid "Attention: This flag is automatically set (or unset) by Bulk Import and its state may change on next run of Bulk Import."
-msgstr "Achtung: Dieser Schalter wird durch den Bulk Import automatisch gesetzt (oder entfernt) und sein Zustand kann sich mit dem nächsten Lauf des Bulk Imports ändern."
+#: ad-integration.php:1050
+msgid ""
+"Attention: This flag is automatically set (or unset) by Bulk Import and its "
+"state may change on next run of Bulk Import."
+msgstr ""
+"Achtung: Dieser Schalter wird durch den Bulk Import automatisch gesetzt "
+"(oder entfernt) und sein Zustand kann sich mit dem nächsten Lauf des Bulk "
+"Imports ändern."
 
-#: ad-integration.php:1266
+#: ad-integration.php:1074
 #, php-format
 msgid "User manually disabled by \"%s\"."
 msgstr "Benutzer manuell deaktiviert von \"%s\"."
 
-#: ad-integration.php:1316
+#: ad-integration.php:1124
 msgid "Additional Informations"
 msgstr "Zusätzliche Informationen"
 
-#: ad-integration.php:1378
+#: ad-integration.php:1186
 msgid "Your password"
 msgstr "Dein Kennwort"
 
-#: ad-integration.php:1381
-msgid "If you want to save the changes on \"Additional Informations\" back to the Active Directory you must enter your password."
-msgstr "Wenn Du deine Änderungen im Bereich \"Zusätzliche Informationen\" zurück ins Active Directory schreiben möchtest, musst Du Dein Kennwort eingeben."
+#: ad-integration.php:1189
+msgid ""
+"If you want to save the changes on \"Additional Informations\" back to the "
+"Active Directory you must enter your password."
+msgstr ""
+"Wenn Du deine Änderungen im Bereich \"Zusätzliche Informationen\" zurück ins "
+"Active Directory schreiben möchtest, musst Du Dein Kennwort eingeben."
 
-#: ad-integration.php:1533
-msgid "No password given, so additional attributes are not written back to Active Directory"
-msgstr "Es wurde kein Kennwort eingegeben. Somit konnten die zusätzlichen Informationen nicht zurück ins Active Directory geschrieben werden."
+#: ad-integration.php:1299
+msgid ""
+"No password given, so additional attributes are not written back to Active "
+"Directory"
+msgstr ""
+"Es wurde kein Kennwort eingegeben. Somit konnten die zusätzlichen "
+"Informationen nicht zurück ins Active Directory geschrieben werden."
 
-#: ad-integration.php:1560
-msgid "Error on writing additional attributes back to Active Directory. Wrong password?"
-msgstr "Fehler beim Zurückschreiben der Daten ins Active Directory. Falsches Kennwort?"
+#: ad-integration.php:1326
+msgid ""
+"Error on writing additional attributes back to Active Directory. Wrong "
+"password?"
+msgstr ""
+"Fehler beim Zurückschreiben der Daten ins Active Directory. Falsches "
+"Kennwort?"
 
-#: ad-integration.php:1573
-msgid "Error on writing additional attributes back to Active Directory. Please contact your administrator."
-msgstr "Fehler beim Zurückschreiben ins Active Directory. Bitte wende Dich an Deinen Administrator."
+#: ad-integration.php:1339
+msgid ""
+"Error on writing additional attributes back to Active Directory. Please "
+"contact your administrator."
+msgstr ""
+"Fehler beim Zurückschreiben ins Active Directory. Bitte wende Dich an Deinen "
+"Administrator."
 
-#: ad-integration.php:1634
+#: ad-integration.php:1400
 msgid "ADI User"
 msgstr "ADI-Benutzer"
 
-#: ad-integration.php:1635
+#: ad-integration.php:1401
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: ad-integration.php:1786
+#: ad-integration.php:1557
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr "Einstellung '%s' wurde entfernt."
 
-#: ad-integration.php:1790
+#: ad-integration.php:1561
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr "Fehler beim Löschen der Einstellung '%s'."
 
-#: ad-integration.php:1925
+#: ad-integration.php:1973
 msgid "Common Name"
 msgstr "Common Name"
 
-#: ad-integration.php:1926
+#: ad-integration.php:1974
 msgid "First name"
 msgstr "Vorname"
 
-#: ad-integration.php:1927
+#: ad-integration.php:1975
 msgid "Initials"
 msgstr "Initialen"
 
-#: ad-integration.php:1928
+#: ad-integration.php:1976
 msgid "Last name"
 msgstr "Nachname"
 
-#: ad-integration.php:1929
-#: admin.php:258
+#: ad-integration.php:1977 admin.php:266
 msgid "Display name"
 msgstr "Den Namen wiefolgt darstellen"
 
-#: ad-integration.php:1930
-#: admin.php:462
+#: ad-integration.php:1978 admin.php:477
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ad-integration.php:1931
+#: ad-integration.php:1979
 msgid "Office"
 msgstr "Büro"
 
-#: ad-integration.php:1932
+#: ad-integration.php:1980
 msgid "Telephone number"
 msgstr "Telefon"
 
-#: ad-integration.php:1933
+#: ad-integration.php:1981
 msgid "E-mail"
 msgstr "E-Mail"
 
-#: ad-integration.php:1934
+#: ad-integration.php:1982
 msgid "Web Page"
 msgstr "Web-Seite"
 
-#: ad-integration.php:1937
+#: ad-integration.php:1985
 msgid "User logon name"
 msgstr "Benutzername"
 
-#: ad-integration.php:1940
+#: ad-integration.php:1988
 msgid "Street"
 msgstr "Straße"
 
-#: ad-integration.php:1941
+#: ad-integration.php:1989
 msgid "P.O. Box"
 msgstr "Postfach"
 
-#: ad-integration.php:1942
+#: ad-integration.php:1990
 msgid "City"
 msgstr "Stadt"
 
-#: ad-integration.php:1943
+#: ad-integration.php:1991
 msgid "State"
 msgstr "Bundesland/Kanton"
 
-#: ad-integration.php:1944
+#: ad-integration.php:1992
 msgid "ZIP/Postal cide"
 msgstr "Postleitzahl"
 
-#: ad-integration.php:1945
+#: ad-integration.php:1993
 msgid "Country abbreviation"
 msgstr "Länderkürzel"
 
-#: ad-integration.php:1946
+#: ad-integration.php:1994
 msgid "Country"
 msgstr "Land"
 
-#: ad-integration.php:1947
+#: ad-integration.php:1995
 msgid "Country code (number)"
 msgstr "Country code"
 
-#: ad-integration.php:1950
+#: ad-integration.php:1998
 msgid "Home"
 msgstr "Privat"
 
-#: ad-integration.php:1951
+#: ad-integration.php:1999
 msgid "Home (other)"
 msgstr "Privat (weitere)"
 
-#: ad-integration.php:1952
+#: ad-integration.php:2000
 msgid "Pager"
 msgstr "Pager"
 
-#: ad-integration.php:1953
+#: ad-integration.php:2001
 msgid "Pager (other)"
 msgstr "Pager (weitere)"
 
-#: ad-integration.php:1954
+#: ad-integration.php:2002
 msgid "Mobile"
 msgstr "Mobil"
 
-#: ad-integration.php:1955
+#: ad-integration.php:2003
 msgid "Mobile (Other)"
 msgstr "Mobil (weitere)"
 
-#: ad-integration.php:1956
+#: ad-integration.php:2004
 msgid "Fax"
 msgstr "Fax"
 
-#: ad-integration.php:1957
+#: ad-integration.php:2005
 msgid "Fax (other)"
 msgstr "Fax (weitere)"
 
-#: ad-integration.php:1958
+#: ad-integration.php:2006
 msgid "IP Phone"
 msgstr "IP-Telefon"
 
-#: ad-integration.php:1959
+#: ad-integration.php:2007
 msgid "IP Phone (other)"
 msgstr "IP-Telefon (weitere)"
 
-#: ad-integration.php:1960
+#: ad-integration.php:2008
 msgid "Notes"
 msgstr "Anmerkung"
 
-#: ad-integration.php:1963
+#: ad-integration.php:2011
 msgid "Title"
 msgstr "Position"
 
-#: ad-integration.php:1964
+#: ad-integration.php:2012
 msgid "Department"
 msgstr "Abteilung"
 
-#: ad-integration.php:1965
+#: ad-integration.php:2013
 msgid "Company"
 msgstr "Firma"
 
-#: ad-integration.php:1966
+#: ad-integration.php:2014
 msgid "Manager"
 msgstr "Vorgesetzter"
 
-#: ad-integration.php:1967
+#: ad-integration.php:2015
 msgid "Direct reports"
 msgstr "Mitarbeiter"
 
-#: ad-integration.php:3016
-#: ad-integration.php:3099
+#: ad-integration.php:3035 ad-integration.php:3118
 msgid "Account blocked"
 msgstr "Konto gesperrt"
 
-#: ad-integration.php:3017
+#: ad-integration.php:3036
 #, php-format
-msgid "Someone tried to login to %s (%s) with your username (%s) - but in vain. For security reasons your account is now blocked for %d seconds."
-msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit Deinem Benutzernamen (%s) anzumelden. Aus Sicherheitsgründen, ist Dein Konto nun für %d Sekunden gesperrt."
+msgid ""
+"Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
+"security reasons your account is now blocked for %d seconds."
+msgstr ""
+"Jemand hat erfolglos versucht sich bei %s (%s) mit Deinem Benutzernamen (%s) "
+"anzumelden. Aus Sicherheitsgründen, ist Dein Konto nun für %d Sekunden "
+"gesperrt."
 
-#: ad-integration.php:3019
-#: ad-integration.php:3104
-msgid "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL ADDRESS SPECIFIED ABOVE."
-msgstr "DIESE E-MAIL WURDE VOM SYSTEM AUTOMATISCH ERSTELLT, BITTE SENDEN SIE KEINE ANTWORT AN DIE ABSENDERADRESSE."
+#: ad-integration.php:3038 ad-integration.php:3123
+msgid ""
+"THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
+"ADDRESS SPECIFIED ABOVE."
+msgstr ""
+"DIESE E-MAIL WURDE VOM SYSTEM AUTOMATISCH ERSTELLT, BITTE SENDEN SIE KEINE "
+"ANTWORT AN DIE ABSENDERADRESSE."
 
-#: ad-integration.php:3100
+#: ad-integration.php:3119
 #, php-format
-msgid "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in vain. For security reasons this account is now blocked for %d seconds."
-msgstr "Jemand hat erfolglos versucht sich bei %s (%s) mit dem Benutzernamen \"%s\" (%s %s) anzumelden. Aus Sicherheitsgründen, ist dieses Konto nun für %d Sekunden gesperrt."
+msgid ""
+"Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
+"vain. For security reasons this account is now blocked for %d seconds."
+msgstr ""
+"Jemand hat erfolglos versucht sich bei %s (%s) mit dem Benutzernamen \"%s"
+"\" (%s %s) anzumelden. Aus Sicherheitsgründen, ist dieses Konto nun für %d "
+"Sekunden gesperrt."
 
-#: ad-integration.php:3102
+#: ad-integration.php:3121
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "Der Loginversuch ging aus von der IP-Adresse: %s"
 
-#: ad-integration.php:3223
+#: ad-integration.php:3242
 msgid "Powered by WordPress"
 msgstr "Powered by WordPress"
 
-#: ad-integration.php:3225
+#: ad-integration.php:3244
 msgid "Account blocked for"
 msgstr "Konto gesperrt"
 
-#: ad-integration.php:3225
-#: admin.php:144
+#: ad-integration.php:3244 admin.php:152
 msgid "seconds"
 msgstr "Sekunden"
 
-#: admin.php:10
+#: admin.php:13
 msgid "Access denied."
 msgstr "Zugriff verweigert."
 
-#: admin.php:76
+#: admin.php:79
 msgid "Active Directory Integration Settings"
 msgstr "Active Directory Integration Einstellungen"
 
-#: admin.php:82
+#: admin.php:86
 msgid "ATTENTION: You have no LDAP support. This plugin won´t work."
-msgstr "ACHTUNG: Es ist kein LDAP Support vorhanden. Dieses Plugin wird nicht funktionieren."
+msgstr ""
+"ACHTUNG: Es ist kein LDAP Support vorhanden. Dieses Plugin wird nicht "
+"funktionieren."
 
-#: admin.php:92
+#: admin.php:87
+msgid "You must install or enable LDAP support in PHP."
+msgstr "LDAP-Support muss in PHP installiert oder aktiviert werden."
+
+#: admin.php:88
+msgid "Further information: "
+msgstr "Weitere Informationen:"
+
+#: admin.php:99
 msgid "Server"
 msgstr "Server"
 
-#: admin.php:93
+#: admin.php:100
 msgid "User"
 msgstr "Benutzer"
 
-#: admin.php:94
-#: admin.php:344
+#: admin.php:101 admin.php:352
 msgid "Authorization"
 msgstr "Berechtigung"
 
-#: admin.php:95
+#: admin.php:102
 msgid "Security"
 msgstr "Sicherheit"
 
-#: admin.php:96
-#: admin.php:481
+#: admin.php:103 admin.php:496
 msgid "User Meta"
 msgstr "User Meta"
 
-#: admin.php:97
+#: admin.php:104
 msgid "Bulk Import"
 msgstr "Bulk Import"
 
-#: admin.php:101
-#: admin.php:708
+#: admin.php:109 admin.php:722
 msgid "Test Tool"
 msgstr "Test Tool"
 
-#: admin.php:113
+#: admin.php:121
 msgid "Active Directory Server"
 msgstr "Active Directory Server"
 
-#: admin.php:117
+#: admin.php:125
 msgid "Domain Controllers"
 msgstr "Domänen Controller"
 
-#: admin.php:120
-msgid "Domain Controllers (separate with semicolons, e.g. \"dc1.company.local;dc2.company.local\")"
-msgstr "Domänen Controller (trenne mehrere durch ein Semikolon, z.B.  \"dc1.company.local;dc2.company.local\")"
+#: admin.php:128
+msgid ""
+"Domain Controllers (separate with semicolons, e.g. \"dc1.company.local;dc2."
+"company.local\")"
+msgstr ""
+"Domänen Controller (trenne mehrere durch ein Semikolon, z.B.  \"dc1.company."
+"local;dc2.company.local\")"
 
-#: admin.php:125
+#: admin.php:133
 msgid "Port"
 msgstr "Port"
 
-#: admin.php:129
+#: admin.php:137
 msgid "Port on which the AD listens (defaults to \"389\")"
 msgstr "Port auf dem das AD lauscht (Standard ist \"389\")."
 
-#: admin.php:134
+#: admin.php:142
 msgid "Use TLS"
 msgstr "Benutze TLS"
 
-#: admin.php:137
-msgid "Secure the connection between the WordPress and the Active Directory Servers using TLS. Note: To use TLS, you must set the LDAP Port to 389."
-msgstr "Sicher die Verbindung zwischen WordPress und dem Active Directory mit TLS. Achtung: Um TLS zu verwenden muss der Port 389 verwendet werden."
+#: admin.php:145
+msgid ""
+"Secure the connection between the WordPress and the Active Directory Servers "
+"using TLS. Note: To use TLS, you must set the LDAP Port to 389."
+msgstr ""
+"Sicher die Verbindung zwischen WordPress und dem Active Directory mit TLS. "
+"Achtung: Um TLS zu verwenden muss der Port 389 verwendet werden."
 
-#: admin.php:142
+#: admin.php:150
 msgid "LDAP Network Timeout"
 msgstr "LDAP Network Timeout"
 
-#: admin.php:146
-msgid "Time in seconds after connection attempt to Active Directory times out and WordPress falls back to local authorization (defaults to \"5\")."
-msgstr "Zeit in Sekunden für einen Verbindungsversuch zum Active Directory und nach der WordPress eine lokale Autorisierung versuchen soll (Standard ist \"5\")."
+#: admin.php:154
+msgid ""
+"Time in seconds after connection attempt to Active Directory times out and "
+"WordPress falls back to local authorization (defaults to \"5\")."
+msgstr ""
+"Zeit in Sekunden für einen Verbindungsversuch zum Active Directory und nach "
+"der WordPress eine lokale Autorisierung versuchen soll (Standard ist \"5\")."
 
-#: admin.php:151
+#: admin.php:159
 msgid "Base DN"
 msgstr "Base DN"
 
-#: admin.php:155
-msgid "Base DN (e.g. \"ou=unit,dc=domain,dc=tld\" or \"cn=users,dc=domain,dc=tld\")"
-msgstr "Base DN (z.B. \"ou=unit,dc=domain,dc=tld\" oder \"cn=users,dc=domain,dc=tld\")"
+#: admin.php:163
+msgid ""
+"Base DN (e.g. \"ou=unit,dc=domain,dc=tld\" or \"cn=users,dc=domain,dc=tld\")"
+msgstr ""
+"Base DN (z.B. \"ou=unit,dc=domain,dc=tld\" oder \"cn=users,dc=domain,dc=tld"
+"\")"
 
-#: admin.php:161
-#: admin.php:330
-#: admin.php:379
-#: admin.php:449
-#: admin.php:604
-#: admin.php:694
+#: admin.php:169 admin.php:338 admin.php:387 admin.php:464 admin.php:619
+#: admin.php:709
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
-#: admin.php:176
+#: admin.php:184
 msgid "User specific settings"
 msgstr "Benutzereinstellungen"
 
-#: admin.php:180
+#: admin.php:188
 msgid "Account Suffix"
 msgstr "Account Suffix"
 
-#: admin.php:183
-msgid "Account Suffix (will be appended to all usernames in the Active Directory authentication process; e.g., \"@company.local\".)"
-msgstr "Der Account Suffix wird beim Authentifizierungsprozess an den Benutzernamen angehängt (z.B. \"@company.local\")."
+#: admin.php:191
+msgid ""
+"Account Suffix (will be appended to all usernames in the Active Directory "
+"authentication process; e.g., \"@company.local\".)"
+msgstr ""
+"Der Account Suffix wird beim Authentifizierungsprozess an den Benutzernamen "
+"angehängt (z.B. \"@company.local\")."
 
-#: admin.php:184
-msgid "If you have multiple account suffixes like @emea.company.local, @africa.company.local seperate them by a semicolon (;) and put the main (@company.local) at the last position (e.g. \"@emea.company.local;@africa.company.local;@company.local\")."
-msgstr "Wenn Du mehrere Account Suffixe, wie @emea.company.com, @africa.company.com hast, trenne sie durch ein Semikolon (;) und setze das Hauptsuffix (@company.local) an die letzte Stelle (z.B. \"@emea.company.local;@africa.company.local;@company.local\")."
+#: admin.php:192
+msgid ""
+"If you have multiple account suffixes like @emea.company.local, @africa."
+"company.local seperate them by a semicolon (;) and put the main (@company."
+"local) at the last position (e.g. \"@emea.company.local;@africa.company."
+"local;@company.local\")."
+msgstr ""
+"Wenn Du mehrere Account Suffixe, wie @emea.company.com, @africa.company.com "
+"hast, trenne sie durch ein Semikolon (;) und setze das Hauptsuffix (@company."
+"local) an die letzte Stelle (z.B. \"@emea.company.local;@africa.company."
+"local;@company.local\")."
 
-#: admin.php:185
+#: admin.php:193
 msgid "<strong>Don't forget to set the @.</strong>"
 msgstr "<strong>Vergiss nicht das @ im Account Suffix zu setzen.</strong>"
 
-#: admin.php:189
-msgid "Append account suffix to new created usernames. If checked, the account suffix (see above) will be appended to the usernames of new created users."
-msgstr "Account Suffix (s.o.) auch an neu angelegte WordPress-Benutzernamen anhängen (aus \"user\" wird dann z.B. \"user@domain.tld\")."
+#: admin.php:197
+msgid ""
+"Append account suffix to new created usernames. If checked, the account "
+"suffix (see above) will be appended to the usernames of new created users."
+msgstr ""
+"Account Suffix (s.o.) auch an neu angelegte WordPress-Benutzernamen anhängen "
+"(aus \"user\" wird dann z.B. \"user@domain.tld\")."
 
-#: admin.php:194
+#: admin.php:202
 msgid "Automatic User Creation"
 msgstr "Automatisches Anlegen von Benutzern"
 
-#: admin.php:197
-msgid "Should a new user be created automatically if not already in the WordPress database?"
-msgstr "Soll automatisch ein neuer Benutzer in der WordPress-Datenbank angelegt werden, wenn er noch nicht existiert?"
+#: admin.php:205
+msgid ""
+"Should a new user be created automatically if not already in the WordPress "
+"database?"
+msgstr ""
+"Soll automatisch ein neuer Benutzer in der WordPress-Datenbank angelegt "
+"werden, wenn er noch nicht existiert?"
 
-#: admin.php:199
-msgid "Created users will obtain the role defined under \"New User Default Role\" on the <a href=\"options-general.php\">General Options</a> page."
-msgstr "Neu angelegte Benutzer erhalten die Rolle die unter \"Standardrolle eines neuen Benutzers\" auf der Seite <a href=\"options-general.php\">Einstellungen › Allgemein</a> festgelegt ist."
-
-#: admin.php:201
-msgid "This setting is separate from the Role Equivalent Groups option, below."
-msgstr "Diese Einstellung ist unabhängig von denen unter \"Rollen-Gruppen-Zugehörigkeit\" (s.u.)."
-
-#: admin.php:204
-msgid "<b>Users with role equivalent groups will be created even if this setting is turned off</b> (because if you didn't want this to happen, you would leave that option blank.)"
-msgstr "<b>Benutzer mit Rollen-Gruppen-Zuordnung werden auch angelegt, wenn diese Einstellung ausgeschaltet ist.</b> Wenn Sie kein automatisches Anlegen von Benutzern wünschen, lassen sie auch die \"Rollen-Gruppen-Zuordnung\" leer."
+#: admin.php:207
+msgid ""
+"Created users will obtain the role defined under \"New User Default Role\" "
+"on the <a href=\"options-general.php\">General Options</a> page."
+msgstr ""
+"Neu angelegte Benutzer erhalten die Rolle die unter \"Standardrolle eines "
+"neuen Benutzers\" auf der Seite <a href=\"options-general.php"
+"\">Einstellungen › Allgemein</a> festgelegt ist."
 
 #: admin.php:209
+msgid "This setting is separate from the Role Equivalent Groups option, below."
+msgstr ""
+"Diese Einstellung ist unabhängig von denen unter \"Rollen-Gruppen-"
+"Zugehörigkeit\" (s.u.)."
+
+#: admin.php:212
+msgid ""
+"<b>Users with role equivalent groups will be created even if this setting is "
+"turned off</b> (because if you didn't want this to happen, you would leave "
+"that option blank.)"
+msgstr ""
+"<b>Benutzer mit Rollen-Gruppen-Zuordnung werden auch angelegt, wenn diese "
+"Einstellung ausgeschaltet ist.</b> Wenn Sie kein automatisches Anlegen von "
+"Benutzern wünschen, lassen sie auch die \"Rollen-Gruppen-Zuordnung\" leer."
+
+#: admin.php:217
 msgid "Automatic User Update"
 msgstr "Automatische Updates der Benutzer"
 
-#: admin.php:212
-msgid "Should the users be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation is turned on.</b>"
-msgstr "Soll bei jedem Login ein Update der Benutzerdaten in der WordPress-Datenbank durchgeführt werden?<br /><b>Funktioniert nur, wenn \"Automatisches Anlegen von Benutzern\" aktiviert ist.</b>"
+#: admin.php:220
+msgid ""
+"Should the users be updated in the WordPress database everytime they logon?"
+"<br /><b>Works only if Automatic User Creation is turned on.</b>"
+msgstr ""
+"Soll bei jedem Login ein Update der Benutzerdaten in der WordPress-Datenbank "
+"durchgeführt werden?<br /><b>Funktioniert nur, wenn \"Automatisches Anlegen "
+"von Benutzern\" aktiviert ist.</b>"
 
-#: admin.php:217
+#: admin.php:225
 msgid "Auto Update User Description"
 msgstr "Automatisches Update der Beschreibung"
 
-#: admin.php:220
-msgid "Should the users descriptions be updated in the WordPress database everytime they logon?<br /><b>Works only if Automatic User Creation <b>and</b> Automatic User Update is turned on.</b>"
-msgstr "Soll ein Update der Beschreibung des Benutzers bei jedem Login in der WordPress-Datenbank durchgeführt werden?<br /><b>Funktioniert nur, wenn \"Automatisches Anlegen von Benutzern\" aktiviert ist.</b>"
+#: admin.php:228
+msgid ""
+"Should the users descriptions be updated in the WordPress database everytime "
+"they logon?<br /><b>Works only if Automatic User Creation <b>and</b> "
+"Automatic User Update is turned on.</b>"
+msgstr ""
+"Soll ein Update der Beschreibung des Benutzers bei jedem Login in der "
+"WordPress-Datenbank durchgeführt werden?<br /><b>Funktioniert nur, wenn "
+"\"Automatisches Anlegen von Benutzern\" aktiviert ist.</b>"
 
-#: admin.php:225
+#: admin.php:233
 msgid "Default email domain"
 msgstr "Standard-E-Mail-Domäne"
 
-#: admin.php:228
-msgid "If the Active Directory attribute 'mail' is blank, a user's email will be set to username@whatever-this-says"
-msgstr "Wenn das Active-Directory-Attribut \"mail\" leer ist, wird die E-Mail-Adresse des Benutzers in WordPress aus seinem Benutzernamen und dieser Standard-E-Mail-Domäne gebildet."
+#: admin.php:236
+msgid ""
+"If the Active Directory attribute 'mail' is blank, a user's email will be "
+"set to username@whatever-this-says"
+msgstr ""
+"Wenn das Active-Directory-Attribut \"mail\" leer ist, wird die E-Mail-"
+"Adresse des Benutzers in WordPress aus seinem Benutzernamen und dieser "
+"Standard-E-Mail-Domäne gebildet."
 
-#: admin.php:233
+#: admin.php:241
 msgid "Email Address Conflict Handling"
 msgstr "Verhalten bei E-Mail-Adresskonflikten"
 
-#: admin.php:236
+#: admin.php:244
 msgid "Prevent (recommended)"
 msgstr "Verhindern (empfohlen)"
 
-#: admin.php:237
+#: admin.php:245
 msgid "Allow (UNSAFE)"
 msgstr "Erlauben (UNSICHER)"
 
-#: admin.php:238
+#: admin.php:246
 msgid "Create"
 msgstr "Erstellen"
 
-#: admin.php:240
+#: admin.php:248
 msgid "Choose how to handle email address conflicts."
 msgstr "Wie sollen E-Mailadresskonflikte behandelt werden?"
 
-#: admin.php:242
-msgid "Prevent: User is not created, if his email address is already in use by another user. (recommended)"
-msgstr "Verhindern: Benutzer wird nicht angelegt, wenn seine E-Mailadresse bereits von einem anderen Benutzer verwendet wird. (empfohlen)"
-
-#: admin.php:243
-msgid "Allow: Allow users to share one email address. (UNSAFE)"
-msgstr "Erlauben: Erlaube mehrere Benutzer mit der gleichen E-Mailadresse. (UNSICHER)"
-
-#: admin.php:244
-msgid "Create: In case of conflict, the new user is created with a unique email address."
-msgstr "Erstellen: Im Konfliktfall erhält der neue Benutzer eine neue, einmalige E-Mailadresse."
-
 #: admin.php:250
+msgid ""
+"Prevent: User is not created, if his email address is already in use by "
+"another user. (recommended)"
+msgstr ""
+"Verhindern: Benutzer wird nicht angelegt, wenn seine E-Mailadresse bereits "
+"von einem anderen Benutzer verwendet wird. (empfohlen)"
+
+#: admin.php:251
+msgid "Allow: Allow users to share one email address. (UNSAFE)"
+msgstr ""
+"Erlauben: Erlaube mehrere Benutzer mit der gleichen E-Mailadresse. (UNSICHER)"
+
+#: admin.php:252
+msgid ""
+"Create: In case of conflict, the new user is created with a unique email "
+"address."
+msgstr ""
+"Erstellen: Im Konfliktfall erhält der neue Benutzer eine neue, einmalige E-"
+"Mailadresse."
+
+#: admin.php:258
 msgid "Prevent Email Change"
 msgstr "Verhindere Änderung der E-Mailadresse"
 
-#: admin.php:253
-msgid "Prevents users authenticated by Active Directory from changing their email address in WordPress. This does not apply to administrators."
-msgstr "Verhindere, dass Benutzer die über das Active Directory autentifiziert wurden ihre E-Mailadresse ändern können. Dies gilt nicht für Administratoren."
-
 #: admin.php:261
+msgid ""
+"Prevents users authenticated by Active Directory from changing their email "
+"address in WordPress. This does not apply to administrators."
+msgstr ""
+"Verhindere, dass Benutzer die über das Active Directory autentifiziert "
+"wurden ihre E-Mailadresse ändern können. Dies gilt nicht für Administratoren."
+
+#: admin.php:269
 msgid "LDAP Attribute: "
 msgstr "Active-Directory-Attribut: "
 
-#: admin.php:262
+#: admin.php:270
 msgid "sAMAccountName (the username)"
 msgstr "sAMAccountName (der Benutzername)"
 
-#: admin.php:263
+#: admin.php:271
 msgid "displayName"
 msgstr "displayName"
 
-#: admin.php:264
+#: admin.php:272
 msgid "description"
 msgstr "description"
 
-#: admin.php:265
+#: admin.php:273
 msgid "givenName (firstname)"
 msgstr "givenName (Vorname)"
 
-#: admin.php:266
+#: admin.php:274
 msgid "SN (lastname)"
 msgstr "SN (Nachname)"
 
-#: admin.php:267
+#: admin.php:275
 msgid "givenName SN (firstname lastname)"
 msgstr "givenName SN (Vorname Nachname)"
 
-#: admin.php:268
+#: admin.php:276
 msgid "CN (Common Name, the whole name)"
 msgstr "CN (Common Name, der komplette Name)"
 
-#: admin.php:269
+#: admin.php:277
 msgid "mail"
 msgstr "mail (E-Mail-Adresse)"
 
-#: admin.php:271
+#: admin.php:279
 msgid "Choose user's Active Directory attribute to be used as display name."
-msgstr "Wähle ein Active-Directory-Attribut das als Anzeigename verwendet werden soll."
+msgstr ""
+"Wähle ein Active-Directory-Attribut das als Anzeigename verwendet werden "
+"soll."
 
-#: admin.php:276
+#: admin.php:284
 msgid "Show User Status"
 msgstr "Zeige Benutzerstatus"
 
-#: admin.php:279
+#: admin.php:287
 msgid "Show additional columns (ADI User, disabled) in the user list."
-msgstr "Zeige zusätzlichen Spalten (ADI Benutzer, deaktiviert) in der Benutzerliste."
+msgstr ""
+"Zeige zusätzlichen Spalten (ADI Benutzer, deaktiviert) in der Benutzerliste."
 
-#: admin.php:285
+#: admin.php:293
 msgid "Password handling"
 msgstr "Kennwörter"
 
-#: admin.php:290
+#: admin.php:298
 msgid "Enable local password changes"
 msgstr "Lokales Kennwort änderbar"
 
-#: admin.php:293
-msgid "Allow users to change their local (<strong>non AD</strong>) WordPress password"
-msgstr "Gestatte den Benutzern ihr lokales (<strong>nicht AD</strong>) WordPress-Kennwort zu ändern."
-
-#: admin.php:295
-msgid "<strong>If activated, a password change will update the local WordPress database only. No changes in Active Directory will be made.</strong>"
-msgstr "<strong>Wenn aktiviert, finden etwaige Kennwortänderungen nur in der lokalen WordPress-Datenbank statt. Es werden keinerlei Änderungen im Active Directory durchgeführt.</strong>"
-
 #: admin.php:301
+msgid ""
+"Allow users to change their local (<strong>non AD</strong>) WordPress "
+"password"
+msgstr ""
+"Gestatte den Benutzern ihr lokales (<strong>nicht AD</strong>) WordPress-"
+"Kennwort zu ändern."
+
+#: admin.php:303
+msgid ""
+"<strong>If activated, a password change will update the local WordPress "
+"database only. No changes in Active Directory will be made.</strong>"
+msgstr ""
+"<strong>Wenn aktiviert, finden etwaige Kennwortänderungen nur in der lokalen "
+"WordPress-Datenbank statt. Es werden keinerlei Änderungen im Active "
+"Directory durchgeführt.</strong>"
+
+#: admin.php:309
 msgid "Set local password on first successfull login"
 msgstr "Setze lokales Kennwort bei erster erfolgreicher Anmeldung"
 
-#: admin.php:304
-msgid "First time a user logs on successfully and is created, his local WordPress password is set to the one used for this login."
-msgstr "Wenn ein Benutzer sich das erste mal erfolgreich anmeldet und angelegt wird, wird sein lokales WordPress-Kennwort auf das gerade benutzte gesetzt."
-
-#: admin.php:306
-msgid "If this option is deactivated a random password for this user will be set."
-msgstr "Wenn diese Einstellung deaktiviert ist, wird ein Zufallskennwort für den Benutzer gesetzt."
-
-#: admin.php:308
-msgid "<b>Works only if \"Automatic User Creation\" is turned on.</b>"
-msgstr "<b>Funktioniert nur wenn \"Automatisches Anlegen von Benutzern\" aktiviert ist.</b>"
+#: admin.php:312
+msgid ""
+"First time a user logs on successfully and is created, his local WordPress "
+"password is set to the one used for this login."
+msgstr ""
+"Wenn ein Benutzer sich das erste mal erfolgreich anmeldet und angelegt wird, "
+"wird sein lokales WordPress-Kennwort auf das gerade benutzte gesetzt."
 
 #: admin.php:314
+msgid ""
+"If this option is deactivated a random password for this user will be set."
+msgstr ""
+"Wenn diese Einstellung deaktiviert ist, wird ein Zufallskennwort für den "
+"Benutzer gesetzt."
+
+#: admin.php:316
+msgid "<b>Works only if \"Automatic User Creation\" is turned on.</b>"
+msgstr ""
+"<b>Funktioniert nur wenn \"Automatisches Anlegen von Benutzern\" aktiviert "
+"ist.</b>"
+
+#: admin.php:322
 msgid "Automatic Password Update"
 msgstr "Automatisches Updates des Kennworts"
 
-#: admin.php:317
-msgid "Every time a user logs on successfully, his local WordPress password is set to the one used for this login."
-msgstr "Jedesmal wenn ein Benutzer sich erfolgreich anmeldet, wird sein lokales WordPress-Kennwort auf das soeben benutzte gesetzt."
+#: admin.php:325
+msgid ""
+"Every time a user logs on successfully, his local WordPress password is set "
+"to the one used for this login."
+msgstr ""
+"Jedesmal wenn ein Benutzer sich erfolgreich anmeldet, wird sein lokales "
+"WordPress-Kennwort auf das soeben benutzte gesetzt."
 
-#: admin.php:319
-msgid "Note: Activating this option makes little sense when \"Enable local password changes\" is turned on."
-msgstr "Hinweis: Diese Einstellung zu aktivieren macht wenig Sinn, wenn \"Lokalse Kennwort änderbar\" aktiviert ist."
+#: admin.php:327
+msgid ""
+"Note: Activating this option makes little sense when \"Enable local password "
+"changes\" is turned on."
+msgstr ""
+"Hinweis: Diese Einstellung zu aktivieren macht wenig Sinn, wenn \"Lokalse "
+"Kennwort änderbar\" aktiviert ist."
 
-#: admin.php:321
-msgid "<b>Works only if \"Automatic User Creation\" and \"Automatic User Update\" is turned on.</b>"
-msgstr "<b>Funktioniert nur wenn \"Automatisches Anlegen von Benutzern\" und \"Automatische Updates des Benutzer\" aktiviert ist.</b>"
+#: admin.php:329
+msgid ""
+"<b>Works only if \"Automatic User Creation\" and \"Automatic User Update\" "
+"is turned on.</b>"
+msgstr ""
+"<b>Funktioniert nur wenn \"Automatisches Anlegen von Benutzern\" und "
+"\"Automatische Updates des Benutzer\" aktiviert ist.</b>"
 
-#: admin.php:348
+#: admin.php:356
 msgid "Authorize by group membership"
 msgstr "Berechtigung durch Gruppenzugehörigkeit"
 
-#: admin.php:351
-msgid "Users are authorized for login only when they are members of a specific AD group."
-msgstr "Die Benutzer haben die Berichtigung zum Anmelden nur, wenn sie Mitglied einer bestimmten Gruppe sind."
+#: admin.php:359
+msgid ""
+"Users are authorized for login only when they are members of a specific AD "
+"group."
+msgstr ""
+"Die Benutzer haben die Berichtigung zum Anmelden nur, wenn sie Mitglied "
+"einer bestimmten Gruppe sind."
 
-#: admin.php:353
-#: admin.php:652
+#: admin.php:361 admin.php:667
 msgid "Group(s)"
 msgstr "Gruppe(n)"
 
-#: admin.php:356
-msgid "Seperate multiple groups by semicolon (e.g. \"domain-users;WP-Users;test-users\")."
-msgstr "Trenne mehrere Gruppen durch Semikolon (z.B. \"Test-Benutzer;WP-Benutzer;Admins\")."
+#: admin.php:364
+msgid ""
+"Seperate multiple groups by semicolon (e.g. \"domain-users;WP-Users;test-"
+"users\")."
+msgstr ""
+"Trenne mehrere Gruppen durch Semikolon (z.B. \"Test-Benutzer;WP-Benutzer;"
+"Admins\")."
 
-#: admin.php:362
+#: admin.php:370
 msgid "Role Equivalent Groups"
 msgstr "Rollen-Gruppen-Zuordnung"
 
-#: admin.php:366
-msgid "List of Active Directory groups which correspond to WordPress user roles."
-msgstr "Liste von Active-Directory-Gruppen welche Rollen in WordPress entsprechen."
+#: admin.php:374
+msgid ""
+"List of Active Directory groups which correspond to WordPress user roles."
+msgstr ""
+"Liste von Active-Directory-Gruppen welche Rollen in WordPress entsprechen."
 
-#: admin.php:367
-msgid "When a user is first created, his role will correspond to what is specified here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/> E.g., \"Soc-Faculty=faculty\" or \"Faculty=faculty;Students=subscriber\"<br/>A user will be created based on the first match, from left to right, so you should obviously put the more powerful groups first."
-msgstr "Wenn ein Benutzer neu angelegt wird, wird seine Rolle in WordPress so festgelegt wie hier eingestellt.<br/>Format: AD-Group1=WordPress-Role1;AD-Group2=WordPress-Role2;...<br/>z.B. <i>\"Domänen-Benutzer=subscriber\"</i> oder <i>\"Domänen-Admins=administrator;WordPress-User=subscriber\"</i><br/>Die Rolle wird durch den ersten Treffer bei einer Auswertung von links nach rechts festgelegt. Die mächtigeren Rollen, sollten also links stehen, die schwächeren rechts in der Liste."
+#: admin.php:375
+msgid ""
+"When a user is first created, his role will correspond to what is specified "
+"here.<br/>Format: AD-Group1=WordPress-Role1;AD-Group1=WordPress-Role1;...<br/"
+"> E.g., \"Soc-Faculty=faculty\" or \"Faculty=faculty;Students=subscriber"
+"\"<br/>A user will be created based on the first match, from left to right, "
+"so you should obviously put the more powerful groups first."
+msgstr ""
+"Wenn ein Benutzer neu angelegt wird, wird seine Rolle in WordPress so "
+"festgelegt wie hier eingestellt.<br/>Format: AD-Group1=WordPress-Role1;AD-"
+"Group2=WordPress-Role2;...<br/>z.B. <i>\"Domänen-Benutzer=subscriber\"</i> "
+"oder <i>\"Domänen-Admins=administrator;WordPress-User=subscriber\"</i><br/"
+">Die Rolle wird durch den ersten Treffer bei einer Auswertung von links nach "
+"rechts festgelegt. Die mächtigeren Rollen, sollten also links stehen, die "
+"schwächeren rechts in der Liste."
 
-#: admin.php:368
+#: admin.php:376
 msgid "NOTES"
 msgstr "ANMERUNGEN"
 
-#: admin.php:370
-msgid "WordPress stores roles as lower case (\"Subscriber\" is stored as \"subscriber\")"
-msgstr "WordPress speichert die Rollen in Kleinschreibung und in englisch (Administrator=administrator, Redakteur=editor, Autor=author, Mitarbeiter=contributor und Abonnent=subscriber)."
+#: admin.php:378
+msgid ""
+"WordPress stores roles as lower case (\"Subscriber\" is stored as "
+"\"subscriber\")"
+msgstr ""
+"WordPress speichert die Rollen in Kleinschreibung und in englisch "
+"(Administrator=administrator, Redakteur=editor, Autor=author, "
+"Mitarbeiter=contributor und Abonnent=subscriber)."
 
-#: admin.php:371
+#: admin.php:379
 msgid "Active Directory groups are case-sensitive."
-msgstr "Bei den Gruppennamen aus dem Active Directory wird Klein- und Großschreibung unterschieden."
+msgstr ""
+"Bei den Gruppennamen aus dem Active Directory wird Klein- und Großschreibung "
+"unterschieden."
 
-#: admin.php:372
-msgid "Group memberships cannot be checked across domains.  So if you have two domains, instr and qc, and qc is the domain specified above, if instr is linked to qc, I can authenticate instr users, but not check instr group memberships."
-msgstr "Die Gruppenmitgliedschaft kann nicht über Domänengrenzen hinweg ermittelt werden. Wenn Sie z.B. die zwei Domänen \"foo\" und \"bar\" haben und \"foo\" unter \"BASE DN\" als Domäne festgelegt wurde, so kann ein Benutzer aus der verbundenen Domäne \"bar\" zwar authentifiziert werden, aber nicht seine Gruppenmitgliedschaft ermittelt werden."
+#: admin.php:380
+msgid ""
+"Group memberships cannot be checked across domains.  So if you have two "
+"domains, instr and qc, and qc is the domain specified above, if instr is "
+"linked to qc, I can authenticate instr users, but not check instr group "
+"memberships."
+msgstr ""
+"Die Gruppenmitgliedschaft kann nicht über Domänengrenzen hinweg ermittelt "
+"werden. Wenn Sie z.B. die zwei Domänen \"foo\" und \"bar\" haben und \"foo\" "
+"unter \"BASE DN\" als Domäne festgelegt wurde, so kann ein Benutzer aus der "
+"verbundenen Domäne \"bar\" zwar authentifiziert werden, aber nicht seine "
+"Gruppenmitgliedschaft ermittelt werden."
 
-#: admin.php:393
+#: admin.php:401
 msgid "Fallback to local password"
 msgstr "Rückfall auf lokales Kennwort"
 
-#: admin.php:396
-msgid "Fallback to local (WordPress) password check if authentication against AD fails.</br>If turned on users can logon even if Active Directory server is unreachable. But this might be a security risk (for example, if the local password is outdated). <b>It's recommended to turn this off.</b>"
-msgstr "Falle zurück auf die lokalen (WordPress) Kennwortprüfung, wenn die Authentifizierung gegen das AD fehlschlägt.<br/>Wenn dies angeschaltet ist, können sich die Benutzer auch dann anmelden, wennn der Active Directory Server nicht erreichbar ist. Aber das kann ein Sicherheitsrisiko sein (z.B. wenn das lokale Kennwort veraltet ist). <b>Es wird empfehlen diese Option nicht zu aktivieren.</b>"
+#: admin.php:404
+msgid ""
+"Fallback to local (WordPress) password check if authentication against AD "
+"fails.</br>If turned on users can logon even if Active Directory server is "
+"unreachable. But this might be a security risk (for example, if the local "
+"password is outdated). <b>It's recommended to turn this off.</b>"
+msgstr ""
+"Falle zurück auf die lokalen (WordPress) Kennwortprüfung, wenn die "
+"Authentifizierung gegen das AD fehlschlägt.<br/>Wenn dies angeschaltet ist, "
+"können sich die Benutzer auch dann anmelden, wennn der Active Directory "
+"Server nicht erreichbar ist. Aber das kann ein Sicherheitsrisiko sein (z.B. "
+"wenn das lokale Kennwort veraltet ist). <b>Es wird empfehlen diese Option "
+"nicht zu aktivieren.</b>"
 
-#: admin.php:402
+#: admin.php:409
+msgid "Enable lost password recovery"
+msgstr "\"Passwort vergessen\" Funktion anschalten"
+
+#: admin.php:417
 msgid "Brute Force Protection"
 msgstr "Brute-Force-Schutz"
 
-#: admin.php:403
-msgid "For security reasons you can use the following options to prevent brute force attacks on your user accounts."
-msgstr "Aus Sicherheitsgründen können sie mit den folgenden Optionen Brute Force Attacken auf die Benutzerkonten verhindern."
+#: admin.php:418
+msgid ""
+"For security reasons you can use the following options to prevent brute "
+"force attacks on your user accounts."
+msgstr ""
+"Aus Sicherheitsgründen können sie mit den folgenden Optionen Brute Force "
+"Attacken auf die Benutzerkonten verhindern."
 
-#: admin.php:408
+#: admin.php:423
 msgid "Maximum number of allowed login attempts"
 msgstr "Maximale Anzahl von Login-Versuchen"
 
-#: admin.php:412
-msgid "Maximum number of failed login attempts before a user account is blocked. If empty or \"0\" Brute Force Protection is turned off."
-msgstr "Maximale Anzahl von gescheiterten Login-Versuchen, bevor der Benutzerkonto gesperrt wird. Wenn leer oder \"0\" wird der Brute-Force-Schutz nicht verwendet."
+#: admin.php:427
+msgid ""
+"Maximum number of failed login attempts before a user account is blocked. If "
+"empty or \"0\" Brute Force Protection is turned off."
+msgstr ""
+"Maximale Anzahl von gescheiterten Login-Versuchen, bevor der Benutzerkonto "
+"gesperrt wird. Wenn leer oder \"0\" wird der Brute-Force-Schutz nicht "
+"verwendet."
 
-#: admin.php:417
+#: admin.php:432
 msgid "Blocking Time"
 msgstr "Sperrzeit"
 
-#: admin.php:421
-msgid "Number of seconds an account is blocked after the maximum number of failed login attempts is reached."
-msgstr "Zeit in Sekunden für die ein Benutzerkonto gesperrt wird, nachdem die maximale Zahl von gescheiterten Login-Versuchen erreicht wurde."
+#: admin.php:436
+msgid ""
+"Number of seconds an account is blocked after the maximum number of failed "
+"login attempts is reached."
+msgstr ""
+"Zeit in Sekunden für die ein Benutzerkonto gesperrt wird, nachdem die "
+"maximale Zahl von gescheiterten Login-Versuchen erreicht wurde."
 
-#: admin.php:426
+#: admin.php:441
 msgid "User Notification"
 msgstr "Benutzer-Benachrichtigung"
 
-#: admin.php:429
+#: admin.php:444
 msgid "Notify user by e-mail when his account is blocked."
-msgstr "Informieren des Benutzers durch eine E-Mail, dass sein Konto gesperrt wurde."
+msgstr ""
+"Informieren des Benutzers durch eine E-Mail, dass sein Konto gesperrt wurde."
 
-#: admin.php:434
+#: admin.php:449
 msgid "Admin Notification"
 msgstr "Admin-Benachrichtigung"
 
-#: admin.php:437
+#: admin.php:452
 msgid "Notify admin(s) by e-mail when an user account is blocked."
-msgstr "Informieren des Admins durch eine E-Mail, das ein Benutzerkonto gesperrt wurde."
+msgstr ""
+"Informieren des Admins durch eine E-Mail, das ein Benutzerkonto gesperrt "
+"wurde."
 
-#: admin.php:439
+#: admin.php:454
 msgid "E-mail addresses for notifications:"
 msgstr "E-Mail-Adressen für Benachrichtigungen:"
 
-#: admin.php:443
-msgid "Seperate multiple addresses by semicolon (e.g. \"admin@company.com;me@mydomain.org\"). If left blank, notifications will be sent to the blog-administrator only."
-msgstr "Trenne mehrere Adressen durch ein Semikolon (z.B. \"admin@company.com;me@mydomain.org\"). Leer lassen, um die Benachrichtigungen an den Blog-Administrator zu senden."
-
 #: admin.php:458
+msgid ""
+"Seperate multiple addresses by semicolon (e.g. \"admin@company.com;"
+"me@mydomain.org\"). If left blank, notifications will be sent to the blog-"
+"administrator only."
+msgstr ""
+"Trenne mehrere Adressen durch ein Semikolon (z.B. \"admin@company.com;"
+"me@mydomain.org\"). Leer lassen, um die Benachrichtigungen an den Blog-"
+"Administrator zu senden."
+
+#: admin.php:473
 msgid "Commonn attributes"
 msgstr "Gebräuchliche Attribute"
 
-#: admin.php:461
+#: admin.php:476
 msgid "AD Attribute"
 msgstr "AD-Attribut"
 
-#: admin.php:482
-msgid "User attributes from the AD are can be stored as User Meta Data. These attributes can then be used in your themes and they can be shown on the profile page of your users."
-msgstr "Benutzerattribute aus dem AD können als User-Meta-Daten gespeichert werden. Du kannst diese Attribute in Deinen Themes benutzen und sie können auf der Profilseite der Benutzer angezeigt werden."
+#: admin.php:497
+msgid ""
+"User attributes from the AD are can be stored as User Meta Data. These "
+"attributes can then be used in your themes and they can be shown on the "
+"profile page of your users."
+msgstr ""
+"Benutzerattribute aus dem AD können als User-Meta-Daten gespeichert werden. "
+"Du kannst diese Attribute in Deinen Themes benutzen und sie können auf der "
+"Profilseite der Benutzer angezeigt werden."
 
-#: admin.php:483
-msgid "The attributes are only stored in the WordPress database if you activate \"Automatic User Creation\" and are only updated if you activate \"Automatic User Update\" on tab \"User\"."
-msgstr "Die Attribute werden nur in der WordPress-Datenbank gespeichert, wenn \"Automatisches Anlegen von Benutzern\" aktiviert ist und sie werden nur dann erneuert, wenn \"Automatische Updates der Benutzer\" aktiviert ist."
+#: admin.php:498
+msgid ""
+"The attributes are only stored in the WordPress database if you activate "
+"\"Automatic User Creation\" and are only updated if you activate \"Automatic "
+"User Update\" on tab \"User\"."
+msgstr ""
+"Die Attribute werden nur in der WordPress-Datenbank gespeichert, wenn "
+"\"Automatisches Anlegen von Benutzern\" aktiviert ist und sie werden nur "
+"dann erneuert, wenn \"Automatische Updates der Benutzer\" aktiviert ist."
 
-#: admin.php:491
+#: admin.php:506
 msgid "Additional User Attributes"
 msgstr "Zusätzliche Benutzerattribute"
 
-#: admin.php:493
-msgid "Enter additional AD attributes (one per line), followed by their type and the associated meta key seperated by a colon (:)."
-msgstr "Gebe die AD-Attribute (eines pro Zeile) gefolgt von ihrem Typ und dem zuverwendenden Meta Key durch einen Doppelpunkt (:) getrennt ein."
+#: admin.php:508
+msgid ""
+"Enter additional AD attributes (one per line), followed by their type and "
+"the associated meta key seperated by a colon (:)."
+msgstr ""
+"Gebe die AD-Attribute (eines pro Zeile) gefolgt von ihrem Typ und dem "
+"zuverwendenden Meta Key durch einen Doppelpunkt (:) getrennt ein."
 
-#: admin.php:494
-msgid "Additional Attributes that should appear on the user profile must also be placed in \"Attributes to show\"."
-msgstr "Zusätzliche Attribute die auch auf der Profilseite zu sehen sein sollen, mussen auch in \"Anzuzeigende Attribute\" eingetragen werden."
+#: admin.php:509
+msgid ""
+"Additional Attributes that should appear on the user profile must also be "
+"placed in \"Attributes to show\"."
+msgstr ""
+"Zusätzliche Attribute die auch auf der Profilseite zu sehen sein sollen, "
+"mussen auch in \"Anzuzeigende Attribute\" eingetragen werden."
 
-#: admin.php:496
-msgid "Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where <i>&lt;type&gt;</i> can be one of the following: <i>string, list, integer, bool, octet, time, timestamp</i>."
-msgstr "Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> wobei <i>&lt;type&gt;</i> einen der folgenden Werte annehmen kann: <i>string, integer, bool, octet, time, timestamp</i>."
+#: admin.php:511
+msgid ""
+"Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where "
+"<i>&lt;type&gt;</i> can be one of the following: <i>string, list, integer, "
+"bool, octet, time, timestamp</i>."
+msgstr ""
+"Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> wobei "
+"<i>&lt;type&gt;</i> einen der folgenden Werte annehmen kann: <i>string, "
+"integer, bool, octet, time, timestamp</i>."
 
-#: admin.php:498
-msgid "If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as <i>adi_&lt;attribute_name&gt;</i>."
-msgstr "Wenn kein <i>&lt;meta key&gt;</i> angegeben wurde, wird das AD-Attribut als <i>adi_&lt;attribute_name&gt;</i> abgelegt."
+#: admin.php:513
+msgid ""
+"If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as "
+"<i>adi_&lt;attribute_name&gt;</i>."
+msgstr ""
+"Wenn kein <i>&lt;meta key&gt;</i> angegeben wurde, wird das AD-Attribut als "
+"<i>adi_&lt;attribute_name&gt;</i> abgelegt."
 
-#: admin.php:500
-#: admin.php:537
+#: admin.php:515 admin.php:552
 msgid "Example:"
 msgstr "Beispiel:"
 
-#: admin.php:502
+#: admin.php:517
 msgid ""
 "lastlogon:timestamp:last_logon_time\n"
 "whencreated:time:user_created_on\n"
@@ -748,51 +1002,80 @@ msgstr ""
 "homephone:string\n"
 "otherhomephone:list"
 
-#: admin.php:505
+#: admin.php:520
 msgid "Show Common Attributes"
 msgstr "Zeige gebräuchliche Attribute"
 
-#: admin.php:507
+#: admin.php:522
 msgid "Notice: Attributes of type <i>octet</i> are stored base64 encoded."
-msgstr "Hinweis: Attribute vom Typ <i>octet</i> werden base64-codiert gespeichert."
+msgstr ""
+"Hinweis: Attribute vom Typ <i>octet</i> werden base64-codiert gespeichert."
 
-#: admin.php:512
+#: admin.php:527
 msgid "Overwrite with empty values"
 msgstr "Überschreiben mit leeren Werten"
 
-#: admin.php:515
-msgid "Overwrite local values even if the attribute values in Active Directory are empty."
-msgstr "Überschreibe lokale Werte auch dann, wenn die Werte der Attribute im Active Directory leer sind."
+#: admin.php:530
+msgid ""
+"Overwrite local values even if the attribute values in Active Directory are "
+"empty."
+msgstr ""
+"Überschreibe lokale Werte auch dann, wenn die Werte der Attribute im Active "
+"Directory leer sind."
 
-#: admin.php:520
+#: admin.php:535
 msgid "Show Attributes"
 msgstr "Zeige Attribute"
 
-#: admin.php:523
+#: admin.php:538
 msgid "Show user attributes from AD in user profile."
 msgstr "Zeige Benutzer-Attributte aus dem AD im Benutzerprofil."
 
-#: admin.php:530
+#: admin.php:545
 msgid "Attributes to show"
 msgstr "Anzuzeigende Attribute"
 
-#: admin.php:532
-msgid "Enter the AD attributes (one per line) followed by a description seperated by a colon (:) to be shown at the end of the user profile page. If no description is given the descriptions for standard attributes (see below) is used. If there is no description for the attribute then the attribute name itself will be displayed."
-msgstr "Gebe die AD-Attribute (eines pro Zeile) gefolgt von ihrer Beschreibung durch einen Doppelpunkt (:) getrennt ein, die am Ende der Benutzerprofilseite angezeigt werden sollen. Wenn keine Beschreibung angegeben wird die Beschreibung der Standard-Attributen (siehe unten) verwendet. Existiert auch diese nicht, wird als Beschreibung der Attributname verwendet."
+#: admin.php:547
+msgid ""
+"Enter the AD attributes (one per line) followed by a description seperated "
+"by a colon (:) to be shown at the end of the user profile page. If no "
+"description is given the descriptions for standard attributes (see below) is "
+"used. If there is no description for the attribute then the attribute name "
+"itself will be displayed."
+msgstr ""
+"Gebe die AD-Attribute (eines pro Zeile) gefolgt von ihrer Beschreibung durch "
+"einen Doppelpunkt (:) getrennt ein, die am Ende der Benutzerprofilseite "
+"angezeigt werden sollen. Wenn keine Beschreibung angegeben wird die "
+"Beschreibung der Standard-Attributen (siehe unten) verwendet. Existiert auch "
+"diese nicht, wird als Beschreibung der Attributname verwendet."
 
-#: admin.php:533
-msgid "The attributes to be shown must appear on the list of Additional User Attributes."
-msgstr "The anzuzeigenden Attribute müssen in der Liste der zusätzlichen Benutzerattribute stehen."
+#: admin.php:548
+msgid ""
+"The attributes to be shown must appear on the list of Additional User "
+"Attributes."
+msgstr ""
+"The anzuzeigenden Attribute müssen in der Liste der zusätzlichen "
+"Benutzerattribute stehen."
 
-#: admin.php:534
-msgid "If want to make some attributes editable and written back to AD on profile update add a trailing \":*\" (Sync Back must be turned on, see below)."
-msgstr "Kennzeichne Attribute die editierbar sein sollen und beim einem Pofilupdate zurück ins AD geschrieben werden sollen durch \":*\" am Ende der Zeile (Sync Back muss dafür angeschaltet sein, s.u.)."
+#: admin.php:549
+msgid ""
+"If want to make some attributes editable and written back to AD on profile "
+"update add a trailing \":*\" (Sync Back must be turned on, see below)."
+msgstr ""
+"Kennzeichne Attribute die editierbar sein sollen und beim einem Pofilupdate "
+"zurück ins AD geschrieben werden sollen durch \":*\" am Ende der Zeile (Sync "
+"Back muss dafür angeschaltet sein, s.u.)."
 
-#: admin.php:535
-msgid "If you enter something that is not in the list of Additional User Attributes it will be treated as normal text. Use this to structure the output."
-msgstr "Wenn Du etwas eingibst, das nicht in der Liste der zusätzlichen Attribute enthalten ist, wird es wie eine Überschrift behandelt. Dies kann zur Struktierung der Ausgabe dienen."
+#: admin.php:550
+msgid ""
+"If you enter something that is not in the list of Additional User Attributes "
+"it will be treated as normal text. Use this to structure the output."
+msgstr ""
+"Wenn Du etwas eingibst, das nicht in der Liste der zusätzlichen Attribute "
+"enthalten ist, wird es wie eine Überschrift behandelt. Dies kann zur "
+"Struktierung der Ausgabe dienen."
 
-#: admin.php:539
+#: admin.php:554
 msgid ""
 "lastlogon\n"
 "whencreated:User Created on\n"
@@ -806,140 +1089,202 @@ msgstr ""
 "homephone:Telefon (privat):*\n"
 "otherhomephone::*"
 
-#: admin.php:547
+#: admin.php:562
 msgid "Sync Back"
 msgstr "Sync Back"
 
-#: admin.php:552
+#: admin.php:567
 msgid "Sync Back to AD"
 msgstr "Sync Back ins AD"
 
-#: admin.php:555
-msgid "Sync changed values of attributes marked with an asterisk (*) back to Active Directory on update of user profile."
-msgstr "Schreibe geänderte Werte von Attributen die mit einem Stern (*) gekennzeichnet sind bei einem Profilupdate zurück ins Active Directory."
+#: admin.php:570
+msgid ""
+"Sync changed values of attributes marked with an asterisk (*) back to Active "
+"Directory on update of user profile."
+msgstr ""
+"Schreibe geänderte Werte von Attributen die mit einem Stern (*) "
+"gekennzeichnet sind bei einem Profilupdate zurück ins Active Directory."
 
-#: admin.php:560
+#: admin.php:575
 msgid "Use Global Sync User"
 msgstr "Benutze Global Sync User"
 
-#: admin.php:563
-msgid "Use a Global Sync User for all writes to AD. Leave this unchecked to ask for the users password on every sync back/profile update."
-msgstr "Benutze einen Global Sync User für Schreiboperationen ins AD. Wenn dies nicht ausgwählt ist, werden die Benutzer bei jedem Sync Back/Profilupdate nach ihrem Kennwort gefragt."
+#: admin.php:578
+msgid ""
+"Use a Global Sync User for all writes to AD. Leave this unchecked to ask for "
+"the users password on every sync back/profile update."
+msgstr ""
+"Benutze einen Global Sync User für Schreiboperationen ins AD. Wenn dies "
+"nicht ausgwählt ist, werden die Benutzer bei jedem Sync Back/Profilupdate "
+"nach ihrem Kennwort gefragt."
 
-#: admin.php:566
-msgid "NOTICE: The password of the Global Sync User is stored encrypted, but USE AT YOUR OWN RISK. To get around this you must give your users the permission to change their own AD attributes. See FAQ for details."
-msgstr "HINWEIS: Das Kennwort des Global Sync Users wird verschlüsselt gespeichert, aber BENUTZE DIES AUF DEINE EIGENE GEFAHR. Um dies zum Umgehen muss den Benutzern das Recht eingeräumt werden, ihre eigenen Daten im AD zu ändern. Siehe FAQ für Details."
+#: admin.php:581
+msgid ""
+"NOTICE: The password of the Global Sync User is stored encrypted, but USE AT "
+"YOUR OWN RISK. To get around this you must give your users the permission to "
+"change their own AD attributes. See FAQ for details."
+msgstr ""
+"HINWEIS: Das Kennwort des Global Sync Users wird verschlüsselt gespeichert, "
+"aber BENUTZE DIES AUF DEINE EIGENE GEFAHR. Um dies zum Umgehen muss den "
+"Benutzern das Recht eingeräumt werden, ihre eigenen Daten im AD zu ändern. "
+"Siehe FAQ für Details."
 
-#: admin.php:571
+#: admin.php:586
 msgid "Global Sync User"
 msgstr "Global Sync User"
 
-#: admin.php:575
-msgid "Username of an AD account with write permissions for the users in the Active Directory (e.g. administrator@company.local)."
-msgstr "Benutzername eines AD-Kontos mit Schreibrechten für die Benutzer im Active Directory (z.B.. administrator@company.local)."
+#: admin.php:590
+msgid ""
+"Username of an AD account with write permissions for the users in the Active "
+"Directory (e.g. administrator@company.local)."
+msgstr ""
+"Benutzername eines AD-Kontos mit Schreibrechten für die Benutzer im Active "
+"Directory (z.B.. administrator@company.local)."
 
-#: admin.php:580
+#: admin.php:595
 msgid "Global Sync User Password"
 msgstr "Global Sync User Kennwort"
 
-#: admin.php:584
+#: admin.php:599
 msgid "Password for Global Sync User."
 msgstr "Kennwort des Global Sync User."
 
-#: admin.php:585
-#: admin.php:675
+#: admin.php:600 admin.php:690
 msgid "Leave empty if password should not be changed."
 msgstr "Leer lassen, wenn das Kennwort nicht geändert werden soll."
 
-#: admin.php:593
+#: admin.php:608
 msgid "Perform SyncBack for all users"
 msgstr "SyncBack für alle Benutzer durchführen"
 
-#: admin.php:595
-msgid "Click on the following link to perform a SyncBack of all users to Active Directory. \"Global Sync User\" and \"Global Sync User Password\" must be set (but it is not necessary to turn on \"Use Global Sync User\")."
-msgstr "Klicke auf den folgenden Link, um ein SyncBack ins Active Directory für alle Benutzer durchzuführen. Ein \"Global Sync User\" und das \"Global Sync User Kennwort\" müssen gesetzt sein (aber es ist nicht notwendig, dass \"Benutze Global Sync User\" angeschaltet ist."
+#: admin.php:610
+msgid ""
+"Click on the following link to perform a SyncBack of all users to Active "
+"Directory. \"Global Sync User\" and \"Global Sync User Password\" must be "
+"set (but it is not necessary to turn on \"Use Global Sync User\")."
+msgstr ""
+"Klicke auf den folgenden Link, um ein SyncBack ins Active Directory für alle "
+"Benutzer durchzuführen. Ein \"Global Sync User\" und das \"Global Sync User "
+"Kennwort\" müssen gesetzt sein (aber es ist nicht notwendig, dass \"Benutze "
+"Global Sync User\" angeschaltet ist."
 
-#: admin.php:618
+#: admin.php:633
 msgid "User Bulk Import & Update"
 msgstr "User Bulk Import & Update"
 
-#: admin.php:619
-msgid "You can import/update the users from Active Directory, for example by using a cron job."
-msgstr "Du kannst die Benutzer aus dem Active Directory importieren und updated, z.B. mittels eines CRON-Jobs."
+#: admin.php:634
+msgid ""
+"You can import/update the users from Active Directory, for example by using "
+"a cron job."
+msgstr ""
+"Du kannst die Benutzer aus dem Active Directory importieren und updated, z."
+"B. mittels eines CRON-Jobs."
 
-#: admin.php:625
+#: admin.php:640
 msgid "Enable Bulk Import & Update"
 msgstr "Bulk Import & Update einschalten"
 
-#: admin.php:632
+#: admin.php:647
 msgid "Auth Code"
 msgstr "Auth Code"
 
-#: admin.php:636
+#: admin.php:651
 msgid "Select this to generate a new Auth Code."
 msgstr "Wähle dies an, um einen neuen Auth Code zu erzeugen."
 
-#: admin.php:641
+#: admin.php:656
 msgid "Bulk Import URL"
 msgstr "Bulk Import URL"
 
-#: admin.php:645
+#: admin.php:660
 msgid "Use this URL in your cron jobs."
 msgstr "Benutze diese URL in CRON-Jobs."
 
-#: admin.php:650
+#: admin.php:665
 msgid "Import members of security groups"
 msgstr "Importiere Mitglieder von Sicherheitsgruppen"
 
-#: admin.php:655
-msgid "The members of the security groups entered here, will be imported or updated autimatically if the Bulk Import URL is opened. Seperate multiple groups by semicolon (e.g. \"company user;WP-Users;test-users\")."
-msgstr "The Mitglieder der hier hinterlegten Sicherheitsgruppen, werden automisch importiert oder upgedated when die Bulk Import URL geöffnet wird. Trenne mehrere Gruppen durch ein Semikolon  (z.B. \"company users;WP-Users;test-users\")."
+#: admin.php:670
+msgid ""
+"The members of the security groups entered here, will be imported or updated "
+"autimatically if the Bulk Import URL is opened. Seperate multiple groups by "
+"semicolon (e.g. \"company user;WP-Users;test-users\")."
+msgstr ""
+"The Mitglieder der hier hinterlegten Sicherheitsgruppen, werden automisch "
+"importiert oder upgedated when die Bulk Import URL geöffnet wird. Trenne "
+"mehrere Gruppen durch ein Semikolon  (z.B. \"company users;WP-Users;test-"
+"users\")."
 
-#: admin.php:656
-msgid "If you want to include the users of the built in user group \"domain users\" you have to enter \"domain users;id:513\" (see FAQ for details)."
-msgstr "Wenn Du die Benutzer der Standardsicherheitsgruppe \"Domänen-Benutzer\" einschließen willst, musst Du \"Domänen-Benutzer;id:513\" eingeben (siehe FAQ für Details)."
+#: admin.php:671
+msgid ""
+"If you want to include the users of the built in user group \"domain users\" "
+"you have to enter \"domain users;id:513\" (see FAQ for details)."
+msgstr ""
+"Wenn Du die Benutzer der Standardsicherheitsgruppe \"Domänen-Benutzer\" "
+"einschließen willst, musst Du \"Domänen-Benutzer;id:513\" eingeben (siehe "
+"FAQ für Details)."
 
-#: admin.php:661
+#: admin.php:676
 msgid "Bulk Import User"
 msgstr "Bulk Import User"
 
-#: admin.php:665
-msgid "Username of an AD account with read permissions for the users in the Active Directory (e.g. \"ldapuser@company.local\")."
-msgstr "Benutzername eines AD-Konto mit Leserechten für die Benutzer im Active Directory (z.B. \"ldapuser@company.local\")."
+#: admin.php:680
+msgid ""
+"Username of an AD account with read permissions for the users in the Active "
+"Directory (e.g. \"ldapuser@company.local\")."
+msgstr ""
+"Benutzername eines AD-Konto mit Leserechten für die Benutzer im Active "
+"Directory (z.B. \"ldapuser@company.local\")."
 
-#: admin.php:670
+#: admin.php:685
 msgid "Bulk Import User Password"
 msgstr "Bulk Import User Kennwort"
 
-#: admin.php:674
+#: admin.php:689
 msgid "Password for Bulk Import User."
 msgstr "Kennwort des Bulk Import User."
 
-#: admin.php:680
+#: admin.php:695
 msgid "Auto Disable Users"
 msgstr "Auto Deaktivierung von Benutzern"
 
-#: admin.php:683
-msgid "Disable users previously authenticated by ADI if they are not imported anymore or if they are disabled in AD."
-msgstr "Deaktiviere Benutzer die vorher durch das AD authentifiziert oder importiert wurden, wenn Sie nun nicht mehr im importiert werden oder im AD deaktiviert wurden."
+#: admin.php:698
+msgid ""
+"Disable users previously authenticated by ADI if they are not imported "
+"anymore or if they are disabled in AD."
+msgstr ""
+"Deaktiviere Benutzer die vorher durch das AD authentifiziert oder importiert "
+"wurden, wenn Sie nun nicht mehr im importiert werden oder im AD deaktiviert "
+"wurden."
 
-#: admin.php:685
-msgid "<b>Disabled users can only be reenabled manually by administrators on users profile page or by Bulk Import.</b>"
-msgstr "<b>Deaktivierte Benutzer können nur manuell oder durch den Bulk Import reaktiviert werden.</b>"
+#: admin.php:700
+msgid ""
+"<b>Disabled users can only be reenabled manually by administrators on users "
+"profile page or by Bulk Import.</b>"
+msgstr ""
+"<b>Deaktivierte Benutzer können nur manuell oder durch den Bulk Import "
+"reaktiviert werden.</b>"
 
-#: admin.php:709
-msgid "Enter a username and password to test logon. If you click the button below, a new window with detailed debug information opens. <strong>Be sure, that no unauthorized person can see the output.</strong>"
-msgstr "Gib einen Benutzernamen und das entsprechende Kennwort ein, um die Anmeldung zu testen. Es öffnet sich ein neues Fenster mit detaillierten Debug-Informationen. <strong>Stelle sicher, daß nur authorisierte Personen die Ausgabe sehen können.</strong>"
+#: admin.php:723
+msgid ""
+"Enter a username and password to test logon. If you click the button below, "
+"a new window with detailed debug information opens. <strong>Be sure, that no "
+"unauthorized person can see the output.</strong>"
+msgstr ""
+"Gib einen Benutzernamen und das entsprechende Kennwort ein, um die Anmeldung "
+"zu testen. Es öffnet sich ein neues Fenster mit detaillierten Debug-"
+"Informationen. <strong>Stelle sicher, daß nur authorisierte Personen die "
+"Ausgabe sehen können.</strong>"
 
-#: admin.php:715
+#: admin.php:729
 msgid "Username"
 msgstr "Benutzer"
 
-#: admin.php:724
+#: admin.php:738
 msgid "Password"
 msgstr "Kennwort"
 
-#: admin.php:733
+#: admin.php:747
 msgid "Perform Test"
 msgstr "Test durchführen"
 

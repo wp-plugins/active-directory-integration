@@ -406,7 +406,7 @@ if (!IS_WPMU) { ?>
 						</tr>
 						
 						<tr valign="top">
-							<th scope="row"><label for="AD_Integration_enable_lost_password_recovery"><?php _e('Enable lost password revcovery', 'ad-integration'); ?></label></th>
+							<th scope="row"><label for="AD_Integration_enable_lost_password_recovery"><?php _e('Enable lost password recovery', 'ad-integration'); ?></label></th>
 							<td>
 								<input type="checkbox" name="AD_Integration_enable_lost_password_recovery" id="AD_Integration_enable_lost_password_recovery"<?php if ($this->_enable_lost_password_recovery) echo ' checked="checked"' ?> value="1" />
 							</td>
