@@ -128,6 +128,7 @@ Here we have a special problem with the builtin security group "Domain Users". I
 == Changelog ==
 
 = 1.1.4 =
+* Fix: Bulk Import didn't work correctly if account suffix is appended to username. (Bug report by Stephen. Issue #0076.)
 * Change: Moved class BulkSyncBackADIntegrationPlugin() from syncback.php to BulkSyncBackADIntegrationPlugin.class.php (Recommendation by nic0tin. Issue #0075.) 
 
 = 1.1.4 =
