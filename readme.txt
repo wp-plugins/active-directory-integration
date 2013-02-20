@@ -128,7 +128,10 @@ Here we have a special problem with the builtin security group "Domain Users". I
 == Changelog ==
 
 = 1.1.4 =
-* ADD: Option to (re-)enable lost password recovery. (Feature Request by Jonathan Shapiro. Issue #00074.)
+* Change: Moved class BulkSyncBackADIntegrationPlugin() from syncback.php to BulkSyncBackADIntegrationPlugin.class.php (Recommendation by nic0tin. Issue #0075.) 
+
+= 1.1.4 =
+* ADD: Option to (re-)enable lost password recovery. (Feature Request by Jonathan Shapiro. Issue #0074.)
 * CHANGE: Only set role of user if the role already exists in WordPress. (Issue #0051)
 * CHANGE: Now using POST instead of GET in Test Tool, so user and password are not shown in server log files (Change Request by Aren Cambre. Issue #0054.)
 * CHANGE: The roles in Role Equivalent Groups are now always stored in lower case. (Issue #0055)
