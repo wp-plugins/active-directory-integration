@@ -655,10 +655,16 @@ class ADIntegrationPlugin {
 								 'adLDAP ver.: '.adLDAP::VERSION."\n".
 								 '------------------------------------------');
 		
+		if (function_exists('ldap_control_paged_result')) {
+			$this->_log(ADI_LOG_INFO, 'LDAP paging: enabled');
+		} else {
+			$this->_log(ADI_LOG_INFO, 'LDAP paging: not available');
+		}
+		
 		// IMPORTANT!
 		$this->_authenticated = false;
 		$user_id = NULL;
-		$username = strtolower($username);
+		$username = strtolower($username); 
 		$password = stripslashes($password);
 
 		
@@ -2253,7 +2259,10 @@ class ADIntegrationPlugin {
 			if ( !empty( $arrPost['AD_Integration_auto_update_user'] ) )
 			 	update_site_option('AD_Integration_auto_update_user', (bool)$arrPost['AD_Integration_auto_update_user']);
 			
-			 	if ( !empty( $arrPost['AD_Integration_auto_update_description'] ) )
+			if ( !empty( $arrPost['AD_Integration_network_timeout'] ) )
+				update_site_option('AD_Integration_network_timeout', (int)$arrPost['AD_Integration_network_timeout']);
+			
+			if ( !empty( $arrPost['AD_Integration_auto_update_description'] ) )
 			 	update_site_option('AD_Integration_auto_update_description', (bool)$arrPost['AD_Integration_auto_update_description']);
 			 
 			if ( !empty( $arrPost['AD_Integration_account_suffix'] ) )

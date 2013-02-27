@@ -15,10 +15,11 @@
  * We'd appreciate any improvements or additions to be submitted back
  * to benefit the entire community :)
  * 
- * EXTENDED with the ability to change the port and recursive_groups bug fix
- *  by Christoph Steindorff, ECW GmbH
- *   email: cst@ecw.de
- *   http://www.ecw.de
+ * EXTENDED with the ability to change the port, recursive_groups bug fix
+ * and paging support by
+ *   Christoph Steindorff
+ *   email: christoph@steindorff.de
+ *   http://www.steindorff.de
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -36,7 +37,7 @@
  * @copyright (c) 2006-2010 Scott Barnett, Richard Hyland
  * @license http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPLv2.1
  * @revision $Revision: 91 $
- * @version 3.3.2 EXTENDED (201102221155)
+ * @version 3.3.2 EXTENDED (201302271401)
  * @link http://adldap.sourceforge.net/
  */
 
@@ -156,7 +157,7 @@ class adLDAP {
 	 *
 	 * @var unknown_type
 	 */
-	const VERSION = '3.3.2 Extended (201104081456)';
+	const VERSION = '3.3.2 EXTENDED (201302271401)';
 	
 	
 	// You should not need to edit anything below this line
@@ -745,27 +746,59 @@ class adLDAP {
      * @param integer $pgid
      * @param array $fields
      */
-    public function group_members_by_primarygroupid($pgid= NULL, $fields = NULL)
+    public function group_members_by_primarygroupid($pgid= NULL, $fields = NULL, $recursive = false)
     {
     	if (!$this->_bind){ return (false); }
     	
     	if ($pgid===NULL){ return (false); }
-        
-        
-        $filter="(&(objectCategory=user)(primarygroupid=".$pgid."))";
-        $sr=ldap_search($this->_conn,$this->_base_dn,$filter,array('dn'));
-        $users = ldap_get_entries($this->_conn, $sr);
+    	
+    	$filter="(&(objectCategory=user)(primarygroupid=".$pgid."))";
+    	
+    	// Let's use paging if available
+    	if (function_exists('ldap_control_paged_result')) {
+    		
+    		$pageSize = 500;
+	    	$cookie = '';
+	    	$users =  array();
+	    	$users_page = array();
+	    	
+	    	do {
+	    		ldap_control_paged_result($this->_conn, $pageSize, true, $cookie);
+	    	
+		        $sr = ldap_search($this->_conn, $this->_base_dn, $filter, array('dn'));
+		        $users_page = ldap_get_entries($this->_conn, $sr);
+		        
+		        if (!is_array($users_page)) {
+		        	return false;
+		        }
+		        
+		        $users = array_merge($users, $users_page);
+	    		ldap_control_paged_result_response($this->_conn, $sr, $cookie);
+	    		 
+	    	} while($cookie !== null && $cookie != '');
+			
+			$users['count'] = count($users) -1; // Set a new count value !important!
+			
+			ldap_control_paged_result($this->_conn, $pageSize, true, $cookie); // RESET is important
+	    	
+    	} else {
+    		
+    		// Non-Paged version
+	        $sr = ldap_search($this->_conn, $this->_base_dn, $filter, array('dn'));
+	        $users = ldap_get_entries($this->_conn, $sr);
+    	}
         
         if (!is_array($users)) {
             return (false);   
         }
-        
+		
         $user_array=array();
 
         for ($i=0; $i<$users["count"]; $i++){
              $filter="(&(objectCategory=person)(distinguishedName=".$this->ldap_slashes($users[$i]['dn'])."))";
+			 
              $fields = array("samaccountname", "distinguishedname", "objectClass");
-             $sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
+             $sr = ldap_search($this->_conn, $this->_base_dn, $filter, $fields);
              $entries = ldap_get_entries($this->_conn, $sr);
 
              // not a person, look for a group  
@@ -795,7 +828,7 @@ class adLDAP {
         }
         return ($user_array);
     }
-            	
+
     	
     
     /**
@@ -809,6 +842,7 @@ class adLDAP {
         if (!$this->_bind){ return (false); }
         
         if ($recursive===NULL){ $recursive=$this->_recursive_groups; } // Use the default option if they haven't set it 
+
         // Search the directory for the members of a group
         $info=$this->group_info($group,array("member","cn"));
         if (isset($info[0]["member"])) {
@@ -819,6 +853,7 @@ class adLDAP {
         if (!is_array($users)) {
             return (false);   
         }
+        
  
         $user_array=array();
 
@@ -855,6 +890,7 @@ class adLDAP {
         return ($user_array);
     }
     
+    
     /**
     * Group Information.  Returns an array of information about a group.
     * The group name is case sensitive
@@ -874,8 +910,41 @@ class adLDAP {
         $filter="(&(objectCategory=group)(name=".$this->ldap_slashes($group_name)."))";
         //echo ($filter."!!!<br>");
         if ($fields===NULL){ $fields=array("member","memberof","cn","description","distinguishedname","objectcategory","samaccountname"); }
-        $sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
-        $entries = ldap_get_entries($this->_conn, $sr);
+        
+        // Let's use paging if available
+		if (function_exists('ldap_control_paged_result')) {
+        
+        	$pageSize = 500;
+        	$cookie = '';
+        	$entries =  array();
+        	$entries_page = array();
+        
+        	do {
+        		ldap_control_paged_result($this->_conn, $pageSize, true, $cookie);
+        
+        		$sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
+        		$entries_page = ldap_get_entries($this->_conn, $sr);
+        
+        		if (!is_array($entries_page)) {
+        			return (false);
+        		}
+        
+        		$entries = array_merge($entries, $entries_page);
+        		ldap_control_paged_result_response($this->_conn, $sr, $cookie);
+        
+        	} while($cookie !== null && $cookie != '');
+			
+			$entries['count'] = count($entries) - 1; // Set a new count value !important!
+			
+			ldap_control_paged_result($this->_conn, $pageSize, true, $cookie); // RESET is important
+        
+        } else {
+        
+        	// Non-Paged version
+        	$sr=ldap_search($this->_conn,$this->_base_dn,$filter,$fields);
+        	$entries = ldap_get_entries($this->_conn, $sr);
+        }
+        
         //print_r($entries);
         return ($entries);
     }

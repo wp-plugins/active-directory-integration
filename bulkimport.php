@@ -253,11 +253,11 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 		$updated_users = 0;
 		foreach ($all_users AS $username) {
 			
-			$ad_username = $username;
+			$ad_username = $username; // Issue #0077
 			
 			// getting user data
-			//$user = get_userdatabylogin($username); // deprecated
 			$user = get_user_by('login', $username);
+			//$ad_username = get_user_meta($user->ID, 'adi_samaccountname', true); // Issue #0077
 			
 			// role
 			$user_role = $this->_get_user_role_equiv($ad_username); // important: use $ad_username not $username
