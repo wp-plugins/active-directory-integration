@@ -2136,7 +2136,7 @@ class ADIntegrationPlugin {
 					} else {
 						$parts[1] = strtolower(trim($parts[1]));
 					}
-					if (!in_array($parts[1], array('string','list','integer','bool','time','timestamp','octet'))) {
+					if (!in_array($parts[1], array('string','list','integer','bool','time','timestamp','octet','cn'))) {
 						$parts[1] = 'string';
 					}
 					$attributes[$attribute]['type'] = $parts[1];
@@ -2202,7 +2202,7 @@ class ADIntegrationPlugin {
 	/**
 	 * Returns formatted value according to attribute type
 	 * 
-	 * @param string $type (string, integer, bool, time, timestamp, octet)
+	 * @param string $type (string, integer, bool, time, timestamp, octet, cn)
 	 * @param mixed $value
 	 * @return mixed formatted value
 	 */
@@ -2224,6 +2224,25 @@ class ADIntegrationPlugin {
 				$timestamp = ($value / 10000000) - 11644473600 + get_option('gmt_offset',0) * 3600; 
 				return date_i18n(get_option('date_format','Y-m-d').' / '.get_option('time_format','H:i:s'), $timestamp, true);
 			case 'octet': return base64_encode($value);
+				
+			case 'cn': // Get CN from string
+				$pos = stripos($value,'cn=');
+				if ($pos !== false) {
+					$start =  $pos+3;
+					$foundEnd = false;
+					$valueLength = strlen($value);
+					for ($x = $start; $x < $valueLength; $x++) {
+						if ($value[$x] == ',') {
+							if ($value[$x-1] !== '\\') {
+								break;
+							}
+						}
+					}
+					return stripslashes(substr($value, $start, $x - $start));
+				} else {
+					return '';
+				}
+			
 		}
 		return $value;
 	}
