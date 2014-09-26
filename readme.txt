@@ -133,6 +133,7 @@ It is never a good idea to allow special characters in usernames! For ADI it won
 
 = 1.1.5 =
 * ADD: LDAP paging support for Bulk Import on PHP 5.4.0 so more than 1000 users per group can be imported. (Issue #0058. Thanks to billrod for the bug report.)
+* ADD: Addes new attribute type "cn" for user meta. (Feature Request by Réda Sehili.)
 * Fix: Added network_timeout setting to wpmu settings.
 * Fix: Bulk Import didn't work correctly if account suffix is appended to username. (Issue #0076. Thanks to Stephen Rice for the bug report.)
 * Change: Moved class BulkSyncBackADIntegrationPlugin() from syncback.php to BulkSyncBackADIntegrationPlugin.class.php (Recommendation by nic0tin. Issue #0075.)
