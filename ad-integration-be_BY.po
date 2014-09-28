@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ADI\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-02-20 12:23+0100\n"
+"POT-Creation-Date: 2014-09-27 18:26+0200\n"
 "PO-Revision-Date: 2012-01-11 10:27+0100\n"
 "Last-Translator: Christoph Steindorff <cst@ecw.de>\n"
 "Language-Team: FatCow <zhr@tut.by>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "X-Poedit-Country: BELARUS\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: ad-integration.php:618 admin.php:77
+#: ad-integration.php:620 admin.php:77
 msgid "Active Directory Integration"
 msgstr "Active Directory Integration"
 
-#: ad-integration.php:843
+#: ad-integration.php:851
 msgid ""
 "<strong>ERROR</strong>: This user exists in Active Directory, but has not "
 "been granted access to this installation of WordPress."
@@ -30,253 +30,253 @@ msgstr ""
 "<strong>ОШИБКА</strong>: Этот пользователь существует в Active Directory, но "
 "не был предоставлен доступ к этой установке WordPress."
 
-#: ad-integration.php:974
+#: ad-integration.php:982
 msgid "Active Directory Integration Help"
 msgstr "Active Directory Integration Помощь"
 
-#: ad-integration.php:975
+#: ad-integration.php:983
 msgid "Overview"
 msgstr "Обзор"
 
-#: ad-integration.php:976
+#: ad-integration.php:984
 msgid "FAQ"
 msgstr "ЧАВО"
 
-#: ad-integration.php:977
+#: ad-integration.php:985
 msgid "Changelog"
 msgstr "История изменений"
 
-#: ad-integration.php:978
+#: ad-integration.php:986
 msgid "Support-Forum"
 msgstr "Форум поддержки"
 
-#: ad-integration.php:979
+#: ad-integration.php:987
 msgid "Bug Tracker"
 msgstr ""
 
-#: ad-integration.php:1039
+#: ad-integration.php:1047
 msgid "User Disabled"
 msgstr ""
 
-#: ad-integration.php:1042
+#: ad-integration.php:1050
 msgid ""
 "If selected, the user can not log in and his e-mail address will be changed "
 "for security reasons. The e-mail address is restored if the user is "
 "reenabled."
 msgstr ""
 
-#: ad-integration.php:1046
+#: ad-integration.php:1054
 msgid "Information on last disabling: "
 msgstr ""
 
-#: ad-integration.php:1050
+#: ad-integration.php:1058
 msgid ""
 "Attention: This flag is automatically set (or unset) by Bulk Import and its "
 "state may change on next run of Bulk Import."
 msgstr ""
 
-#: ad-integration.php:1074
+#: ad-integration.php:1082
 #, php-format
 msgid "User manually disabled by \"%s\"."
 msgstr ""
 
-#: ad-integration.php:1124
+#: ad-integration.php:1132
 msgid "Additional Informations"
 msgstr ""
 
-#: ad-integration.php:1186
+#: ad-integration.php:1194
 #, fuzzy
 msgid "Your password"
 msgstr "Пароль"
 
-#: ad-integration.php:1189
+#: ad-integration.php:1197
 msgid ""
 "If you want to save the changes on \"Additional Informations\" back to the "
 "Active Directory you must enter your password."
 msgstr ""
 
-#: ad-integration.php:1299
+#: ad-integration.php:1307
 msgid ""
 "No password given, so additional attributes are not written back to Active "
 "Directory"
 msgstr ""
 
-#: ad-integration.php:1326
+#: ad-integration.php:1334
 msgid ""
 "Error on writing additional attributes back to Active Directory. Wrong "
 "password?"
 msgstr ""
 
-#: ad-integration.php:1339
+#: ad-integration.php:1347
 msgid ""
 "Error on writing additional attributes back to Active Directory. Please "
 "contact your administrator."
 msgstr ""
 
-#: ad-integration.php:1400
+#: ad-integration.php:1408
 #, fuzzy
 msgid "ADI User"
 msgstr "Имя"
 
-#: ad-integration.php:1401
+#: ad-integration.php:1409
 msgid "Disabled"
 msgstr ""
 
-#: ad-integration.php:1557
+#: ad-integration.php:1565
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr "Ключевое слово '%s' было удалено."
 
-#: ad-integration.php:1561
+#: ad-integration.php:1569
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr "Ошибка при удалении настройки Ключевых '%s'."
 
-#: ad-integration.php:1973
+#: ad-integration.php:1981
 msgid "Common Name"
 msgstr ""
 
-#: ad-integration.php:1974
+#: ad-integration.php:1982
 msgid "First name"
 msgstr ""
 
-#: ad-integration.php:1975
+#: ad-integration.php:1983
 msgid "Initials"
 msgstr ""
 
-#: ad-integration.php:1976
+#: ad-integration.php:1984
 msgid "Last name"
 msgstr ""
 
-#: ad-integration.php:1977 admin.php:266
+#: ad-integration.php:1985 admin.php:266
 msgid "Display name"
 msgstr "Отображаемое имя"
 
-#: ad-integration.php:1978 admin.php:477
+#: ad-integration.php:1986 admin.php:477
 msgid "Description"
 msgstr ""
 
-#: ad-integration.php:1979
+#: ad-integration.php:1987
 msgid "Office"
 msgstr ""
 
-#: ad-integration.php:1980
+#: ad-integration.php:1988
 msgid "Telephone number"
 msgstr ""
 
-#: ad-integration.php:1981
+#: ad-integration.php:1989
 msgid "E-mail"
 msgstr ""
 
-#: ad-integration.php:1982
+#: ad-integration.php:1990
 msgid "Web Page"
 msgstr ""
 
-#: ad-integration.php:1985
+#: ad-integration.php:1993
 msgid "User logon name"
 msgstr "User logon name"
 
-#: ad-integration.php:1988
+#: ad-integration.php:1996
 msgid "Street"
 msgstr ""
 
-#: ad-integration.php:1989
+#: ad-integration.php:1997
 msgid "P.O. Box"
 msgstr ""
 
-#: ad-integration.php:1990
+#: ad-integration.php:1998
 msgid "City"
 msgstr ""
 
-#: ad-integration.php:1991
+#: ad-integration.php:1999
 msgid "State"
 msgstr ""
 
-#: ad-integration.php:1992
+#: ad-integration.php:2000
 msgid "ZIP/Postal cide"
 msgstr ""
 
-#: ad-integration.php:1993
+#: ad-integration.php:2001
 msgid "Country abbreviation"
 msgstr ""
 
-#: ad-integration.php:1994
+#: ad-integration.php:2002
 msgid "Country"
 msgstr ""
 
-#: ad-integration.php:1995
+#: ad-integration.php:2003
 msgid "Country code (number)"
 msgstr ""
 
-#: ad-integration.php:1998
+#: ad-integration.php:2006
 msgid "Home"
 msgstr ""
 
-#: ad-integration.php:1999
+#: ad-integration.php:2007
 msgid "Home (other)"
 msgstr ""
 
-#: ad-integration.php:2000
+#: ad-integration.php:2008
 msgid "Pager"
 msgstr ""
 
-#: ad-integration.php:2001
+#: ad-integration.php:2009
 msgid "Pager (other)"
 msgstr ""
 
-#: ad-integration.php:2002
+#: ad-integration.php:2010
 msgid "Mobile"
 msgstr ""
 
-#: ad-integration.php:2003
+#: ad-integration.php:2011
 msgid "Mobile (Other)"
 msgstr ""
 
-#: ad-integration.php:2004
+#: ad-integration.php:2012
 msgid "Fax"
 msgstr ""
 
-#: ad-integration.php:2005
+#: ad-integration.php:2013
 msgid "Fax (other)"
 msgstr ""
 
-#: ad-integration.php:2006
+#: ad-integration.php:2014
 msgid "IP Phone"
 msgstr ""
 
-#: ad-integration.php:2007
+#: ad-integration.php:2015
 msgid "IP Phone (other)"
 msgstr ""
 
-#: ad-integration.php:2008
+#: ad-integration.php:2016
 msgid "Notes"
 msgstr ""
 
-#: ad-integration.php:2011
+#: ad-integration.php:2019
 msgid "Title"
 msgstr ""
 
-#: ad-integration.php:2012
+#: ad-integration.php:2020
 msgid "Department"
 msgstr ""
 
-#: ad-integration.php:2013
+#: ad-integration.php:2021
 msgid "Company"
 msgstr ""
 
-#: ad-integration.php:2014
+#: ad-integration.php:2022
 msgid "Manager"
 msgstr ""
 
-#: ad-integration.php:2015
+#: ad-integration.php:2023
 msgid "Direct reports"
 msgstr ""
 
-#: ad-integration.php:3035 ad-integration.php:3118
+#: ad-integration.php:3065 ad-integration.php:3148
 msgid "Account blocked"
 msgstr "Аккаунт заблокирован"
 
-#: ad-integration.php:3036
+#: ad-integration.php:3066
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
@@ -285,7 +285,7 @@ msgstr ""
 "Попыток входа%s (%s) с вашим именем (%s) - but in vain. For security reasons "
 "your account is now blocked for %d seconds."
 
-#: ad-integration.php:3038 ad-integration.php:3123
+#: ad-integration.php:3068 ad-integration.php:3153
 msgid ""
 "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
 "ADDRESS SPECIFIED ABOVE."
@@ -293,7 +293,7 @@ msgstr ""
 "Это система найдено электронной почте, пожалуйста, не отвечайте на E-mail "
 "адрес, указанный ВЫШЕ."
 
-#: ad-integration.php:3119
+#: ad-integration.php:3149
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
@@ -302,20 +302,20 @@ msgstr ""
 "Кто-то попытался Войти в %s (%s) with the username \"%s\" (%s %s) - but in "
 "vain. For security reasons this account is now blocked for %d seconds."
 
-#: ad-integration.php:3121
+#: ad-integration.php:3151
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "Логин попытка была сделана с IP-адреса: %s"
 
-#: ad-integration.php:3242
+#: ad-integration.php:3272
 msgid "Powered by WordPress"
 msgstr "Powered by WordPress"
 
-#: ad-integration.php:3244
+#: ad-integration.php:3274
 msgid "Account blocked for"
 msgstr "Аккаунт заблокирован для"
 
-#: ad-integration.php:3244 admin.php:152
+#: ad-integration.php:3274 admin.php:152
 msgid "seconds"
 msgstr "секунд"
 
@@ -921,7 +921,7 @@ msgstr ""
 msgid ""
 "Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where "
 "<i>&lt;type&gt;</i> can be one of the following: <i>string, list, integer, "
-"bool, octet, time, timestamp</i>."
+"bool, octet, time, timestamp, cn</i>."
 msgstr ""
 
 #: admin.php:513

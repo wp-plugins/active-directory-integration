@@ -508,7 +508,7 @@ if (!IS_WPMU) { ?>
 								<?php _e('Enter additional AD attributes (one per line), followed by their type and the associated meta key seperated by a colon (:).', 'ad-integration'); ?>
 								<?php _e('Additional Attributes that should appear on the user profile must also be placed in "Attributes to show".', 'ad-integration'); ?>
 								<br/>
-								<?php _e('Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where <i>&lt;type&gt;</i> can be one of the following: <i>string, list, integer, bool, octet, time, timestamp</i>.', 'ad-integration'); ?>
+								<?php _e('Format: <i>&lt;attribute_name&gt;:&lt;type&gt;:&lt;meta key&gt;</i> where <i>&lt;type&gt;</i> can be one of the following: <i>string, list, integer, bool, octet, time, timestamp, cn</i>.', 'ad-integration'); ?>
 								<br/>
 								<?php _e('If no <i>&lt;meta key&gt;</i> is given the AD attributes will be stored as <i>adi_&lt;attribute_name&gt;</i>.', 'ad-integration'); ?>
 								<br/>
