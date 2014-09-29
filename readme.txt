@@ -135,6 +135,7 @@ It is never a good idea to allow special characters in usernames! For ADI it won
 * ADD: LDAP paging support for Bulk Import on PHP 5.4.0 so more than 1000 users per group can be imported. (Issue #0058. Thanks to billrod for the bug report.)
 * ADD: Added new attribute type "cn" for user meta. (Issue #0080. Feature Request by Réda Sehili.)
 * UPD: Language Norwegian (nb_NO) updated. (Many thanks to Audun Wangen.)
+* FIX: Replaced deprecated $wpdb->escape() by $wpdb->prepare(). (Documented in issue #0078. Thanks to marshalld for the bug report.)
 * FIX: User Meta not loaded if "Append account suffix to new created usernames." is checked. (Issue #0081. Thanks to Réda Sehili for the bug report and the solution.)
 * Fix: Added network_timeout setting to wpmu settings.
 * Fix: Bulk Import didn't work correctly if account suffix is appended to username. (Issue #0076. Thanks to Stephen Rice for the bug report.)

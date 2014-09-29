@@ -830,7 +830,6 @@ class ADIntegrationPlugin {
 
 		// userinfo from AD
 		$this->_log(ADI_LOG_DEBUG, 'ATTRIBUTES TO LOAD: '.print_r($this->_all_user_attributes, true));
-		//$userinfo = $this->_adldap->user_info($ad_username, $this->_all_user_attributes);
 		$userinfo = $this->_adldap->user_info($username, $this->_all_user_attributes); // Issue #0081 $username instead of $ad_username
 		$userinfo = $userinfo[0];
 		$this->_log(ADI_LOG_DEBUG,"USERINFO[0]: \n".print_r($userinfo,true));
@@ -2416,7 +2415,7 @@ class ADIntegrationPlugin {
 		$this->_log(ADI_LOG_WARN,'storing failed login for user "'.$username.'"');
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
-		$sql = "INSERT INTO $table_name (user_login, failed_login_time) VALUES ('" . $wpdb->escape($username)."'," . time() . ")";
+		$sql = $wpdb->prepare("INSERT INTO $table_name (user_login, failed_login_time) VALUES (%s, %d)", $username, time());
 		$result = $wpdb->query($sql);
 		
 	}
@@ -2434,7 +2433,7 @@ class ADIntegrationPlugin {
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - (int)$this->_block_time;
 		
-		$sql = "SELECT count(*) AS count from $table_name WHERE user_login = '".$wpdb->escape($username)."' AND failed_login_time >= $time";
+		$sql =  $wpdb->prepare("SELECT count(*) AS count from $table_name WHERE user_login = %s AND failed_login_time >= %d", $username, $time);
 		return $wpdb->get_var($sql);
 	}
 	
@@ -2453,9 +2452,10 @@ class ADIntegrationPlugin {
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - $this->_block_time;
 		
-		$sql = "DELETE FROM $table_name WHERE failed_login_time < $time";
 		if ($username != NULL) {
-			$sql .= " OR user_login = '".$wpdb->escape($username)."'"; 
+			$sql = $wpdb->prepare("DELETE FROM $table_name WHERE failed_login_time < %d OR user_login = %s", $time, $username);
+		} else {
+			$sql = $wpdb->prepare("DELETE FROM $table_name WHERE failed_login_time < %d", $time);
 		}
 		
 		$results = $wpdb->query($sql);
@@ -2473,7 +2473,7 @@ class ADIntegrationPlugin {
 		
 		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
 		
-		$sql = "SELECT max(failed_login_time) FROM $table_name WHERE user_login = '".$wpdb->escape($username)."'";
+		$sql = $wpdb->prepare("SELECT max(failed_login_time) FROM $table_name WHERE user_login = %s", $username);
 		$max_time = $wpdb->get_var($sql);
 		
 		if ($max_time == NULL ) {
