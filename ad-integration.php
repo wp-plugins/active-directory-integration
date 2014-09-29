@@ -27,8 +27,6 @@ OriginalAuthor URI: http://soc.qc.edu/jonathan
 	Lesser General Public License for more details.
 */
 
-// TODO: Add text for "cn" attribute type, change language files
-
 
 if (!class_exists('ADIntegrationPlugin')) {
 	
