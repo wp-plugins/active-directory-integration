@@ -2,22 +2,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Active Directory Integration\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-29 11:20+0200\n"
+"POT-Creation-Date: 2014-09-29 11:55+0200\n"
 "PO-Revision-Date: \n"
-"Last-Translator: Christoph Steindorff <cst@ecw.de>\n"
+"Last-Translator: Christoph Steindorff <christoph@steindorff.de>\n"
 "Language-Team: Bas Ruijters | kantoffis <info@kantoffis.nl>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Language: nl_NL\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ad-integration.php:618 admin.php:77
 msgid "Active Directory Integration"
 msgstr "Active Directory Integratie"
 
-#: ad-integration.php:849
+#: ad-integration.php:850
 msgid ""
 "<strong>ERROR</strong>: This user exists in Active Directory, but has not "
 "been granted access to this installation of WordPress."
@@ -25,35 +25,35 @@ msgstr ""
 "<strong>FOUT</strong>: Deze gebruiker bestaat in de Active Directory, maar "
 "is niet gemachtigd in deze WordPress installatie."
 
-#: ad-integration.php:980
+#: ad-integration.php:981
 msgid "Active Directory Integration Help"
 msgstr "Active Directory Integration Help"
 
-#: ad-integration.php:981
+#: ad-integration.php:982
 msgid "Overview"
 msgstr "Overzicht"
 
-#: ad-integration.php:982
+#: ad-integration.php:983
 msgid "FAQ"
 msgstr "FAQ"
 
-#: ad-integration.php:983
+#: ad-integration.php:984
 msgid "Changelog"
 msgstr "Wijzigingenlog"
 
-#: ad-integration.php:984
+#: ad-integration.php:985
 msgid "Support-Forum"
 msgstr "Ondersteuning Forum"
 
-#: ad-integration.php:985
+#: ad-integration.php:986
 msgid "Bug Tracker"
 msgstr "Bug Tracker"
 
-#: ad-integration.php:1045
+#: ad-integration.php:1046
 msgid "User Disabled"
 msgstr "Gebruiker geblokkeerd"
 
-#: ad-integration.php:1048
+#: ad-integration.php:1049
 msgid ""
 "If selected, the user can not log in and his e-mail address will be changed "
 "for security reasons. The e-mail address is restored if the user is "
@@ -63,11 +63,11 @@ msgstr ""
 "worden gewijzigd ter beveiliging. Het email adres zal worden herstelt als de "
 "gebruiker weer ingeschakeld wordt."
 
-#: ad-integration.php:1052
+#: ad-integration.php:1053
 msgid "Information on last disabling: "
 msgstr "Informatie over de laatste blokkering:"
 
-#: ad-integration.php:1056
+#: ad-integration.php:1057
 msgid ""
 "Attention: This flag is automatically set (or unset) by Bulk Import and its "
 "state may change on next run of Bulk Import."
@@ -75,20 +75,20 @@ msgstr ""
 "Attentie: Dit vinkje wordt automatisch aan of uitgevinkt tijdens de Massa "
 "Import en kan worden gewijzigd tijdens de volgende Massa Import"
 
-#: ad-integration.php:1080
+#: ad-integration.php:1081
 #, php-format
 msgid "User manually disabled by \"%s\"."
 msgstr "Gebruiker handmatig geblokkeerd door \"%s\"."
 
-#: ad-integration.php:1130
+#: ad-integration.php:1131
 msgid "Additional Informations"
 msgstr "Aanvullende informatie"
 
-#: ad-integration.php:1192
+#: ad-integration.php:1193
 msgid "Your password"
 msgstr "Uw wachtwoord"
 
-#: ad-integration.php:1195
+#: ad-integration.php:1196
 msgid ""
 "If you want to save the changes on \"Additional Informations\" back to the "
 "Active Directory you must enter your password."
@@ -96,7 +96,7 @@ msgstr ""
 "Als je de wijzigingen in \"Overige Informatie\" wilt opslaan en wegschrijven "
 "naar de Active Directory, dan moet je hier je wachtwoord ingeven."
 
-#: ad-integration.php:1305
+#: ad-integration.php:1306
 msgid ""
 "No password given, so additional attributes are not written back to Active "
 "Directory"
@@ -104,7 +104,7 @@ msgstr ""
 "Geen wachtwoord ingevoerd dus overige attributen zullen niet worden "
 "weggeschreven in de Active Directory"
 
-#: ad-integration.php:1332
+#: ad-integration.php:1333
 msgid ""
 "Error on writing additional attributes back to Active Directory. Wrong "
 "password?"
@@ -112,7 +112,7 @@ msgstr ""
 "Fout in het wegschrijven van overige attributen naar de Active Directory. "
 "Verkeerd wachtwoord?"
 
-#: ad-integration.php:1345
+#: ad-integration.php:1346
 msgid ""
 "Error on writing additional attributes back to Active Directory. Please "
 "contact your administrator."
@@ -120,179 +120,179 @@ msgstr ""
 "Fout in het wegschrijven van overige attributen naar de Active Directory. "
 "Neem contact op met uw administrator."
 
-#: ad-integration.php:1406
+#: ad-integration.php:1407
 msgid "ADI User"
 msgstr "ADI Gebruiker"
 
-#: ad-integration.php:1407
+#: ad-integration.php:1408
 msgid "Disabled"
 msgstr "Geblokkeerd"
 
-#: ad-integration.php:1563
+#: ad-integration.php:1564
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr "Instelling '%s' is verwijderd."
 
-#: ad-integration.php:1567
+#: ad-integration.php:1568
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr "Fout in het verwijderen van instelling '%s'."
 
-#: ad-integration.php:1979
+#: ad-integration.php:1980
 msgid "Common Name"
 msgstr "Gangbare naam"
 
-#: ad-integration.php:1980
+#: ad-integration.php:1981
 msgid "First name"
 msgstr "Voornaam"
 
-#: ad-integration.php:1981
+#: ad-integration.php:1982
 msgid "Initials"
 msgstr "Initialen"
 
-#: ad-integration.php:1982
+#: ad-integration.php:1983
 msgid "Last name"
 msgstr "Achternaam"
 
-#: ad-integration.php:1983 admin.php:266
+#: ad-integration.php:1984 admin.php:266
 msgid "Display name"
 msgstr "Schermnaam"
 
-#: ad-integration.php:1984 admin.php:477
+#: ad-integration.php:1985 admin.php:477
 msgid "Description"
 msgstr "Omschrijving"
 
-#: ad-integration.php:1985
+#: ad-integration.php:1986
 msgid "Office"
 msgstr "Kantoor"
 
-#: ad-integration.php:1986
+#: ad-integration.php:1987
 msgid "Telephone number"
 msgstr "Telefoonnummer"
 
-#: ad-integration.php:1987
+#: ad-integration.php:1988
 msgid "E-mail"
 msgstr "E-mail"
 
-#: ad-integration.php:1988
+#: ad-integration.php:1989
 msgid "Web Page"
 msgstr "Webpagina"
 
-#: ad-integration.php:1991
+#: ad-integration.php:1992
 msgid "User logon name"
 msgstr "Gebruikersnaam"
 
-#: ad-integration.php:1994
+#: ad-integration.php:1995
 msgid "Street"
 msgstr "Straat"
 
-#: ad-integration.php:1995
+#: ad-integration.php:1996
 msgid "P.O. Box"
 msgstr "Postbus"
 
-#: ad-integration.php:1996
+#: ad-integration.php:1997
 msgid "City"
 msgstr "Plaats"
 
-#: ad-integration.php:1997
+#: ad-integration.php:1998
 msgid "State"
 msgstr "Provincie"
 
-#: ad-integration.php:1998
+#: ad-integration.php:1999
 msgid "ZIP/Postal cide"
 msgstr "Postcode"
 
-#: ad-integration.php:1999
+#: ad-integration.php:2000
 msgid "Country abbreviation"
 msgstr "Land afkorting"
 
-#: ad-integration.php:2000
+#: ad-integration.php:2001
 msgid "Country"
 msgstr "Land"
 
-#: ad-integration.php:2001
+#: ad-integration.php:2002
 msgid "Country code (number)"
 msgstr "Landcode (nummer)"
 
-#: ad-integration.php:2004
+#: ad-integration.php:2005
 msgid "Home"
 msgstr "Thuis"
 
-#: ad-integration.php:2005
+#: ad-integration.php:2006
 msgid "Home (other)"
 msgstr "Thuis (anders)"
 
-#: ad-integration.php:2006
+#: ad-integration.php:2007
 msgid "Pager"
 msgstr "Pieper"
 
-#: ad-integration.php:2007
+#: ad-integration.php:2008
 msgid "Pager (other)"
 msgstr "Pieper (anders)"
 
-#: ad-integration.php:2008
+#: ad-integration.php:2009
 msgid "Mobile"
 msgstr "Mobiel"
 
-#: ad-integration.php:2009
+#: ad-integration.php:2010
 msgid "Mobile (Other)"
 msgstr "Mobiel (anders)"
 
-#: ad-integration.php:2010
+#: ad-integration.php:2011
 msgid "Fax"
 msgstr "Fax"
 
-#: ad-integration.php:2011
+#: ad-integration.php:2012
 msgid "Fax (other)"
 msgstr "Fax (anders)"
 
-#: ad-integration.php:2012
+#: ad-integration.php:2013
 msgid "IP Phone"
 msgstr "IP telefoon"
 
-#: ad-integration.php:2013
+#: ad-integration.php:2014
 msgid "IP Phone (other)"
 msgstr "IP telefoon (anders)"
 
-#: ad-integration.php:2014
+#: ad-integration.php:2015
 msgid "Notes"
 msgstr "Opmerkingen"
 
-#: ad-integration.php:2017
+#: ad-integration.php:2018
 msgid "Title"
 msgstr "Titel"
 
-#: ad-integration.php:2018
+#: ad-integration.php:2019
 msgid "Department"
 msgstr "Afdeling"
 
-#: ad-integration.php:2019
+#: ad-integration.php:2020
 msgid "Company"
 msgstr "Bedrijf"
 
-#: ad-integration.php:2020
+#: ad-integration.php:2021
 msgid "Manager"
 msgstr "Leidinggevende"
 
-#: ad-integration.php:2021
+#: ad-integration.php:2022
 msgid "Direct reports"
 msgstr "Directe rapporten"
 
-#: ad-integration.php:3063 ad-integration.php:3146
+#: ad-integration.php:3064 ad-integration.php:3147
 msgid "Account blocked"
 msgstr "Account vergrendeld"
 
-#: ad-integration.php:3064
+#: ad-integration.php:3065
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with your username (%s) - but in vain. For "
 "security reasons your account is now blocked for %d seconds."
 msgstr ""
-"Iemand heeft geprobeerd om in te loggen op %s (%s) met deze gebruikersnaam (%"
-"s) - maar dat is niet gelukt. Uit veiligheidsoverweging is het account "
+"Iemand heeft geprobeerd om in te loggen op %s (%s) met deze gebruikersnaam "
+"(%s) - maar dat is niet gelukt. Uit veiligheidsoverweging is het account "
 "vergrendeld voor %d seconden."
 
-#: ad-integration.php:3066 ad-integration.php:3151
+#: ad-integration.php:3067 ad-integration.php:3152
 msgid ""
 "THIS IS A SYSTEM GENERATED E-MAIL, PLEASE DO NOT RESPOND TO THE E-MAIL "
 "ADDRESS SPECIFIED ABOVE."
@@ -300,30 +300,30 @@ msgstr ""
 "DIT IS EEN AUTOMATISCH GEGENEREERDE EMAIL, NIET ANTWOORDEN NAAR DIT EMAIL "
 "ADRES."
 
-#: ad-integration.php:3147
+#: ad-integration.php:3148
 #, php-format
 msgid ""
 "Someone tried to login to %s (%s) with the username \"%s\" (%s %s) - but in "
 "vain. For security reasons this account is now blocked for %d seconds."
 msgstr ""
-"Iemand probeerde in te loggen op %s (%s) met de gebruikersnaam \"%s\" (%s %"
-"s) - maar dat is niet gelukt. Uit veiligheidsoverweging is het account "
+"Iemand probeerde in te loggen op %s (%s) met de gebruikersnaam \"%s\" (%s "
+"%s) - maar dat is niet gelukt. Uit veiligheidsoverweging is het account "
 "geblokkeerd voor %d seconden."
 
-#: ad-integration.php:3149
+#: ad-integration.php:3150
 #, php-format
 msgid "The login attempt was made from IP-Address: %s"
 msgstr "De inlog poging kwam van dit IP-adres: %s"
 
-#: ad-integration.php:3270
+#: ad-integration.php:3271
 msgid "Powered by WordPress"
 msgstr "Aangedreven door WordPress"
 
-#: ad-integration.php:3272
+#: ad-integration.php:3273
 msgid "Account blocked for"
 msgstr "Account vergrendeld voor"
 
-#: ad-integration.php:3272 admin.php:152
+#: ad-integration.php:3273 admin.php:152
 msgid "seconds"
 msgstr "seconden"
 
@@ -980,12 +980,14 @@ msgid ""
 "lastlogon:timestamp:last_logon_time\n"
 "whencreated:time:user_created_on\n"
 "homephone:string\n"
-"otherhomephone:list"
+"otherhomephone:list\n"
+"manager:cn"
 msgstr ""
 "lastlogon:timestamp:last_logon_time\n"
 "whencreated:time:user_created_on\n"
 "homephone:string\n"
-"otherhomephone:list"
+"otherhomephone:list\n"
+"manager:cn"
 
 #: admin.php:520
 msgid "Show Common Attributes"
@@ -1068,13 +1070,15 @@ msgid ""
 "whencreated:User Created on\n"
 "&lt;h4&gt;A headline&lt;/h4&gt;\n"
 "homephone:Phone (home):*\n"
-"otherhomephone::*"
+"otherhomephone::*\n"
+"manager:Manager"
 msgstr ""
 "lastlogon\n"
 "whencreated:Gebruiker aangemaakt op\n"
 "&lt;h4&gt;A headline&lt;/h4&gt;\n"
 "homephone:Telefoon (thuis):*\n"
-"otherhomephone::*"
+"otherhomephone::*\n"
+"manager: Onmiddellijke chef"
 
 #: admin.php:562
 msgid "Sync Back"

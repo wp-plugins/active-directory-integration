@@ -830,7 +830,8 @@ class ADIntegrationPlugin {
 
 		// userinfo from AD
 		$this->_log(ADI_LOG_DEBUG, 'ATTRIBUTES TO LOAD: '.print_r($this->_all_user_attributes, true));
-		$userinfo = $this->_adldap->user_info($ad_username, $this->_all_user_attributes);
+		//$userinfo = $this->_adldap->user_info($ad_username, $this->_all_user_attributes);
+		$userinfo = $this->_adldap->user_info($username, $this->_all_user_attributes); // Issue #0081 $username instead of $ad_username
 		$userinfo = $userinfo[0];
 		$this->_log(ADI_LOG_DEBUG,"USERINFO[0]: \n".print_r($userinfo,true));
 		
