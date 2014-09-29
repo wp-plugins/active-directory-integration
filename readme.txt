@@ -3,7 +3,7 @@ Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security, windows
 Requires at least: 3.0
 Tested up to: 4.0
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -95,6 +95,7 @@ Not all attribute types from the Active Directory schema are supported and there
 * octet: **Octet String**s like  "jpegPhoto"
 * time: **UTC Coded Time** like "whenCreated"
 * timestamp: **Integer**s which store timestamps (not the unix ones) like "lastLogon"
+* cn: **Common Name** extracts the CN part and drops everthing else - use it with "manager"
 
 = Why will no users be imported if I'm using "Domain Users" as security group for Bulk Import? =
 Here we have a special problem with the builtin security group "Domain Users". In detail: the security group "Domain Users" is usually the primary group of all users. In this case the members of this security group are not listed in the members attribute of the group. To import all users of the security group "Domain Users" you must set the option "Import members of security groups" to "**Domain Users;id:513**". The part "id:513" means "Import all users whos primaryGroupID is 513." And as you might have guessed, 513 is the ID of the security group "Domain Users".
