@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.1.5
+Version: 1.1.6dev
 Plugin URI: http://www.steindorff.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff
@@ -48,7 +48,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.1.5';
+	const ADI_VERSION = '1.1.6dev';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -303,18 +303,18 @@ class ADIntegrationPlugin {
 	 * Constructor
 	 */
 	public function __construct() {
-		global $wp_version, $wpmu_version, $wpdb, $wpmuBaseTablePrefix;
-
-		if (!defined('IS_WPMU')) {
-			define('IS_WPMU', ($wpmu_version != ''));
-		}
+		global $wp_version, $wpdb;
 		
 		// define folder constant
 		if (!defined('ADINTEGRATION_FOLDER')) {  
 			define('ADINTEGRATION_FOLDER', basename(dirname(__FILE__)));
 		}
 	
-		$this->setLogFile(dirname(__FILE__).'/adi.log'); 
+		if (is_multisite()) {
+			$this->setLogFile(dirname(__FILE__) . '/adi_blog-'. $wpdb->blogid . '.log');
+		} else {
+			$this->setLogFile(dirname(__FILE__).'/adi.log');
+		} 
 		
 		$this->errors = new WP_Error();
 		
@@ -327,13 +327,15 @@ class ADIntegrationPlugin {
 			$this->_generate_authcode();
 		}
 		
-		if (isset($_GET['activate']) and $_GET['activate'] == 'true') {
-			add_action('init', array(&$this, 'initialize_options'));
-		}
-		
 		add_action('admin_init', array(&$this, 'register_adi_settings'));
 		
-		add_action('admin_menu', array(&$this, 'add_options_page'));
+		// Adds our Options page
+		if ( is_multisite() ) {
+			add_action( 'network_admin_menu', array(&$this, 'add_options_page'));
+		} else {
+			add_action('admin_menu', array(&$this, 'add_options_page'));
+		}
+
 		add_filter('contextual_help', array(&$this, 'contextual_help'), 10, 2);
 		
 		// DO WE HAVE LDAP SUPPORT?
@@ -415,15 +417,21 @@ class ADIntegrationPlugin {
 	}
 	
 	
-	public function load_styles() {
-		wp_register_style('adintegration', plugins_url('css/adintegration.css', __FILE__ )  ,false, '1.7.1', 'screen');
-		wp_enqueue_style('adintegration');
+	public function load_styles() { 
+		$screen = get_current_screen();
+		if ( $screen->id == 'settings_page_active-directory-integration' || $screen->id == 'settings_page_active-directory-integration-network' ) {
+			wp_register_style('adintegration', plugins_url('css/adintegration.css', __FILE__ )  ,false, '1.7.1', 'screen');
+			wp_enqueue_style('adintegration');
+		}
 	}
 	
 	
 	public function load_scripts() {
-		wp_enqueue_script('jquery-ui-tabs');   // this is a wp default script
-		wp_enqueue_script('jquery-ui-dialog'); // this is a wp default script
+		$screen = get_current_screen();
+		if ( $screen->id == 'settings_page_active-directory-integration' || $screen->id == 'settings_page_active-directory-integration-network' ) {
+			wp_enqueue_script('jquery-ui-tabs');   // this is a wp default script
+			wp_enqueue_script('jquery-ui-dialog'); // this is a wp default script
+		}
 	}
 	
 
@@ -436,7 +444,7 @@ class ADIntegrationPlugin {
 	 */
 	public function initialize_options() {
 		
-		if (IS_WPMU) {
+		if ( is_multisite() ) {
 			if (is_super_admin()) {
 				add_site_option('AD_Integration_account_suffix', ''); 
 				add_site_option('AD_Integration_auto_create_user', false);
@@ -612,15 +620,13 @@ class ADIntegrationPlugin {
 	 */
 	public function add_options_page() {
 	
-		if (IS_WPMU && is_super_admin()) {
-			// WordPress MU
+		if ( is_multisite() ) {
+			// WordPress Multisite
 			if (function_exists('add_submenu_page')) {
-				add_submenu_page('wpmu-admin.php', __('Active Directory Integration'), __('Active Directory Integration'), 'manage_options', 'active-directory-integration', array(&$this, 'display_options_page'));
+				add_submenu_page('settings.php', __('Active Directory Integration'), __('Active Directory Integration'), 'manage_network', 'active-directory-integration', array(&$this, 'display_options_page'));
 			}
-		}
-	
-		if (!IS_WPMU) {
-			// WordPress Standard
+		} else {
+			// Standard WordPress
 			if (function_exists('add_options_page')) {
 				//add_options_page('Active Directory Integration', 'Active Directory Integration', 'manage_options', __FILE__, array(&$this, 'display_options_page'));
 				add_options_page('Active Directory Integration', 'Active Directory Integration', 'manage_options', 'active-directory-integration', array(&$this, 'display_options_page'));
@@ -635,20 +641,14 @@ class ADIntegrationPlugin {
 	 */
 	public function authenticate($user = NULL, $username = '', $password = '') {
 		
-		global $wp_version, $wpmu_version;
+		global $wp_version;
 		
 		$this->_log(ADI_LOG_INFO,'method authenticate() called');		
-		
-		if (IS_WPMU) {
-			$version = $wpmu_version;
-		} else {
-			$version = $wp_version;
-		}
 		
 		// log debug informations
 		$this->_log(ADI_LOG_INFO,"------------------------------------------\n".
 								 'PHP version: '.phpversion()."\n".
-								 'WP  version: '.$version."\n".
+								 'WP  version: '.$wp_version."\n".
 								 'ADI version: '.ADIntegrationPlugin::ADI_VERSION."\n". 
 								 'OS Info    : '.php_uname()."\n".
 								 'Web Server : '.php_sapi_name()."\n".
@@ -976,7 +976,7 @@ class ADIntegrationPlugin {
 	 */
 	public function contextual_help ($help, $screen) {
 		if ($screen == 'settings_page_' . ADINTEGRATION_FOLDER . '/ad-integration'
-		                 || $screen == 'wpmu-admin_page_' . ADINTEGRATION_FOLDER . '/ad-integration') {
+		                 || $screen == 'settings_page_active-directory-integration-network' ) {
 			$help .= '<h5>' . __('Active Directory Integration Help','ad-integration') . '</h5><div class="metabox-prefs">';
 			$help .= '<a href="http://blog.ecw.de/wp-ad-integration" target="_blank">'.__ ('Overview','ad-integration').'</a><br/>';
 			$help .= '<a href="http://wordpress.org/extend/plugins/active-directory-integration/faq/" target="_blank">'.__ ('FAQ', 'ad-integration').'</a><br/>';
@@ -1092,7 +1092,7 @@ class ADIntegrationPlugin {
 	 * Display the options for this plugin.
 	 */
 	public function display_options_page() {
-		include dirname( __FILE__ ) .'/admin.php';
+		include dirname( __FILE__ ) .'/admin_new.php'; //TODO change this back to admin.php
 	}	
 				
 	
@@ -1446,36 +1446,19 @@ class ADIntegrationPlugin {
 	/****************************************************************
 	 * STATIC FUNCTIONS
 	 ****************************************************************/
-
-	/**
-	 * Determine global table prefix, usually "wp_".
-	 * 
-	 * @return string table prefix
-	 */
-	public static function global_db_prefix() {
-		global $wpmu_version, $wpdb, $wpmuBaseTablePrefix;
-		
-		// define table prefix
-		if ($wpmu_version != '') {
-			return $wpmuBaseTablePrefix;
-		} else {
-			return $wpdb->prefix;
-		}
-	}
-
 	
 	/**
 	 * Adding the needed table to database and store the db version in the
 	 * options table on plugin activation.
 	 */
 	public static function activate() {
-		global $wpdb, $wpmu_version;
+		global $wpdb;
 		
-		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = $wpdb->base_prefix . ADIntegrationPlugin::TABLE_NAME;
 		
 		
 		// get current version and write version of plugin to options table
-		if (isset($wpmu_version) && $wpmu_version != '') {
+		if ( is_multisite() ) {
 			$version_installed = get_site_option('AD_Integration_version');
 			update_site_option('AD_Integration_version', ADIntegrationPlugin::ADI_VERSION);
 		} else {
@@ -1484,7 +1467,7 @@ class ADIntegrationPlugin {
 		}
 		
 		// get current db version
-		if (isset($wpmu_version) && $wpmu_version != '') {
+		if ( is_multisite() ) {
 			$db_version = get_site_option('AD_Integration_db_version');
 		} else {
 			$db_version = get_option('AD_Integration_db_version');
@@ -1503,7 +1486,7 @@ class ADIntegrationPlugin {
 	      	dbDelta($sql);
 	      
 	   		// store db version in the options
-	      	if (isset($wpmu_version) && $wpmu_version != '') {
+	      	if ( is_multisite() ) {
 	      		add_site_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION);
 	      	} else {
 		   		add_option('AD_Integration_db_version', ADIntegrationPlugin::DB_VERSION);
@@ -1515,7 +1498,7 @@ class ADIntegrationPlugin {
 			
 			if (version_compare('1.0.1', $version_installed, '>') || ($version_installed == false)) {
 				// remove old needless options
-		      	if (isset($wpmu_version) && $wpmu_version != '') {
+		      	if ( is_multisite() ) {
 		      		delete_site_option('AD_Integration_bind_user');
 		      		delete_site_option('AD_Integration_bind_pwd');
 		      	} else {
@@ -1533,15 +1516,15 @@ class ADIntegrationPlugin {
 	 * options table on plugin deactivation.
 	 */
 	public static function deactivate() {
-		global $wpdb, $wpmu_version;
+		global $wpdb;
 		
-		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = $wpdb->base_prefix . ADIntegrationPlugin::TABLE_NAME;
 		
 		// drop table
 		$wpdb->query('DROP TABLE IF EXISTS '.$table_name);
 		
 		// delete option
-		if (isset($wpmu_version) && $wpmu_version != '') {
+		if ( is_multisite() ) {
 			delete_site_option('AD_Integration_db_version');
 		} else {
 			delete_option('AD_Integration_db_version');
@@ -1758,7 +1741,7 @@ class ADIntegrationPlugin {
 	{
 		// Password left unchanged so get it from $db
 		if ($pwd == '') {
-			if (IS_WPMU) { 
+			if ( is_multisite() ) { 
 				$pwd = get_site_option('AD_Integration_syncback_global_pwd');
 			} else {
 				$pwd = get_option('AD_Integration_syncback_global_pwd');
@@ -1792,7 +1775,7 @@ class ADIntegrationPlugin {
 	{
 		// Password left unchanged so get it from $db
 		if ($pwd == '') {
-			if (IS_WPMU) { 
+			if ( is_multisite() ) { 
 				$pwd = get_site_option('AD_Integration_bulkimport_pwd');
 			} else {
 				$pwd = get_option('AD_Integration_bulkimport_pwd');
@@ -1847,7 +1830,7 @@ class ADIntegrationPlugin {
 	 */
 	protected function _load_options() {
 		
-		if (IS_WPMU) {
+		if ( is_multisite() ) {
 			$this->_log(ADI_LOG_INFO,'loading options (WPMU) ...');
 			
 			// Server (5)
@@ -2267,7 +2250,7 @@ class ADIntegrationPlugin {
 	 */
 	protected function _save_wpmu_options($arrPost) {
 		
- 		if (IS_WPMU) {
+ 		if ( is_multisite() ) {
 
  			if ( !empty( $arrPost['AD_Integration_additional_user_attributes'] ) )
 			 	update_site_option('AD_Integration_additional_user_attributes', $arrPost['AD_Integration_additional_user_attributes']);
@@ -2413,7 +2396,7 @@ class ADIntegrationPlugin {
 		global $wpdb;
 		
 		$this->_log(ADI_LOG_WARN,'storing failed login for user "'.$username.'"');
-		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = $wpdb->base_prefix . ADIntegrationPlugin::TABLE_NAME;
 		
 		$sql = $wpdb->prepare("INSERT INTO $table_name (user_login, failed_login_time) VALUES (%s, %d)", $username, time());
 		$result = $wpdb->query($sql);
@@ -2430,7 +2413,7 @@ class ADIntegrationPlugin {
 	 */
 	protected function _get_failed_logins_within_block_time($username) {
 		global $wpdb;
-		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = $wpdb->base_prefix . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - (int)$this->_block_time;
 		
 		$sql =  $wpdb->prepare("SELECT count(*) AS count from $table_name WHERE user_login = %s AND failed_login_time >= %d", $username, $time);
@@ -2449,7 +2432,7 @@ class ADIntegrationPlugin {
 		global $wpdb;
 		
 		$this->_log(ADI_LOG_NOTICE,'cleaning up failed logins for user "'.$username.'"');
-		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = $wpdb->base_prefix . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - $this->_block_time;
 		
 		if ($username != NULL) {
@@ -2471,7 +2454,7 @@ class ADIntegrationPlugin {
 	protected function _get_rest_of_blocking_time($username) {
 		global $wpdb;
 		
-		$table_name = ADIntegrationPlugin::global_db_prefix() . ADIntegrationPlugin::TABLE_NAME;
+		$table_name = $wpdb->base_prefix . ADIntegrationPlugin::TABLE_NAME;
 		
 		$sql = $wpdb->prepare("SELECT max(failed_login_time) FROM $table_name WHERE user_login = %s", $username);
 		$max_time = $wpdb->get_var($sql);
@@ -3003,7 +2986,7 @@ class ADIntegrationPlugin {
 		$this->_bulkimport_authcode =  $code;
 		
 		// Save authcode
-		if (IS_WPMU) {
+		if ( is_multisite() ) {
 			update_site_option('AD_Integration_bulkimport_authcode',$code);
 		} else {
 			update_option('AD_Integration_bulkimport_authcode',$code);
