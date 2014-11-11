@@ -666,7 +666,12 @@ class ADIntegrationPlugin {
 		$user_id = NULL;
 		$username = strtolower($username); 
 		$password = stripslashes($password);
-
+		
+		// Stop if username is empty
+		if (empty($username)) {
+			$this->_log(ADI_LOG_ERROR,'Empty username. Authentication failed.');
+			return false;
+		}
 		
 		// Don't use Active Directory for admin user (ID 1)
 		// $user = get_userdatabylogin($username); // deprecated 
@@ -2413,6 +2418,11 @@ class ADIntegrationPlugin {
 	 */
 	protected function _get_failed_logins_within_block_time($username) {
 		global $wpdb;
+		
+		if (empty($username)) {
+			return 0;
+		}
+		
 		$table_name = $wpdb->base_prefix . ADIntegrationPlugin::TABLE_NAME;
 		$time = time() - (int)$this->_block_time;
 		

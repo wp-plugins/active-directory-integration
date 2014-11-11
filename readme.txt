@@ -133,6 +133,7 @@ It is never a good idea to allow special characters in usernames! For ADI it won
 
 = 1.1.6 =
 * UPD: Multisite Support updated. Centralized settings for all blogs. (Issue #0070. Thanks to William Earnhardt for his work.)
+* FIX: Fixed a problem with empty usernames. (Thanks to Johnathon Williams for the bug report.)
 
 = 1.1.5 =
 * ADD: LDAP paging support for Bulk Import on PHP 5.4.0 so more than 1000 users per group can be imported. (Issue #0058. Thanks to billrod for the bug report.)
