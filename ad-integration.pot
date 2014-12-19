@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-29 11:55+0200\n"
+"POT-Creation-Date: 2014-12-09 10:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,249 +20,249 @@ msgstr ""
 msgid "Active Directory Integration"
 msgstr ""
 
-#: ad-integration.php:850
+#: ad-integration.php:849
 msgid ""
 "<strong>ERROR</strong>: This user exists in Active Directory, but has not "
 "been granted access to this installation of WordPress."
 msgstr ""
 
-#: ad-integration.php:981
+#: ad-integration.php:980
 msgid "Active Directory Integration Help"
 msgstr ""
 
-#: ad-integration.php:982
+#: ad-integration.php:981
 msgid "Overview"
 msgstr ""
 
-#: ad-integration.php:983
+#: ad-integration.php:982
 msgid "FAQ"
 msgstr ""
 
-#: ad-integration.php:984
+#: ad-integration.php:983
 msgid "Changelog"
 msgstr ""
 
-#: ad-integration.php:985
+#: ad-integration.php:984
 msgid "Support-Forum"
 msgstr ""
 
-#: ad-integration.php:986
+#: ad-integration.php:985
 msgid "Bug Tracker"
 msgstr ""
 
-#: ad-integration.php:1046
+#: ad-integration.php:1045
 msgid "User Disabled"
 msgstr ""
 
-#: ad-integration.php:1049
+#: ad-integration.php:1048
 msgid ""
 "If selected, the user can not log in and his e-mail address will be changed "
 "for security reasons. The e-mail address is restored if the user is "
 "reenabled."
 msgstr ""
 
-#: ad-integration.php:1053
+#: ad-integration.php:1052
 msgid "Information on last disabling: "
 msgstr ""
 
-#: ad-integration.php:1057
+#: ad-integration.php:1056
 msgid ""
 "Attention: This flag is automatically set (or unset) by Bulk Import and its "
 "state may change on next run of Bulk Import."
 msgstr ""
 
-#: ad-integration.php:1081
+#: ad-integration.php:1080
 #, php-format
 msgid "User manually disabled by \"%s\"."
 msgstr ""
 
-#: ad-integration.php:1131
+#: ad-integration.php:1130
 msgid "Additional Informations"
 msgstr ""
 
-#: ad-integration.php:1193
+#: ad-integration.php:1192
 msgid "Your password"
 msgstr ""
 
-#: ad-integration.php:1196
+#: ad-integration.php:1195
 msgid ""
 "If you want to save the changes on \"Additional Informations\" back to the "
 "Active Directory you must enter your password."
 msgstr ""
 
-#: ad-integration.php:1306
+#: ad-integration.php:1305
 msgid ""
 "No password given, so additional attributes are not written back to Active "
 "Directory"
 msgstr ""
 
-#: ad-integration.php:1333
+#: ad-integration.php:1332
 msgid ""
 "Error on writing additional attributes back to Active Directory. Wrong "
 "password?"
 msgstr ""
 
-#: ad-integration.php:1346
+#: ad-integration.php:1345
 msgid ""
 "Error on writing additional attributes back to Active Directory. Please "
 "contact your administrator."
 msgstr ""
 
-#: ad-integration.php:1407
+#: ad-integration.php:1406
 msgid "ADI User"
 msgstr ""
 
-#: ad-integration.php:1408
+#: ad-integration.php:1407
 msgid "Disabled"
 msgstr ""
 
-#: ad-integration.php:1564
+#: ad-integration.php:1563
 #, php-format
 msgid "Setting Key '%s' has been deleted."
 msgstr ""
 
-#: ad-integration.php:1568
+#: ad-integration.php:1567
 #, php-format
 msgid "Error deleting Setting Key '%s'."
 msgstr ""
 
-#: ad-integration.php:1980
+#: ad-integration.php:1979
 msgid "Common Name"
 msgstr ""
 
-#: ad-integration.php:1981
+#: ad-integration.php:1980
 msgid "First name"
 msgstr ""
 
-#: ad-integration.php:1982
+#: ad-integration.php:1981
 msgid "Initials"
 msgstr ""
 
-#: ad-integration.php:1983
+#: ad-integration.php:1982
 msgid "Last name"
 msgstr ""
 
-#: ad-integration.php:1984 admin.php:266
+#: ad-integration.php:1983 admin.php:266
 msgid "Display name"
 msgstr ""
 
-#: ad-integration.php:1985 admin.php:477
+#: ad-integration.php:1984 admin.php:477
 msgid "Description"
 msgstr ""
 
-#: ad-integration.php:1986
+#: ad-integration.php:1985
 msgid "Office"
 msgstr ""
 
-#: ad-integration.php:1987
+#: ad-integration.php:1986
 msgid "Telephone number"
 msgstr ""
 
-#: ad-integration.php:1988
+#: ad-integration.php:1987
 msgid "E-mail"
 msgstr ""
 
-#: ad-integration.php:1989
+#: ad-integration.php:1988
 msgid "Web Page"
 msgstr ""
 
-#: ad-integration.php:1992
+#: ad-integration.php:1991
 msgid "User logon name"
 msgstr ""
 
-#: ad-integration.php:1995
+#: ad-integration.php:1994
 msgid "Street"
 msgstr ""
 
-#: ad-integration.php:1996
+#: ad-integration.php:1995
 msgid "P.O. Box"
 msgstr ""
 
-#: ad-integration.php:1997
+#: ad-integration.php:1996
 msgid "City"
 msgstr ""
 
-#: ad-integration.php:1998
+#: ad-integration.php:1997
 msgid "State"
 msgstr ""
 
-#: ad-integration.php:1999
+#: ad-integration.php:1998
 msgid "ZIP/Postal cide"
 msgstr ""
 
-#: ad-integration.php:2000
+#: ad-integration.php:1999
 msgid "Country abbreviation"
 msgstr ""
 
-#: ad-integration.php:2001
+#: ad-integration.php:2000
 msgid "Country"
 msgstr ""
 
-#: ad-integration.php:2002
+#: ad-integration.php:2001
 msgid "Country code (number)"
 msgstr ""
 
-#: ad-integration.php:2005
+#: ad-integration.php:2004
 msgid "Home"
 msgstr ""
 
-#: ad-integration.php:2006
+#: ad-integration.php:2005
 msgid "Home (other)"
 msgstr ""
 
-#: ad-integration.php:2007
+#: ad-integration.php:2006
 msgid "Pager"
 msgstr ""
 
-#: ad-integration.php:2008
+#: ad-integration.php:2007
 msgid "Pager (other)"
 msgstr ""
 
-#: ad-integration.php:2009
+#: ad-integration.php:2008
 msgid "Mobile"
 msgstr ""
 
-#: ad-integration.php:2010
+#: ad-integration.php:2009
 msgid "Mobile (Other)"
 msgstr ""
 
-#: ad-integration.php:2011
+#: ad-integration.php:2010
 msgid "Fax"
 msgstr ""
 
-#: ad-integration.php:2012
+#: ad-integration.php:2011
 msgid "Fax (other)"
 msgstr ""
 
-#: ad-integration.php:2013
+#: ad-integration.php:2012
 msgid "IP Phone"
 msgstr ""
 
-#: ad-integration.php:2014
+#: ad-integration.php:2013
 msgid "IP Phone (other)"
 msgstr ""
 
-#: ad-integration.php:2015
+#: ad-integration.php:2014
 msgid "Notes"
 msgstr ""
 
-#: ad-integration.php:2018
+#: ad-integration.php:2017
 msgid "Title"
 msgstr ""
 
-#: ad-integration.php:2019
+#: ad-integration.php:2018
 msgid "Department"
 msgstr ""
 
-#: ad-integration.php:2020
+#: ad-integration.php:2019
 msgid "Company"
 msgstr ""
 
-#: ad-integration.php:2021
+#: ad-integration.php:2020
 msgid "Manager"
 msgstr ""
 
-#: ad-integration.php:2022
+#: ad-integration.php:2021
 msgid "Direct reports"
 msgstr ""
 

@@ -159,7 +159,7 @@ if (function_exists('ldap_connect')) {
 <?php 
 
 // Let's go!
-if (isset($_POST['AD_Integration_test_user']) && isset($_POST['AD_Integration_test_user'])) {
+if (isset($_POST['AD_Integration_test_user']) && isset($_POST['AD_Integration_test_password'])) {
 	$result = $ADI->authenticate(NULL, $_POST['AD_Integration_test_user'], $_POST['AD_Integration_test_password']);
 } else {
 	// no POST data

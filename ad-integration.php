@@ -729,6 +729,26 @@ class ADIntegrationPlugin {
 					  "- use_tls: ".(int) $this->_use_tls."\n".
 					  "- network timeout: ". $this->_network_timeout);
 
+			// Check if the domain controllers are reachable
+		if ($this->_loglevel == ADI_LOG_DEBUG) {
+			// Let's check if AD is reachable
+			if (function_exists('fsockopen')) {
+				$this->_log(ADI_LOG_INFO,'Checking domain controller ports:');
+				$arrDCs = explode(";",$this->_domain_controllers);
+				foreach($arrDCs AS $dc) {
+					if($fp = @fsockopen($dc,$this->_port,$errCode,$errStr,2)) {
+						$this->_log(ADI_LOG_INFO,'- ' . $dc . ':' . $this->_port . ' - OK');
+						fclose($fp);
+					} else {
+						$this->_log(ADI_LOG_ERROR,'- ' . $dc . ':' . $this->_port . ' - FAILED');
+					}
+				}
+				unset($arrDCs, $dc, $fp);
+			} else {
+				$this->_log(ADI_LOG_NOTICE,'Function fsockopen() not available. Can not check server ports.');
+			}
+		} 
+		
 		// Connect to Active Directory
 		try {
 			$this->_adldap = @new adLDAP(array(
