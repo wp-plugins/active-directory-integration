@@ -729,7 +729,7 @@ class ADIntegrationPlugin {
 					  "- use_tls: ".(int) $this->_use_tls."\n".
 					  "- network timeout: ". $this->_network_timeout);
 
-			// Check if the domain controllers are reachable
+		// Check if the domain controllers are reachable
 		if ($this->_loglevel == ADI_LOG_DEBUG) {
 			// Let's check if AD is reachable
 			if (function_exists('fsockopen')) {
@@ -3220,7 +3220,7 @@ class ADIntegrationPlugin {
 		if (function_exists('mcrypt_decrypt')) {
 		    $iv = md5('Active-Directory-Integration');
 		    $key = substr(AUTH_SALT,0, mcrypt_get_key_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB));
-		    $text = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $encrypted_text, MCRYPT_MODE_ECB, $iv);
+		    $text = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $key, $encrypted_text, MCRYPT_MODE_ECB, $iv), "\0");
 		} else {
 			$text = $encrypted_text; 
 		}
