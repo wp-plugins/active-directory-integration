@@ -276,7 +276,7 @@ class BulkImportADIntegrationPlugin extends ADIntegrationPlugin {
 				}
 				
 			} else {
-
+			
 				// Only user accounts (UF_NORMAL_ACCOUNT is set and other account flags are unset)
 				if (($userinfo["useraccountcontrol"][0] & (UF_NORMAL_ACCOUNT | ADI_NO_UF_NORMAL_ACOUNT)) == UF_NORMAL_ACCOUNT) { 
 				   //&& (($userinfo["useraccountcontrol"][0] & ADI_NO_UF_NORMAL_ACOUNT)  == 0)) {
@@ -359,7 +359,7 @@ if (class_exists('ADIntegrationPlugin')) {
 }
 
 // Log Level
-if (isset($_REQUEST['debug'])) {
+if (isset($_REQUEST['debug']) || WP_DEBUG === TRUE) {
 	$ADI->setLogLevel(ADI_LOG_DEBUG);
 } else {
 	$ADI->setLogLevel(ADI_LOG_INFO);

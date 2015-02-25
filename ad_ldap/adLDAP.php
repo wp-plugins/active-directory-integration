@@ -15,8 +15,8 @@
  * We'd appreciate any improvements or additions to be submitted back
  * to benefit the entire community :)
  * 
- * EXTENDED with the ability to change the port, recursive_groups bug fix
- * and paging support by
+ * EXTENDED with the ability to change the port, recursive_groups bug fix,
+ * some minor bug fixes and paging support by
  *   Christoph Steindorff
  *   email: christoph@steindorff.de
  *   http://www.steindorff.de
@@ -37,7 +37,7 @@
  * @copyright (c) 2006-2010 Scott Barnett, Richard Hyland
  * @license http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html LGPLv2.1
  * @revision $Revision: 91 $
- * @version 3.3.2 EXTENDED (201302271401)
+ * @version 3.3.2 EXTENDED (201502251229)
  * @link http://adldap.sourceforge.net/
  */
 
@@ -2574,11 +2574,32 @@ class adLDAP {
     * @author Port by Andreas Gohr <andi@splitbrain.org>
     * @return string
     */
-    protected function ldap_slashes($str){
+    /*protected function ldap_slashes($str){
         return preg_replace('/([\x00-\x1F\*\(\)\\\\])/e',
                             '"\\\\\".join("",unpack("H2","$1"))',
                             $str);
-    }
+    }*/
+	
+	/**
+	* Escape strings for the use in LDAP filters
+	*
+	* DEVELOPERS SHOULD BE DOING PROPER FILTERING IF THEY'RE ACCEPTING USER INPUT
+	* Ported from Perl's Net::LDAP::Util escape_filter_value
+	*
+	* @param string $str The string the parse
+	* @author Port by Andreas Gohr <andi@splitbrain.org>
+	* @author Modified for PHP55 by Esteban Santana Santana <MentalPower@GMail.com>
+	* @return string
+	*/
+	public function ldap_slashes($str){
+		return preg_replace_callback(
+			'/([\x00-\x1F\*\(\)\\\\])/',
+			function ($matches) {
+				return "\\".join("", unpack("H2", $matches[1]));
+			},
+			$str
+		);
+	}	
     
     /**
     * Select a random domain controller from your domain controller array
