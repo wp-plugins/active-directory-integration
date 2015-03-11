@@ -1709,11 +1709,11 @@ class ADIntegrationPlugin {
 	 * Maximum number of login attempts must be a postive integer.
 	 * 
 	 * @param integer $attempts
-	 * @return integer 3 if $attempts is lower than 1
+	 * @return integer 3 if $attempts is lower than 0
 	 */
 	public function sanitize_max_login_attempts($attempts) {
 		$attempts = intval($attempts);
-		if ($attempts < 1) {
+		if ($attempts < 0) {
 			$attempts = 3;
 		}
 		return $attempts;
