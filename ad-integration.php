@@ -1118,7 +1118,7 @@ class ADIntegrationPlugin {
 	 * Display the options for this plugin.
 	 */
 	public function display_options_page() {
-		include dirname( __FILE__ ) .'/admin_new.php'; //TODO change this back to admin.php
+		include dirname( __FILE__ ) .'/admin.php';
 	}	
 				
 	
