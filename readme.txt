@@ -131,6 +131,11 @@ It is never a good idea to allow special characters in usernames! For ADI it won
 
 == Changelog ==
 
+= 1.1.7 =
+* FIX: Styles and scripts not always loaded when needed.
+* MIN: Logo wasn't loaded.
+* MIN: Updated the logo and the ADI icon on the users page.
+
 = 1.1.6 =
 * UPD: Multisite Support updated. Centralized settings for all blogs. (Issue #0070. Thanks to William Earnhardt for his work.)
 * FIX: Fixed a problem with empty usernames. (Thanks to Johnathon Williams for the bug report.)
