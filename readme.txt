@@ -2,8 +2,8 @@
 Contributors: glatze
 Tags: authentication, active directory, ldap, authorization, security, windows
 Requires at least: 3.0
-Tested up to: 4.2
-Stable tag: 1.1.6
+Tested up to: 4.2.1
+Stable tag: 1.1.7
 
 Allows WordPress to authenticate, authorize, create and update users against Active Directory
 
@@ -132,9 +132,12 @@ It is never a good idea to allow special characters in usernames! For ADI it won
 == Changelog ==
 
 = 1.1.7 =
-* FIX: Styles and scripts not always loaded when needed.
-* MIN: Logo wasn't loaded.
-* MIN: Updated the logo and the ADI icon on the users page.
+* FIX: Not all options are stored in multisite environments. (Thanks to Mike Jones for the bug report.)
+* FIX: Styles and scripts not always loaded when needed. Now the ADI status is visible again.
+* FIX: Logo wasn't loaded.
+* UPD: Updated the logo and the ADI icon on the users page.
+
+Sorry, 1.1.6 was a real bad release.
 
 = 1.1.6 =
 * UPD: Multisite Support updated. Centralized settings for all blogs. (Issue #0070. Thanks to William Earnhardt for his work.)

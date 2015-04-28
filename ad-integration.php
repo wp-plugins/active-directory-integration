@@ -2,7 +2,7 @@
 
 /*
 Plugin Name: Active Directory Integration 
-Version: 1.1.6
+Version: 1.1.7
 Plugin URI: http://www.steindorff.de/wp-ad-integration
 Description: Allows WordPress to authenticate, authorize, create and update users through Active Directory
 Author: Christoph Steindorff
@@ -48,7 +48,7 @@ class ADIntegrationPlugin {
 	
 	// version of needed DB table structure
 	const DB_VERSION = '0.9';
-	const ADI_VERSION = '1.1.6';
+	const ADI_VERSION = '1.1.7';
 	
 	// name of our own table
 	const TABLE_NAME = 'adintegration';
@@ -418,14 +418,12 @@ class ADIntegrationPlugin {
 	
 	
 	public function load_styles() { 
-		$screen = get_current_screen();
 		wp_register_style('adintegration', plugins_url('css/adintegration.css', __FILE__ )  ,false, '1.7.1', 'screen');
 		wp_enqueue_style('adintegration');
 	}
 	
 	
 	public function load_scripts() {
-		$screen = get_current_screen();
 		wp_enqueue_script('jquery-ui-tabs');   // this is a wp default script
 		wp_enqueue_script('jquery-ui-dialog'); // this is a wp default script
 	}
@@ -529,7 +527,6 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_user_notification', false);
 				add_option('AD_Integration_admin_notification', false);
 				add_option('AD_Integration_admin_email', '');
-				add_option('AD_Integration_disable_users', false);
 				add_option('AD_Integration_fallback_to_local_password', false);
 				add_option('AD_Integration_enable_lost_password_recovery', false);
 
@@ -545,6 +542,7 @@ class ADIntegrationPlugin {
 				add_option('AD_Integration_bulkimport_security_groups', '');
 				add_option('AD_Integration_bulkimport_user', '');
 				add_option('AD_Integration_bulkimport_pwd', '');
+				add_option('AD_Integration_disable_users', false);
 			}
 		}
 		
@@ -2265,112 +2263,154 @@ class ADIntegrationPlugin {
 		
 	
 	/**
-	 * Saves the options to the sitewide options store. This is only needed for WPMU.
+	 * Saves the options to the sitewide options store. This is only needed for multisite.
 	 * 
 	 * @param $arrPost the POST-Array with the new options
 	 * @return unknown_type
 	 */
-	protected function _save_wpmu_options($arrPost) {
+	protected function _save_multisite_options($arrPost) {
 		
  		if ( is_multisite() ) {
 
- 			if ( !empty( $arrPost['AD_Integration_additional_user_attributes'] ) )
-			 	update_site_option('AD_Integration_additional_user_attributes', $arrPost['AD_Integration_additional_user_attributes']);
- 			
-			if ( !empty( $arrPost['AD_Integration_auto_create_user'] ) )
-			 	update_site_option('AD_Integration_auto_create_user', (bool)$arrPost['AD_Integration_auto_create_user']);
-			 
-			if ( !empty( $arrPost['AD_Integration_auto_update_user'] ) )
-			 	update_site_option('AD_Integration_auto_update_user', (bool)$arrPost['AD_Integration_auto_update_user']);
+			// Server 
+			if ($arrPost['option_page'] == 'ADI-server-settings') {
 			
-			if ( !empty( $arrPost['AD_Integration_network_timeout'] ) )
+				if (!isset($arrPost['AD_Integration_use_tls'])) {
+					$arrPost['AD_Integration_use_tls'] = 0;
+				}
+				
+				update_site_option('AD_Integration_domain_controllers', $arrPost['AD_Integration_domain_controllers']);
+				update_site_option('AD_Integration_base_dn', $arrPost['AD_Integration_base_dn']);
+				update_site_option('AD_Integration_port', $arrPost['AD_Integration_port']);
+				update_site_option('AD_Integration_use_tls', $arrPost['AD_Integration_use_tls']);
 				update_site_option('AD_Integration_network_timeout', (int)$arrPost['AD_Integration_network_timeout']);
+			}
+
+			// User 
+			if ($arrPost['option_page'] == 'ADI-user-settings') {
 			
-			if ( !empty( $arrPost['AD_Integration_auto_update_description'] ) )
-			 	update_site_option('AD_Integration_auto_update_description', (bool)$arrPost['AD_Integration_auto_update_description']);
-			 
-			if ( !empty( $arrPost['AD_Integration_account_suffix'] ) )
-			 	update_site_option('AD_Integration_account_suffix', $arrPost['AD_Integration_account_suffix']);
-			 
-			if ( !empty( $arrPost['AD_Integration_append_suffix_to_new_users'] ) )
-			 	update_site_option('AD_Integration_append_suffix_to_new_users', $arrPost['AD_Integration_append_suffix_to_new_users']);
-
- 			if ( !empty( $arrPost['AD_Integration_attributes_to_show'] ) )
-			 	update_site_option('AD_Integration_attributes_to_show', $arrPost['AD_Integration_attributes_to_show']);
-			 	
-			if ( !empty( $arrPost['AD_Integration_domain_controllers'] ) )
-			 	update_site_option('AD_Integration_domain_controllers', $arrPost['AD_Integration_domain_controllers']);
-			 
-			if ( !empty( $arrPost['AD_Integration_base_dn'] ) )
-			 	update_site_option('AD_Integration_base_dn', $arrPost['AD_Integration_base_dn']);
-			 
-			if ( !empty( $arrPost['AD_Integration_port'] ) )
-			 	update_site_option('AD_Integration_port', $arrPost['AD_Integration_port']);
-			 
-			if ( !empty( $arrPost['AD_Integration_use_tls'] ) )
-			 	update_site_option('AD_Integration_use_tls', $arrPost['AD_Integration_use_tls']);
-			 
-			if ( !empty( $arrPost['AD_Integration_default_email_domain'] ) )
-			 	update_site_option('AD_Integration_default_email_domain', $arrPost['AD_Integration_default_email_domain']);
-			 
-			if ( !empty( $arrPost['AD_Integration_authorize_by_group'] ) )
-			 	update_site_option('AD_Integration_authorize_by_group', (bool)$arrPost['AD_Integration_authorize_by_group']);
-			 
-			if ( !empty( $arrPost['AD_Integration_authorization_group'] ) )
-			 	update_site_option('AD_Integration_authorization_group', $arrPost['AD_Integration_authorization_group']);
-			 
-			if ( !empty( $arrPost['AD_Integration_role_equivalent_groups'] ) )
-			 	update_site_option('AD_Integration_role_equivalent_groups', $arrPost['AD_Integration_role_equivalent_groups']);
-			 
-			if ( !empty( $arrPost['AD_Integration_max_login_attempts'] ) )
-			 	update_site_option('AD_Integration_max_login_attempts', (int)$arrPost['AD_Integration_max_login_attempts']);
-			 
-			if ( !empty( $arrPost['AD_Integration_block_time'] ) )
-			 	update_site_option('AD_Integration_block_time', (int)$arrPost['AD_Integration_block_time']);
-			 
-			if ( !empty( $arrPost['AD_Integration_user_notification'] ) )
-			 	update_site_option('AD_Integration_user_notification', (bool)$arrPost['AD_Integration_user_notification']);
-			 
-			if ( !empty( $arrPost['AD_Integration_admin_notification'] ) )
-			 	update_site_option('AD_Integration_admin_notification', (bool)$arrPost['AD_Integration_admin_notification']);
-			 
-			if ( !empty( $arrPost['AD_Integration_admin_email'] ) )
-			 	update_site_option('AD_Integration_admin_email', $arrPost['AD_Integration_admin_email']);
-			 
-			if ( !empty( $arrPost['AD_Integration_display_name'] ) )
-			 	update_site_option('AD_Integration_display_name', $arrPost['AD_Integration_display_name']);
-			 
-			if ( !empty( $arrPost['AD_Integration_enable_password_change'] ) )
-				update_site_option('AD_Integration_enable_password_change', $arrPost['AD_Integration_enable_password_change']);
-				
-			if ( !empty( $arrPost['AD_Integration_enable_lost_password_recovery'] ) )
-				update_site_option('AD_Integration_enable_lost_password_recovery', $arrPost['AD_Integration_enable_lost_password_recovery']);
-
-			if ( !empty( $arrPost['AD_Integration_show_attributes'] ) )
-				update_site_option('AD_Integration_show_attributes', $arrPost['AD_Integration_show_attributes']);
-				
-			if ( !empty( $arrPost['AD_Integration_usermeta_empty_overwrite'] ) )
-				update_site_option('AD_Integration_usermeta_empty_overwrite', $arrPost['AD_Integration_usermeta_empty_overwrite']);				
-				
-			if ( !empty( $arrPost['AD_Integration_no_random_password'] ) )				
+				if (!isset($arrPost['AD_Integration_append_suffix_to_new_users'])) {
+					$arrPost['AD_Integration_append_suffix_to_new_users'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_auto_create_user'])) {
+					$arrPost['AD_Integration_auto_create_user'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_auto_update_user'])) {
+					$arrPost['AD_Integration_auto_update_user'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_auto_update_description'])) {
+					$arrPost['AD_Integration_auto_update_description'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_prevent_email_change'])) {
+					$arrPost['AD_Integration_prevent_email_change'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_show_user_status'])) {
+					$arrPost['AD_Integration_show_user_status'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_enable_password_change'])) {
+					$arrPost['AD_Integration_enable_password_change'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_no_random_password'])) {
+					$arrPost['AD_Integration_no_random_password'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_auto_update_password'])) {
+					$arrPost['AD_Integration_auto_update_password'] = 0;
+				}
+			
+				update_site_option('AD_Integration_account_suffix', $arrPost['AD_Integration_account_suffix']);
+				update_site_option('AD_Integration_append_suffix_to_new_users', (bool)$arrPost['AD_Integration_append_suffix_to_new_users']);
+				update_site_option('AD_Integration_auto_create_user', (bool)$arrPost['AD_Integration_auto_create_user']);
+				update_site_option('AD_Integration_auto_update_user', (bool)$arrPost['AD_Integration_auto_update_user']);
+				update_site_option('AD_Integration_auto_update_description', (bool)$arrPost['AD_Integration_auto_update_description']);
+				update_site_option('AD_Integration_default_email_domain', $arrPost['AD_Integration_default_email_domain']);
+				update_site_option('AD_Integration_duplicate_email_prevention', (bool)$arrPost['AD_Integration_duplicate_email_prevention']);
+				update_site_option('AD_Integration_prevent_email_change', (bool)$arrPost['AD_Integration_prevent_email_change']);
+				update_site_option('AD_Integration_display_name', $arrPost['AD_Integration_display_name']);
+				update_site_option('AD_Integration_show_user_status', (bool)$arrPost['AD_Integration_show_user_status']);
+				update_site_option('AD_Integration_enable_password_change', (bool)$arrPost['AD_Integration_enable_password_change']);
 				update_site_option('AD_Integration_no_random_password', (bool)$arrPost['AD_Integration_no_random_password']);
+				update_site_option('AD_Integration_auto_update_password', (bool)$arrPost['AD_Integration_auto_update_password']);					
+			}
 
-			if ( !empty( $arrPost['AD_Integration_auto_update_password'] ) )				
-				update_site_option('AD_Integration_auto_update_password', (bool)$arrPost['AD_Integration_auto_update_password']);
+
+			// Authorization	
+			if ($arrPost['option_page'] == 'ADI-auth-settings') {			
+				if (!isset( $arrPost['AD_Integration_authorize_by_group'] )) {
+					$arrPost['AD_Integration_authorize_by_group'] = 0; 
+				}
+
+				update_site_option('AD_Integration_authorize_by_group', (bool)$arrPost['AD_Integration_authorize_by_group']);
+			 	update_site_option('AD_Integration_authorization_group', $arrPost['AD_Integration_authorization_group']);
+			 	update_site_option('AD_Integration_role_equivalent_groups', $arrPost['AD_Integration_role_equivalent_groups']);
+			}
+			
+			// Security
+			if ($arrPost['option_page'] == 'ADI-security-settings') {
+				if (!isset($arrPost['AD_Integration_fallback_to_local_password'])) {
+					$arrPost['AD_Integration_fallback_to_local_password'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_enable_lost_password_recovery'])) {
+					$arrPost['AD_Integration_enable_lost_password_recovery'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_user_notification'])) {
+					$arrPost['AD_Integration_user_notification'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_admin_notification'])) {
+					$arrPost['AD_Integration_admin_notification'] = 0;
+				}
 				
-			if ( !empty( $arrPost['AD_Integration_syncback'] ) )				
+			 	update_site_option('AD_Integration_fallback_to_local_password', $arrPost['AD_Integration_fallback_to_local_password']);
+			 	update_site_option('AD_Integration_enable_lost_password_recovery', $arrPost['AD_Integration_enable_lost_password_recovery']);
+			 	update_site_option('AD_Integration_max_login_attempts', $arrPost['AD_Integration_max_login_attempts']);
+			 	update_site_option('AD_Integration_block_time', $arrPost['AD_Integration_block_time']);
+			 	update_site_option('AD_Integration_user_notification', $arrPost['AD_Integration_user_notification']);
+			 	update_site_option('AD_Integration_admin_notification', $arrPost['AD_Integration_admin_notification']);
+			 	update_site_option('AD_Integration_admin_email', $arrPost['AD_Integration_admin_email']);
+			}
+
+			// User Meta
+			if ($arrPost['option_page'] == 'ADI-usermeta-settings') {
+				if (!isset($arrPost['AD_Integration_usermeta_empty_overwrite'])) {
+					$arrPost['AD_Integration_usermeta_empty_overwrite'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_show_attributes'])) {
+					$arrPost['AD_Integration_show_attributes'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_syncback'])) {
+					$arrPost['AD_Integration_syncback'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_syncback_use_global_user'])) {
+					$arrPost['AD_Integration_syncback_use_global_user'] = 0;
+				}
+			 	update_site_option('AD_Integration_additional_user_attributes', $arrPost['AD_Integration_additional_user_attributes']);
+				update_site_option('AD_Integration_usermeta_empty_overwrite', $arrPost['AD_Integration_usermeta_empty_overwrite']);				
+				update_site_option('AD_Integration_show_attributes', $arrPost['AD_Integration_show_attributes']);
+			 	update_site_option('AD_Integration_attributes_to_show', $arrPost['AD_Integration_attributes_to_show']);
 				update_site_option('AD_Integration_syncback', (bool)$arrPost['AD_Integration_syncback']);
-
-			if ( !empty( $arrPost['AD_Integration_syncback_use_global_user'] ) )				
 				update_site_option('AD_Integration_syncback_use_global_user', (bool)$arrPost['AD_Integration_syncback_use_global_user']);
-
-			if ( !empty( $arrPost['AD_Integration_syncback_global_user'] ) )				
 				update_site_option('AD_Integration_syncback_global_user', $arrPost['AD_Integration_syncback_global_user']);
+				if (!empty($arrPost['AD_Integration_syncback_global_pwd'])) update_site_option('AD_Integration_syncback_global_pwd', $arrPost['AD_Integration_syncback_global_pwd']);
+			}
 				
-			if ( !empty( $arrPost['AD_Integration_syncback_global_pwd'] ) )				
-				update_site_option('AD_Integration_syncback_global_pwd', $arrPost['AD_Integration_syncback_global_pwd']);
-				
-				
+			// Bulk Import
+			if ($arrPost['option_page'] == 'ADI-bulkimport-settings') {
+				if (!isset($arrPost['AD_Integration_bulkimport_enabled'])) {
+					$arrPost['AD_Integration_bulkimport_enabled'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_disable_users'])) {
+					$arrPost['AD_Integration_disable_users'] = 0;
+				}
+				if (!isset($arrPost['AD_Integration_bulkimport_new_authcode'])) {
+					$arrPost['AD_Integration_bulkimport_new_authcode'] = 0;
+				}
+
+			 	update_site_option('AD_Integration_bulkimport_enabled', $arrPost['AD_Integration_bulkimport_enabled']);
+			 	update_site_option('AD_Integration_bulkimport_new_authcode', $arrPost['AD_Integration_bulkimport_new_authcode']);
+			 	update_site_option('AD_Integration_bulkimport_security_groups', $arrPost['AD_Integration_bulkimport_security_groups']);
+			 	update_site_option('AD_Integration_bulkimport_user', $arrPost['AD_Integration_bulkimport_user']);
+			 	if (!empty($arrPost['AD_Integration_bulkimport_pwd'])) update_site_option('AD_Integration_bulkimport_pwd', $arrPost['AD_Integration_bulkimport_pwd']);
+			 	update_site_option('AD_Integration_disable_users', $arrPost['AD_Integration_disable_users']);
+			}
 			// let's load the new values
 			$this->_load_options();
 		}

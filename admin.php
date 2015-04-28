@@ -19,7 +19,7 @@
 		
 		// form send?
 		if ( is_multisite() && isset($_POST['action']) && $_POST['action'] == 'update') {
-			$this->_save_wpmu_options($_POST);
+			$this->_save_multisite_options($_POST);
 		} else {
 			$this->_load_options();
 		}
@@ -667,7 +667,7 @@ if ( !is_multisite() ) { ?>
 						</tr>
 
 						<tr valign="top">
-							<th scope="row"><label for="AD_Integration_bulkimport_authcode"><?php _e('Auth Code', 'ad-integration'); ?></label></th>
+							<th scope="row"><label for="AD_Integration_bulkimport_new_authcode"><?php _e('Auth Code', 'ad-integration'); ?></label></th>
 							<td>
 								<p><strong><?php echo $this->_bulkimport_authcode; ?></strong></p>
 								<input type="checkbox" name="AD_Integration_bulkimport_new_authcode" id="AD_Integration_bulkimport_new_authcode" value="1" />
