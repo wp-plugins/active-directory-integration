@@ -10,6 +10,8 @@ Allows WordPress to authenticate, authorize, create and update users against Act
 
 == Description ==
 
+**ATTENTION: If you are running a multisite environment you shouldn't update from 1.1.5 or lower to 1.1.6 or above. Since 1.1.6 the central settings apply for all sites. In the upcoming version 1.2 you can choose between installation wide and site specific settings.**
+
 This Plugin allows WordPress to authenticate, authorize, create and update users against an Active Directory Domain.
 
 It is very easy to set up. Just activate the plugin, type in a domain controller, and you're done. But there are many more Features:
